@@ -40,8 +40,8 @@ pub struct Info {
     user_api_center_id_md5: [u8; 16],
     #[br(if(format_version > 5))]
     pub take_off_altitude: f32,
-    #[br(if(format_version > 5))]
-    pub product_type: u8,
+    #[br(if(format_version > 5), map = |x: u8| ProductType::from(x))]
+    pub product_type: ProductType,
     #[br(temp)]
     unknown2: i64,
     #[br(seek_before = if format_version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0)})]
@@ -73,5 +73,140 @@ pub struct UUID([u8; 36]);
 impl Default for UUID {
     fn default() -> Self {
         Self([0; 36])
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum ProductType {
+    None,
+    Phantom3Standard,
+    Phantom4,
+    Matrice600,
+    Phantom34K,
+    MavicPro,
+    Inspire2,
+    Phantom4Pro,
+    Spark,
+    Matrice600Pro,
+    Phantom4Advanced,
+    Phantom3SE,
+    Matrice200,
+    Matrice210,
+    Matrice210RTK,
+    MavicAir,
+    Mavic2,
+    Phantom4ProV2,
+    Phantom4RTK,
+    P4Multispectral,
+    Mavic2Enterprise,
+    MavicMini,
+    Matrice200V2,
+    Matrice210V2,
+    Matrice210RTKV2,
+    MavicAir2,
+    Matrice300RTK,
+    DJIFPV,
+    MavicAir2S,
+    MavicMini2,
+    Mavic3,
+    MavicMiniSE,
+    Mini3Pro,
+    Matrice30,
+    Mavic3Enterprise,
+    DJIAvata,
+    Unknown(u8),
+}
+
+impl From<u8> for ProductType {
+    fn from(num: u8) -> Self {
+        match num {
+            0 => ProductType::None,
+            2 => ProductType::Phantom3Standard,
+            7 => ProductType::Phantom4,
+            11 => ProductType::Matrice600,
+            12 => ProductType::Phantom34K,
+            13 => ProductType::MavicPro,
+            17 => ProductType::Inspire2,
+            24 => ProductType::Phantom4Pro,
+            26 => ProductType::Spark,
+            27 => ProductType::Matrice600Pro,
+            28 => ProductType::Phantom4Advanced,
+            29 => ProductType::Phantom3SE,
+            31 => ProductType::Matrice200,
+            33 => ProductType::Matrice210,
+            34 => ProductType::Matrice210RTK,
+            38 => ProductType::MavicAir,
+            42 => ProductType::Mavic2,
+            44 => ProductType::Phantom4ProV2,
+            46 => ProductType::Phantom4RTK,
+            57 => ProductType::P4Multispectral,
+            58 => ProductType::Mavic2Enterprise,
+            59 => ProductType::MavicMini,
+            60 => ProductType::Matrice200V2,
+            61 => ProductType::Matrice210V2,
+            62 => ProductType::Matrice210RTKV2,
+            67 => ProductType::MavicAir2,
+            70 => ProductType::Matrice300RTK,
+            73 => ProductType::DJIFPV,
+            75 => ProductType::MavicAir2S,
+            76 => ProductType::MavicMini2,
+            77 => ProductType::Mavic3,
+            96 => ProductType::MavicMiniSE,
+            103 => ProductType::Mini3Pro,
+            116 => ProductType::Matrice30,
+            118 => ProductType::Mavic3Enterprise,
+            121 => ProductType::DJIAvata,
+            _ => ProductType::Unknown(num),
+        }
+    }
+}
+
+impl Into<u8> for ProductType {
+    fn into(self) -> u8 {
+        match self {
+            ProductType::None => 0,
+            ProductType::Phantom3Standard => 2,
+            ProductType::Phantom4 => 7,
+            ProductType::Matrice600 => 11,
+            ProductType::Phantom34K => 12,
+            ProductType::MavicPro => 13,
+            ProductType::Inspire2 => 17,
+            ProductType::Phantom4Pro => 24,
+            ProductType::Spark => 26,
+            ProductType::Matrice600Pro => 27,
+            ProductType::Phantom4Advanced => 28,
+            ProductType::Phantom3SE => 29,
+            ProductType::Matrice200 => 31,
+            ProductType::Matrice210 => 33,
+            ProductType::Matrice210RTK => 34,
+            ProductType::MavicAir => 38,
+            ProductType::Mavic2 => 42,
+            ProductType::Phantom4ProV2 => 44,
+            ProductType::Phantom4RTK => 46,
+            ProductType::P4Multispectral => 57,
+            ProductType::Mavic2Enterprise => 58,
+            ProductType::MavicMini => 59,
+            ProductType::Matrice200V2 => 60,
+            ProductType::Matrice210V2 => 61,
+            ProductType::Matrice210RTKV2 => 62,
+            ProductType::MavicAir2 => 67,
+            ProductType::Matrice300RTK => 70,
+            ProductType::DJIFPV => 73,
+            ProductType::MavicAir2S => 75,
+            ProductType::MavicMini2 => 76,
+            ProductType::Mavic3 => 77,
+            ProductType::MavicMiniSE => 96,
+            ProductType::Mini3Pro => 103,
+            ProductType::Matrice30 => 116,
+            ProductType::Mavic3Enterprise => 118,
+            ProductType::DJIAvata => 121,
+            ProductType::Unknown(num) => num,
+        }
+    }
+}
+
+impl Default for ProductType {
+    fn default() -> Self {
+        ProductType::None
     }
 }
