@@ -11,3 +11,4 @@ binrw = "0.13.1"
 chrono = "0.4.31"
 clap = { version = "4.4.11", features = ["derive"] }
 crc64 = "2.0.0"
+thiserror = "1.0.50"
