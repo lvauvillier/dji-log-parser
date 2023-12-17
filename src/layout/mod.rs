@@ -1,4 +1,4 @@
-pub mod auxilliary;
+pub mod auxiliary;
 pub mod info;
 pub mod prefix;
-pub mod record_frame;
+pub mod record;

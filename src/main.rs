@@ -17,7 +17,7 @@ fn main() {
     let bytes = fs::read(&args.filepath).expect("Unable to read file");
     let parser = DJILog::from_bytes(&bytes).expect("Unable to parse file");
 
-    if parser.version >= 13 && args.sdk_key.is_none() {
+    if parser.prefix.version >= 13 && args.sdk_key.is_none() {
         panic!("A sdk_key is required for this log format");
     }
 
