@@ -1,4 +1,5 @@
 use binrw::{binread, io::NoSeek, parser, BinResult};
+use serde::{Deserialize, Serialize, Serializer};
 
 use crate::decoder::Decoder;
 
@@ -11,6 +12,12 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = read_u16)] u16,
         #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(Decoder::new(reader, 56)))]
         KeyStorage,
+        #[br(temp)] u8, // end byte
+    ),
+    #[br(magic = 50u8)]
+    FlightRecordRecover(
+        #[br(temp, args(version <= 12), parse_with = read_u16)] u16,
+        #[br(count = self_0)] Vec<u8>,
         #[br(temp)] u8, // end byte
     ),
     Unknown(
@@ -56,7 +63,7 @@ pub struct KeyStorage {
 }
 
 #[binread]
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
 #[br(repr(u16))]
 pub enum FeaturePoint {
     BaseFeature = 1,
@@ -76,10 +83,12 @@ pub enum FeaturePoint {
     SecurityFeature,
 }
 
-impl FeaturePoint {
-    // Method to convert a `FeaturePoint` enum variant to its string representation
-    fn to_string(&self) -> &'static str {
-        match self {
+impl Serialize for FeaturePoint {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let feature_point_string = match self {
             FeaturePoint::BaseFeature => "FR_Standardization_Feature_Base_1",
             FeaturePoint::VisionFeature => "FR_Standardization_Feature_Vision_2",
             FeaturePoint::WaypointFeature => "FR_Standardization_Feature_Waypoint_3",
@@ -95,6 +104,37 @@ impl FeaturePoint {
             FeaturePoint::BatteryFeature => "FR_Standardization_Feature_Battery_13",
             FeaturePoint::FlySafeFeature => "FR_Standardization_Feature_FlySafe_14",
             FeaturePoint::SecurityFeature => "FR_Standardization_Feature_Security_15",
+        };
+        serializer.serialize_str(feature_point_string)
+    }
+}
+
+impl<'de> Deserialize<'de> for FeaturePoint {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        match s.as_str() {
+            "FR_Standardization_Feature_Base_1" => Ok(FeaturePoint::BaseFeature),
+            "FR_Standardization_Feature_Vision_2" => Ok(FeaturePoint::VisionFeature),
+            "FR_Standardization_Feature_Waypoint_3" => Ok(FeaturePoint::WaypointFeature),
+            "FR_Standardization_Feature_Agriculture_4" => Ok(FeaturePoint::AgricultureFeature),
+            "FR_Standardization_Feature_AirLink_5" => Ok(FeaturePoint::AirLinkFeature),
+            "FR_Standardization_Feature_AfterSales_6" => Ok(FeaturePoint::AfterSalesFeature),
+            "FR_Standardization_Feature_DJIFlyCustom_7" => Ok(FeaturePoint::DJIFlyCustomFeature),
+            "FR_Standardization_Feature_Plaintext_8" => Ok(FeaturePoint::PlaintextFeature),
+            "FR_Standardization_Feature_FlightHub_9" => Ok(FeaturePoint::FlightHubFeature),
+            "FR_Standardization_Feature_Gimbal_10" => Ok(FeaturePoint::GimbalFeature),
+            "FR_Standardization_Feature_RC_11" => Ok(FeaturePoint::RCFeature),
+            "FR_Standardization_Feature_Camera_12" => Ok(FeaturePoint::CameraFeature),
+            "FR_Standardization_Feature_Battery_13" => Ok(FeaturePoint::BatteryFeature),
+            "FR_Standardization_Feature_FlySafe_14" => Ok(FeaturePoint::FlySafeFeature),
+            "FR_Standardization_Feature_Security_15" => Ok(FeaturePoint::SecurityFeature),
+            _ => Err(serde::de::Error::custom(format!(
+                "Invalid feature point: {}",
+                s
+            ))),
         }
     }
 }

@@ -1,8 +1,8 @@
 use binrw::binread;
 
 // Constants
-const OLD_PREFIX_SIZE: usize = 12;
-const PREFIX_SIZE: usize = 100;
+const OLD_PREFIX_SIZE: u64 = 12;
+const PREFIX_SIZE: u64 = 100;
 
 #[binread]
 #[derive(Debug, Clone)]
@@ -14,15 +14,15 @@ pub struct Prefix {
 }
 
 impl Prefix {
-    pub fn info_offset(&self) -> usize {
+    pub fn info_offset(&self) -> u64 {
         if self.version < 12 {
-            self.detail_offset as usize
+            self.detail_offset
         } else {
             PREFIX_SIZE
         }
     }
 
-    pub fn records_offset(&self) -> usize {
+    pub fn records_offset(&self) -> u64 {
         if self.version < 6 {
             OLD_PREFIX_SIZE
         } else if self.version < 12 {
@@ -30,11 +30,11 @@ impl Prefix {
         } else if self.version == 12 {
             PREFIX_SIZE + 436 // We manually add info size
         } else {
-            self.detail_offset as usize
+            self.detail_offset
         }
     }
 
-    pub fn image_offset(&self) -> usize {
+    pub fn image_offset(&self) -> u64 {
         todo!()
     }
 }

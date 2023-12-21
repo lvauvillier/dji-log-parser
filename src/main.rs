@@ -1,14 +1,14 @@
 use clap::Parser;
-use dji_log_parser::DJILog;
+use dji_log_parser::{DJILog, DecryptMethod};
 use std::fs;
 
-#[derive(Parser, Debug)]
+#[derive(Parser)]
 struct Args {
     #[arg(value_name = "FILE")]
     filepath: String,
 
     #[arg(short, long)]
-    sdk_key: Option<String>,
+    api_key: Option<String>,
 }
 
 fn main() {
@@ -17,9 +17,17 @@ fn main() {
     let bytes = fs::read(&args.filepath).expect("Unable to read file");
     let parser = DJILog::from_bytes(&bytes).expect("Unable to parse file");
 
-    if parser.prefix.version >= 13 && args.sdk_key.is_none() {
-        panic!("A sdk_key is required for this log format");
-    }
+    let decrypt_method = if parser.prefix.version >= 13 {
+        if let Some(api_key) = args.api_key {
+            DecryptMethod::ApiKey(api_key)
+        } else {
+            panic!("Api Key required");
+        }
+    } else {
+        DecryptMethod::None
+    };
 
-    println!("{:?}", parser);
+    let records = parser
+        .records(decrypt_method)
+        .expect("Unable to parse records");
 }
