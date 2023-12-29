@@ -1,6 +1,9 @@
-use base64::{engine::general_purpose::STANDARD as Base64Standard, Engine as _};
+use base64::engine::general_purpose::STANDARD as Base64Standard;
+use base64::Engine as _;
 use binrw::io::Cursor;
 use binrw::BinRead;
+use std::cell::RefCell;
+use std::collections::{HashMap, VecDeque};
 use thiserror::Error;
 
 mod decoder;
@@ -171,8 +174,11 @@ impl<'a> DJILog<'a> {
         let mut keychain: Vec<KeychainCipherText> = Vec::new();
 
         for _ in 0..self.info.record_line_count {
-            let record = Record::read_args(&mut cursor, (self.prefix.version,))
-                .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
+            let record = Record::read_args(
+                &mut cursor,
+                (self.prefix.version, &RefCell::new(HashMap::new())),
+            )
+            .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
 
             match record {
                 Record::KeyStorage(data) => {
@@ -203,6 +209,35 @@ impl<'a> DJILog<'a> {
             ));
         }
 
-        todo!();
+        let mut keychains = VecDeque::from(match decrypt_method {
+            DecryptMethod::ApiKey(api_key) => self.keychain_request()?.fetch(&api_key)?,
+            DecryptMethod::Keychains(keychains) => keychains,
+            DecryptMethod::None => Vec::new(),
+        });
+
+        let mut cursor = Cursor::new(&self.inner);
+        cursor.set_position(self.prefix.records_offset());
+
+        let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+
+        for _ in 0..self.info.record_line_count {
+            let record = Record::read_args(&mut cursor, (self.prefix.version, &keychain))
+                .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
+
+            match record {
+                Record::OSDFlightRecordDataType(data) => {
+                    println!("OSDFlightRecordDataType {:?}", data);
+                }
+                Record::FlightRecordRecover(_) => {
+                    keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+                }
+                Record::Unknown(record_type, data) => {
+                    println!("Unknown ({}): {:?}", record_type, data);
+                }
+                _ => {}
+            }
+        }
+
+        Ok(Vec::new())
     }
 }

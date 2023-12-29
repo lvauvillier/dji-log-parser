@@ -1,17 +1,34 @@
-use binrw::{binread, io::NoSeek, parser, BinResult};
-use serde::{Deserialize, Serialize, Serializer};
+use std::cell::RefCell;
 
-use crate::decoder::Decoder;
+use binrw::io::NoSeek;
+use binrw::{binread, parser, BinResult};
+
+use crate::decoder::record_decoder;
+use crate::layout::feature_point::FeaturePoint;
+use crate::Keychain;
 
 #[binread]
 #[derive(Debug)]
-#[br(little, import(version: u8))]
+#[br(little, import(version: u8, keychain: &RefCell<Keychain>))]
 pub enum Record {
+    #[br(magic = 1u8)]
+    OSDFlightRecordDataType(
+        #[br(temp, args(version <= 12), parse_with = read_u16)] u16,
+        #[br(pad_size_to = self_0,
+            count = if version <= 12 {
+                self_0
+            } else {
+                self_0 - 2
+            },
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 1, version, keychain, self_0)) )]
+        Vec<u8>,
+        #[br(temp)] u8, // end byte
+    ),
     #[br(magic = 56u8)]
     KeyStorage(
         #[br(temp, args(version <= 12), parse_with = read_u16)] u16,
-        #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(Decoder::new(reader, 56)))]
-        KeyStorage,
+        #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(record_decoder(reader, 56, version, keychain, self_0)))]
+         KeyStorage,
         #[br(temp)] u8, // end byte
     ),
     #[br(magic = 50u8)]
@@ -23,7 +40,14 @@ pub enum Record {
     Unknown(
         u8, // record_type
         #[br(temp, args(version <= 12), parse_with = read_u16)] u16,
-        #[br(count = self_1)] Vec<u8>,
+        #[br(pad_size_to = self_1,
+            count = if version <= 12 {
+                self_1
+            } else {
+                self_1 - 2
+            },
+            map_stream = |reader| NoSeek::new(record_decoder(reader, self_0, version, keychain, self_1)))]
+        Vec<u8>,
         #[br(temp)] u8, // end byte
     ),
 }
@@ -60,81 +84,4 @@ pub struct KeyStorage {
     data_length: u16,
     #[br(count = data_length)]
     pub data: Vec<u8>,
-}
-
-#[binread]
-#[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
-#[br(repr(u16))]
-pub enum FeaturePoint {
-    BaseFeature = 1,
-    VisionFeature,
-    WaypointFeature,
-    AgricultureFeature,
-    AirLinkFeature,
-    AfterSalesFeature,
-    DJIFlyCustomFeature,
-    PlaintextFeature,
-    FlightHubFeature,
-    GimbalFeature,
-    RCFeature,
-    CameraFeature,
-    BatteryFeature,
-    FlySafeFeature,
-    SecurityFeature,
-}
-
-impl Serialize for FeaturePoint {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let feature_point_string = match self {
-            FeaturePoint::BaseFeature => "FR_Standardization_Feature_Base_1",
-            FeaturePoint::VisionFeature => "FR_Standardization_Feature_Vision_2",
-            FeaturePoint::WaypointFeature => "FR_Standardization_Feature_Waypoint_3",
-            FeaturePoint::AgricultureFeature => "FR_Standardization_Feature_Agriculture_4",
-            FeaturePoint::AirLinkFeature => "FR_Standardization_Feature_AirLink_5",
-            FeaturePoint::AfterSalesFeature => "FR_Standardization_Feature_AfterSales_6",
-            FeaturePoint::DJIFlyCustomFeature => "FR_Standardization_Feature_DJIFlyCustom_7",
-            FeaturePoint::PlaintextFeature => "FR_Standardization_Feature_Plaintext_8",
-            FeaturePoint::FlightHubFeature => "FR_Standardization_Feature_FlightHub_9",
-            FeaturePoint::GimbalFeature => "FR_Standardization_Feature_Gimbal_10",
-            FeaturePoint::RCFeature => "FR_Standardization_Feature_RC_11",
-            FeaturePoint::CameraFeature => "FR_Standardization_Feature_Camera_12",
-            FeaturePoint::BatteryFeature => "FR_Standardization_Feature_Battery_13",
-            FeaturePoint::FlySafeFeature => "FR_Standardization_Feature_FlySafe_14",
-            FeaturePoint::SecurityFeature => "FR_Standardization_Feature_Security_15",
-        };
-        serializer.serialize_str(feature_point_string)
-    }
-}
-
-impl<'de> Deserialize<'de> for FeaturePoint {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        match s.as_str() {
-            "FR_Standardization_Feature_Base_1" => Ok(FeaturePoint::BaseFeature),
-            "FR_Standardization_Feature_Vision_2" => Ok(FeaturePoint::VisionFeature),
-            "FR_Standardization_Feature_Waypoint_3" => Ok(FeaturePoint::WaypointFeature),
-            "FR_Standardization_Feature_Agriculture_4" => Ok(FeaturePoint::AgricultureFeature),
-            "FR_Standardization_Feature_AirLink_5" => Ok(FeaturePoint::AirLinkFeature),
-            "FR_Standardization_Feature_AfterSales_6" => Ok(FeaturePoint::AfterSalesFeature),
-            "FR_Standardization_Feature_DJIFlyCustom_7" => Ok(FeaturePoint::DJIFlyCustomFeature),
-            "FR_Standardization_Feature_Plaintext_8" => Ok(FeaturePoint::PlaintextFeature),
-            "FR_Standardization_Feature_FlightHub_9" => Ok(FeaturePoint::FlightHubFeature),
-            "FR_Standardization_Feature_Gimbal_10" => Ok(FeaturePoint::GimbalFeature),
-            "FR_Standardization_Feature_RC_11" => Ok(FeaturePoint::RCFeature),
-            "FR_Standardization_Feature_Camera_12" => Ok(FeaturePoint::CameraFeature),
-            "FR_Standardization_Feature_Battery_13" => Ok(FeaturePoint::BatteryFeature),
-            "FR_Standardization_Feature_FlySafe_14" => Ok(FeaturePoint::FlySafeFeature),
-            "FR_Standardization_Feature_Security_15" => Ok(FeaturePoint::SecurityFeature),
-            _ => Err(serde::de::Error::custom(format!(
-                "Invalid feature point: {}",
-                s
-            ))),
-        }
-    }
 }

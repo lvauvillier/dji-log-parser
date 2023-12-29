@@ -1,6 +1,7 @@
-use binrw::{binread, io::NoSeek};
+use binrw::binread;
+use binrw::io::NoSeek;
 
-use crate::decoder::Decoder;
+use crate::decoder::MagicDecoder;
 
 #[binread]
 #[derive(Debug)]
@@ -9,8 +10,8 @@ pub enum Auxiliary {
     #[br(magic = 0u8)]
     Info(
         #[br(temp)] u16,
-        #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(Decoder::new(reader, 0)))]
-        AuxiliaryInfo,
+        #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(MagicDecoder::new(reader, 0)))]
+         AuxiliaryInfo,
     ),
 
     #[br(magic = 1u8)]

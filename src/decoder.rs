@@ -1,13 +1,83 @@
+use aes::cipher::block_padding::Pkcs7;
+use aes::cipher::{BlockDecryptMut, BlockSizeUser, KeyIvInit};
+use aes::Aes256;
 use crc64::crc64;
-use std::io::{self, Read};
+use std::cell::RefCell;
+use std::io::{Cursor, Read, Result};
 
-pub struct Decoder<R: Read> {
-    inner: R,
-    key: [u8; 8],
-    index: usize,
+use crate::layout::feature_point::FeaturePoint;
+use crate::Keychain;
+
+type Aes256CbcDec = cbc::Decryptor<Aes256>;
+
+/// Constructs a reader based on the given record type, version, and keychain.
+///
+/// # Arguments
+///
+/// * `reader` - A reader that implements the `Read` trait.
+/// * `record_type` - The type of record to be read.
+/// * `version` - The prefix version.
+/// * `keychain` - A reference to a keychain for decryption. We use here a RefCell here to allow updates and satisfy the Fn immutability constraint
+/// * `size` - The size of the data to be read.
+///
+/// # Returns
+///
+/// This function returns a `Result` containing either a boxed reader implementing `Read`
+/// or an error if one occurs during the reader's construction.
+pub fn record_decoder<'a, R: Read + 'a>(
+    reader: R,
+    record_type: u8,
+    version: u8,
+    keychain: &RefCell<Keychain>,
+    size: u16,
+) -> Box<dyn Read + 'a> {
+    match version {
+        0..=6 => Box::new(reader),
+        7..=12 => Box::new(MagicDecoder::new(reader, record_type)),
+        _ => {
+            let feature_point = FeaturePoint::from_record_type(record_type, version);
+            match feature_point {
+                FeaturePoint::PlaintextFeature => Box::new(MagicDecoder::new(reader, record_type)),
+                _ => {
+                    let pair = keychain
+                        .borrow()
+                        .get(&feature_point)
+                        .map(|value| (value.0.clone(), value.1.clone()));
+
+                    match pair {
+                        Some(value) => {
+                            let aes_reader = AesDecoder::new(
+                                MagicDecoder::new(reader, record_type),
+                                &value.0,
+                                &value.1,
+                                size - 2, // firstChar and lastChar are not part of the content
+                            );
+
+                            // Update keychain with next iv
+                            keychain.borrow_mut().insert(
+                                feature_point,
+                                (aes_reader.next_iv.clone(), value.1.clone()),
+                            );
+
+                            Box::new(aes_reader)
+                        }
+                        None => Box::new(MagicDecoder::new(reader, record_type)),
+                    }
+                }
+            }
+        }
+    }
 }
 
-impl<R: Read> Decoder<R> {
+/// Magic Encoding is an internal data encoding method used starting v4
+/// It doesn't require any external keychain
+pub struct MagicDecoder<R: Read> {
+    reader: R,
+    key: [u8; 8],
+    position: usize,
+}
+
+impl<R: Read> MagicDecoder<R> {
     pub fn new(mut reader: R, record_type: u8) -> Self {
         let mut first_byte = [0u8];
         reader.read_exact(&mut first_byte).unwrap();
@@ -20,22 +90,55 @@ impl<R: Read> Decoder<R> {
         )
         .to_le_bytes();
 
-        Decoder {
-            inner: reader,
+        MagicDecoder {
+            reader,
             key,
-            index: 0,
+            position: 0,
         }
     }
 }
 
-impl<R: Read> Read for Decoder<R> {
-    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let bytes_read = self.inner.read(buf)?;
+impl<R: Read> Read for MagicDecoder<R> {
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
+        let bytes_read = self.reader.read(buf)?;
         for i in 0..bytes_read {
-            buf[i] ^= self.key[(self.index + i) % 8];
+            buf[i] ^= self.key[(self.position + i) % 8];
         }
-        self.index += bytes_read;
+        self.position += bytes_read;
 
         Ok(bytes_read)
+    }
+}
+
+struct AesDecoder {
+    buffer: Cursor<Vec<u8>>,
+    pub next_iv: Vec<u8>,
+}
+
+impl AesDecoder {
+    pub fn new<R: Read>(mut reader: R, iv: &[u8], key: &[u8], size: u16) -> AesDecoder {
+        let mut buffer = vec![0u8; size.into()];
+        reader.read_exact(&mut buffer).unwrap();
+
+        // Get next from last block
+        let next_iv = buffer[buffer.len() - Aes256::block_size()..].to_vec();
+
+        let dec: cbc::Decryptor<Aes256> = Aes256CbcDec::new_from_slices(key, iv).unwrap();
+        let plaintext = dec
+            .decrypt_padded_mut::<Pkcs7>(&mut buffer)
+            .unwrap()
+            .to_vec();
+
+        AesDecoder {
+            buffer: Cursor::new(plaintext.to_vec()),
+            next_iv,
+        }
+    }
+}
+
+impl Read for AesDecoder {
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
+        self.buffer.read(buf);
+        Ok(buf.len()) // always return buffer length to avoid padding issues
     }
 }

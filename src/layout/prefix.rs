@@ -11,6 +11,11 @@ pub struct Prefix {
     detail_offset: u64,
     detail_length: u16,
     pub version: u8,
+    #[br(temp)]
+    unknown: u8,
+    encrypt_magic_version: u64,
+    #[br(temp)]
+    reserved: [u8; 80],
 }
 
 impl Prefix {
