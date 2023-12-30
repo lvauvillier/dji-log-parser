@@ -180,7 +180,8 @@ impl<'a> DJILog<'a> {
 
         let mut keychain: Vec<KeychainCipherText> = Vec::new();
 
-        for _ in 0..self.info.record_line_count {
+        let mut i = 0;
+        while i < self.info.record_line_count {
             let record = Record::read_args(
                 &mut cursor,
                 (self.prefix.version, &RefCell::new(HashMap::new())),
@@ -188,6 +189,9 @@ impl<'a> DJILog<'a> {
             .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
 
             match record {
+                Record::OSDFlightRecordDataType(_) => {
+                    i += 1;
+                }
                 Record::KeyStorage(data) => {
                     // add KeychainCipherText to current keychain
                     keychain.push(KeychainCipherText {
@@ -227,12 +231,14 @@ impl<'a> DJILog<'a> {
 
         let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
 
-        for _ in 0..self.info.record_line_count {
+        let mut i = 0;
+        while i < self.info.record_line_count {
             let record = Record::read_args(&mut cursor, (self.prefix.version, &keychain))
                 .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
 
             match record {
                 Record::OSDFlightRecordDataType(data) => {
+                    i += 1;
                     println!("OSDFlightRecordDataType {:?}", data);
                 }
                 Record::FlightRecordRecover(_) => {
