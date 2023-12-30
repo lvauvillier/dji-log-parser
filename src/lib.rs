@@ -119,15 +119,13 @@ impl<'a> DJILog<'a> {
     /// └─────────────────┘
     /// ```
     pub fn from_bytes(bytes: &[u8]) -> Result<DJILog, DJILogError> {
-        // Create a cursor
-        let mut cursor = Cursor::new(bytes);
-
         // Decode Prefix
-        let prefix =
-            Prefix::read(&mut cursor).map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
+        let prefix = Prefix::read(&mut Cursor::new(bytes))
+            .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
 
         // Decode Infos
-        cursor.set_position(prefix.info_offset() as u64);
+        let info_offset = prefix.info_offset() as usize;
+        let mut cursor = Cursor::new(&bytes[info_offset..]);
 
         let info = if prefix.version < 13 {
             Info::read_args(&mut cursor, (prefix.version,))
