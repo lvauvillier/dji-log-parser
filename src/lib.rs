@@ -215,11 +215,20 @@ impl<'a> DJILog<'a> {
 
         let mut i = 0;
         while i < self.info.record_line_count {
-            let record = Record::read_args(
+            let record = match Record::read_args(
                 &mut cursor,
                 (self.prefix.version, &RefCell::new(HashMap::new())),
-            )
-            .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
+            ) {
+                Ok(record) => record,
+                Err(e) => {
+                    // Recover errors if this is the last iteration of the loop
+                    if i == self.info.record_line_count - 1 {
+                        break;
+                    } else {
+                        return Err(DJILogError::RecordParseError(e.to_string()));
+                    }
+                }
+            };
 
             match record {
                 Record::OSDFlightRecordDataType(_) => {
@@ -283,8 +292,17 @@ impl<'a> DJILog<'a> {
 
         let mut i = 0;
         while i < self.info.record_line_count {
-            let record = Record::read_args(&mut cursor, (self.prefix.version, &keychain))
-                .map_err(|e| DJILogError::RecordParseError(e.to_string()))?;
+            let record = match Record::read_args(&mut cursor, (self.prefix.version, &keychain)) {
+                Ok(record) => record,
+                Err(e) => {
+                    // Recover errors if this is the last iteration of the loop
+                    if i == self.info.record_line_count - 1 {
+                        break;
+                    } else {
+                        return Err(DJILogError::RecordParseError(e.to_string()));
+                    }
+                }
+            };
 
             match record {
                 Record::OSDFlightRecordDataType(data) => {
