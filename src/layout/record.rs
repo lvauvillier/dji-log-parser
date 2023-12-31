@@ -7,6 +7,12 @@ use crate::decoder::record_decoder;
 use crate::layout::feature_point::FeaturePoint;
 use crate::Keychain;
 
+/// Represents the different types of records.
+///
+/// Each variant of this enum corresponds to a specific type of record in the log file.
+/// Records typically consist of a 'magic' byte indicating the record type, followed by the length of the record,
+/// the actual data, and then a terminating byte of value `0xff`.
+///
 #[binread]
 #[derive(Debug)]
 #[br(little, import(version: u8, keychain: &RefCell<Keychain>))]

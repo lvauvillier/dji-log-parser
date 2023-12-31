@@ -1,3 +1,61 @@
+//! # DJILog Parser Module
+//!
+//! This module provides functionality for parsing DJI log files.
+//!
+//! Binary structure of log files:
+//!
+//! v4 -> v6
+//! ```text
+//! ┌─────────────────┐
+//! │     Prefix      │ detail_offset ─┐
+//! ├─────────────────┤                │
+//! │     Records     │                │
+//! ├─────────────────┤<───────────────┘
+//! │      Info       │
+//! └─────────────────┘
+//! ```
+//!
+//! v7 -> v11
+//! ```text
+//! ┌─────────────────┐
+//! │     Prefix      │ detail_offset ─┐
+//! ├─────────────────┤                │
+//! │     Records     │                │
+//! │   (Encrypted)   │                │
+//! ├─────────────────┤<───────────────┘
+//! │      Info       │
+//! └─────────────────┘
+//!```
+//!
+//! v12
+//! ```text
+//! ┌─────────────────┐
+//! │     Prefix      │ detail_offset ─┐
+//! ├─────────────────┤                │
+//! │      Info       │                │
+//! ├─────────────────┤                │
+//! │     Records     │                │
+//! │   (Encrypted)   │                │
+//! └─────────────────┘<───────────────┘
+//!```
+//!
+//! v13 -> v14
+//! ```text
+//! ┌─────────────────┐
+//! │     Prefix      │ detail_offset ─┐
+//! ├─────────────────┤                │
+//! │ Auxiliary Info  |                |
+//! │   (Encrypted)   |                |
+//! ├─────────────────┤                │
+//! │    Auxiliary    |                |
+//! │     Version     |                │
+//! ├─────────────────┤<───────────────┘
+//! │     Records     │
+//! │(Encrypted + AES)|
+//! ├─────────────────┤
+//! │     Images      │
+//! └─────────────────┘
+//! ```
 use base64::engine::general_purpose::STANDARD as Base64Standard;
 use base64::Engine as _;
 use binrw::io::Cursor;
@@ -60,64 +118,30 @@ pub struct DJILog<'a> {
 }
 
 impl<'a> DJILog<'a> {
-    /// Constructs a `Parser` from a byte slice.
+    /// Constructs a `DJILog` from a byte slice.
     ///
-    /// This function parse Prefix, Info and KeychainInfo
+    /// This function parses the Prefix and Info blocks of the log file,
+    /// and handles different versions of the log format.
     ///
-    /// Binary structure:
+    /// # Arguments
     ///
-    /// v4 -> v6
-    /// ```text
-    /// ┌─────────────────┐
-    /// │     Prefix      │ detail_offset ─┐
-    /// ├─────────────────┤                │
-    /// │     Records     │                │
-    /// ├─────────────────┤<───────────────┘
-    /// │      Info       │
-    /// └─────────────────┘
+    /// * `bytes` - A byte slice representing the DJI log file.
+    ///
+    /// # Returns
+    ///
+    /// This function returns `Result<DJILog, DJILogError>`.
+    /// On success, it returns the `DJILog` instance. On failure, it returns
+    /// a `DJILogError` indicating the type of error encountered.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use djilog_parser::DJILog;
+    ///
+    /// let log_bytes = include_bytes!("path/to/log/file");
+    /// let log = DJILog::from_bytes(log_bytes).unwrap();
     /// ```
     ///
-    /// v7 -> v11
-    /// ```text
-    /// ┌─────────────────┐
-    /// │     Prefix      │ detail_offset ─┐
-    /// ├─────────────────┤                │
-    /// │     Records     │                │
-    /// │   (Encrypted)   │                │
-    /// ├─────────────────┤<───────────────┘
-    /// │      Info       │
-    /// └─────────────────┘
-    ///```
-    ///
-    /// v12
-    /// ```text
-    /// ┌─────────────────┐
-    /// │     Prefix      │ detail_offset ─┐
-    /// ├─────────────────┤                │
-    /// │      Info       │                │
-    /// ├─────────────────┤                │
-    /// │     Records     │                │
-    /// │   (Encrypted)   │                │
-    /// └─────────────────┘<───────────────┘
-    ///```
-    ///
-    /// v13 -> v14
-    /// ```text
-    /// ┌─────────────────┐
-    /// │     Prefix      │ detail_offset ─┐
-    /// ├─────────────────┤                │
-    /// │ Auxiliary Info  |                |
-    /// │   (Encrypted)   |                |
-    /// ├─────────────────┤                │
-    /// │    Auxiliary    |                |
-    /// │     Version     |                │
-    /// ├─────────────────┤<───────────────┘
-    /// │     Records     │
-    /// │(Encrypted + AES)|
-    /// ├─────────────────┤
-    /// │     Images      │
-    /// └─────────────────┘
-    /// ```
     pub fn from_bytes(bytes: &[u8]) -> Result<DJILog, DJILogError> {
         // Decode Prefix
         let prefix = Prefix::read(&mut Cursor::new(bytes))
@@ -149,7 +173,18 @@ impl<'a> DJILog<'a> {
         })
     }
 
-    /// Create a KeychainRequest object by parsing KeyStorage records
+    /// Creates a `KeychainRequest` object by parsing `KeyStorage` records.
+    ///
+    /// This function is used to build a request body for manually retrieving the keychain from the DJI API.
+    /// Keychains are required to decode records for logs with a version greater than or equal to 13.
+    /// For earlier versions, this function returns a default `KeychainRequest`.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result<KeychainRequest, DJILogError>`. On success, it provides a `KeychainRequest`
+    /// instance, which contains the necessary information to fetch keychains from the DJI API.
+    /// On failure, it returns a `DJILogError` indicating the type of error encountered during parsing.
+    ///
     pub fn keychain_request(&self) -> Result<KeychainRequest, DJILogError> {
         let mut keychain_request = KeychainRequest::default();
 
@@ -210,7 +245,24 @@ impl<'a> DJILog<'a> {
 
         Ok(keychain_request)
     }
-
+    /// Retrieves the parsed records from the DJI log.
+    ///
+    /// This function decodes the records from the log file based on the specified decryption method.
+    /// For log versions less than 13, `DecryptMethod::None` should be used as there is no encryption.
+    /// For versions 13 and above, records are encrypted and require a decryption method:
+    /// - `DecryptMethod::Keychains` if you want to manually provide the keychains,
+    /// - `DecryptMethod::ApiKey` if you have an API key to decrypt the records.
+    ///
+    /// # Arguments
+    ///
+    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based on the log version and available decryption keys.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result<Vec<Record>, DJILogError>`. On success, it provides a vector of `Record`
+    /// instances representing the parsed log records. On failure, it returns a `DJILogError` indicating
+    /// the type of error encountered during record parsing.
+    ///
     pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>, DJILogError> {
         if self.prefix.version >= 13 && decrypt_method == DecryptMethod::None {
             return Err(DJILogError::RecordParseError(
