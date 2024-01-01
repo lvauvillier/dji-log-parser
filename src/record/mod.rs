@@ -11,6 +11,7 @@ use crate::utils;
 use crate::Keychain;
 
 pub mod custom;
+pub mod deform;
 pub mod gimbal;
 pub mod home;
 pub mod key_storage;
@@ -18,6 +19,7 @@ pub mod osd;
 pub mod rc;
 
 use custom::Custom;
+use deform::Deform;
 use gimbal::Gimbal;
 use home::Home;
 use key_storage::KeyStorage;
@@ -83,6 +85,16 @@ pub enum Record {
             map_stream = |reader| NoSeek::new(record_decoder(reader, 5, version, keychain, self_0))
         )]
         Custom,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 6u8)]
+    Deform(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 6, version, keychain, self_0))
+        )]
+        Deform,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
