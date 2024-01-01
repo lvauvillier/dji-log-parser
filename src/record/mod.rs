@@ -9,9 +9,11 @@ use crate::decoder::record_decoder;
 use crate::utils;
 use crate::Keychain;
 
+pub mod gimbal;
 pub mod key_storage;
 pub mod osd;
 
+use gimbal::Gimbal;
 use key_storage::KeyStorage;
 use osd::OSD;
 
@@ -31,6 +33,14 @@ pub enum Record {
         #[br(pad_size_to = self_0,
             map_stream = |reader| NoSeek::new(record_decoder(reader, 1, version, keychain, self_0)) )]
         OSD,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 3u8)]
+    Gimbal(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 3, version, keychain, self_0)) )]
+        Gimbal,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
