@@ -10,6 +10,7 @@ use crate::layout::info::ProductType;
 use crate::utils;
 use crate::Keychain;
 
+pub mod center_battery;
 pub mod custom;
 pub mod deform;
 pub mod gimbal;
@@ -18,6 +19,7 @@ pub mod key_storage;
 pub mod osd;
 pub mod rc;
 
+use center_battery::CenterBattery;
 use custom::Custom;
 use deform::Deform;
 use gimbal::Gimbal;
@@ -97,6 +99,17 @@ pub enum Record {
         Deform,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
+    #[br(magic = 7u8)]
+    CenterBattery(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 7, version, keychain, self_0))
+        )]
+        CenterBattery,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+
     #[br(magic = 56u8)]
     KeyStorage(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
