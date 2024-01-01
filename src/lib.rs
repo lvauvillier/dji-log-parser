@@ -231,7 +231,7 @@ impl<'a> DJILog<'a> {
             };
 
             match record {
-                Record::OSDFlightRecordDataType(_) => {
+                Record::OSD(_) => {
                     i += 1;
                 }
                 Record::KeyStorage(data) => {
@@ -241,7 +241,7 @@ impl<'a> DJILog<'a> {
                         aes_ciphertext: Base64Standard.encode(&data.data),
                     });
                 }
-                Record::FlightRecordRecover(_) => {
+                Record::Recover(_) => {
                     // start a new keychain
                     keychain_request.keychains.push(keychain);
                     keychain = Vec::new();
@@ -305,15 +305,18 @@ impl<'a> DJILog<'a> {
             };
 
             match record {
-                Record::OSDFlightRecordDataType(data) => {
+                Record::OSD(data) => {
                     i += 1;
-                    println!("OSDFlightRecordDataType {:?}", data);
+                    println!("OSD: {:?}", data);
                 }
-                Record::FlightRecordRecover(_) => {
+                Record::Recover(_) => {
                     keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
                 }
                 Record::Unknown(record_type, data) => {
                     println!("Unknown ({}): {:?}", record_type, data);
+                }
+                Record::Invalid(data) => {
+                    println!("Invalid: {:?}", data);
                 }
                 _ => {}
             }

@@ -161,50 +161,6 @@ impl From<u8> for ProductType {
     }
 }
 
-impl Into<u8> for ProductType {
-    fn into(self) -> u8 {
-        match self {
-            ProductType::None => 0,
-            ProductType::Phantom3Standard => 2,
-            ProductType::Phantom4 => 7,
-            ProductType::Matrice600 => 11,
-            ProductType::Phantom34K => 12,
-            ProductType::MavicPro => 13,
-            ProductType::Inspire2 => 17,
-            ProductType::Phantom4Pro => 24,
-            ProductType::Spark => 26,
-            ProductType::Matrice600Pro => 27,
-            ProductType::Phantom4Advanced => 28,
-            ProductType::Phantom3SE => 29,
-            ProductType::Matrice200 => 31,
-            ProductType::Matrice210 => 33,
-            ProductType::Matrice210RTK => 34,
-            ProductType::MavicAir => 38,
-            ProductType::Mavic2 => 42,
-            ProductType::Phantom4ProV2 => 44,
-            ProductType::Phantom4RTK => 46,
-            ProductType::P4Multispectral => 57,
-            ProductType::Mavic2Enterprise => 58,
-            ProductType::MavicMini => 59,
-            ProductType::Matrice200V2 => 60,
-            ProductType::Matrice210V2 => 61,
-            ProductType::Matrice210RTKV2 => 62,
-            ProductType::MavicAir2 => 67,
-            ProductType::Matrice300RTK => 70,
-            ProductType::DJIFPV => 73,
-            ProductType::MavicAir2S => 75,
-            ProductType::MavicMini2 => 76,
-            ProductType::Mavic3 => 77,
-            ProductType::MavicMiniSE => 96,
-            ProductType::Mini3Pro => 103,
-            ProductType::Matrice30 => 116,
-            ProductType::Mavic3Enterprise => 118,
-            ProductType::DJIAvata => 121,
-            ProductType::Unknown(num) => num,
-        }
-    }
-}
-
 impl Default for ProductType {
     fn default() -> Self {
         ProductType::None

@@ -13,6 +13,7 @@ pub struct Prefix {
     pub version: u8,
     #[br(temp)]
     unknown: u8,
+    #[br(temp)]
     encrypt_magic_version: u64,
     #[br(temp)]
     reserved: [u8; 80],

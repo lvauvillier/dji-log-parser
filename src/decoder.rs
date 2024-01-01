@@ -32,8 +32,11 @@ pub fn record_decoder<'a, R: Read + 'a>(
     size: u16,
 ) -> Box<dyn Read + 'a> {
     match version {
+        // Raw
         0..=6 => Box::new(reader),
+        // Magic
         7..=12 => Box::new(MagicDecoder::new(reader, record_type)),
+        // Magic + AES
         _ => {
             let feature_point = FeaturePoint::from_record_type(record_type, version);
             match feature_point {
