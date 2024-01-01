@@ -67,13 +67,15 @@ use thiserror::Error;
 mod decoder;
 mod keychain;
 mod layout;
+pub mod record;
+mod utils;
 
 pub use crate::keychain::Keychain;
 use crate::keychain::{KeychainCipherText, KeychainRequest};
 use crate::layout::auxiliary::Auxiliary;
-use crate::layout::info::Info;
-use crate::layout::prefix::Prefix;
-use crate::layout::record::Record;
+pub use crate::layout::info::Info;
+pub use crate::layout::prefix::Prefix;
+use crate::record::Record;
 
 #[derive(PartialEq, Debug, Error)]
 #[non_exhaustive]

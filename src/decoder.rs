@@ -113,7 +113,7 @@ impl<R: Read> Read for MagicDecoder<R> {
     }
 }
 
-struct AesDecoder {
+pub struct AesDecoder {
     buffer: Cursor<Vec<u8>>,
     pub next_iv: Vec<u8>,
 }

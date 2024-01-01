@@ -1,0 +1,65 @@
+use std::cell::RefCell;
+
+use binrw::binread;
+use binrw::helpers::until;
+use binrw::io::NoSeek;
+
+use crate::decoder::record_decoder;
+
+use crate::utils;
+use crate::Keychain;
+
+pub mod key_storage;
+pub mod osd;
+
+use key_storage::KeyStorage;
+use osd::OSD;
+
+/// Represents the different types of records.
+///
+/// Each variant of this enum corresponds to a specific type of record in the log file.
+/// Records typically consist of a 'magic' byte indicating the record type, followed by the length of the record,
+/// the actual data, and then a terminating byte of value `0xff`.
+///
+#[binread]
+#[derive(Debug)]
+#[br(little, import(version: u8, keychain: &RefCell<Keychain>))]
+pub enum Record {
+    #[br(magic = 1u8)]
+    OSD(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 1, version, keychain, self_0)) )]
+        OSD,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 56u8)]
+    KeyStorage(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(record_decoder(reader, 56, version, keychain, self_0)))]
+         KeyStorage,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 50u8)]
+    Recover(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(count = self_0)] Vec<u8>,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    // Valid record of unknown data
+    Unknown(
+        u8, // record_type
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(pad_size_to = self_1,
+            count = if version <= 6 {
+                self_1
+            } else {
+                self_1 - 2
+            },
+            map_stream = |reader| NoSeek::new(record_decoder(reader, self_0, version, keychain, self_1)))]
+        Vec<u8>,
+        #[br(temp, assert(self_3 == 0xff))] u8,
+    ),
+    // Invalid Record, parse util we get a terminating byte of value `0xff`
+    Invalid(#[br(parse_with = until(|&byte| byte == 0xff))] Vec<u8>),
+}
