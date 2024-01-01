@@ -10,12 +10,14 @@ use crate::layout::info::ProductType;
 use crate::utils;
 use crate::Keychain;
 
+pub mod custom;
 pub mod gimbal;
 pub mod home;
 pub mod key_storage;
 pub mod osd;
 pub mod rc;
 
+use custom::Custom;
 use gimbal::Gimbal;
 use home::Home;
 use key_storage::KeyStorage;
@@ -35,41 +37,62 @@ pub enum Record {
     #[br(magic = 1u8)]
     OSD(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 1, version, keychain, self_0)) )]
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 1, version, keychain, self_0))
+        )]
         OSD,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 2u8)]
     Home(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 2, version, keychain, self_0)) )]
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 2, version, keychain, self_0))
+        )]
         Home,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 3u8)]
     Gimbal(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 3, version, keychain, self_0)) )]
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 3, version, keychain, self_0))
+        )]
         Gimbal,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 4u8)]
     RC(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(pad_size_to = self_0,
+        #[br(
+            pad_size_to = self_0,
             map_stream = |reader| NoSeek::new(record_decoder(reader, 4, version, keychain, self_0)),
-        args { product_type} )]
+            args { product_type }
+        )]
         RC,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 5u8)]
+    Custom(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 5, version, keychain, self_0))
+        )]
+        Custom,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
     KeyStorage(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(pad_size_to = self_0, map_stream = |reader| NoSeek::new(record_decoder(reader, 56, version, keychain, self_0)))]
-         KeyStorage,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 56, version, keychain, self_0))
+        )]
+        KeyStorage,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 50u8)]
@@ -82,13 +105,15 @@ pub enum Record {
     Unknown(
         u8, // record_type
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(pad_size_to = self_1,
+        #[br(
+            pad_size_to = self_1,
             count = if version <= 6 {
                 self_1
             } else {
                 self_1 - 2
             },
-            map_stream = |reader| NoSeek::new(record_decoder(reader, self_0, version, keychain, self_1)))]
+            map_stream = |reader| NoSeek::new(record_decoder(reader, self_0, version, keychain, self_1))
+        )]
         Vec<u8>,
         #[br(temp, assert(self_3 == 0xff))] u8,
     ),

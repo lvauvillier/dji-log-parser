@@ -56,7 +56,7 @@ pub struct Home {
     pub record_sd_left_time: u16,
     pub current_flight_record_index: u16,
     #[br(temp)]
-    pub unknown: [u8; 5],
+    unknown: [u8; 5],
     pub max_allowed_height: f32,
 }
 
