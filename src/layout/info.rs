@@ -76,7 +76,7 @@ impl Default for UUID {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ProductType {
     None,
     Phantom3Standard,

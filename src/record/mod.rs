@@ -6,6 +6,7 @@ use binrw::io::NoSeek;
 
 use crate::decoder::record_decoder;
 
+use crate::layout::info::ProductType;
 use crate::utils;
 use crate::Keychain;
 
@@ -13,11 +14,13 @@ pub mod gimbal;
 pub mod home;
 pub mod key_storage;
 pub mod osd;
+pub mod rc;
 
 use gimbal::Gimbal;
 use home::Home;
 use key_storage::KeyStorage;
 use osd::OSD;
+use rc::RC;
 
 /// Represents the different types of records.
 ///
@@ -27,7 +30,7 @@ use osd::OSD;
 ///
 #[binread]
 #[derive(Debug)]
-#[br(little, import(version: u8, keychain: &RefCell<Keychain>))]
+#[br(little, import { version: u8, keychain: &RefCell<Keychain>, product_type: ProductType = ProductType::None })]
 pub enum Record {
     #[br(magic = 1u8)]
     OSD(
@@ -51,6 +54,15 @@ pub enum Record {
         #[br(pad_size_to = self_0,
             map_stream = |reader| NoSeek::new(record_decoder(reader, 3, version, keychain, self_0)) )]
         Gimbal,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 4u8)]
+    RC(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 4, version, keychain, self_0)),
+        args { product_type} )]
+        RC,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]

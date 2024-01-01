@@ -217,9 +217,13 @@ impl<'a> DJILog<'a> {
 
         let mut i = 0;
         while i < self.info.record_line_count {
+            let empty_keychain = RefCell::new(HashMap::new());
             let record = match Record::read_args(
                 &mut cursor,
-                (self.prefix.version, &RefCell::new(HashMap::new())),
+                binrw::args! {
+                    version: self.prefix.version,
+                    keychain: &empty_keychain
+                },
             ) {
                 Ok(record) => record,
                 Err(e) => {
@@ -294,11 +298,19 @@ impl<'a> DJILog<'a> {
 
         let mut i = 0;
         while i < self.info.record_line_count {
-            let record = match Record::read_args(&mut cursor, (self.prefix.version, &keychain)) {
+            let record = match Record::read_args(
+                &mut cursor,
+                binrw::args! {
+                    version: self.prefix.version,
+                    keychain: &keychain
+                },
+            ) {
                 Ok(record) => record,
                 Err(e) => {
                     // Recover errors if this is the last iteration of the loop
-                    if i == self.info.record_line_count - 1 {
+                    if i == self.info.record_line_count - 1
+                        || self.inner.len() as u64 - cursor.position() == 0
+                    {
                         break;
                     } else {
                         return Err(DJILogError::RecordParseError(e.to_string()));
