@@ -18,6 +18,7 @@ pub mod home;
 pub mod key_storage;
 pub mod osd;
 pub mod rc;
+pub mod smart_battery;
 
 use center_battery::CenterBattery;
 use custom::Custom;
@@ -27,6 +28,7 @@ use home::Home;
 use key_storage::KeyStorage;
 use osd::OSD;
 use rc::RC;
+use smart_battery::SmartBattery;
 
 /// Represents the different types of records.
 ///
@@ -109,7 +111,16 @@ pub enum Record {
         CenterBattery,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
-
+    #[br(magic = 8u8)]
+    SmartBattery(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 8, version, keychain, self_0))
+        )]
+        SmartBattery,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
     #[br(magic = 56u8)]
     KeyStorage(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
