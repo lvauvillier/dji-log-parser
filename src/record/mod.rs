@@ -57,7 +57,8 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 2, version, keychain, self_0))
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 2, version, keychain, self_0)),
+            args { version }
         )]
         Home,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -78,7 +79,7 @@ pub enum Record {
         #[br(
             pad_size_to = self_0,
             map_stream = |reader| NoSeek::new(record_decoder(reader, 4, version, keychain, self_0)),
-            args { product_type }
+            args { product_type, version }
         )]
         RC,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -108,7 +109,8 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 7, version, keychain, self_0))
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 7, version, keychain, self_0)),
+            args { version }
         )]
         CenterBattery,
         #[br(temp, assert(self_2 == 0xff))] u8,

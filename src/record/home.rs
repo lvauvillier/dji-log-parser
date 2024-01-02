@@ -5,7 +5,7 @@ use binrw::binread;
 
 #[binread]
 #[derive(Debug)]
-#[br(little)]
+#[br(little, import { version: u8 })]
 pub struct Home {
     /// degrees
     #[br(map = |x: f64| (x * 180.0) / PI)]
@@ -55,8 +55,9 @@ pub struct Home {
     pub record_sd_capacity_percent: u8,
     pub record_sd_left_time: u16,
     pub current_flight_record_index: u16,
-    #[br(temp)]
+    #[br(if(version >= 8), temp)]
     unknown: [u8; 5],
+    #[br(if(version >= 8))]
     pub max_allowed_height: f32,
 }
 

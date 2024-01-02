@@ -5,7 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Debug)]
-#[br(little, import { product_type: ProductType = ProductType::None })]
+#[br(little, import { version: u8, product_type: ProductType = ProductType::None })]
 pub struct RC {
     /// right stick - horizontal
     #[br(map = |x: u16| (x as f32 - 1024.0) / 0.66)]
@@ -61,7 +61,9 @@ pub struct RC {
     #[br(calc(sub_byte_field(_bitpack3, 0x80)))]
     pub record_btn_down: u8,
 
-    pub bandidth: u8,
+    #[br(if(version >= 6))]
+    pub bandwidth: u8,
+    #[br(if(version >= 7))]
     pub gimbal_control_enable: u8,
 }
 
