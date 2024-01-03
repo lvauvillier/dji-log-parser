@@ -19,7 +19,7 @@ pub struct Info {
     pub needs_upload: u8,
     pub record_line_count: i32,
     pub detail_info_checksum: i32,
-    #[br(map = |x: i64| DateTime::from_timestamp(x / 1000, (x % 1000 * 1000000) as u32).unwrap())]
+    #[br(map = |x: i64| DateTime::from_timestamp(x / 1000, (x % 1000 * 1000000) as u32).unwrap_or_default())]
     pub timestamp: DateTime<Utc>,
     pub longitude: f64,
     pub latitude: f64,
@@ -44,18 +44,24 @@ pub struct Info {
     pub product_type: ProductType,
     #[br(temp)]
     unknown2: i64,
-    #[br(seek_before = if version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0)})]
-    #[br(count=if version <= 5 { 24 } else {32}, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(
+        seek_before = if version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0) },
+        count = if version <= 5 { 24 } else { 32 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
+    )]
     pub aircraft_name: String,
-    #[br(seek_before = if version <= 4 { SeekFrom::Start(267) } else { SeekFrom::Current(0)})]
-    #[br(count=if version <= 5 { 10 } else {16}, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(
+        seek_before = if version <= 4 { SeekFrom::Start(267) } else { SeekFrom::Current(0) },
+        count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
+    )]
     pub aircraft_sn: String,
-    #[br(seek_before = if version <= 4 { SeekFrom::Start(318) } else { SeekFrom::Current(0)})]
-    #[br(count=if version <= 5 { 10 } else {16}, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(
+        seek_before = if version <= 4 { SeekFrom::Start(318) } else { SeekFrom::Current(0) },
+        count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
+    )]
     pub camera_sn: String,
-    #[br(count=if version <= 5 { 10 } else {16}, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
     pub rc_sn: String,
-    #[br(count=if version <= 5 { 10 } else {16}, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
     pub battery_sn: String,
     pub app_version: [u8; 4],
     #[br(temp)]

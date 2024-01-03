@@ -12,7 +12,7 @@ pub struct OSD {
     pub longitude: f64,
     /// degrees
     #[br(map = |x: f64| (x * 180.0) / PI)]
-    pub lattitude: f64,
+    pub latitude: f64,
     /// meters
     #[br(map = |x: i16| (x as f32 / 10.0))]
     pub altitude: f32,
