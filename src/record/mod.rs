@@ -21,6 +21,7 @@ pub mod key_storage;
 pub mod osd;
 pub mod rc;
 pub mod rc_gps;
+pub mod recover_info;
 pub mod smart_battery;
 
 use app_tip::AppTip;
@@ -34,6 +35,7 @@ use key_storage::KeyStorage;
 use osd::OSD;
 use rc::RC;
 use rc_gps::RCGPS;
+use recover_info::RecoverInfo;
 use smart_battery::SmartBattery;
 
 /// Represents the different types of records.
@@ -159,6 +161,17 @@ pub enum Record {
             map_stream = |reader| NoSeek::new(record_decoder(reader, 11, version, keychain, self_0))
         )]
         RCGPS,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 13u8)]
+    RecoverInfo(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 13, version, keychain, self_0)),
+            args { version }
+        )]
+        RecoverInfo,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
