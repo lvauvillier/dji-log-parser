@@ -20,13 +20,21 @@ pub struct Info {
     pub record_line_count: i32,
     pub detail_info_checksum: i32,
     #[br(map = |x: i64| DateTime::from_timestamp(x / 1000, (x % 1000 * 1000000) as u32).unwrap_or_default())]
-    pub timestamp: DateTime<Utc>,
+    pub start_time: DateTime<Utc>,
+    /// degrees
     pub longitude: f64,
+    /// degrees
     pub latitude: f64,
+    /// meters
     pub total_distance: f32,
-    pub total_time: i32,
+    /// seconds
+    #[br( map = |x: i32| x as f64 / 1000.0)]
+    pub total_time: f64,
+    /// meters
     pub max_height: f32,
+    /// meters / seconds
     pub max_horizontal_speed: f32,
+    /// meters / seconds
     pub max_vertical_speed: f32,
     pub capture_num: i32,
     pub video_time: i64,
@@ -63,7 +71,10 @@ pub struct Info {
     pub rc_sn: String,
     #[br(count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
     pub battery_sn: String,
-    pub app_version: [u8; 4],
+    #[br(map = |x: u8| Platform::from(x))]
+    pub app_platform: Platform,
+    #[br(map = |x: [u8; 3]| format!("{}.{}.{}", x[0], x[1], x[2]))]
+    pub app_version: String,
     #[br(temp)]
     unknown3: u8,
     #[br(temp)]
@@ -170,5 +181,26 @@ impl From<u8> for ProductType {
 impl Default for ProductType {
     fn default() -> Self {
         ProductType::None
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Platform {
+    IOS,
+    Android,
+    Window,
+    Mac,
+    Unknown(u8),
+}
+
+impl From<u8> for Platform {
+    fn from(num: u8) -> Self {
+        match num {
+            1 => Platform::IOS,
+            2 => Platform::Android,
+            10 => Platform::Window,
+            11 => Platform::Mac,
+            _ => Platform::Unknown(num),
+        }
     }
 }
