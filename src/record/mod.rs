@@ -16,6 +16,7 @@ pub mod app_warn;
 pub mod center_battery;
 pub mod custom;
 pub mod deform;
+pub mod firmware;
 pub mod gimbal;
 pub mod home;
 pub mod key_storage;
@@ -31,6 +32,7 @@ use app_warn::AppWarn;
 use center_battery::CenterBattery;
 use custom::Custom;
 use deform::Deform;
+use firmware::Firmware;
 use gimbal::Gimbal;
 use home::Home;
 use key_storage::KeyStorage;
@@ -184,6 +186,16 @@ pub enum Record {
             map_stream = |reader| NoSeek::new(record_decoder(reader, 14, version, keychain, self_0))
         )]
         AppGPS,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 15u8)]
+    Firmware(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| NoSeek::new(record_decoder(reader, 15, version, keychain, self_0))
+        )]
+        Firmware,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
