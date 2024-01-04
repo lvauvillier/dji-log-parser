@@ -18,17 +18,17 @@ pub struct CenterBattery {
     pub current: f32,
 
     #[br(map = |x: u16| x as f32 / 1000.0)]
-    pub voltageCell1: f32,
+    pub voltage_cell1: f32,
     #[br(map = |x: u16| x as f32 / 1000.0)]
-    pub voltageCell2: f32,
+    pub voltage_cell2: f32,
     #[br(map = |x: u16| x as f32 / 1000.0)]
-    pub voltageCell3: f32,
+    pub voltage_cell3: f32,
     #[br(map = |x: u16| x as f32 / 1000.0)]
-    pub voltageCell4: f32,
+    pub voltage_cell4: f32,
     #[br(map = |x: u16| x as f32 / 1000.0)]
-    pub voltageCell5: f32,
+    pub voltage_cell5: f32,
     #[br(map = |x: u16| x as f32 / 1000.0)]
-    pub voltageCell6: f32,
+    pub voltage_cell6: f32,
 
     pub serial_number: u16,
     pub product_date: u16,
