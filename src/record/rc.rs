@@ -107,7 +107,7 @@ impl FlightModeSwitch {
             0 => FlightModeSwitch::One,
             1 => FlightModeSwitch::Two,
             2 => FlightModeSwitch::Three,
-            other => FlightModeSwitch::Unknown(other),
+            _ => FlightModeSwitch::Unknown(mapped_value),
         }
     }
 }

@@ -33,7 +33,7 @@ impl FailSafeProtectionType {
             0 => FailSafeProtectionType::Hover,
             1 => FailSafeProtectionType::Landing,
             2 => FailSafeProtectionType::GoHome,
-            other => FailSafeProtectionType::Unknown(other),
+            _ => FailSafeProtectionType::Unknown(value),
         }
     }
 }
