@@ -2,7 +2,6 @@ use std::cell::RefCell;
 
 use binrw::binread;
 use binrw::helpers::until;
-use binrw::io::NoSeek;
 
 use crate::decoder::record_decoder;
 
@@ -59,7 +58,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 1, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 1, version, keychain, self_0)
         )]
         OSD,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -69,7 +68,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 2, version, keychain, self_0)),
+            map_stream = |reader| record_decoder(reader, 2, version, keychain, self_0),
             args { version }
         )]
         Home,
@@ -80,7 +79,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 3, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 3, version, keychain, self_0)
         )]
         Gimbal,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -90,7 +89,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 4, version, keychain, self_0)),
+            map_stream = |reader| record_decoder(reader, 4, version, keychain, self_0),
             args { product_type, version }
         )]
         RC,
@@ -101,7 +100,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 5, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 5, version, keychain, self_0)
         )]
         Custom,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -111,7 +110,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 6, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 6, version, keychain, self_0)
         )]
         Deform,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -121,7 +120,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 7, version, keychain, self_0)),
+            map_stream = |reader| record_decoder(reader, 7, version, keychain, self_0),
             args { version }
         )]
         CenterBattery,
@@ -132,7 +131,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 8, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 8, version, keychain, self_0)
         )]
         SmartBattery,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -142,7 +141,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 9, version, keychain, self_0)),
+            map_stream = |reader| record_decoder(reader, 9, version, keychain, self_0),
             args { length: self_0 }
         )]
         AppTip,
@@ -153,7 +152,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 10, version, keychain, self_0)),
+            map_stream = |reader| record_decoder(reader, 10, version, keychain, self_0),
             args { length: self_0 }
         )]
         AppWarn,
@@ -164,7 +163,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 11, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 11, version, keychain, self_0)
         )]
         RCGPS,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -174,7 +173,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 13, version, keychain, self_0)),
+            map_stream = |reader| record_decoder(reader, 13, version, keychain, self_0),
             args { version }
         )]
         RecoverInfo,
@@ -185,7 +184,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 14, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 14, version, keychain, self_0)
         )]
         AppGPS,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -195,7 +194,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 15, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 15, version, keychain, self_0)
         )]
         Firmware,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -205,7 +204,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 19, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 19, version, keychain, self_0)
         )]
         MCParams,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -215,7 +214,7 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| NoSeek::new(record_decoder(reader, 56, version, keychain, self_0))
+            map_stream = |reader| record_decoder(reader, 56, version, keychain, self_0)
         )]
         KeyStorage,
         #[br(temp, assert(self_2 == 0xff))] u8,
@@ -237,7 +236,7 @@ pub enum Record {
             } else {
                 self_1 - 2
             },
-            map_stream = |reader| NoSeek::new(record_decoder(reader, self_0, version, keychain, self_1))
+            map_stream = |reader| record_decoder(reader, self_0, version, keychain, self_1)
         )]
         Vec<u8>,
         #[br(temp, assert(self_3 == 0xff))] u8,

@@ -1,14 +1,18 @@
 use aes::cipher::block_padding::Pkcs7;
 use aes::cipher::{BlockDecryptMut, BlockSizeUser, KeyIvInit};
 use aes::Aes256;
+use binrw::io::NoSeek;
 use crc64::crc64;
 use std::cell::RefCell;
-use std::io::{Cursor, Read, Result};
+use std::io::{Cursor, Read, Result, Seek, SeekFrom};
 
 use crate::layout::feature_point::FeaturePoint;
 use crate::Keychain;
 
 type Aes256CbcDec = cbc::Decryptor<Aes256>;
+
+pub trait SeekRead: Seek + Read {}
+impl<T> SeekRead for T where T: Seek + Read {}
 
 /// Constructs a reader based on the given record type, version, and keychain.
 ///
@@ -24,23 +28,28 @@ type Aes256CbcDec = cbc::Decryptor<Aes256>;
 ///
 /// This function returns a `Result` containing either a boxed reader implementing `Read`
 /// or an error if one occurs during the reader's construction.
-pub fn record_decoder<'a, R: Read + 'a>(
+pub fn record_decoder<'a, R>(
     reader: R,
     record_type: u8,
     version: u8,
     keychain: &RefCell<Keychain>,
     size: u16,
-) -> Box<dyn Read + 'a> {
+) -> Box<dyn SeekRead + 'a>
+where
+    R: Read + Seek + 'a,
+{
     match version {
         // Raw
         0..=6 => Box::new(reader),
         // Magic
-        7..=12 => Box::new(MagicDecoder::new(reader, record_type)),
+        7..=12 => Box::new(NoSeek::new(MagicDecoder::new(reader, record_type))),
         // Magic + AES
         _ => {
             let feature_point = FeaturePoint::from_record_type(record_type, version);
             match feature_point {
-                FeaturePoint::PlaintextFeature => Box::new(MagicDecoder::new(reader, record_type)),
+                FeaturePoint::PlaintextFeature => {
+                    Box::new(NoSeek::new(MagicDecoder::new(reader, record_type)))
+                }
                 _ => {
                     let pair = keychain
                         .borrow()
@@ -64,7 +73,7 @@ pub fn record_decoder<'a, R: Read + 'a>(
 
                             Box::new(aes_reader)
                         }
-                        None => Box::new(MagicDecoder::new(reader, record_type)),
+                        None => Box::new(NoSeek::new(MagicDecoder::new(reader, record_type))),
                     }
                 }
             }
@@ -74,7 +83,7 @@ pub fn record_decoder<'a, R: Read + 'a>(
 
 /// Magic Encoding is an internal data encoding method used starting v4
 /// It doesn't require any external keychain
-pub struct MagicDecoder<R: Read> {
+pub struct MagicDecoder<R> {
     reader: R,
     key: [u8; 8],
     position: usize,
@@ -143,5 +152,11 @@ impl Read for AesDecoder {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
         self.buffer.read(buf);
         Ok(buf.len()) // always return buffer length to avoid padding issues
+    }
+}
+
+impl Seek for AesDecoder {
+    fn seek(&mut self, pos: SeekFrom) -> Result<u64> {
+        self.buffer.seek(pos)
     }
 }
