@@ -25,6 +25,7 @@ pub mod rc;
 pub mod rc_gps;
 pub mod recover_info;
 pub mod smart_battery;
+pub mod smart_battery_group;
 
 use app_gps::AppGPS;
 use app_tip::AppTip;
@@ -42,6 +43,7 @@ use rc::RC;
 use rc_gps::RCGPS;
 use recover_info::RecoverInfo;
 use smart_battery::SmartBattery;
+use smart_battery_group::SmartBatteryGroup;
 
 /// Represents the different types of records.
 ///
@@ -207,6 +209,16 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 19, version, keychain, self_0)
         )]
         MCParams,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 22u8)]
+    SmartBatteryGroup(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| record_decoder(reader, 22, version, keychain, self_0)
+        )]
+        SmartBatteryGroup,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
