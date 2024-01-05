@@ -129,7 +129,7 @@ impl AesDecoder {
         let dec: cbc::Decryptor<Aes256> = Aes256CbcDec::new_from_slices(key, iv).unwrap();
         let plaintext = dec
             .decrypt_padded_mut::<Pkcs7>(&mut buffer)
-            .unwrap()
+            .unwrap_or_default()
             .to_vec();
 
         AesDecoder {

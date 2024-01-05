@@ -13,7 +13,7 @@ pub struct SmartBattery {
     pub land_battery: u16,
     pub safe_fly_radius: f32,
     pub volume_consume: f32,
-    pub smart_battery_state: u32,
+    pub status: u32,
     #[br(map = |x: u8| GoHomeStatus::from(x))]
     pub go_home_status: GoHomeStatus,
     pub go_home_countdown: u8,
