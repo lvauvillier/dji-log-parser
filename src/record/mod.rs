@@ -13,6 +13,7 @@ pub mod app_gps;
 pub mod app_serious_warn;
 pub mod app_tip;
 pub mod app_warn;
+pub mod camera;
 pub mod center_battery;
 pub mod custom;
 pub mod deform;
@@ -32,6 +33,7 @@ use app_gps::AppGPS;
 use app_serious_warn::AppSeriousWarn;
 use app_tip::AppTip;
 use app_warn::AppWarn;
+use camera::Camera;
 use center_battery::CenterBattery;
 use custom::Custom;
 use deform::Deform;
@@ -232,6 +234,16 @@ pub enum Record {
             args { length: self_0 }
         )]
         AppSeriousWarn,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 25u8)]
+    Camera(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| record_decoder(reader, 25, version, keychain, self_0),
+        )]
+        Camera,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 56u8)]
