@@ -8,8 +8,8 @@ use crate::utils::sub_byte_field;
 pub struct Deform {
     #[br(temp)]
     _bitpack1: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x01)))]
-    pub is_deform_protected: u8,
+    #[br(calc(sub_byte_field(_bitpack1, 0x01) == 1))]
+    pub is_deform_protected: bool,
     #[br(calc(DeformStatus::from(sub_byte_field(_bitpack1, 0x0E))))]
     pub deform_status: DeformStatus,
     #[br(calc(DeformMode::from(sub_byte_field(_bitpack1, 0x30))))]

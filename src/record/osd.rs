@@ -39,44 +39,44 @@ pub struct OSD {
     _bitpack1: u8,
     #[br(calc(FlightMode::from(sub_byte_field(_bitpack1, 0x7F))))]
     pub flight_mode: FlightMode,
-    #[br(calc(sub_byte_field(_bitpack1, 0x80)))]
-    pub rc_outcontrol: u8,
+    #[br(calc(sub_byte_field(_bitpack1, 0x80) == 1))]
+    pub rc_outcontrol: bool,
 
     #[br(map = |x: u8| AppCommand::from(x))]
     pub app_command: AppCommand,
 
     #[br(temp)]
     _bitpack2: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x01)))]
-    pub can_ioc_work: u8,
+    #[br(calc(sub_byte_field(_bitpack2, 0x01) == 1))]
+    pub can_ioc_work: bool,
     #[br(calc(GroundOrSky::from(sub_byte_field(_bitpack2, 0x06))))]
     pub ground_or_sky: GroundOrSky,
-    #[br(calc(sub_byte_field(_bitpack2, 0x08)))]
-    pub is_motor_up: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x10)))]
-    pub is_swave_work: u8,
+    #[br(calc(sub_byte_field(_bitpack2, 0x08) == 1))]
+    pub is_motor_up: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x10) == 1))]
+    pub is_swave_work: bool,
     #[br(calc(GoHomeStatus::from(sub_byte_field(_bitpack2, 0xE0))))]
     pub go_home_status: GoHomeStatus,
 
     #[br(temp)]
     _bitpack3: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x01)))]
-    pub is_vision_used: u8,
+    #[br(calc(sub_byte_field(_bitpack3, 0x01) == 1))]
+    pub is_vision_used: bool,
     #[br(calc(sub_byte_field(_bitpack3, 0x06)))]
     pub voltage_warning: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x10)))]
-    pub is_imu_preheated: u8,
+    #[br(calc(sub_byte_field(_bitpack3, 0x10) == 1))]
+    pub is_imu_preheated: bool,
     #[br(calc(sub_byte_field(_bitpack3, 0x60)))]
     pub mode_channel: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x80)))]
-    pub is_gps_valid: u8,
+    #[br(calc(sub_byte_field(_bitpack3, 0x80) == 1))]
+    pub is_gps_valid: bool,
 
     #[br(temp)]
     _bitpack4: u8,
-    #[br(calc(sub_byte_field(_bitpack4, 0x01)))]
-    pub is_compass_error: u8,
-    #[br(calc(sub_byte_field(_bitpack4, 0x02)))]
-    pub wave_error: u8,
+    #[br(calc(sub_byte_field(_bitpack4, 0x01) == 1))]
+    pub is_compass_error: bool,
+    #[br(calc(sub_byte_field(_bitpack4, 0x02) == 1))]
+    pub wave_error: bool,
     #[br(calc(sub_byte_field(_bitpack4, 0x3C)))]
     pub gps_level: u8,
     #[br(calc(BatteryType::from(sub_byte_field(_bitpack4, 0xC0))))]
@@ -84,22 +84,22 @@ pub struct OSD {
 
     #[br(temp)]
     _bitpack5: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x01)))]
-    pub is_out_of_limit: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x02)))]
-    pub is_go_home_height_modified: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x04)))]
-    pub is_propeller_catapult: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x08)))]
-    pub is_motor_blocked: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x10)))]
-    pub is_not_enough_force: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x20)))]
-    pub is_barometer_dead_in_air: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x40)))]
-    pub is_vibrating: u8,
-    #[br(calc(sub_byte_field(_bitpack5, 0x80)))]
-    pub is_acceletor_over_range: u8,
+    #[br(calc(sub_byte_field(_bitpack5, 0x01) == 1))]
+    pub is_out_of_limit: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x02) == 1))]
+    pub is_go_home_height_modified: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x04) == 1))]
+    pub is_propeller_catapult: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x08) == 1))]
+    pub is_motor_blocked: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x10) == 1))]
+    pub is_not_enough_force: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x20) == 1))]
+    pub is_barometer_dead_in_air: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x40) == 1))]
+    pub is_vibrating: bool,
+    #[br(calc(sub_byte_field(_bitpack5, 0x80) == 1))]
+    pub is_acceletor_over_range: bool,
 
     pub gps_num: u8,
     #[br(map = |x: u8| FlightAction::from(x))]
@@ -111,8 +111,8 @@ pub struct OSD {
     _bitpack6: u8,
     #[br(calc(NonGPSCause::from(sub_byte_field(_bitpack6, 0x0F))))]
     pub non_gps_cause: NonGPSCause,
-    #[br(calc(sub_byte_field(_bitpack6, 0x10)))]
-    pub waypoint_limit_mode: u8,
+    #[br(calc(sub_byte_field(_bitpack6, 0x10) == 1))]
+    pub waypoint_limit_mode: bool,
 
     pub battery: u8,
     pub s_wave_height: u8,

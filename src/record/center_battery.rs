@@ -43,8 +43,8 @@ pub struct CenterBattery {
 
     #[br(if(version >=8), temp)]
     _bitpack1: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x01)))]
-    pub battery_on_charge: u8,
+    #[br(calc(sub_byte_field(_bitpack1, 0x01) == 1))]
+    pub battery_on_charge: bool,
     #[br(calc(sub_byte_field(_bitpack1, 0xFE)))]
     pub reverse: u8,
 }

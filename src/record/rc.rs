@@ -24,8 +24,8 @@ pub struct RC {
 
     #[br(temp)]
     _bitpack1: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x01)))]
-    pub wheel_btn_down: u8,
+    #[br(calc(sub_byte_field(_bitpack1, 0x01) == 1))]
+    pub wheel_btn_down: bool,
     #[br(calc(sub_byte_field(_bitpack1, 0x3E)))]
     pub wheel_offset: u8,
     #[br(calc(sub_byte_field(_bitpack1, 0x40)))]
@@ -37,8 +37,8 @@ pub struct RC {
     _bitpack2: u8,
     #[br(calc(sub_byte_field(_bitpack2, 0x07)))]
     pub transform_btn_reserve: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x08)))]
-    pub return_btn: u8,
+    #[br(calc(sub_byte_field(_bitpack2, 0x08) == 1))]
+    pub return_btn: bool,
     #[br(calc(FlightModeSwitch::from(sub_byte_field(_bitpack2, 0x30), product_type)))]
     pub flight_mode_switch: FlightModeSwitch,
     #[br(calc(sub_byte_field(_bitpack2, 0xC0)))]
@@ -46,20 +46,20 @@ pub struct RC {
 
     #[br(temp)]
     _bitpack3: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x02)))]
-    pub custom_function_btn4_down: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x04)))]
-    pub custom_function_btn3_down: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x08)))]
-    pub custom_function_btn2_down: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x10)))]
-    pub custom_function_btn1_down: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x20)))]
-    pub playback_btn_down: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x40)))]
-    pub shutter_btn_down: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x80)))]
-    pub record_btn_down: u8,
+    #[br(calc(sub_byte_field(_bitpack3, 0x02) == 1))]
+    pub custom_function_btn4_down: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x04) == 1))]
+    pub custom_function_btn3_down: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x08) == 1))]
+    pub custom_function_btn2_down: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x10) == 1))]
+    pub custom_function_btn1_down: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x20) == 1))]
+    pub playback_btn_down: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x40) == 1))]
+    pub shutter_btn_down: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x80) == 1))]
+    pub record_btn_down: bool,
 
     #[br(if(version >= 6))]
     pub bandwidth: u8,

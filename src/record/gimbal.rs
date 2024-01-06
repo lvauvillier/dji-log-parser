@@ -29,31 +29,31 @@ pub struct Gimbal {
 
     #[br(temp)]
     _bitpack2: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x01)))]
-    pub is_pitch_in_limit: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x02)))]
-    pub is_roll_in_limit: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x04)))]
-    pub is_yaw_in_limit: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x08)))]
-    pub is_auto_calibration: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x10)))]
-    pub auto_calibration_result: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x20)))]
-    pub install_direction: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x40)))]
-    pub is_stuck: u8,
+    #[br(calc(sub_byte_field(_bitpack2, 0x01) == 1))]
+    pub is_pitch_in_limit: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x02) == 1))]
+    pub is_roll_in_limit: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x04) == 1))]
+    pub is_yaw_in_limit: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x08) == 1))]
+    pub is_auto_calibration: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x10) == 1))]
+    pub auto_calibration_result: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x20) == 1))]
+    pub install_direction: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x40) == 1))]
+    pub is_stuck: bool,
 
     #[br(temp)]
     _bitpack3: u8,
     #[br(calc(sub_byte_field(_bitpack3, 0x0F)))]
     pub version: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x20)))]
-    pub is_double_click: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x40)))]
-    pub is_triple_click: u8,
-    #[br(calc(sub_byte_field(_bitpack3, 0x80)))]
-    pub is_single_click: u8,
+    #[br(calc(sub_byte_field(_bitpack3, 0x20) == 1))]
+    pub is_double_click: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x40) == 1))]
+    pub is_triple_click: bool,
+    #[br(calc(sub_byte_field(_bitpack3, 0x80) == 1))]
+    pub is_single_click: bool,
 }
 
 #[derive(Debug)]

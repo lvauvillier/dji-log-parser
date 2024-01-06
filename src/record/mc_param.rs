@@ -11,12 +11,12 @@ pub struct MCParams {
 
     #[br(temp)]
     _bitpack1: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x01)))]
-    pub mvo_func_enabled: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x02)))]
-    pub avoid_obstacle_enabled: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x04)))]
-    pub user_avoid_enabled: u8,
+    #[br(calc(sub_byte_field(_bitpack1, 0x01) == 1))]
+    pub mvo_func_enabled: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x02) == 1))]
+    pub avoid_obstacle_enabled: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x04) == 1))]
+    pub user_avoid_enabled: bool,
 }
 
 #[derive(Debug)]

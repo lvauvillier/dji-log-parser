@@ -19,33 +19,33 @@ pub struct Home {
 
     #[br(temp)]
     _bitpack1: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x01)))]
-    pub is_home_record: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x02)))]
-    pub go_home_mode: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x04)))]
-    pub aircraft_head_direction: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x08)))]
-    pub is_dynamic_home_point_enabled: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x10)))]
-    pub is_near_distance_limit: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x20)))]
-    pub is_near_height_limit: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x40)))]
-    pub is_multiple_mode_open: u8,
-    #[br(calc(sub_byte_field(_bitpack1, 0x80)))]
-    pub has_go_home: u8,
+    #[br(calc(sub_byte_field(_bitpack1, 0x01) == 1))]
+    pub is_home_record: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x02) == 1))]
+    pub go_home_mode: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x04) == 1))]
+    pub aircraft_head_direction: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x08) == 1))]
+    pub is_dynamic_home_point_enabled: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x10) == 1))]
+    pub is_near_distance_limit: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x20) == 1))]
+    pub is_near_height_limit: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x40) == 1))]
+    pub is_multiple_mode_open: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x80) == 1))]
+    pub has_go_home: bool,
 
     #[br(temp)]
     _bitpack2: u8,
     #[br(calc(sub_byte_field(_bitpack2, 0x03)))]
     pub compass_state: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x04)))]
-    pub is_compass_adjust: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x08)))]
-    pub is_beginner_mode: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x10)))]
-    pub is_ioc_open: u8,
+    #[br(calc(sub_byte_field(_bitpack2, 0x04) == 1))]
+    pub is_compass_adjust: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x08) == 1))]
+    pub is_beginner_mode: bool,
+    #[br(calc(sub_byte_field(_bitpack2, 0x10) == 1))]
+    pub is_ioc_open: bool,
     #[br(calc(IOCMode::from(sub_byte_field(_bitpack2, 0xE0))))]
     pub ioc_mode: IOCMode,
 
