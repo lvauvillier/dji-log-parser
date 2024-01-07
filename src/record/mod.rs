@@ -29,6 +29,7 @@ pub mod rc_gps;
 pub mod recover_info;
 pub mod smart_battery;
 pub mod smart_battery_group;
+pub mod virtual_stick;
 
 use app_gps::AppGPS;
 use app_serious_warn::AppSeriousWarn;
@@ -50,6 +51,7 @@ use rc_gps::RCGPS;
 use recover_info::RecoverInfo;
 use smart_battery::SmartBattery;
 use smart_battery_group::SmartBatteryGroup;
+use virtual_stick::VirtualStick;
 
 /// Represents the different types of records.
 ///
@@ -246,6 +248,16 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 25, version, keychain, self_0),
         )]
         Camera,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
+    #[br(magic = 33u8)]
+    VirtualStick(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| record_decoder(reader, 33, version, keychain, self_0),
+        )]
+        VirtualStick,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
     #[br(magic = 49u8)]
