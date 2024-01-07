@@ -1,9 +1,10 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::layout::feature_point::FeaturePoint;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct KeyStorage {
     pub feature_point: FeaturePoint,

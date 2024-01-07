@@ -1,9 +1,10 @@
 use binrw::binread;
 use chrono::{DateTime, Utc};
+use serde::Serialize;
 use std::io::SeekFrom;
 
 #[binread]
-#[derive(Debug, Clone)]
+#[derive(Debug, Serialize, Clone)]
 #[br(little, import(version: u8))]
 pub struct Info {
     #[br(count=20, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
@@ -93,7 +94,7 @@ impl Default for UUID {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 pub enum ProductType {
     None,
     Phantom3Standard,
@@ -184,7 +185,7 @@ impl Default for ProductType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 pub enum Platform {
     IOS,
     Android,

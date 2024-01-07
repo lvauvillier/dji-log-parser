@@ -1,9 +1,10 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct VirtualStick {
     #[br(temp)]
@@ -27,7 +28,7 @@ pub struct VirtualStick {
     pub throttle: f32,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum VirtualStickVerticalControlMode {
     /// Sets the virtual stick vertical control values to be a vertical velocity.
     /// Positive and negative vertical velocity is for the aircraft ascending and
@@ -50,7 +51,7 @@ impl From<u8> for VirtualStickVerticalControlMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum VirtualStickRollPitchControlMode {
     /// Sets the roll and pitch values to be an angle relative to a level aircraft. In
     /// the body coordinate system, positive and negative pitch angle is for the
@@ -87,7 +88,7 @@ impl From<u8> for VirtualStickRollPitchControlMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum VirtualStickYawControlMode {
     /// Sets the yaw values to be an angle relative to the north. Positive and negative
     /// yaw angle is for the aircraft rotating clockwise and counterclockwise,
@@ -112,7 +113,7 @@ impl From<u8> for VirtualStickYawControlMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum VirtualStickFlightCoordinateSystem {
     /// Ground coordinate system.
     Ground,

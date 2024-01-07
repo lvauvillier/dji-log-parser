@@ -1,8 +1,9 @@
 use crate::utils::sub_byte_field;
 use binrw::binread;
+use serde::Serialize;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct Gimbal {
     /// degrees
@@ -56,7 +57,7 @@ pub struct Gimbal {
     pub is_single_click: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum GimbalMode {
     /// The gimbal can move independently of the aircraft's yaw. In this mode, even if
     /// the aircraft yaw changes, the camera will continue pointing in the same world

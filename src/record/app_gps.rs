@@ -1,7 +1,8 @@
 use binrw::binread;
+use serde::Serialize;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct AppGPS {
     /// degrees

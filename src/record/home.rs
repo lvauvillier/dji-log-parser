@@ -2,9 +2,10 @@ use std::f64::consts::PI;
 
 use crate::utils::sub_byte_field;
 use binrw::binread;
+use serde::Serialize;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little, import { version: u8 })]
 pub struct Home {
     /// degrees
@@ -61,7 +62,7 @@ pub struct Home {
     pub max_allowed_height: f32,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum IOCMode {
     CourseLock,
     HomeLock,

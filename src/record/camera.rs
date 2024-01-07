@@ -1,9 +1,10 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct Camera {
     #[br(temp)]
@@ -70,7 +71,7 @@ pub struct Camera {
     pub camera_type: u8,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum SDCardState {
     Normal,
     NoCard,
@@ -110,7 +111,7 @@ impl From<u8> for SDCardState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum CameraWorkMode {
     Capture,
     Recording,

@@ -1,9 +1,10 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct MCParams {
     #[br(map = |x:u8| FailSafeProtectionType::from(x))]
@@ -19,7 +20,7 @@ pub struct MCParams {
     pub user_avoid_enabled: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum FailSafeProtectionType {
     Hover,
     Landing,

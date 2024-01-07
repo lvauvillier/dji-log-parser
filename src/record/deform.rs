@@ -1,9 +1,10 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct Deform {
     #[br(temp)]
@@ -16,7 +17,7 @@ pub struct Deform {
     pub deform_mode: DeformMode,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum DeformMode {
     Pack,
     Protect,
@@ -35,7 +36,7 @@ impl From<u8> for DeformMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum DeformStatus {
     FoldComplete,
     Folding,

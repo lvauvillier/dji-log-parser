@@ -1,5 +1,8 @@
 use clap::Parser;
-use dji_log_parser::{DJILog, DecryptMethod};
+use dji_log_parser::record::Record;
+use dji_log_parser::{DJILog, DecryptMethod, Info};
+use serde::Serialize;
+
 use std::fs;
 
 #[derive(Parser)]
@@ -9,6 +12,13 @@ struct Args {
 
     #[arg(short, long)]
     api_key: Option<String>,
+}
+
+#[derive(Serialize, Debug)]
+struct DJILogResult {
+    version: u8,
+    info: Info,
+    records: Vec<Record>,
 }
 
 fn main() {
@@ -29,5 +39,18 @@ fn main() {
 
     let records = parser
         .records(decrypt_method)
-        .expect("Unable to parse records");
+        .expect("Unable to parse records")
+        .into_iter()
+        .filter(|r| !matches!(r, Record::Unknown(_, _) | Record::Invalid(_)))
+        .collect();
+
+    let result = DJILogResult {
+        version: parser.prefix.version,
+        info: parser.info,
+        records,
+    };
+
+    let serialized = serde_json::to_string(&result).unwrap();
+
+    println!("{serialized}");
 }

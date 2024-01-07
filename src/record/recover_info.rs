@@ -1,10 +1,11 @@
 use binrw::binread;
 use chrono::{DateTime, Utc};
+use serde::Serialize;
 
 use crate::layout::info::ProductType;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little, import {version: u8})]
 pub struct RecoverInfo {
     #[br(map = |x: u8| ProductType::from(x))]

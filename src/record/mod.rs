@@ -2,6 +2,7 @@ use std::cell::RefCell;
 
 use binrw::binread;
 use binrw::helpers::until;
+use serde::Serialize;
 
 use crate::decoder::record_decoder;
 
@@ -60,7 +61,7 @@ use virtual_stick::VirtualStick;
 /// the actual data, and then a terminating byte of value `0xff`.
 ///
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little, import { version: u8, keychain: &RefCell<Keychain>, product_type: ProductType = ProductType::None })]
 pub enum Record {
     #[br(magic = 1u8)]

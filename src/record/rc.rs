@@ -1,10 +1,11 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::layout::info::ProductType;
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little, import { version: u8, product_type: ProductType = ProductType::None })]
 pub struct RC {
     /// right stick - horizontal
@@ -67,7 +68,7 @@ pub struct RC {
     pub gimbal_control_enable: u8,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum FlightModeSwitch {
     /// Position One. For all products except Mavic Pro, this is the left most position
     /// of the flight mode switch on a remote controller from the perspective of the

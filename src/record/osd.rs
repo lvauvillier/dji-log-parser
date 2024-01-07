@@ -1,10 +1,11 @@
 use binrw::binread;
+use serde::Serialize;
 use std::f64::consts::PI;
 
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct OSD {
     /// degrees
@@ -129,7 +130,7 @@ pub struct OSD {
     pub imu_init_fail_reason: ImuInitFailReason,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum DroneType {
     None,
     Inspire1,
@@ -196,7 +197,7 @@ impl From<u8> for DroneType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum FlightMode {
     Manual,
     Atti,
@@ -285,7 +286,7 @@ impl From<u8> for FlightMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum AppCommand {
     AutoFly,
     AutoLanding,
@@ -356,7 +357,7 @@ impl From<u8> for AppCommand {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum GroundOrSky {
     Ground,
     Sky,
@@ -373,7 +374,7 @@ impl From<u8> for GroundOrSky {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum GoHomeStatus {
     Standby,
     Preascending,
@@ -400,7 +401,7 @@ impl From<u8> for GoHomeStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum BatteryType {
     NonSmart,
     Smart,
@@ -417,7 +418,7 @@ impl From<u8> for BatteryType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum FlightAction {
     None,
     WarningPowerGoHome,
@@ -500,7 +501,7 @@ impl From<u8> for FlightAction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum MotorStartFailedCause {
     None,
     CompassError,
@@ -698,7 +699,7 @@ impl From<u8> for MotorStartFailedCause {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum NonGPSCause {
     Already,
     Forbid,
@@ -727,7 +728,7 @@ impl From<u8> for NonGPSCause {
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum ImuInitFailReason {
     MonitorError,
     CollectingData,

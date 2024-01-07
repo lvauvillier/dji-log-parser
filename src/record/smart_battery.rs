@@ -1,9 +1,10 @@
 use binrw::binread;
+use serde::Serialize;
 
 use crate::utils::sub_byte_field;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct SmartBattery {
     pub useful_time: u16,
@@ -39,7 +40,7 @@ pub struct SmartBattery {
     pub reserve: u8,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub enum GoHomeStatus {
     NonGoHome,
     GoHome,

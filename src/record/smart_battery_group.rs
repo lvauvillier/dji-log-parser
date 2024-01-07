@@ -1,7 +1,8 @@
 use binrw::binread;
+use serde::Serialize;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub enum SmartBatteryGroup {
     #[br(magic = 1u8)]
@@ -13,7 +14,7 @@ pub enum SmartBatteryGroup {
 }
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct SmartBatteryStatic {
     pub index: u8,
@@ -33,7 +34,7 @@ pub struct SmartBatteryStatic {
 }
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct SmartBatteryDynamic {
     pub index: u8,
@@ -54,7 +55,7 @@ pub struct SmartBatteryDynamic {
 }
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct SmartBatterySingleVoltage {
     pub index: u8,

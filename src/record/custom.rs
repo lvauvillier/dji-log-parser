@@ -1,8 +1,9 @@
 use binrw::binread;
 use chrono::{DateTime, Utc};
+use serde::Serialize;
 
 #[binread]
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 #[br(little)]
 pub struct Custom {
     #[br(temp)]
