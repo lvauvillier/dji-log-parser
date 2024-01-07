@@ -294,10 +294,12 @@ impl<'a> DJILog<'a> {
         let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
 
-        let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+        let keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
 
+        let mut records = Vec::new();
         let mut i = 0;
         while i < self.info.record_line_count {
+            // decode record
             let record = match Record::read_args(
                 &mut cursor,
                 binrw::args! {
@@ -318,24 +320,13 @@ impl<'a> DJILog<'a> {
                 }
             };
 
-            match record {
-                Record::OSD(data) => {
-                    i += 1;
-                    println!("OSD: {:?}", data);
-                }
-                Record::Recover(_) => {
-                    keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
-                }
-                Record::Unknown(record_type, data) => {
-                    println!("Unknown ({}): {:?}", record_type, data);
-                }
-                Record::Invalid(data) => {
-                    println!("Invalid: {:?}", data);
-                }
-                _ => {}
+            if let Record::OSD(_) = record {
+                i += 1;
             }
+
+            records.push(record);
         }
 
-        Ok(Vec::new())
+        Ok(records)
     }
 }
