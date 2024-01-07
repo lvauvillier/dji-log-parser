@@ -1,10 +1,9 @@
 use aes::cipher::block_padding::Pkcs7;
 use aes::cipher::{BlockDecryptMut, BlockSizeUser, KeyIvInit};
 use aes::Aes256;
-use binrw::io::NoSeek;
 use crc64::crc64;
 use std::cell::RefCell;
-use std::io::{Cursor, Read, Result, Seek, SeekFrom};
+use std::io::{Cursor, Error, ErrorKind, Read, Result, Seek, SeekFrom};
 
 use crate::layout::feature_point::FeaturePoint;
 use crate::Keychain;
@@ -42,14 +41,12 @@ where
         // Raw
         0..=6 => Box::new(reader),
         // Magic
-        7..=12 => Box::new(NoSeek::new(MagicDecoder::new(reader, record_type))),
+        7..=12 => Box::new(MagicDecoder::new(reader, record_type)),
         // Magic + AES
         _ => {
             let feature_point = FeaturePoint::from_record_type(record_type, version);
             match feature_point {
-                FeaturePoint::PlaintextFeature => {
-                    Box::new(NoSeek::new(MagicDecoder::new(reader, record_type)))
-                }
+                FeaturePoint::PlaintextFeature => Box::new(MagicDecoder::new(reader, record_type)),
                 _ => {
                     let pair = keychain
                         .borrow()
@@ -73,7 +70,7 @@ where
 
                             Box::new(aes_reader)
                         }
-                        None => Box::new(NoSeek::new(MagicDecoder::new(reader, record_type))),
+                        None => Box::new(MagicDecoder::new(reader, record_type)),
                     }
                 }
             }
@@ -86,14 +83,17 @@ where
 pub struct MagicDecoder<R> {
     reader: R,
     key: [u8; 8],
-    position: usize,
+    start_position: u64,
+    decode_position: usize,
 }
 
-impl<R: Read> MagicDecoder<R> {
+impl<R: Read + Seek> MagicDecoder<R> {
     pub fn new(mut reader: R, record_type: u8) -> Self {
         let mut first_byte = [0u8];
         reader.read_exact(&mut first_byte).unwrap();
         let first_byte = first_byte[0];
+
+        let start_position = reader.stream_position().unwrap();
 
         let magic: u64 = 0x123456789ABCDEF0;
         let key = crc64(
@@ -105,7 +105,8 @@ impl<R: Read> MagicDecoder<R> {
         MagicDecoder {
             reader,
             key,
-            position: 0,
+            start_position,
+            decode_position: 0,
         }
     }
 }
@@ -114,11 +115,23 @@ impl<R: Read> Read for MagicDecoder<R> {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
         let bytes_read = self.reader.read(buf)?;
         for i in 0..bytes_read {
-            buf[i] ^= self.key[(self.position + i) % 8];
+            buf[i] ^= self.key[(self.decode_position + i) % 8];
         }
-        self.position += bytes_read;
-
+        self.decode_position += bytes_read;
         Ok(bytes_read)
+    }
+}
+
+impl<R: Seek> Seek for MagicDecoder<R> {
+    fn seek(&mut self, pos: SeekFrom) -> Result<u64> {
+        match pos {
+            SeekFrom::Start(position) => {
+                self.decode_position = (position - self.start_position) as usize;
+                self.reader.seek(pos)
+            }
+            SeekFrom::Current(_) => self.reader.seek(pos),
+            _ => Err(Error::new(ErrorKind::Other, "Unsupported seek")),
+        }
     }
 }
 
