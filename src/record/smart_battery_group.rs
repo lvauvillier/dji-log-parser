@@ -3,6 +3,7 @@ use serde::Serialize;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(tag = "type")]
 #[br(little)]
 pub enum SmartBatteryGroup {
     #[br(magic = 1u8)]

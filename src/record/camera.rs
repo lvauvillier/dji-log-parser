@@ -5,6 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct Camera {
     #[br(temp)]
@@ -87,6 +88,7 @@ pub enum SDCardState {
     Initialize,
     SuggestFormat,
     Repairing,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -122,6 +124,7 @@ pub enum CameraWorkMode {
     Download,
     XcodePlayback,
     Broadcast,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

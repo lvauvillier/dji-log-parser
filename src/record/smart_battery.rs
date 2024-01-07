@@ -5,6 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct SmartBattery {
     pub useful_time: u16,
@@ -45,6 +46,7 @@ pub enum GoHomeStatus {
     NonGoHome,
     GoHome,
     GoHomeAlready,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

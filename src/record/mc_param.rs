@@ -5,6 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct MCParams {
     #[br(map = |x:u8| FailSafeProtectionType::from(x))]
@@ -25,6 +26,7 @@ pub enum FailSafeProtectionType {
     Hover,
     Landing,
     GoHome,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

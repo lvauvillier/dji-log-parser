@@ -5,6 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct VirtualStick {
     #[br(temp)]
@@ -38,6 +39,7 @@ pub enum VirtualStickVerticalControlMode {
     /// Sets the virtual stick vertical control values to be an altitude. Maximum
     /// position is defined as 500 m. Minimum position is defined as 0 m.
     Position,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -75,6 +77,7 @@ pub enum VirtualStickRollPitchControlMode {
     /// south, respectively. Maximum velocity is defined as 15 meters/s. Minimum
     /// velocity is defined as -15 meters/s.
     Velocity,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -100,6 +103,7 @@ pub enum VirtualStickYawControlMode {
     /// respectively. Maximum yaw angular velocity is defined as 100 degrees/s. Minimum
     /// yaw angular velocity is defined as -100 degrees/s.
     Velocity,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -119,6 +123,7 @@ pub enum VirtualStickFlightCoordinateSystem {
     Ground,
     /// Body coordinate system.
     Body,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

@@ -6,6 +6,7 @@ use serde::Serialize;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little, import { version: u8 })]
 pub struct Home {
     /// degrees
@@ -67,6 +68,7 @@ pub enum IOCMode {
     CourseLock,
     HomeLock,
     HotspotSurround,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

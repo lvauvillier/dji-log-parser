@@ -6,6 +6,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little, import { version: u8, product_type: ProductType = ProductType::None })]
 pub struct RC {
     /// right stick - horizontal
@@ -88,6 +89,7 @@ pub enum FlightModeSwitch {
     /// labeled "P". Mavic Pro, Spark or Mavic Air does not have  a third position for
     /// the flight mode switch.
     Three,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

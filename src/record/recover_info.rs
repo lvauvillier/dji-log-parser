@@ -6,6 +6,7 @@ use crate::layout::info::ProductType;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little, import {version: u8})]
 pub struct RecoverInfo {
     #[br(map = |x: u8| ProductType::from(x))]

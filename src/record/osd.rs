@@ -6,6 +6,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct OSD {
     /// degrees
@@ -159,6 +160,7 @@ pub enum DroneType {
     P3SE,
     Matrice210MTK,
     MavicAir2,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -237,6 +239,7 @@ pub enum FlightMode {
     TrackHeadlock,
     EngineStart,
     GentleGPS,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -287,6 +290,7 @@ impl From<u8> for FlightMode {
 }
 
 #[derive(Serialize, Debug)]
+
 pub enum AppCommand {
     AutoFly,
     AutoLanding,
@@ -317,6 +321,7 @@ pub enum AppCommand {
     UpDeform,
     ForceLanding,
     ForceLanding2,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -361,6 +366,7 @@ impl From<u8> for AppCommand {
 pub enum GroundOrSky {
     Ground,
     Sky,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -383,6 +389,7 @@ pub enum GoHomeStatus {
     Cruise,
     Braking,
     Bypassing,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -405,6 +412,7 @@ impl From<u8> for GoHomeStatus {
 pub enum BatteryType {
     NonSmart,
     Smart,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -419,6 +427,7 @@ impl From<u8> for BatteryType {
 }
 
 #[derive(Serialize, Debug)]
+
 pub enum FlightAction {
     None,
     WarningPowerGoHome,
@@ -455,6 +464,7 @@ pub enum FlightAction {
     FakeBatteryLanding,
     RTHComingObstacleLanding,
     IMUErrorRTH,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -595,6 +605,7 @@ pub enum MotorStartFailedCause {
     BatteryOverTemperature,
     BatteryInstallError,
     BeImpact,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -709,6 +720,7 @@ pub enum NonGPSCause {
     SpeedErrorLarge,
     YawErrorLarge,
     CompassErrorLarge,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -745,6 +757,7 @@ pub enum ImuInitFailReason {
     AcceMoveTooLarge,
     McHeaderMoved,
     McVibrated,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

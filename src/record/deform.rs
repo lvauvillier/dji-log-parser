@@ -5,6 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct Deform {
     #[br(temp)]
@@ -22,6 +23,7 @@ pub enum DeformMode {
     Pack,
     Protect,
     Normal,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -43,6 +45,7 @@ pub enum DeformStatus {
     StretchComplete,
     Stretching,
     StopDeformation,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

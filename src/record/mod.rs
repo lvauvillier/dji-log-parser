@@ -62,6 +62,7 @@ use virtual_stick::VirtualStick;
 ///
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(tag = "type", content = "content")]
 #[br(little, import { version: u8, keychain: &RefCell<Keychain>, product_type: ProductType = ProductType::None })]
 pub enum Record {
     #[br(magic = 1u8)]

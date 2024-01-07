@@ -5,6 +5,7 @@ use crate::layout::feature_point::FeaturePoint;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct KeyStorage {
     pub feature_point: FeaturePoint,

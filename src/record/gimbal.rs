@@ -4,6 +4,7 @@ use serde::Serialize;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 pub struct Gimbal {
     /// degrees
@@ -72,6 +73,7 @@ pub enum GimbalMode {
     /// The gimbal's work mode is such that it will follow the yaw. In this mode, the
     /// gimbal yaw will be fixed, while pitch and roll will be available to move.
     YawFollow,
+    #[serde(untagged)]
     Unknown(u8),
 }
 

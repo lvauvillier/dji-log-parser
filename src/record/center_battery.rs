@@ -5,6 +5,7 @@ use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little, import { version: u8 })]
 pub struct CenterBattery {
     pub relative_capacity: u8,

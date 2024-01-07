@@ -5,6 +5,7 @@ use std::io::SeekFrom;
 
 #[binread]
 #[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 #[br(little, import(version: u8))]
 pub struct Info {
     #[br(count=20, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
@@ -132,6 +133,7 @@ pub enum ProductType {
     Matrice30,
     Mavic3Enterprise,
     DJIAvata,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
@@ -191,6 +193,7 @@ pub enum Platform {
     Android,
     Window,
     Mac,
+    #[serde(untagged)]
     Unknown(u8),
 }
 
