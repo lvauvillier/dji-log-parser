@@ -23,12 +23,12 @@ pub struct SmartBatteryStatic {
     pub loop_times: u16,
     pub full_voltage: u32,
     #[br(temp)]
-    unknown: u16,
+    _unknown: u16,
     serial_number: u16,
     #[br(temp)]
-    unknown2: [u8; 10],
+    _unknown2: [u8; 10],
     #[br(temp)]
-    unknown3: [u8; 5],
+    _unknown3: [u8; 5],
     pub version_number: [u8; 8],
     pub battery_life: u8,
     pub battery_type: u8,

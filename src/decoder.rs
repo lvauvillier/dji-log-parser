@@ -163,7 +163,7 @@ impl AesDecoder {
 
 impl Read for AesDecoder {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
-        self.buffer.read(buf);
+        let _ = self.buffer.read(buf);
         Ok(buf.len()) // always return buffer length to avoid padding issues
     }
 }

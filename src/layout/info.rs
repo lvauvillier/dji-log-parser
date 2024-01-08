@@ -45,15 +45,15 @@ pub struct Info {
     pub moment_pic_longitude: [f64; 4],
     pub moment_pic_latitude: [f64; 4],
     #[br(temp)]
-    unknown: i64,
+    _unknown: i64,
     #[br(temp, if(version > 5))]
-    user_api_center_id_md5: [u8; 16],
+    _user_api_center_id_md5: [u8; 16],
     #[br(if(version > 5))]
     pub take_off_altitude: f32,
     #[br(if(version > 5), map = |x: u8| ProductType::from(x))]
     pub product_type: ProductType,
     #[br(temp)]
-    unknown2: i64,
+    _unknown2: i64,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0) },
         count = if version <= 5 { 24 } else { 32 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
@@ -78,11 +78,11 @@ pub struct Info {
     #[br(map = |x: [u8; 3]| format!("{}.{}.{}", x[0], x[1], x[2]))]
     pub app_version: String,
     #[br(temp)]
-    unknown3: u8,
+    _unknown3: u8,
     #[br(temp)]
-    reserved: [u8; 19],
+    _reserved: [u8; 19],
     #[br(temp, if(version >= 12))]
-    pub uuid: UUID,
+    _uuid: UUID,
 }
 
 #[binread]
