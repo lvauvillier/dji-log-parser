@@ -41,7 +41,12 @@ fn main() {
         .records(decrypt_method)
         .expect("Unable to parse records")
         .into_iter()
-        .filter(|r| !matches!(r, Record::Unknown(_, _) | Record::Invalid(_)))
+        .filter(|r| {
+            !matches!(
+                r,
+                Record::KeyStorage(_) | Record::Unknown(_, _) | Record::Invalid(_)
+            )
+        })
         .collect();
 
     let result = DJILogResult {
