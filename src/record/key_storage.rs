@@ -1,7 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
 
-use crate::layout::feature_point::FeaturePoint;
+use crate::keychain::FeaturePoint;
 
 #[binread]
 #[derive(Serialize, Debug)]

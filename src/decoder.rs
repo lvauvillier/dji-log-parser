@@ -5,8 +5,7 @@ use crc64::crc64;
 use std::cell::RefCell;
 use std::io::{Cursor, Error, ErrorKind, Read, Result, Seek, SeekFrom};
 
-use crate::layout::feature_point::FeaturePoint;
-use crate::Keychain;
+use crate::keychain::{FeaturePoint, Keychain};
 
 type Aes256CbcDec = cbc::Decryptor<Aes256>;
 

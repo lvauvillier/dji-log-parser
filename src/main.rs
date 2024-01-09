@@ -27,7 +27,7 @@ fn main() {
     let bytes = fs::read(&args.filepath).expect("Unable to read file");
     let parser = DJILog::from_bytes(&bytes).expect("Unable to parse file");
 
-    let decrypt_method = if parser.prefix.version >= 13 {
+    let decrypt_method = if parser.version >= 13 {
         if let Some(api_key) = args.api_key {
             DecryptMethod::ApiKey(api_key)
         } else {
@@ -50,7 +50,7 @@ fn main() {
         .collect();
 
     let result = DJILogResult {
-        version: parser.prefix.version,
+        version: parser.version,
         info: parser.info,
         records,
     };

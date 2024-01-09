@@ -65,17 +65,16 @@ use std::collections::{HashMap, VecDeque};
 use thiserror::Error;
 
 mod decoder;
-mod keychain;
+pub mod keychain;
 mod layout;
 pub mod record;
 mod utils;
 
-pub use crate::keychain::Keychain;
-use crate::keychain::{KeychainCipherText, KeychainRequest};
-use crate::layout::auxiliary::Auxiliary;
-pub use crate::layout::info::Info;
-pub use crate::layout::prefix::Prefix;
-use crate::record::Record;
+use keychain::{Keychain, KeychainCipherText, KeychainRequest};
+use layout::auxiliary::Auxiliary;
+pub use layout::info::Info;
+use layout::prefix::Prefix;
+use record::Record;
 
 #[derive(PartialEq, Debug, Error)]
 #[non_exhaustive]
@@ -115,7 +114,10 @@ pub enum DecryptMethod {
 #[derive(Debug)]
 pub struct DJILog<'a> {
     inner: &'a [u8],
-    pub prefix: Prefix,
+    prefix: Prefix,
+    /// Log format version
+    pub version: u8,
+    /// Log info. Contains record summary and general informations
     pub info: Info,
 }
 
@@ -149,19 +151,21 @@ impl<'a> DJILog<'a> {
         let prefix = Prefix::read(&mut Cursor::new(bytes))
             .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
 
+        let version = prefix.version;
+
         // Decode Infos
         let info_offset = prefix.info_offset() as usize;
         let mut cursor = Cursor::new(&bytes[info_offset..]);
 
-        let info = if prefix.version < 13 {
-            Info::read_args(&mut cursor, (prefix.version,))
+        let info = if version < 13 {
+            Info::read_args(&mut cursor, (version,))
                 .map_err(|e| DJILogError::InfoParseError(e.to_string()))?
         } else {
             // Get info from first auxilliary block
             if let Auxiliary::Info(data) = Auxiliary::read(&mut cursor)
                 .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
             {
-                Info::read_args(&mut Cursor::new(&data.info_data), (prefix.version,))
+                Info::read_args(&mut Cursor::new(&data.info_data), (version,))
                     .map_err(|e| DJILogError::InfoParseError(e.to_string()))?
             } else {
                 Err(DJILogError::InfoParseError("Invalid auxiliary data".into()))?
@@ -171,6 +175,7 @@ impl<'a> DJILog<'a> {
         Ok(DJILog {
             inner: bytes,
             prefix,
+            version,
             info,
         })
     }
@@ -191,7 +196,7 @@ impl<'a> DJILog<'a> {
         let mut keychain_request = KeychainRequest::default();
 
         // No keychain
-        if self.prefix.version < 13 {
+        if self.version < 13 {
             return Ok(keychain_request);
         }
 
@@ -221,7 +226,7 @@ impl<'a> DJILog<'a> {
             let record = match Record::read_args(
                 &mut cursor,
                 binrw::args! {
-                    version: self.prefix.version,
+                    version: self.version,
                     keychain: &empty_keychain
                 },
             ) {
@@ -279,7 +284,7 @@ impl<'a> DJILog<'a> {
     /// the type of error encountered during record parsing.
     ///
     pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>, DJILogError> {
-        if self.prefix.version >= 13 && decrypt_method == DecryptMethod::None {
+        if self.version >= 13 && decrypt_method == DecryptMethod::None {
             return Err(DJILogError::RecordParseError(
                 "Api Key or keychain is required to parse records".into(),
             ));
@@ -303,7 +308,7 @@ impl<'a> DJILog<'a> {
             let record = match Record::read_args(
                 &mut cursor,
                 binrw::args! {
-                    version: self.prefix.version,
+                    version: self.version,
                     keychain: &keychain
                 },
             ) {

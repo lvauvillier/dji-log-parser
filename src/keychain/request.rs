@@ -1,18 +1,14 @@
 use base64::engine::general_purpose::STANDARD as Base64Standard;
 use base64::Engine as _;
+use serde::Serialize;
 use std::collections::HashMap;
 use std::time::Duration;
 
-use serde::{Deserialize, Serialize};
+use super::feature_point::FeaturePoint;
+use super::response::KeychainResponse;
+use super::Keychain;
 
-use crate::layout::feature_point::FeaturePoint;
 use crate::DJILogError;
-
-/// `Keychain` serves as a mapping to decrypt `Record` instances.
-/// It associates each `FeaturePoint` with its corresponding AES initialization vector (IV)
-/// and encryption key. In this hashmap, each `FeaturePoint` is linked to a tuple containing
-/// the AES IV and key as array of bytes.
-pub type Keychain = HashMap<FeaturePoint, (Vec<u8>, Vec<u8>)>;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -65,18 +61,4 @@ impl KeychainRequest {
 
         Ok(result)
     }
-}
-
-/// Response structure received from the keychain API.
-#[derive(Debug, Deserialize)]
-pub struct KeychainResponse {
-    pub data: Vec<Vec<KeychainAES>>,
-}
-
-#[derive(Debug, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct KeychainAES {
-    pub feature_point: FeaturePoint,
-    pub aes_key: String,
-    pub aes_iv: String,
 }
