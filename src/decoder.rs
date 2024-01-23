@@ -39,13 +39,13 @@ where
     match version {
         // Raw
         0..=6 => Box::new(reader),
-        // Magic
-        7..=12 => Box::new(MagicDecoder::new(reader, record_type)),
-        // Magic + AES
+        // Xor
+        7..=12 => Box::new(XorDecoder::new(reader, record_type)),
+        // Xor + AES
         _ => {
             let feature_point = FeaturePoint::from_record_type(record_type, version);
             match feature_point {
-                FeaturePoint::PlaintextFeature => Box::new(MagicDecoder::new(reader, record_type)),
+                FeaturePoint::PlaintextFeature => Box::new(XorDecoder::new(reader, record_type)),
                 _ => {
                     let pair = keychain
                         .borrow()
@@ -55,7 +55,7 @@ where
                     match pair {
                         Some(value) => {
                             let aes_reader = AesDecoder::new(
-                                MagicDecoder::new(reader, record_type),
+                                XorDecoder::new(reader, record_type),
                                 &value.0,
                                 &value.1,
                                 size - 2, // firstChar and lastChar are not part of the content
@@ -69,7 +69,7 @@ where
 
                             Box::new(aes_reader)
                         }
-                        None => Box::new(MagicDecoder::new(reader, record_type)),
+                        None => Box::new(XorDecoder::new(reader, record_type)),
                     }
                 }
             }
@@ -77,16 +77,16 @@ where
     }
 }
 
-/// Magic Encoding is an internal data encoding method used starting v4
+/// Xor Encoding is an internal data encoding method used starting v4
 /// It doesn't require any external keychain
-pub struct MagicDecoder<R> {
+pub struct XorDecoder<R> {
     reader: R,
     key: [u8; 8],
     start_position: u64,
     decode_position: usize,
 }
 
-impl<R: Read + Seek> MagicDecoder<R> {
+impl<R: Read + Seek> XorDecoder<R> {
     pub fn new(mut reader: R, record_type: u8) -> Self {
         let mut first_byte = [0u8];
         reader.read_exact(&mut first_byte).unwrap();
@@ -101,7 +101,7 @@ impl<R: Read + Seek> MagicDecoder<R> {
         )
         .to_le_bytes();
 
-        MagicDecoder {
+        XorDecoder {
             reader,
             key,
             start_position,
@@ -110,7 +110,7 @@ impl<R: Read + Seek> MagicDecoder<R> {
     }
 }
 
-impl<R: Read> Read for MagicDecoder<R> {
+impl<R: Read> Read for XorDecoder<R> {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
         let bytes_read = self.reader.read(buf)?;
         for i in 0..bytes_read {
@@ -121,7 +121,7 @@ impl<R: Read> Read for MagicDecoder<R> {
     }
 }
 
-impl<R: Seek> Seek for MagicDecoder<R> {
+impl<R: Seek> Seek for XorDecoder<R> {
     fn seek(&mut self, pos: SeekFrom) -> Result<u64> {
         match pos {
             SeekFrom::Start(position) => {

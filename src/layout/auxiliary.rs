@@ -1,6 +1,6 @@
 use binrw::binread;
 
-use crate::decoder::MagicDecoder;
+use crate::decoder::XorDecoder;
 
 #[binread]
 #[derive(Debug)]
@@ -9,8 +9,7 @@ pub enum Auxiliary {
     #[br(magic = 0u8)]
     Info(
         #[br(temp)] u16,
-        #[br(pad_size_to = self_0, map_stream = |reader|MagicDecoder::new(reader, 0))]
-        AuxiliaryInfo,
+        #[br(pad_size_to = self_0, map_stream = |reader| XorDecoder::new(reader, 0))] AuxiliaryInfo,
     ),
 
     #[br(magic = 1u8)]
