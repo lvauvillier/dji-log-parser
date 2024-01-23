@@ -40,7 +40,11 @@ impl Prefix {
         }
     }
 
-    pub fn image_offset(&self) -> u64 {
-        todo!()
+    pub fn records_end_offset(&self, file_size: impl Into<u64>) -> u64 {
+        if self.version < 12 {
+            self.detail_offset
+        } else {
+            file_size.into()
+        }
     }
 }

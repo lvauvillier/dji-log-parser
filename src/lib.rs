@@ -61,7 +61,7 @@
 //! ├─────────────────┤                │
 //! │     Records     │                │
 //! ├─────────────────┤<───────────────┘
-//! │      Info       │
+//! │      Info       │ detail_length
 //! └─────────────────┘
 //! ```
 //!
@@ -71,9 +71,9 @@
 //! │     Prefix      │ detail_offset ─┐
 //! ├─────────────────┤                │
 //! │     Records     │                │
-//! │   (Encrypted)   │                │
+//! │   (Encrypted)   │                |
 //! ├─────────────────┤<───────────────┘
-//! │      Info       │
+//! │      Info       │ detail_length
 //! └─────────────────┘
 //!```
 //!
@@ -82,7 +82,7 @@
 //! ┌─────────────────┐
 //! │     Prefix      │ detail_offset ─┐
 //! ├─────────────────┤                │
-//! │      Info       │                │
+//! │      Info       │ detail_length  │
 //! ├─────────────────┤                │
 //! │     Records     │                │
 //! │   (Encrypted)   │                │
@@ -94,7 +94,7 @@
 //! ┌─────────────────┐
 //! │     Prefix      │ detail_offset ─┐
 //! ├─────────────────┤                │
-//! │ Auxiliary Info  |                |
+//! │ Auxiliary Info  |  detail_length |
 //! │   (Encrypted)   |                |
 //! ├─────────────────┤                │
 //! │    Auxiliary    |                |
@@ -102,8 +102,6 @@
 //! ├─────────────────┤<───────────────┘
 //! │     Records     │
 //! │(Encrypted + AES)|
-//! ├─────────────────┤
-//! │     Images      │
 //! └─────────────────┘
 //! ```
 use base64::engine::general_purpose::STANDARD as Base64Standard;
@@ -270,8 +268,7 @@ impl<'a> DJILog<'a> {
 
         let mut keychain: Vec<KeychainCipherText> = Vec::new();
 
-        let mut i = 0;
-        while i < self.info.record_line_count {
+        while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             let empty_keychain = RefCell::new(HashMap::new());
             let record = match Record::read_args(
                 &mut cursor,
@@ -281,20 +278,10 @@ impl<'a> DJILog<'a> {
                 },
             ) {
                 Ok(record) => record,
-                Err(e) => {
-                    // Recover errors if this is the last iteration of the loop
-                    if i == self.info.record_line_count - 1 {
-                        break;
-                    } else {
-                        return Err(DJILogError::RecordParseError(e.to_string()));
-                    }
-                }
+                Err(_) => break,
             };
 
             match record {
-                Record::OSD(_) => {
-                    i += 1;
-                }
                 Record::KeyStorage(data) => {
                     // add KeychainCipherText to current keychain
                     keychain.push(KeychainCipherText {
@@ -315,6 +302,7 @@ impl<'a> DJILog<'a> {
 
         Ok(keychain_request)
     }
+
     /// Retrieves the parsed records from the DJI log.
     ///
     /// This function decodes the records from the log file based on the specified decryption method.
@@ -352,8 +340,8 @@ impl<'a> DJILog<'a> {
         let keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
 
         let mut records = Vec::new();
-        let mut i = 0;
-        while i < self.info.record_line_count {
+
+        while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             // decode record
             let record = match Record::read_args(
                 &mut cursor,
@@ -363,21 +351,8 @@ impl<'a> DJILog<'a> {
                 },
             ) {
                 Ok(record) => record,
-                Err(e) => {
-                    // Recover errors if this is the last iteration of the loop
-                    if i == self.info.record_line_count - 1
-                        || self.inner.len() as u64 - cursor.position() == 0
-                    {
-                        break;
-                    } else {
-                        return Err(DJILogError::RecordParseError(e.to_string()));
-                    }
-                }
+                Err(_) => break,
             };
-
-            if let Record::OSD(_) = record {
-                i += 1;
-            }
 
             records.push(record);
         }

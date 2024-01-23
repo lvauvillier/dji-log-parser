@@ -1,7 +1,6 @@
 use std::cell::RefCell;
 
 use binrw::binread;
-use binrw::helpers::until;
 use serde::Serialize;
 
 use crate::decoder::record_decoder;
@@ -54,6 +53,8 @@ pub use smart_battery::SmartBattery;
 pub use smart_battery_group::*;
 pub use virtual_stick::VirtualStick;
 
+const END_BYTE: u8 = 0xFF;
+
 /// Represents the different types of records.
 ///
 /// Each variant of this enum corresponds to a specific type of record in the log file.
@@ -73,7 +74,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 1, version, keychain, self_0)
         )]
         OSD,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 2u8)]
     Home(
@@ -84,7 +85,7 @@ pub enum Record {
             args { version }
         )]
         Home,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 3u8)]
     Gimbal(
@@ -94,7 +95,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 3, version, keychain, self_0)
         )]
         Gimbal,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 4u8)]
     RC(
@@ -105,7 +106,7 @@ pub enum Record {
             args { product_type, version }
         )]
         RC,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 5u8)]
     Custom(
@@ -115,7 +116,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 5, version, keychain, self_0)
         )]
         Custom,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 6u8)]
     Deform(
@@ -125,7 +126,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 6, version, keychain, self_0)
         )]
         Deform,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 7u8)]
     CenterBattery(
@@ -136,7 +137,7 @@ pub enum Record {
             args { version }
         )]
         CenterBattery,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 8u8)]
     SmartBattery(
@@ -146,7 +147,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 8, version, keychain, self_0)
         )]
         SmartBattery,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 9u8)]
     AppTip(
@@ -157,7 +158,7 @@ pub enum Record {
             args { length: self_0 }
         )]
         AppTip,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 10u8)]
     AppWarn(
@@ -168,7 +169,7 @@ pub enum Record {
             args { length: self_0 }
         )]
         AppWarn,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 11u8)]
     RCGPS(
@@ -178,7 +179,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 11, version, keychain, self_0)
         )]
         RCGPS,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 13u8)]
     RecoverInfo(
@@ -189,7 +190,7 @@ pub enum Record {
             args { version }
         )]
         RecoverInfo,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 14u8)]
     AppGPS(
@@ -199,7 +200,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 14, version, keychain, self_0)
         )]
         AppGPS,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 15u8)]
     Firmware(
@@ -209,7 +210,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 15, version, keychain, self_0)
         )]
         Firmware,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 19u8)]
     MCParams(
@@ -219,7 +220,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 19, version, keychain, self_0)
         )]
         MCParams,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 22u8)]
     SmartBatteryGroup(
@@ -229,7 +230,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 22, version, keychain, self_0)
         )]
         SmartBatteryGroup,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 24u8)]
     AppSeriousWarn(
@@ -240,7 +241,7 @@ pub enum Record {
             args { length: self_0 }
         )]
         AppSeriousWarn,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 25u8)]
     Camera(
@@ -250,7 +251,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 25, version, keychain, self_0),
         )]
         Camera,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 33u8)]
     VirtualStick(
@@ -260,7 +261,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 33, version, keychain, self_0),
         )]
         VirtualStick,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 49u8)]
     OFDM(
@@ -270,7 +271,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 49, version, keychain, self_0),
         )]
         OFDM,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 56u8)]
     KeyStorage(
@@ -280,7 +281,7 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 56, version, keychain, self_0)
         )]
         KeyStorage,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 50u8)]
     Recover(
@@ -288,10 +289,11 @@ pub enum Record {
         #[br(count = self_0)] Vec<u8>,
         #[br(temp, assert(self_2 == 0xff))] u8,
     ),
+    JPEG(#[br(parse_with = utils::read_jpeg)] Vec<u8>),
     // Valid record of unknown data
     Unknown(
         u8, // record_type
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16, assert(self_1 > 2))] u16,
         #[br(
             pad_size_to = self_1,
             count = if version <= 6 {
@@ -302,8 +304,8 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, self_0, version, keychain, self_1)
         )]
         Vec<u8>,
-        #[br(temp, assert(self_3 == 0xff))] u8,
+        #[br(temp, assert(self_3 == END_BYTE))] u8,
     ),
-    // Invalid Record, parse util we get a terminating byte of value `0xff`
-    Invalid(#[br(parse_with = until(|&byte| byte == 0xff))] Vec<u8>),
+    // Invalid data, try to seek to next record
+    Invalid(#[br(parse_with = utils::seek_to_next_record)] Vec<u8>),
 }
