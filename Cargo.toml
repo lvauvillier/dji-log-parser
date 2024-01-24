@@ -1,6 +1,7 @@
 [package]
 name = "dji-log-parser"
 version = "0.1.0"
+description = "Library for parsing DJI txt logs"
 authors = ["Luc Vauvillier <luc.vauvillier@gmail.com>"]
 repository = "https://github.com/lvauvillier/dji-log-parser"
 license = "MIT"
