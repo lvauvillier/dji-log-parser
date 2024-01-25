@@ -307,5 +307,5 @@ pub enum Record {
         #[br(temp, assert(self_3 == END_BYTE))] u8,
     ),
     // Invalid data, try to seek to next record
-    Invalid(#[br(parse_with = utils::seek_to_next_record, assert(self_0.len() > 0))] Vec<u8>),
+    Invalid(#[br(parse_with = utils::seek_to_next_record, assert(!self_0.is_empty()))] Vec<u8>),
 }

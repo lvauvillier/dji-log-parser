@@ -95,8 +95,9 @@ impl Default for UUID {
     }
 }
 
-#[derive(Serialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Debug, Clone, PartialEq, Default)]
 pub enum ProductType {
+    #[default]
     None,
     Phantom3Standard,
     Phantom4,
@@ -178,12 +179,6 @@ impl From<u8> for ProductType {
             121 => ProductType::DJIAvata,
             _ => ProductType::Unknown(num),
         }
-    }
-}
-
-impl Default for ProductType {
-    fn default() -> Self {
-        ProductType::None
     }
 }
 
