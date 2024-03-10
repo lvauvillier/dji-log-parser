@@ -45,6 +45,12 @@ Use `%d` in the images option to specify a sequence.
 dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --images image%d.jpeg --output records.json
 ```
 
+### With geojson generation
+
+```bash
+dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --geojson geojson.json --output records.json
+```
+
 ## Library Usage
 
 ### Initialization
