@@ -8,13 +8,13 @@ use std::io::SeekFrom;
 #[serde(rename_all = "camelCase")]
 #[br(little, import(version: u8))]
 pub struct Info {
-    #[br(count=20, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub sub_street: String,
-    #[br(count=20, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub street: String,
-    #[br(count=20, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub city: String,
-    #[br(count=20, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub area: String,
     pub is_favorite: u8,
     pub is_new: u8,
@@ -56,22 +56,22 @@ pub struct Info {
     _unknown2: i64,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0) },
-        count = if version <= 5 { 24 } else { 32 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
+        count = if version <= 5 { 24 } else { 32 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
     )]
     pub aircraft_name: String,
     #[br(
         seek_before = if version <= 4 { SeekFrom::Start(267) } else { SeekFrom::Current(0) },
-        count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
+        count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
     )]
     pub aircraft_sn: String,
     #[br(
         seek_before = if version <= 4 { SeekFrom::Start(318) } else { SeekFrom::Current(0) },
-        count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned())
+        count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
     )]
     pub camera_sn: String,
-    #[br(count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub rc_sn: String,
-    #[br(count = if version <= 5 { 10 } else { 16 }, try_map = |x| String::from_utf8(x).map(|s| s.trim_end_matches('\0').to_owned()))]
+    #[br(count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub battery_sn: String,
     #[br(map = |x: u8| Platform::from(x))]
     pub app_platform: Platform,
