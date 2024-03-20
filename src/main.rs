@@ -23,6 +23,10 @@ struct Cli {
     #[arg(short, long)]
     images: Option<String>,
 
+    /// Thumbnail file path.
+    #[arg(short, long)]
+    thumbnails: Option<String>,
+
     // GeoJSON file path.
     #[arg(short, long)]
     geojson: Option<String>,
@@ -91,17 +95,55 @@ fn main() {
 
     // Export Images
     if let Some(image_path) = args.images {
-        records
+        let number_of_images = parser
+            .info
+            .moment_pic_image_buffer_len
             .iter()
-            .filter(|r| matches!(r, Record::JPEG(_)))
-            .enumerate()
-            .for_each(|(i, record)| {
-                if let Record::JPEG(data) = record {
-                    let file_name = image_path.replace("%d", &(i + 1).to_string());
-                    let mut file = File::create(Path::new(&file_name)).unwrap();
-                    file.write_all(data).unwrap();
-                }
-            });
+            .filter(|&&x| x != 0)
+            .count();
+
+        if number_of_images > 0 {
+            records
+                .iter()
+                .filter(|r| matches!(r, Record::JPEG(_)))
+                .enumerate()
+                .for_each(|(i, record)| {
+                    if i < number_of_images {
+                        if let Record::JPEG(data) = record {
+                            let file_name = image_path.replace("%d", &(i + 1).to_string());
+                            let mut file = File::create(Path::new(&file_name)).unwrap();
+                            file.write_all(data).unwrap();
+                        }
+                    }
+                });
+        }
+    }
+
+    // Export Thumbnails
+    if let Some(thumbnails_path) = args.thumbnails {
+        let number_of_images = parser
+            .info
+            .moment_pic_image_buffer_len
+            .iter()
+            .filter(|&&x| x != 0)
+            .count();
+
+        if number_of_images > 0 {
+            records
+                .iter()
+                .filter(|r| matches!(r, Record::JPEG(_)))
+                .enumerate()
+                .for_each(|(i, record)| {
+                    if i >= number_of_images {
+                        if let Record::JPEG(data) = record {
+                            let file_name = thumbnails_path
+                                .replace("%d", &(i - number_of_images + 1).to_string());
+                            let mut file = File::create(Path::new(&file_name)).unwrap();
+                            file.write_all(data).unwrap();
+                        }
+                    }
+                });
+        }
     }
 
     // Export GeoJSON
