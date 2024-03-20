@@ -37,12 +37,12 @@ or with an output arg
 dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --output records.json
 ```
 
-### With image extraction
+### With image / thumbnails extraction
 
-Use `%d` in the images option to specify a sequence.
+Use `%d` in the images or thumbnails option to specify a sequence.
 
 ```bash
-dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --images image%d.jpeg --output records.json
+dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --images image%d.jpeg --thumbnails thumbnail%d.jpeg --output records.json
 ```
 
 ### With geojson generation
