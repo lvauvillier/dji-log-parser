@@ -30,7 +30,7 @@ pub struct Info {
     /// meters
     pub total_distance: f32,
     /// seconds
-    #[br( map = |x: i32| x as f64 / 1000.0)]
+    #[br(map = |x: i32| x as f64 / 1000.0)]
     pub total_time: f64,
     /// meters
     pub max_height: f32,
@@ -45,27 +45,30 @@ pub struct Info {
     pub moment_pic_longitude: [f64; 4],
     pub moment_pic_latitude: [f64; 4],
     #[br(temp)]
-    _unknown: i64,
-    #[br(temp, if(version > 5))]
+    _analysis_offset: i64,
+    #[br(temp)]
     _user_api_center_id_md5: [u8; 16],
-    #[br(if(version > 5))]
+    #[br(seek_before = if version <= 5 { SeekFrom::Start(352) } else { SeekFrom::Current(0) })]
     pub take_off_altitude: f32,
-    #[br(if(version > 5), map = |x: u8| ProductType::from(x))]
+    #[br(
+        seek_before = if version <= 5 { SeekFrom::Start(277) } else { SeekFrom::Current(0) },
+        map = |x: u8| ProductType::from(x))
+    ]
     pub product_type: ProductType,
     #[br(temp)]
-    _unknown2: i64,
+    _activation_timestamp: i64,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0) },
         count = if version <= 5 { 24 } else { 32 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
     )]
     pub aircraft_name: String,
     #[br(
-        seek_before = if version <= 4 { SeekFrom::Start(267) } else { SeekFrom::Current(0) },
+        seek_before = if version <= 5 { SeekFrom::Start(267) } else { SeekFrom::Current(0) },
         count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
     )]
     pub aircraft_sn: String,
     #[br(
-        seek_before = if version <= 4 { SeekFrom::Start(318) } else { SeekFrom::Current(0) },
+        seek_before = if version <= 5 { SeekFrom::Start(318) } else { SeekFrom::Current(0) },
         count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
     )]
     pub camera_sn: String,
@@ -77,30 +80,18 @@ pub struct Info {
     pub app_platform: Platform,
     #[br(map = |x: [u8; 3]| format!("{}.{}.{}", x[0], x[1], x[2]))]
     pub app_version: String,
-    #[br(temp)]
-    _unknown3: u8,
-    #[br(temp)]
-    _reserved: [u8; 19],
-    #[br(temp, if(version >= 12))]
-    _uuid: UUID,
-}
-
-#[binread]
-#[derive(Debug, Clone)]
-pub struct UUID([u8; 36]);
-
-impl Default for UUID {
-    fn default() -> Self {
-        Self([0; 36])
-    }
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq, Default)]
 pub enum ProductType {
     #[default]
     None,
-    Phantom3Standard,
+    Inspire1,
+    Phantom3C,
+    Phantom3S,
+    Phantom3X,
     Phantom4,
+    Inspire1Pro,
     Matrice600,
     Phantom34K,
     MavicPro,
@@ -142,8 +133,12 @@ impl From<u8> for ProductType {
     fn from(num: u8) -> Self {
         match num {
             0 => ProductType::None,
-            2 => ProductType::Phantom3Standard,
+            1 => ProductType::Inspire1,
+            2 => ProductType::Phantom3C,
+            3 => ProductType::Phantom3S,
+            4 => ProductType::Phantom3X,
             7 => ProductType::Phantom4,
+            9 => ProductType::Inspire1Pro,
             11 => ProductType::Matrice600,
             12 => ProductType::Phantom34K,
             13 => ProductType::MavicPro,
