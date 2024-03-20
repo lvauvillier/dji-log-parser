@@ -114,7 +114,7 @@ use thiserror::Error;
 
 mod decoder;
 pub mod keychain;
-mod layout;
+pub mod layout;
 pub mod record;
 mod utils;
 

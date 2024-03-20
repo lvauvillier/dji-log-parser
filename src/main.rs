@@ -1,7 +1,13 @@
+use chrono::{DateTime, Utc};
 use clap::Parser;
+use dji_log_parser::layout::info::ProductType;
 use dji_log_parser::record::Record;
 use dji_log_parser::{DJILog, DecryptMethod, Info};
+use exif::experimental::Writer;
+use exif::{Field, In, Rational, Tag, Value as ExifValue};
 use geojson::{Feature, GeoJson, Geometry, JsonObject, JsonValue, Value};
+use img_parts::jpeg::Jpeg;
+use img_parts::{Bytes, ImageEXIF};
 use serde::Serialize;
 use std::fs;
 use std::fs::File;
@@ -111,8 +117,24 @@ fn main() {
                     if i < number_of_images {
                         if let Record::JPEG(data) = record {
                             let file_name = image_path.replace("%d", &(i + 1).to_string());
-                            let mut file = File::create(Path::new(&file_name)).unwrap();
-                            file.write_all(data).unwrap();
+                            save_image_with_exif_metadata(
+                                data,
+                                file_name,
+                                ExifInfo {
+                                    datetime: parser.info.start_time,
+                                    latitude: if parser.info.moment_pic_latitude[i] != 0.0 {
+                                        parser.info.moment_pic_latitude[i]
+                                    } else {
+                                        parser.info.latitude
+                                    },
+                                    longitude: if parser.info.moment_pic_longitude[i] != 0.0 {
+                                        parser.info.moment_pic_longitude[i]
+                                    } else {
+                                        parser.info.longitude
+                                    },
+                                    model: parser.info.product_type,
+                                },
+                            );
                         }
                     }
                 });
@@ -138,8 +160,30 @@ fn main() {
                         if let Record::JPEG(data) = record {
                             let file_name = thumbnails_path
                                 .replace("%d", &(i - number_of_images + 1).to_string());
-                            let mut file = File::create(Path::new(&file_name)).unwrap();
-                            file.write_all(data).unwrap();
+                            save_image_with_exif_metadata(
+                                data,
+                                file_name,
+                                ExifInfo {
+                                    datetime: parser.info.start_time,
+                                    latitude: if parser.info.moment_pic_latitude
+                                        [i - number_of_images]
+                                        != 0.0
+                                    {
+                                        parser.info.moment_pic_latitude[i - number_of_images]
+                                    } else {
+                                        parser.info.latitude
+                                    },
+                                    longitude: if parser.info.moment_pic_longitude
+                                        [i - number_of_images]
+                                        != 0.0
+                                    {
+                                        parser.info.moment_pic_longitude[i - number_of_images]
+                                    } else {
+                                        parser.info.longitude
+                                    },
+                                    model: parser.info.product_type,
+                                },
+                            );
                         }
                     }
                 });
@@ -293,4 +337,103 @@ fn main() {
         file.write_all(geojson_string.as_bytes())
             .expect("Unable to write GeoJSON data");
     }
+}
+
+struct ExifInfo {
+    datetime: DateTime<Utc>,
+    latitude: f64,
+    longitude: f64,
+    model: ProductType,
+}
+
+fn save_image_with_exif_metadata(data: &Vec<u8>, file_name: String, info: ExifInfo) {
+    let mut jpeg = Jpeg::from_bytes(Bytes::copy_from_slice(data)).unwrap();
+    let mut writer = Writer::new();
+
+    // Set Latitude
+    let (degrees, minutes, seconds) = decimal_to_dms(info.latitude);
+    let latitude_field = Field {
+        tag: Tag::GPSLatitude,
+        ifd_num: In::PRIMARY,
+        value: ExifValue::Rational(vec![
+            Rational::from((degrees as u32, 1)),
+            Rational::from((minutes as u32, 1)),
+            Rational::from((seconds as u32, 1)),
+        ]),
+    };
+    writer.push_field(&latitude_field);
+
+    // Set Longitude
+    let (degrees, minutes, seconds) = decimal_to_dms(info.longitude);
+    let longitude_field = Field {
+        tag: Tag::GPSLongitude,
+        ifd_num: In::PRIMARY,
+        value: ExifValue::Rational(vec![
+            Rational::from((degrees as u32, 1)),
+            Rational::from((minutes as u32, 1)),
+            Rational::from((seconds as u32, 1)),
+        ]),
+    };
+    writer.push_field(&longitude_field);
+
+    // Set Datetime
+    let datetime = Field {
+        tag: Tag::DateTime,
+        ifd_num: In::PRIMARY,
+        value: ExifValue::Ascii(vec![info
+            .datetime
+            .format("%Y:%m:%d %H:%M:%S")
+            .to_string()
+            .into_bytes()]),
+    };
+    writer.push_field(&datetime);
+
+    // Set Datetime Original
+    let datetime_original = Field {
+        tag: Tag::DateTimeOriginal,
+        ifd_num: In::PRIMARY,
+        value: ExifValue::Ascii(vec![info
+            .datetime
+            .format("%Y:%m:%d %H:%M:%S")
+            .to_string()
+            .into_bytes()]),
+    };
+    writer.push_field(&datetime_original);
+
+    // Set Make
+    let make = Field {
+        tag: Tag::Make,
+        ifd_num: In::PRIMARY,
+        value: ExifValue::Ascii(vec!["DJI".into()]),
+    };
+    writer.push_field(&make);
+
+    // Set Model
+    let model_name = serde_json::to_string(&info.model).unwrap();
+    let model = Field {
+        tag: Tag::Model,
+        ifd_num: In::PRIMARY,
+        value: ExifValue::Ascii(vec![(if model_name.len() > 2 {
+            model_name[1..model_name.len() - 1].to_string()
+        } else {
+            model_name
+        })
+        .into()]),
+    };
+    writer.push_field(&model);
+
+    let mut buf = std::io::Cursor::new(Vec::new());
+    writer.write(&mut buf, false).unwrap();
+
+    jpeg.set_exif(Some(Bytes::from(buf.into_inner())));
+
+    let file = File::create(Path::new(&file_name)).unwrap();
+    jpeg.encoder().write_to(file).unwrap();
+}
+
+fn decimal_to_dms(decimal: f64) -> (f64, f64, f64) {
+    let degrees = decimal.trunc();
+    let minutes = ((decimal - degrees) * 60.0).trunc();
+    let seconds = (decimal - degrees - minutes / 60.0) * 3600.0;
+    (degrees, minutes, seconds)
 }

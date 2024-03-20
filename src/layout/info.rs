@@ -42,7 +42,11 @@ pub struct Info {
     pub video_time: i64,
     pub moment_pic_image_buffer_len: [i32; 4],
     pub moment_pic_shrink_image_buffer_len: [i32; 4],
+    /// degrees
+    #[br(map = |v: [f64; 4]| v.map(|rad: f64| rad.to_degrees()) )]
     pub moment_pic_longitude: [f64; 4],
+    /// degrees
+    #[br(map = |v: [f64; 4]| v.map(|rad: f64| rad.to_degrees()) )]
     pub moment_pic_latitude: [f64; 4],
     #[br(temp)]
     _analysis_offset: i64,
@@ -82,7 +86,7 @@ pub struct Info {
     pub app_version: String,
 }
 
-#[derive(Serialize, Debug, Clone, PartialEq, Default)]
+#[derive(Serialize, Debug, Clone, PartialEq, Default, Copy)]
 pub enum ProductType {
     #[default]
     None,
