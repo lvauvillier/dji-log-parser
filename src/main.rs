@@ -101,93 +101,75 @@ fn main() {
 
     // Export Images
     if let Some(image_path) = args.images {
-        let number_of_images = parser
-            .info
-            .moment_pic_image_buffer_len
+        let mut index = 0;
+        records
             .iter()
-            .filter(|&&x| x != 0)
-            .count();
-
-        if number_of_images > 0 {
-            records
-                .iter()
-                .filter(|r| matches!(r, Record::JPEG(_)))
-                .enumerate()
-                .for_each(|(i, record)| {
-                    if i < number_of_images {
-                        if let Record::JPEG(data) = record {
-                            let file_name = image_path.replace("%d", &(i + 1).to_string());
-                            save_image_with_exif_metadata(
-                                data,
-                                file_name,
-                                ExifInfo {
-                                    datetime: parser.info.start_time,
-                                    latitude: if parser.info.moment_pic_latitude[i] != 0.0 {
-                                        parser.info.moment_pic_latitude[i]
-                                    } else {
-                                        parser.info.latitude
-                                    },
-                                    longitude: if parser.info.moment_pic_longitude[i] != 0.0 {
-                                        parser.info.moment_pic_longitude[i]
-                                    } else {
-                                        parser.info.longitude
-                                    },
-                                    model: parser.info.product_type,
+            .filter(|r| matches!(r, Record::JPEG(_)))
+            .for_each(|record| {
+                if let Record::JPEG(data) = record {
+                    if index < 4
+                        && parser.info.moment_pic_image_buffer_len[index] == data.len() as i32
+                    {
+                        let file_name = image_path.replace("%d", &(index + 1).to_string());
+                        save_image_with_exif_metadata(
+                            data,
+                            file_name,
+                            ExifInfo {
+                                datetime: parser.info.start_time,
+                                latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
+                                    parser.info.moment_pic_latitude[index]
+                                } else {
+                                    parser.info.latitude
                                 },
-                            );
-                        }
+                                longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
+                                    parser.info.moment_pic_longitude[index]
+                                } else {
+                                    parser.info.longitude
+                                },
+                                model: parser.info.product_type,
+                            },
+                        );
+                        index += 1;
                     }
-                });
-        }
+                }
+            });
     }
 
     // Export Thumbnails
     if let Some(thumbnails_path) = args.thumbnails {
-        let number_of_images = parser
-            .info
-            .moment_pic_image_buffer_len
+        let mut index = 0;
+        records
             .iter()
-            .filter(|&&x| x != 0)
-            .count();
-
-        if number_of_images > 0 {
-            records
-                .iter()
-                .filter(|r| matches!(r, Record::JPEG(_)))
-                .enumerate()
-                .for_each(|(i, record)| {
-                    if i >= number_of_images {
-                        if let Record::JPEG(data) = record {
-                            let file_name = thumbnails_path
-                                .replace("%d", &(i - number_of_images + 1).to_string());
-                            save_image_with_exif_metadata(
-                                data,
-                                file_name,
-                                ExifInfo {
-                                    datetime: parser.info.start_time,
-                                    latitude: if parser.info.moment_pic_latitude
-                                        [i - number_of_images]
-                                        != 0.0
-                                    {
-                                        parser.info.moment_pic_latitude[i - number_of_images]
-                                    } else {
-                                        parser.info.latitude
-                                    },
-                                    longitude: if parser.info.moment_pic_longitude
-                                        [i - number_of_images]
-                                        != 0.0
-                                    {
-                                        parser.info.moment_pic_longitude[i - number_of_images]
-                                    } else {
-                                        parser.info.longitude
-                                    },
-                                    model: parser.info.product_type,
+            .filter(|r| matches!(r, Record::JPEG(_)))
+            .for_each(|record| {
+                if let Record::JPEG(data) = record {
+                    if index < 4
+                        && parser.info.moment_pic_shrink_image_buffer_len[index]
+                            == data.len() as i32
+                    {
+                        let file_name = thumbnails_path.replace("%d", &(index + 1).to_string());
+                        save_image_with_exif_metadata(
+                            data,
+                            file_name,
+                            ExifInfo {
+                                datetime: parser.info.start_time,
+                                latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
+                                    parser.info.moment_pic_latitude[index]
+                                } else {
+                                    parser.info.latitude
                                 },
-                            );
-                        }
+                                longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
+                                    parser.info.moment_pic_longitude[index]
+                                } else {
+                                    parser.info.longitude
+                                },
+                                model: parser.info.product_type,
+                            },
+                        );
+                        index += 1;
                     }
-                });
-        }
+                }
+            });
     }
 
     // Export GeoJSON
