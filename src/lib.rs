@@ -54,7 +54,7 @@
 //!
 //! ## Binary structure of log files:
 //!
-//! v4 -> v6
+//! v1 -> v6
 //! ```text
 //! ┌─────────────────┐
 //! │     Prefix      │ detail_offset ─┐
@@ -123,6 +123,8 @@ use layout::auxiliary::Auxiliary;
 pub use layout::info::Info;
 use layout::prefix::Prefix;
 use record::Record;
+
+use crate::utils::pad_with_zeros;
 
 #[derive(PartialEq, Debug, Error)]
 #[non_exhaustive]
@@ -203,7 +205,7 @@ impl<'a> DJILog<'a> {
 
         // Decode Infos
         let info_offset = prefix.info_offset() as usize;
-        let mut cursor = Cursor::new(&bytes[info_offset..]);
+        let mut cursor = Cursor::new(pad_with_zeros(&bytes[info_offset..], 400));
 
         let info = if version < 13 {
             Info::read_args(&mut cursor, (version,))

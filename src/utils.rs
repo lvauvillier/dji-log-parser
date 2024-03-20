@@ -165,3 +165,38 @@ pub fn sub_byte_field(byte: u8, mask: u8) -> u8 {
     }
     byte
 }
+
+/// Ensures that a given slice of bytes has a minimum specified length, padding it with zeros if necessary.
+///
+/// # Parameters
+///
+/// - `input`: A slice of bytes (`&[u8]`) to check and possibly extend.
+/// - `min_length`: The minimum length desired for the output vector. If `input` is shorter than this,
+///    it will be padded with zeros until it reaches `min_length`.
+///
+/// # Returns
+///
+/// A `Vec<u8>` that is at least `min_length` bytes long. If the input slice was already at least
+/// `min_length` bytes long, this will be a direct copy of `input`. Otherwise, it will be `input`
+/// followed by enough zeros to reach `min_length`.
+///
+/// # Examples
+///
+/// Basic usage:
+///
+/// ```
+/// let bytes = b"Hello, world!";
+/// let padded_bytes = pad_with_zeros(&bytes[..], 16);
+/// assert_eq!(padded_bytes, b"Hello, world!\x00\x00\x00");
+/// ```
+pub fn pad_with_zeros(input: &[u8], min_length: usize) -> Vec<u8> {
+    let current_length = input.len();
+    let mut output = Vec::from(input);
+
+    if current_length < min_length {
+        let padding = min_length - current_length;
+        output.extend(vec![0; padding]);
+    }
+
+    output
+}
