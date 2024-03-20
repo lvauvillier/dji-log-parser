@@ -347,7 +347,16 @@ struct ExifInfo {
 }
 
 fn save_image_with_exif_metadata(data: &Vec<u8>, file_name: String, info: ExifInfo) {
-    let mut jpeg = Jpeg::from_bytes(Bytes::copy_from_slice(data)).unwrap();
+    let jpeg_result = Jpeg::from_bytes(Bytes::copy_from_slice(data));
+
+    if let Err(_) = jpeg_result {
+        // Don't add exif metadata if JPEG creation fails
+        let mut file = File::create(Path::new(&file_name)).unwrap();
+        file.write_all(data).unwrap();
+        return;
+    }
+
+    let mut jpeg = jpeg_result.unwrap();
     let mut writer = Writer::new();
 
     // Set Latitude
