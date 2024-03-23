@@ -54,29 +54,33 @@ impl Exporter for GeoJsonExporter {
             );
             properties.insert(
                 "totalDistance".to_string(),
-                JsonValue::Number(
-                    serde_json::Number::from_f64(info.total_distance.into()).unwrap(),
-                ),
+                serde_json::Number::from_f64(info.total_distance.into())
+                    .map(JsonValue::Number)
+                    .unwrap_or(JsonValue::Null),
             );
             properties.insert(
                 "totalTime".to_string(),
-                JsonValue::Number(serde_json::Number::from_f64(info.total_time.into()).unwrap()),
+                serde_json::Number::from_f64(info.total_time.into())
+                    .map(JsonValue::Number)
+                    .unwrap_or(JsonValue::Null),
             );
             properties.insert(
                 "maxHeight".to_string(),
-                JsonValue::Number(serde_json::Number::from_f64(info.max_height.into()).unwrap()),
+                serde_json::Number::from_f64(info.max_height.into())
+                    .map(JsonValue::Number)
+                    .unwrap_or(JsonValue::Null),
             );
             properties.insert(
                 "maxHorizontalSpeed".to_string(),
-                JsonValue::Number(
-                    serde_json::Number::from_f64(info.max_horizontal_speed.into()).unwrap(),
-                ),
+                serde_json::Number::from_f64(info.max_horizontal_speed.into())
+                    .map(JsonValue::Number)
+                    .unwrap_or(JsonValue::Null),
             );
             properties.insert(
                 "maxVerticalSpeed".to_string(),
-                JsonValue::Number(
-                    serde_json::Number::from_f64(info.max_vertical_speed.into()).unwrap(),
-                ),
+                serde_json::Number::from_f64(info.max_vertical_speed.into())
+                    .map(JsonValue::Number)
+                    .unwrap_or(JsonValue::Null),
             );
             properties.insert(
                 "captureNum".to_string(),
@@ -111,7 +115,9 @@ impl Exporter for GeoJsonExporter {
                     info.moment_pic_longitude
                         .iter()
                         .map(|x| {
-                            JsonValue::Number(serde_json::Number::from_f64((*x).into()).unwrap())
+                            serde_json::Number::from_f64((*x).into())
+                                .map(JsonValue::Number)
+                                .unwrap_or(JsonValue::Null)
                         })
                         .collect(),
                 ),
@@ -122,16 +128,18 @@ impl Exporter for GeoJsonExporter {
                     info.moment_pic_latitude
                         .iter()
                         .map(|x| {
-                            JsonValue::Number(serde_json::Number::from_f64((*x).into()).unwrap())
+                            serde_json::Number::from_f64((*x).into())
+                                .map(JsonValue::Number)
+                                .unwrap_or(JsonValue::Null)
                         })
                         .collect(),
                 ),
             );
             properties.insert(
                 "takeOffAltitude".to_string(),
-                JsonValue::Number(
-                    serde_json::Number::from_f64(info.take_off_altitude.into()).unwrap(),
-                ),
+                serde_json::Number::from_f64(info.take_off_altitude.into())
+                    .map(JsonValue::Number)
+                    .unwrap_or(JsonValue::Null),
             );
             let product_type = serde_json::to_string(&info.product_type).unwrap();
             properties.insert(
