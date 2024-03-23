@@ -1,8 +1,10 @@
-[package]
-name = "dji-log-parser"
-version = "0.3.0"
-description = "Library for parsing DJI txt logs"
+[workspace]
+resolver = "2"
+members = ["dji-log-parser", "dji-log-cli"]
+
+[workspace.package]
 authors = ["Luc Vauvillier <luc.vauvillier@gmail.com>"]
+edition = "2021"
 repository = "https://github.com/lvauvillier/dji-log-parser"
 license = "MIT"
 keywords = ["dji", "UAV", "parser", "drones"]
@@ -12,9 +14,9 @@ categories = [
     "parser-implementations",
     "parsing",
 ]
-edition = "2021"
 
-[dependencies]
+[workspace.dependencies]
+dji-log-parser = { path = "dji-log-parser", version = "0.3.0", default-features = false }
 aes = "0.8"
 base64 = "0.21.5"
 binrw = "0.13.1"
