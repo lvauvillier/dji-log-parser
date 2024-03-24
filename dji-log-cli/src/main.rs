@@ -1,7 +1,7 @@
 use clap::Parser;
 use dji_log_parser::record::Record;
 use dji_log_parser::{DJILog, DecryptMethod};
-use exporters::{GeoJsonExporter, ImageExporter, JsonExporter};
+use exporters::{GeoJsonExporter, ImageExporter, JsonExporter, KmlExporter};
 use std::fs;
 
 mod exporters;
@@ -29,6 +29,10 @@ pub(crate) struct Cli {
     // GeoJSON file path.
     #[arg(short, long)]
     geojson: Option<String>,
+
+    // KML file path.
+    #[arg(short, long)]
+    kml: Option<String>,
 
     /// DJI keychain Api Key
     #[arg(short, long)]
@@ -60,7 +64,12 @@ fn main() {
         .records(decrypt_method)
         .expect("Unable to parse records");
 
-    let exporters: Vec<&dyn Exporter> = vec![&JsonExporter, &ImageExporter, &GeoJsonExporter];
+    let exporters: Vec<&dyn Exporter> = vec![
+        &JsonExporter,
+        &ImageExporter,
+        &GeoJsonExporter,
+        &KmlExporter,
+    ];
 
     for exporter in exporters {
         exporter.export(&parser, &records, &args);

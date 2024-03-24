@@ -21,5 +21,6 @@ dji-log-parser.workspace = true
 geojson.workspace = true
 img-parts.workspace = true
 kamadak-exif.workspace = true
+kml.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
