@@ -24,77 +24,92 @@ pub struct ImageExporter;
 
 impl Exporter for ImageExporter {
     fn export(&self, parser: &DJILog, records: &Vec<Record>, args: &Cli) {
+        // Get fallback GPS point from track in case of no GPS available on startup
+        let mut fallback_latitude = 0.0;
+        let mut fallback_longitude = 0.0;
+
+        records.iter().for_each(|record| {
+            if let Record::OSD(data) = record {
+                if data.latitude != 0.0 || data.longitude != 0.0 {
+                    fallback_latitude = data.latitude;
+                    fallback_longitude = data.longitude;
+                }
+            }
+        });
+
         // Export Images
         if let Some(image_path) = &args.images {
             let mut index = 0;
-            records
-                .iter()
-                .filter(|r| matches!(r, Record::JPEG(_)))
-                .for_each(|record| {
-                    if let Record::JPEG(data) = record {
-                        if index < 4
-                            && parser.info.moment_pic_image_buffer_len[index] == data.len() as i32
-                        {
-                            let file_name = image_path.replace("%d", &(index + 1).to_string());
-                            self.save_image_with_exif_metadata(
-                                data,
-                                file_name,
-                                ExifInfo {
-                                    datetime: parser.info.start_time,
-                                    latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
-                                        parser.info.moment_pic_latitude[index]
-                                    } else {
-                                        parser.info.latitude
-                                    },
-                                    longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
-                                        parser.info.moment_pic_longitude[index]
-                                    } else {
-                                        parser.info.longitude
-                                    },
-                                    model: parser.info.product_type,
+            records.iter().for_each(|record| {
+                if let Record::JPEG(data) = record {
+                    if index < 4
+                        && parser.info.moment_pic_image_buffer_len[index] == data.len() as i32
+                    {
+                        let file_name = image_path.replace("%d", &(index + 1).to_string());
+                        self.save_image_with_exif_metadata(
+                            data,
+                            file_name,
+                            ExifInfo {
+                                datetime: parser.info.start_time,
+                                latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
+                                    parser.info.moment_pic_latitude[index]
+                                } else if parser.info.latitude != 0.0 {
+                                    parser.info.latitude
+                                } else {
+                                    fallback_latitude
                                 },
-                            );
-                            index += 1;
-                        }
+                                longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
+                                    parser.info.moment_pic_longitude[index]
+                                } else if parser.info.longitude != 0.0 {
+                                    parser.info.longitude
+                                } else {
+                                    fallback_longitude
+                                },
+                                model: parser.info.product_type,
+                            },
+                        );
+                        index += 1;
                     }
-                });
+                }
+            });
         }
 
         // Export Thumbnails
         if let Some(thumbnails_path) = &args.thumbnails {
             let mut index = 0;
-            records
-                .iter()
-                .filter(|r| matches!(r, Record::JPEG(_)))
-                .for_each(|record| {
-                    if let Record::JPEG(data) = record {
-                        if index < 4
-                            && parser.info.moment_pic_shrink_image_buffer_len[index]
-                                == data.len() as i32
-                        {
-                            let file_name = thumbnails_path.replace("%d", &(index + 1).to_string());
-                            self.save_image_with_exif_metadata(
-                                data,
-                                file_name,
-                                ExifInfo {
-                                    datetime: parser.info.start_time,
-                                    latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
-                                        parser.info.moment_pic_latitude[index]
-                                    } else {
-                                        parser.info.latitude
-                                    },
-                                    longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
-                                        parser.info.moment_pic_longitude[index]
-                                    } else {
-                                        parser.info.longitude
-                                    },
-                                    model: parser.info.product_type,
+            records.iter().for_each(|record| {
+                if let Record::JPEG(data) = record {
+                    if index < 4
+                        && parser.info.moment_pic_shrink_image_buffer_len[index]
+                            == data.len() as i32
+                    {
+                        let file_name = thumbnails_path.replace("%d", &(index + 1).to_string());
+                        self.save_image_with_exif_metadata(
+                            data,
+                            file_name,
+                            ExifInfo {
+                                datetime: parser.info.start_time,
+                                latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
+                                    parser.info.moment_pic_latitude[index]
+                                } else if parser.info.latitude != 0.0 {
+                                    parser.info.latitude
+                                } else {
+                                    fallback_latitude
                                 },
-                            );
-                            index += 1;
-                        }
+                                longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
+                                    parser.info.moment_pic_longitude[index]
+                                } else if parser.info.longitude != 0.0 {
+                                    parser.info.longitude
+                                } else {
+                                    fallback_longitude
+                                },
+                                model: parser.info.product_type,
+                            },
+                        );
+                        index += 1;
                     }
-                });
+                }
+            });
         }
     }
 }
