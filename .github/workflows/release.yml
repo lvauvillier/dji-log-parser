@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
-          bin: dji-log-parser
+          bin: dji-log
           tar: unix
           zip: windows
           target: ${{ matrix.target }}
@@ -59,6 +59,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
-      - run: cargo publish --token ${CRATES_TOKEN}
+      - run: cargo publish -p dji-log-parser --token ${CRATES_TOKEN}
     env:
       CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}

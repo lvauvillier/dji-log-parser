@@ -340,7 +340,7 @@ dependencies = [
 
 [[package]]
 name = "dji-log-cli"
-version = "0.1.0"
+version = "0.3.1"
 dependencies = [
  "chrono",
  "clap",
@@ -355,7 +355,7 @@ dependencies = [
 
 [[package]]
 name = "dji-log-parser"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "aes",
  "base64",
