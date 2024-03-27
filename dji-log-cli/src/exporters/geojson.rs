@@ -12,18 +12,15 @@ impl Exporter for GeoJsonExporter {
         if let Some(geojson_path) = &args.geojson {
             // Create a Value::LineString from all the coords.
             let mut coords = vec![];
-            records
-                .iter()
-                .filter(|r| matches!(r, Record::OSD(_)))
-                .for_each(|r| {
-                    if let Record::OSD(osd) = r {
-                        let lat = osd.latitude;
-                        let lon = osd.longitude;
-                        let alt = osd.altitude as f64;
-                        let coord = vec![lon, lat, alt];
-                        coords.push(coord);
-                    }
-                });
+            records.iter().for_each(|r| {
+                if let Record::OSD(osd) = r {
+                    let lat = osd.latitude;
+                    let lon = osd.longitude;
+                    let alt = osd.altitude as f64;
+                    let coord = vec![lon, lat, alt];
+                    coords.push(coord);
+                }
+            });
             let mut properties = JsonObject::new();
             let info = parser.info.clone();
             // Add info.subStreet, street, city as properties.
