@@ -1,6 +1,6 @@
 [package]
 name = "dji-log-cli"
-version = "0.1.0"
+version.workspace = true
 description = "CLI for parsing DJI txt logs"
 categories.workspace = true
 authors.workspace = true
@@ -8,7 +8,7 @@ repository.workspace = true
 license.workspace = true
 keywords.workspace = true
 edition.workspace = true
-publish = true
+publish = false
 
 [[bin]]
 name = "dji-log"

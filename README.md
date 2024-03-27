@@ -7,8 +7,9 @@ A library / cli for parsing DJI txt logs
 
 ## Features
 
-- Supports all log versions
+- Supports all log versions and encryptions
 - Parse records and extract embedded images
+- Export flight tracks to GeoJSON and KML
 
 ## Encryption in Version 13 and Later
 
@@ -25,16 +26,20 @@ To acquire an apiKey, follow these steps:
 
 ## Cli Usage
 
+### Installation
+
+[Download](https://github.com/lvauvillier/dji-log-parser/releases) binary from latest release
+
 ### Basic usage
 
 ```bash
-dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ > records.json
+dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ > records.json
 ```
 
 or with an output arg
 
 ```bash
-dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --output records.json
+dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --output records.json
 ```
 
 ### With image / thumbnails extraction
@@ -42,19 +47,19 @@ dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_K
 Use `%d` in the images or thumbnails option to specify a sequence.
 
 ```bash
-dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --images image%d.jpeg --thumbnails thumbnail%d.jpeg --output records.json
+dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --images image%d.jpeg --thumbnails thumbnail%d.jpeg --output records.json
 ```
 
 ### With kml generation
 
 ```bash
-dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --kml track.kml --output records.json
+dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --kml track.kml --output records.json
 ```
 
 ### With geojson generation
 
 ```bash
-dji-log-parser DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --geojson track.json --output records.json
+dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --geojson track.json --output records.json
 ```
 
 ## Library Usage
