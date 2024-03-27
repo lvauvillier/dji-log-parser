@@ -114,7 +114,7 @@ impl ImageExporter {
         let mut writer = Writer::new();
 
         // Set Latitude
-        let (degrees, minutes, seconds) = decimal_to_dms(info.latitude);
+        let (degrees, minutes, seconds) = decimal_to_dms(info.latitude.abs());
         let latitude_field = Field {
             tag: Tag::GPSLatitude,
             ifd_num: In::PRIMARY,
@@ -126,8 +126,17 @@ impl ImageExporter {
         };
         writer.push_field(&latitude_field);
 
+        let latitude_ref_field = Field {
+            tag: Tag::GPSLatitudeRef,
+            ifd_num: In::PRIMARY,
+            value: Value::Ascii(vec![(if info.latitude >= 0.0 { "N" } else { "S" })
+                .to_string()
+                .into_bytes()]),
+        };
+        writer.push_field(&latitude_ref_field);
+
         // Set Longitude
-        let (degrees, minutes, seconds) = decimal_to_dms(info.longitude);
+        let (degrees, minutes, seconds) = decimal_to_dms(info.longitude.abs());
         let longitude_field = Field {
             tag: Tag::GPSLongitude,
             ifd_num: In::PRIMARY,
@@ -138,6 +147,15 @@ impl ImageExporter {
             ]),
         };
         writer.push_field(&longitude_field);
+
+        let longitude_ref_field = Field {
+            tag: Tag::GPSLongitudeRef,
+            ifd_num: In::PRIMARY,
+            value: Value::Ascii(vec![(if info.longitude >= 0.0 { "E" } else { "W" })
+                .to_string()
+                .into_bytes()]),
+        };
+        writer.push_field(&longitude_ref_field);
 
         // Set Datetime
         let datetime = Field {

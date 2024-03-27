@@ -26,11 +26,11 @@ pub(crate) struct Cli {
     #[arg(short, long)]
     thumbnails: Option<String>,
 
-    // GeoJSON file path.
+    /// GeoJSON file path.
     #[arg(short, long)]
     geojson: Option<String>,
 
-    // KML file path.
+    /// KML file path.
     #[arg(short, long)]
     kml: Option<String>,
 
