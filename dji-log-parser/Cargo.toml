@@ -9,6 +9,7 @@ license.workspace = true
 keywords.workspace = true
 edition.workspace = true
 publish = true
+readme = "../README.md"
 
 [dependencies]
 aes.workspace = true
