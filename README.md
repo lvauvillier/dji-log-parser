@@ -91,13 +91,20 @@ let records = parser.records(DecryptMethod::ApiKey("__DJI_API_KEY__"));
 
 ### Advanced: Manual Keychain Retrieval
 
-For scenarios like caching, offline use, or custom server communication, the library
-exposes the internal keychain retrieval process:
+For WASM or custom server communication, the library exposes the internal keychain retrieval process:
 
 ```rust
+// 1. Build a keychain request
 let keychain_request = parser.keychain_request().unwrap();
-let keychains = keychain_request.fetch("__DJI_API_KEY__").unwrap();
+
+// 2. Fetch from DJI's servers, take a callback as second argument
+let keychains = keychain_request.fetch("__DJI_API_KEY__", |result| {
+    let keychains = result.unwrap();
+});
+
+// 3. Parse records
 let records = parser.records(DecryptMethod::Keychains(keychains));
+
 ```
 
 Note: Replace `__DJI_API_KEY__` with your actual apiKey

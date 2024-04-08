@@ -110,6 +110,8 @@ use binrw::io::Cursor;
 use binrw::BinRead;
 use std::cell::RefCell;
 use std::collections::{HashMap, VecDeque};
+#[cfg(not(target_arch = "wasm32"))]
+use std::sync::mpsc;
 use thiserror::Error;
 
 mod decoder;
@@ -156,6 +158,7 @@ pub enum DJILogError {
 
 #[derive(PartialEq)]
 pub enum DecryptMethod {
+    #[cfg(not(target_arch = "wasm32"))]
     ApiKey(String),
     Keychains(Vec<Keychain>),
     None,
@@ -311,7 +314,7 @@ impl<'a> DJILog<'a> {
     /// For log versions less than 13, `DecryptMethod::None` should be used as there is no encryption.
     /// For versions 13 and above, records are encrypted and require a decryption method:
     /// - `DecryptMethod::Keychains` if you want to manually provide the keychains,
-    /// - `DecryptMethod::ApiKey` if you have an API key to decrypt the records.
+    /// - `DecryptMethod::ApiKey` if you have an API key to decrypt the records. This method is thread blocking and not supported in WASM.
     ///
     /// # Arguments
     ///
@@ -331,7 +334,19 @@ impl<'a> DJILog<'a> {
         }
 
         let mut keychains = VecDeque::from(match decrypt_method {
-            DecryptMethod::ApiKey(api_key) => self.keychain_request()?.fetch(&api_key)?,
+            #[cfg(not(target_arch = "wasm32"))]
+            DecryptMethod::ApiKey(api_key) => {
+                // Build request
+                let keychain_request = self.keychain_request()?;
+                let (tx, rx) = mpsc::channel::<Result<Vec<Keychain>, DJILogError>>();
+
+                keychain_request.fetch(&api_key, move |response| {
+                    tx.send(response).unwrap();
+                });
+
+                // Wait until we get a response
+                rx.recv().unwrap()?
+            }
             DecryptMethod::Keychains(keychains) => keychains,
             DecryptMethod::None => Vec::new(),
         });
