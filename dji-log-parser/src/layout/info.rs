@@ -129,6 +129,7 @@ pub enum ProductType {
     Matrice30,
     Mavic3Enterprise,
     DJIAvata,
+    DJIAvata2,
     #[serde(untagged)]
     Unknown(u8),
 }
@@ -176,6 +177,7 @@ impl From<u8> for ProductType {
             116 => ProductType::Matrice30,
             118 => ProductType::Mavic3Enterprise,
             121 => ProductType::DJIAvata,
+            152 => ProductType::DJIAvata2,
             _ => ProductType::Unknown(num),
         }
     }
