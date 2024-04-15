@@ -1,0 +1,7 @@
+[build]
+target = "dji-log-viewer/index.html"
+dist = "dist"
+
+[[build.watcher]]
+name = "dji-log-viewer"
+watch = "dji-log-viewer/src/**"
