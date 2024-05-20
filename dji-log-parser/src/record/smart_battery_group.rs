@@ -61,4 +61,6 @@ pub struct SmartBatteryDynamic {
 pub struct SmartBatterySingleVoltage {
     pub index: u8,
     pub cell_count: u8,
+    #[br(count = cell_count)]
+    pub cell_voltages: Vec<u16>,
 }
