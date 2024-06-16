@@ -162,8 +162,8 @@ pub enum DecryptMethod {
 }
 
 #[derive(Debug)]
-pub struct DJILog<'a> {
-    inner: &'a [u8],
+pub struct DJILog {
+    inner: Vec<u8>,
     prefix: Prefix,
     /// Log format version
     pub version: u8,
@@ -171,7 +171,7 @@ pub struct DJILog<'a> {
     pub info: Info,
 }
 
-impl<'a> DJILog<'a> {
+impl DJILog {
     /// Constructs a `DJILog` from a byte slice.
     ///
     /// This function parses the Prefix and Info blocks of the log file,
@@ -196,9 +196,9 @@ impl<'a> DJILog<'a> {
     /// let log = DJILog::from_bytes(log_bytes).unwrap();
     /// ```
     ///
-    pub fn from_bytes(bytes: &[u8]) -> Result<DJILog, DJILogError> {
+    pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog, DJILogError> {
         // Decode Prefix
-        let prefix = Prefix::read(&mut Cursor::new(bytes))
+        let prefix = Prefix::read(&mut Cursor::new(&bytes))
             .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
 
         let version = prefix.version;

@@ -47,7 +47,7 @@ fn main() {
     let args = Cli::parse();
 
     let bytes = fs::read(&args.filepath).expect("Unable to read file");
-    let parser = DJILog::from_bytes(&bytes).expect("Unable to parse file");
+    let parser = DJILog::from_bytes(bytes).expect("Unable to parse file");
 
     // Configure a decrypt method
     let decrypt_method = if parser.version >= 13 {
