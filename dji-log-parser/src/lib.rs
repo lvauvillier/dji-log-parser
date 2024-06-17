@@ -198,7 +198,7 @@ impl DJILog {
     ///
     pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog, DJILogError> {
         // Decode Prefix
-        let prefix = Prefix::read(&mut Cursor::new(&bytes))
+        let mut prefix = Prefix::read(&mut Cursor::new(&bytes))
             .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
 
         let version = prefix.version;
@@ -211,7 +211,7 @@ impl DJILog {
             Info::read_args(&mut cursor, (version,))
                 .map_err(|e| DJILogError::InfoParseError(e.to_string()))?
         } else {
-            // Get info from first auxilliary block
+            // Get info from first auxiliary block
             if let Auxiliary::Info(data) = Auxiliary::read(&mut cursor)
                 .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
             {
@@ -221,6 +221,14 @@ impl DJILog {
                 Err(DJILogError::InfoParseError("Invalid auxiliary data".into()))?
             }
         };
+
+        // Try to recover detail offset
+        if prefix.records_offset() == 0 && version >= 13 {
+            // Skip second auxiliary block
+            let _ = Auxiliary::read(&mut cursor)
+                .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
+            prefix.recover_detail_offset(cursor.position() + info_offset as u64);
+        }
 
         Ok(DJILog {
             inner: bytes,
@@ -253,7 +261,7 @@ impl DJILog {
         let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.info_offset());
 
-        // Skip first auxilliary block
+        // Skip first auxiliary block
         let _ = Auxiliary::read(&mut cursor)
             .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
 
@@ -339,7 +347,7 @@ impl DJILog {
         let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
 
-        let keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+        let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
 
         let mut records = Vec::new();
 
@@ -355,6 +363,10 @@ impl DJILog {
                 Ok(record) => record,
                 Err(_) => break,
             };
+
+            if let Record::Recover(_) = record {
+                keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+            }
 
             records.push(record);
         }

@@ -20,6 +20,10 @@ pub struct Prefix {
 }
 
 impl Prefix {
+    pub fn recover_detail_offset(&mut self, detail_offset: u64) {
+        self.detail_offset = detail_offset;
+    }
+
     pub fn info_offset(&self) -> u64 {
         if self.version < 12 {
             self.detail_offset
