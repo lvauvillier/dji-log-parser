@@ -172,14 +172,14 @@ pub struct DJILog {
 }
 
 impl DJILog {
-    /// Constructs a `DJILog` from a byte slice.
+    /// Constructs a `DJILog` from an arry of bytes.
     ///
     /// This function parses the Prefix and Info blocks of the log file,
     /// and handles different versions of the log format.
     ///
     /// # Arguments
     ///
-    /// * `bytes` - A byte slice representing the DJI log file.
+    /// * `bytes` - An array of bytes representing the DJI log file.
     ///
     /// # Returns
     ///

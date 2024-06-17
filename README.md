@@ -66,10 +66,10 @@ dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --
 
 ### Initialization
 
-Initialize a `DJILog` instance from a byte slice to access version information and metadata:
+Initialize a `DJILog` instance from an array of bytes to access version information and metadata:
 
 ```rust
-let parser = DJILog::from_bytes(&bytes).unwrap();
+let parser = DJILog::from_bytes(bytes).unwrap();
 println!("Version: {:?}", parser.version);
 println!("Info: {:?}", parser.info);
 ```
