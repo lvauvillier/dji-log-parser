@@ -2,7 +2,7 @@ use binrw::binread;
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
-use crate::layout::info::ProductType;
+use crate::layout::info::{Platform, ProductType};
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -11,7 +11,10 @@ use crate::layout::info::ProductType;
 pub struct RecoverInfo {
     #[br(map = |x: u8| ProductType::from(x))]
     pub product_type: ProductType,
-    pub app_version: [u8; 4],
+    #[br(map = |x: u8| Platform::from(x))]
+    pub app_platform: Platform,
+    #[br(map = |x: [u8; 3]| format!("{}.{}.{}", x[0], x[1], x[2]))]
+    pub app_version: String,
     #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub aircraft_sn: String,
     #[br(count = 32, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
