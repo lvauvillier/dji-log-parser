@@ -25,6 +25,7 @@ mod mc_param;
 mod ofdm;
 mod osd;
 mod rc;
+mod rc_display_field;
 mod rc_gps;
 mod recover_info;
 mod smart_battery;
@@ -47,6 +48,7 @@ pub use mc_param::MCParams;
 pub use ofdm::OFDM;
 pub use osd::OSD;
 pub use rc::RC;
+pub use rc_display_field::RCDisplayField;
 pub use rc_gps::RCGPS;
 pub use recover_info::RecoverInfo;
 pub use smart_battery::SmartBattery;
@@ -273,6 +275,12 @@ pub enum Record {
         OFDM,
         #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
+    #[br(magic = 50u8)]
+    Recover(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(count = self_0)] Vec<u8>,
+        #[br(temp, assert(self_2 == 0xff))] u8,
+    ),
     #[br(magic = 56u8)]
     KeyStorage(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
@@ -283,11 +291,15 @@ pub enum Record {
         KeyStorage,
         #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
-    #[br(magic = 50u8)]
-    Recover(
+    #[br(magic = 62u8)]
+    RCDisplayField(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(count = self_0)] Vec<u8>,
-        #[br(temp, assert(self_2 == 0xff))] u8,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| record_decoder(reader, 62, version, keychain, self_0),
+        )]
+        RCDisplayField,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     JPEG(#[br(parse_with = utils::read_jpeg)] Vec<u8>),
     // Valid record of unknown data

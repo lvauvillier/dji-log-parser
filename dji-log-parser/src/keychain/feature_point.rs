@@ -212,6 +212,8 @@ impl FeaturePoint {
             58 => FeaturePoint::BaseFeature,
             // FCIMUInfoDataType
             59 => FeaturePoint::BaseFeature,
+            // RemoteControllerDisplayField
+            62 => FeaturePoint::RCFeature,
             // FlightControllerCommonOSDField
             63 => FeaturePoint::BaseFeature,
             // Default
