@@ -10,19 +10,14 @@ use crate::utils::sub_byte_field;
 #[br(little, import { version: u8, product_type: ProductType = ProductType::None })]
 pub struct RC {
     /// right stick - horizontal
-    #[br(map = |x: u16| (x as f32 - 1024.0) / 0.66)]
-    pub aileron: f32,
+    pub aileron: u16,
     /// right stick - vertical
-    #[br(map = |x: u16| (x as f32 - 1024.0) / 0.66)]
-    pub elevator: f32,
+    pub elevator: u16,
     /// left stick - vertical
-    #[br(map = |x: u16| (x as f32 - 1024.0) / 0.66)]
-    pub throttle: f32,
+    pub throttle: u16,
     /// left stick - horizontal
-    #[br(map = |x: u16| (x as f32 - 1024.0) / 0.66)]
-    pub rudder: f32,
-    #[br(map = |x: u16| (x as f32 - 1024.0) / 0.66)]
-    pub gimbal: f32,
+    pub rudder: u16,
+    pub gimbal: u16,
 
     #[br(temp)]
     _bitpack1: u8,
