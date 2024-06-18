@@ -270,7 +270,7 @@ impl DJILog {
             .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
         {
             keychain_request.version = data.version;
-            keychain_request.department = data.department;
+            keychain_request.department = data.department.into();
         }
 
         // Extract keychains from KeyStorage Records
