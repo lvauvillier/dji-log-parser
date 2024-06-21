@@ -73,7 +73,8 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 1, version, keychain, self_0)
+            map_stream = |reader| record_decoder(reader, 1, version, keychain, self_0),
+            args { version }
         )]
         OSD,
         #[br(temp, assert(self_2 == END_BYTE))] u8,
@@ -94,7 +95,8 @@ pub enum Record {
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 3, version, keychain, self_0)
+            map_stream = |reader| record_decoder(reader, 3, version, keychain, self_0),
+            args { version }
         )]
         Gimbal,
         #[br(temp, assert(self_2 == END_BYTE))] u8,

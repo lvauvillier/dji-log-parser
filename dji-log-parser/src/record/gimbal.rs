@@ -5,7 +5,7 @@ use serde::Serialize;
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
-#[br(little)]
+#[br(import { version: u8 }, little)]
 pub struct Gimbal {
     /// degrees
     #[br(map = |x: i16| (x as f32 / 10.0))]
@@ -45,8 +45,7 @@ pub struct Gimbal {
     pub install_direction: bool,
     #[br(calc(sub_byte_field(_bitpack2, 0x40) == 1))]
     pub is_stuck: bool,
-
-    #[br(temp)]
+    #[br(if(version >=2), temp)]
     _bitpack3: u8,
     #[br(calc(sub_byte_field(_bitpack3, 0x0F)))]
     pub version: u8,

@@ -7,7 +7,7 @@ use crate::utils::sub_byte_field;
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
-#[br(little)]
+#[br( import { version: u8 }, little)]
 pub struct OSD {
     /// degrees
     #[br(map = |x: f64| (x * 180.0) / PI)]
@@ -124,15 +124,16 @@ pub struct OSD {
     pub motor_revolution: u8,
     #[br(temp)]
     _unknown: u16,
-    pub version: u8,
-    #[br(map = |x: u8| DroneType::from(x))]
+    pub version_c: u8,
+    #[br(if(version >=2), map = |x: u8| DroneType::from(x))]
     pub drone_type: DroneType,
-    #[br(map = |x: u8| ImuInitFailReason::from(x))]
+    #[br(if(version >=3), map = |x: u8| ImuInitFailReason::from(x))]
     pub imu_init_fail_reason: ImuInitFailReason,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Default)]
 pub enum DroneType {
+    #[default]
     None,
     Inspire1,
     P3Advanced,
@@ -740,8 +741,9 @@ impl From<u8> for NonGPSCause {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Default)]
 pub enum ImuInitFailReason {
+    #[default]
     MonitorError,
     CollectingData,
     AcceDead,
