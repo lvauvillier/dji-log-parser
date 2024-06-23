@@ -23,8 +23,8 @@ pub struct Home {
     _bitpack1: u8,
     #[br(calc(sub_byte_field(_bitpack1, 0x01) == 1))]
     pub is_home_record: bool,
-    #[br(calc(sub_byte_field(_bitpack1, 0x02) == 1))]
-    pub go_home_mode: bool,
+    #[br(calc(GoHomeMode::from(sub_byte_field(_bitpack1, 0x02) == 1)))]
+    pub go_home_mode: GoHomeMode,
     #[br(calc(sub_byte_field(_bitpack1, 0x04) == 1))]
     pub aircraft_head_direction: bool,
     #[br(calc(sub_byte_field(_bitpack1, 0x08) == 1))]
@@ -63,7 +63,7 @@ pub struct Home {
     pub max_allowed_height: f32,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub enum IOCMode {
     CourseLock,
     HomeLock,
@@ -79,6 +79,21 @@ impl From<u8> for IOCMode {
             2 => IOCMode::HomeLock,
             3 => IOCMode::HotspotSurround,
             _ => IOCMode::Unknown(value),
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone)]
+pub enum GoHomeMode {
+    Normal,
+    FixedHeight,
+}
+
+impl From<bool> for GoHomeMode {
+    fn from(value: bool) -> Self {
+        match value {
+            false => GoHomeMode::Normal,
+            true => GoHomeMode::FixedHeight,
         }
     }
 }
