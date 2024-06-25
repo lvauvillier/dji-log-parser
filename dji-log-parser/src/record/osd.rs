@@ -202,44 +202,72 @@ impl From<u8> for DroneType {
 
 #[derive(Serialize, Debug)]
 pub enum FlightMode {
+    /// Manual mode. Shown as Manual in DJI app.
     Manual,
+    /// Attitude mode. Shown as Atti in DJI app.
     Atti,
+    /// Attitude course lock mode. Shown as Atti in DJI app.
     AttiCourseLock,
+    /// Attitude hover mode. Shown as Atti in DJI app.
     AttiHover,
+    /// Hover mode. Shown as P-GPS in DJI app.
     Hover,
+    /// GPS blake mode. Shown as P-GPS in DJI app.
     GPSBlake,
+    /// GPS Attitude mode. Shown as P-GPS in DJI app.
     GPSAtti,
+    /// GPS course lock mode. Shown as CL/P-CL/F-CL in DJI app.
     GPSCourseLock,
+    /// GPS Home mode. Shown as HL/P-HL/F-HL in DJI app.
     GPSHomeLock,
+    /// GPS hotpoint mode. Show as POI/F-POI in DJI app.
     GPSHotPoint,
+    /// Assisted takeoff mode. Shown as TakeOff in DJI app.
     AssistedTakeoff,
+    /// Auto takeoff mode. Shown as TakeOff in DJI app.
     AutoTakeoff,
+    /// Auto landing mode. Shown as Landing in DJI app.
     AutoLanding,
+    /// Attitude landing mode. Shown as Landing in DJI app.
     AttiLanding,
-    NaviGo,
+    /// GPS waypoint mode. Shown as WP/F-WP in DJI app.
+    GPSWaypoint,
+    /// Go home mode. Shown as Gohome in DJI app.
     GoHome,
     ClickGo,
+    /// Joystick mode. hown as Joystick in DJI app.
     Joystick,
     GPSAttiWristband,
     Cinematic,
+    /// Attitude limited mode. Shown as Atti in DJI app.
     AttiLimited,
+    /// Draw mode. Shown as Draw in DJI app.
     Draw,
+    /// GPS follow me mode. Shown as FM/F-FM in DJI app.
     GPSFollowMe,
+    /// ActiveTrack mode. Shown as ActiveTrack in DJI app.
     ActiveTrack,
+    /// TapFly mode. Shown as TapFly in DJI app.
     TapFly,
     Pano,
     Farming,
     FPV,
+    /// Sport mode. Shown as Sport in DJI app.
     GPSSport,
     GPSNovice,
-    ForceLanding,
+    /// Confirm landing mode. Shown as Landing in DJI app.
+    ConfirmLanding,
+    /// The aircraft should move following the terrain. Shown as TerrainTracking in DJI app.
     TerrainTracking,
     NaviAdvGoHome,
     NaviAdvLanding,
-    TripodGPS,
+    /// Tripod mode. Shown as Tripod in DJI app.
+    Tripod,
+    /// Active track mode, corresponds to Spotlight active track mode. Shown as QuickShot/ActiveTrack in DJI app.
     TrackHeadlock,
+    /// The motors are just started. Shown as TakeOff in DJI app.
     EngineStart,
-    GentleGPS,
+    GPSGentle,
     #[serde(untagged)]
     Unknown(u8),
 }
@@ -261,7 +289,7 @@ impl From<u8> for FlightMode {
             11 => FlightMode::AutoTakeoff,
             12 => FlightMode::AutoLanding,
             13 => FlightMode::AttiLanding,
-            14 => FlightMode::NaviGo,
+            14 => FlightMode::GPSWaypoint,
             15 => FlightMode::GoHome,
             16 => FlightMode::ClickGo,
             17 => FlightMode::Joystick,
@@ -277,14 +305,14 @@ impl From<u8> for FlightMode {
             30 => FlightMode::FPV,
             31 => FlightMode::GPSSport,
             32 => FlightMode::GPSNovice,
-            33 => FlightMode::ForceLanding,
+            33 => FlightMode::ConfirmLanding,
             35 => FlightMode::TerrainTracking,
             36 => FlightMode::NaviAdvGoHome,
             37 => FlightMode::NaviAdvLanding,
-            38 => FlightMode::TripodGPS,
+            38 => FlightMode::Tripod,
             39 => FlightMode::TrackHeadlock,
             41 => FlightMode::EngineStart,
-            43 => FlightMode::GentleGPS,
+            43 => FlightMode::GPSGentle,
             _ => FlightMode::Unknown(value),
         }
     }
