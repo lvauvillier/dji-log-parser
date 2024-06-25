@@ -25,6 +25,7 @@ cbc = "0.1"
 chrono = { version = "0.4.31", features = ["serde"] }
 clap = { version = "4.4.11", features = ["derive"] }
 crc64 = "2.0.0"
+csv = "1.0.0"
 geojson = "0.24.1"
 img-parts = "0.3.0"
 kamadak-exif = "0.5.5"

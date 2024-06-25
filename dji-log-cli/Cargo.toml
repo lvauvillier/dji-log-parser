@@ -17,6 +17,7 @@ path = "src/main.rs"
 [dependencies]
 chrono = { workspace = true, features = ["serde"] }
 clap = { workspace = true, features = ["derive"] }
+csv.workspace = true
 dji-log-parser.workspace = true
 geojson.workspace = true
 img-parts.workspace = true

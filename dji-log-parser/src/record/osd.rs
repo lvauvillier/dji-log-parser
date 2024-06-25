@@ -133,7 +133,7 @@ pub struct OSD {
     pub imu_init_fail_reason: ImuInitFailReason,
 }
 
-#[derive(Serialize, Debug, Default)]
+#[derive(Serialize, Debug, Default, Clone, Copy)]
 pub enum DroneType {
     #[default]
     None,
@@ -202,7 +202,7 @@ impl From<u8> for DroneType {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Copy, Clone)]
 pub enum FlightMode {
     /// Manual mode. Shown as Manual in DJI app.
     Manual,
@@ -320,8 +320,7 @@ impl From<u8> for FlightMode {
     }
 }
 
-#[derive(Serialize, Debug)]
-
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum AppCommand {
     AutoFly,
     AutoLanding,
@@ -393,7 +392,7 @@ impl From<u8> for AppCommand {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(PartialEq, Serialize, Debug, Clone, Copy)]
 pub enum GroundOrSky {
     Ground,
     Sky,
@@ -411,7 +410,7 @@ impl From<u8> for GroundOrSky {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum GoHomeStatus {
     Standby,
     Preascending,
@@ -439,7 +438,7 @@ impl From<u8> for GoHomeStatus {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum BatteryType {
     NonSmart,
     Smart,
@@ -457,7 +456,7 @@ impl From<u8> for BatteryType {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 
 pub enum FlightAction {
     None,
@@ -542,7 +541,7 @@ impl From<u8> for FlightAction {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum MotorStartFailedCause {
     None,
     CompassError,
@@ -741,7 +740,7 @@ impl From<u8> for MotorStartFailedCause {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum NonGPSCause {
     Already,
     Forbid,
@@ -771,7 +770,7 @@ impl From<u8> for NonGPSCause {
     }
 }
 
-#[derive(Serialize, Debug, Default)]
+#[derive(Serialize, Debug, Default, Clone, Copy)]
 pub enum ImuInitFailReason {
     #[default]
     MonitorError,

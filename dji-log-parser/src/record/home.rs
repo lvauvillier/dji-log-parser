@@ -63,7 +63,7 @@ pub struct Home {
     pub max_allowed_height: f32,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum IOCMode {
     CourseLock,
     HomeLock,
@@ -83,7 +83,7 @@ impl From<u8> for IOCMode {
     }
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum GoHomeMode {
     Normal,
     FixedHeight,
