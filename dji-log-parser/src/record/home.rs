@@ -25,8 +25,8 @@ pub struct Home {
     pub is_home_record: bool,
     #[br(calc(GoHomeMode::from(sub_byte_field(_bitpack1, 0x02) == 1)))]
     pub go_home_mode: GoHomeMode,
-    #[br(calc(sub_byte_field(_bitpack1, 0x04) == 1))]
-    pub aircraft_head_direction: bool,
+    #[br(calc(sub_byte_field(_bitpack1, 0x04)))]
+    pub aircraft_head_direction: u8,
     #[br(calc(sub_byte_field(_bitpack1, 0x08) == 1))]
     pub is_dynamic_home_point_enabled: bool,
     #[br(calc(sub_byte_field(_bitpack1, 0x10) == 1))]
@@ -40,8 +40,8 @@ pub struct Home {
 
     #[br(temp)]
     _bitpack2: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x03)))]
-    pub compass_state: u8,
+    #[br(calc(CompassCalibrationState::from(sub_byte_field(_bitpack2, 0x03))))]
+    pub compass_state: CompassCalibrationState,
     #[br(calc(sub_byte_field(_bitpack2, 0x04) == 1))]
     pub is_compass_adjust: bool,
     #[br(calc(sub_byte_field(_bitpack2, 0x08) == 1))]
@@ -94,6 +94,29 @@ impl From<bool> for GoHomeMode {
         match value {
             false => GoHomeMode::Normal,
             true => GoHomeMode::FixedHeight,
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, Copy)]
+pub enum CompassCalibrationState {
+    NotCalibrating,
+    Horizontal,
+    Vertical,
+    Successful,
+    Failed,
+    Unnown(u8),
+}
+
+impl From<u8> for CompassCalibrationState {
+    fn from(value: u8) -> Self {
+        match value {
+            0 => CompassCalibrationState::NotCalibrating,
+            1 => CompassCalibrationState::Horizontal,
+            2 => CompassCalibrationState::Vertical,
+            3 => CompassCalibrationState::Successful,
+            4 => CompassCalibrationState::Failed,
+            _ => CompassCalibrationState::Unnown(value),
         }
     }
 }
