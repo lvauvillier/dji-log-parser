@@ -117,7 +117,9 @@ pub struct OSD {
     pub waypoint_limit_mode: bool,
 
     pub battery: u8,
-    pub s_wave_height: u8,
+    /// meters
+    #[br(map = |x: u8| (x as f32 / 10.0))]
+    pub s_wave_height: f32,
     /// second
     #[br(map = |x: u16| (x as f32 / 10.0))]
     pub fly_time: f32,
