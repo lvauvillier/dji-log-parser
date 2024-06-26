@@ -23,11 +23,11 @@ pub struct Camera {
 
     #[br(temp)]
     _bitpack2: u8,
-    #[br(calc(sub_byte_field(_bitpack2, 0x02)))]
-    pub has_sd_card: u8,
-    #[br(calc(SDCardState::from(sub_byte_field(_bitpack2, 0x02))))]
+    #[br(calc(sub_byte_field(_bitpack2, 0x02) == 1))]
+    pub has_sd_card: bool,
+    #[br(calc(SDCardState::from(sub_byte_field(_bitpack2, 0x3C))))]
     pub sd_card_state: SDCardState,
-    #[br(calc(sub_byte_field(_bitpack2, 0x3C)))]
+    #[br(calc(sub_byte_field(_bitpack2, 0x40)))]
     pub is_upgrading: u8,
 
     #[br(temp)]
