@@ -64,7 +64,7 @@ pub struct RC {
     pub gimbal_control_enable: u8,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum FlightModeSwitch {
     /// Position One. For all products except Mavic Pro, this is the left most position
     /// of the flight mode switch on a remote controller from the perspective of the
@@ -89,7 +89,7 @@ pub enum FlightModeSwitch {
 }
 
 impl FlightModeSwitch {
-    fn from(value: u8, product_type: ProductType) -> Self {
+    pub fn from(value: u8, product_type: ProductType) -> Self {
         let mapped_value = match product_type {
             // Remap values for Mavic Pro
             ProductType::MavicPro => match value {

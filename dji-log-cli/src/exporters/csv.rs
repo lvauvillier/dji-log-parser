@@ -1,10 +1,14 @@
 use chrono::{DateTime, Utc};
 use csv::Writer;
+use dji_log_parser::record::camera::SDCardState;
+use dji_log_parser::record::gimbal::GimbalMode;
 use dji_log_parser::record::home::{CompassCalibrationState, GoHomeMode, IOCMode};
 use dji_log_parser::record::osd::{
     AppCommand, BatteryType, DroneType, FlightAction, FlightMode, GoHomeStatus, GroundOrSky,
     ImuInitFailReason, MotorStartFailedCause, NonGPSCause,
 };
+
+use dji_log_parser::record::smart_battery_group::SmartBatteryGroup;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use serde::Serialize;
@@ -123,6 +127,81 @@ pub struct Frame {
     #[serde(rename = "OSD.voltageWarning")]
     pub osd_voltage_warning: u8,
 
+    #[serde(rename = "GIMBAL.mode")]
+    pub gimbal_mode: Option<GimbalMode>,
+    /// degrees
+    #[serde(rename = "GIMBAL.pitch")]
+    pub gimbal_pitch: f32,
+    /// degrees
+    #[serde(rename = "GIMBAL.roll")]
+    pub gimbal_roll: f32,
+    /// degrees
+    #[serde(rename = "GIMBAL.yaw")]
+    pub gimbal_yaw: f32,
+    #[serde(rename = "GIMBAL.isPitchAtLimit")]
+    pub gimbal_is_pitch_at_limit: bool,
+    #[serde(rename = "GIMBAL.isRollAtLimit")]
+    pub gimbal_is_roll_at_limit: bool,
+    #[serde(rename = "GIMBAL.isYawAtLimit")]
+    pub gimbal_is_yaw_at_limit: bool,
+    #[serde(rename = "GIMBAL.isStuck")]
+    pub gimbal_is_stuck: bool,
+
+    #[serde(rename = "CAMERA.isPhoto")]
+    pub camera_is_photo: bool,
+    #[serde(rename = "CAMERA.isVideo")]
+    pub camera_is_video: bool,
+    #[serde(rename = "CAMERA.sdCardIsInserted")]
+    pub camera_sd_card_is_inserted: bool,
+    #[serde(rename = "CAMERA.sdCardState")]
+    pub camera_sd_card_state: Option<SDCardState>,
+
+    #[serde(rename = "RC.downlinkSignal")]
+    pub rc_downlink_signal: Option<u8>,
+    #[serde(rename = "RC.uplinkSignal")]
+    pub rc_uplink_signal: Option<u8>,
+    #[serde(rename = "RC.aileron")]
+    /// right stick - horizontal
+    pub rc_aileron: u16,
+    #[serde(rename = "RC.elevator")]
+    /// right stick - vertical
+    pub rc_elevator: u16,
+    #[serde(rename = "RC.throttle")]
+    /// left stick - vertical
+    pub rc_throttle: u16,
+    #[serde(rename = "RC.rudder")]
+    /// left stick - horizontal
+    pub rc_rudder: u16,
+
+    #[serde(rename = "BATTERY.chargeLevel")]
+    pub battery_charge_level: u8,
+    #[serde(rename = "BATTERY.voltage")]
+    pub battery_voltage: f32,
+    #[serde(rename = "BATTERY.current")]
+    pub battery_current: f32,
+    #[serde(rename = "BATTERY.currentCapacity")]
+    pub battery_current_capacity: u32,
+    #[serde(rename = "BATTERY.fullCapacity")]
+    pub battery_full_capacity: u32,
+    #[serde(rename = "BATTERY.cellVoltage1")]
+    pub battery_cell_voltage1: f32,
+    #[serde(rename = "BATTERY.cellVoltage2")]
+    pub battery_cell_voltage2: f32,
+    #[serde(rename = "BATTERY.cellVoltage3")]
+    pub battery_cell_voltage3: f32,
+    #[serde(rename = "BATTERY.cellVoltage4")]
+    pub battery_cell_voltage4: f32,
+    #[serde(rename = "BATTERY.cellVoltageDeviation")]
+    pub battery_cell_voltage_deviation: f32,
+    #[serde(rename = "BATTERY.maxCellVoltageDeviation")]
+    pub battery_max_cell_voltage_deviation: f32,
+    #[serde(rename = "BATTERY.temperature")]
+    pub battery_temperature: f32,
+    #[serde(rename = "BATTERY.minTemperature")]
+    pub battery_min_temperature: f32,
+    #[serde(rename = "BATTERY.maxTemperature")]
+    pub battery_max_temperature: f32,
+
     /// degrees
     #[serde(rename = "HOME.latitude")]
     pub home_latitude: f64,
@@ -189,6 +268,10 @@ impl Exporter for CSVExporter {
                             writer.serialize(&frame).unwrap();
                         }
 
+                        // Reset non persistant values (one time events)
+                        frame.camera_is_photo = bool::default();
+                        frame.camera_is_video = bool::default();
+
                         frame.osd_fly_time = osd.fly_time;
                         frame.osd_latitude = osd.latitude;
                         frame.osd_longitude = osd.longitude;
@@ -249,6 +332,166 @@ impl Exporter for CSVExporter {
                         frame.osd_voltage_warning = osd.voltage_warning;
 
                         frame_index = frame_index + 1;
+                    }
+                    Record::Gimbal(gimbal) => {
+                        frame.gimbal_mode = Some(gimbal.mode);
+                        frame.gimbal_pitch = gimbal.pitch;
+                        frame.gimbal_roll = gimbal.roll;
+                        frame.gimbal_yaw = gimbal.yaw;
+                        frame.gimbal_is_pitch_at_limit = gimbal.is_pitch_at_limit;
+                        frame.gimbal_is_roll_at_limit = gimbal.is_roll_at_limit;
+                        frame.gimbal_is_yaw_at_limit = gimbal.is_yaw_at_limit;
+                        frame.gimbal_is_stuck = gimbal.is_stuck;
+                    }
+                    Record::Camera(camera) => {
+                        frame.camera_is_photo = camera.is_shooting_single_photo;
+                        frame.camera_is_video = camera.is_recording;
+                        frame.camera_sd_card_is_inserted = camera.has_sd_card;
+                        frame.camera_sd_card_state = Some(camera.sd_card_state);
+                    }
+                    Record::RC(rc) => {
+                        frame.rc_aileron = rc.aileron;
+                        frame.rc_elevator = rc.elevator;
+                        frame.rc_throttle = rc.throttle;
+                        frame.rc_rudder = rc.rudder;
+                    }
+                    Record::RCDisplayField(rc) => {
+                        frame.rc_aileron = rc.aileron;
+                        frame.rc_elevator = rc.elevator;
+                        frame.rc_throttle = rc.throttle;
+                        frame.rc_rudder = rc.rudder;
+                    }
+                    Record::CenterBattery(battery) => {
+                        frame.battery_charge_level = battery.relative_capacity;
+                        frame.battery_voltage = battery.voltage;
+                        frame.battery_current_capacity = battery.current_capacity as u32;
+                        frame.battery_full_capacity = battery.full_capacity as u32;
+                        frame.battery_full_capacity = battery.full_capacity as u32;
+
+                        frame.battery_cell_voltage1 = battery.voltage_cell1;
+                        frame.battery_cell_voltage2 = battery.voltage_cell2;
+                        frame.battery_cell_voltage3 = battery.voltage_cell3;
+                        frame.battery_cell_voltage4 = battery.voltage_cell4;
+
+                        let max_voltage = frame
+                            .battery_cell_voltage1
+                            .min(frame.battery_cell_voltage2)
+                            .min(frame.battery_cell_voltage3)
+                            .min(frame.battery_cell_voltage4);
+
+                        let mut min_voltage = 0.0;
+
+                        if frame.battery_cell_voltage1 > f32::default() {
+                            min_voltage = frame.battery_cell_voltage1
+                        }
+                        if frame.battery_cell_voltage2 > f32::default() {
+                            min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                        }
+                        if frame.battery_cell_voltage3 > f32::default() {
+                            min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                        }
+                        if frame.battery_cell_voltage4 > f32::default() {
+                            min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                        }
+
+                        frame.battery_cell_voltage_deviation =
+                            ((max_voltage - min_voltage) * 1000.0).round() / 1000.0;
+
+                        if frame.battery_cell_voltage_deviation
+                            > frame.battery_max_cell_voltage_deviation
+                        {
+                            frame.battery_max_cell_voltage_deviation =
+                                frame.battery_cell_voltage_deviation;
+                        }
+
+                        frame.battery_temperature = battery.temperature;
+
+                        if frame.battery_temperature > frame.battery_max_temperature {
+                            frame.battery_max_temperature = frame.battery_temperature
+                        }
+
+                        if frame.battery_temperature < frame.battery_min_temperature
+                            || frame.battery_min_temperature == f32::default()
+                        {
+                            frame.battery_min_temperature = frame.battery_temperature
+                        }
+                    }
+                    Record::SmartBattery(battery) => {
+                        frame.battery_charge_level = battery.percent;
+                        frame.battery_voltage = battery.voltage;
+                    }
+                    Record::SmartBatteryGroup(battery_group) => match battery_group {
+                        SmartBatteryGroup::SmartBatteryStatic(_) => {}
+                        SmartBatteryGroup::SmartBatteryDynamic(battery) => {
+                            frame.battery_voltage = battery.current_voltage;
+                            frame.battery_current = battery.current_current;
+                            frame.battery_current_capacity = battery.remained_capacity;
+                            frame.battery_full_capacity = battery.full_capacity;
+                            frame.battery_charge_level = battery.capacity_percent;
+                            frame.battery_temperature = battery.temperature;
+
+                            if frame.battery_temperature > frame.battery_max_temperature {
+                                frame.battery_max_temperature = frame.battery_temperature
+                            }
+
+                            if frame.battery_temperature < frame.battery_min_temperature
+                                || frame.battery_min_temperature == f32::default()
+                            {
+                                frame.battery_min_temperature = frame.battery_temperature
+                            }
+                        }
+                        SmartBatteryGroup::SmartBatterySingleVoltage(battery) => {
+                            if battery.cell_count > 0 && battery.cell_voltages.len() > 0 {
+                                frame.battery_cell_voltage1 = battery.cell_voltages[0];
+                            }
+                            if battery.cell_count > 1 && battery.cell_voltages.len() > 1 {
+                                frame.battery_cell_voltage2 = battery.cell_voltages[1];
+                            }
+                            if battery.cell_count > 2 && battery.cell_voltages.len() > 2 {
+                                frame.battery_cell_voltage3 = battery.cell_voltages[2];
+                            }
+                            if battery.cell_count > 3 && battery.cell_voltages.len() > 3 {
+                                frame.battery_cell_voltage4 = battery.cell_voltages[3];
+                            }
+
+                            let max_voltage = frame
+                                .battery_cell_voltage1
+                                .min(frame.battery_cell_voltage2)
+                                .min(frame.battery_cell_voltage3)
+                                .min(frame.battery_cell_voltage4);
+
+                            let mut min_voltage = 0.0;
+
+                            if frame.battery_cell_voltage1 > f32::default() {
+                                min_voltage = frame.battery_cell_voltage1
+                            }
+                            if frame.battery_cell_voltage2 > f32::default() {
+                                min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                            }
+                            if frame.battery_cell_voltage3 > f32::default() {
+                                min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                            }
+                            if frame.battery_cell_voltage4 > f32::default() {
+                                min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                            }
+
+                            frame.battery_cell_voltage_deviation =
+                                ((max_voltage - min_voltage) * 1000.0).round() / 1000.0;
+
+                            if frame.battery_cell_voltage_deviation
+                                > frame.battery_max_cell_voltage_deviation
+                            {
+                                frame.battery_max_cell_voltage_deviation =
+                                    frame.battery_cell_voltage_deviation;
+                            }
+                        }
+                    },
+                    Record::OFDM(ofdm) => {
+                        if ofdm.is_up {
+                            frame.rc_downlink_signal = Some(ofdm.signal_percent);
+                        } else {
+                            frame.rc_downlink_signal = Some(ofdm.signal_percent);
+                        }
                     }
                     Record::Custom(custom) => {
                         frame.custom_date_time = custom.update_time_stamp;

@@ -72,7 +72,7 @@ pub struct Camera {
     pub camera_type: u8,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum SDCardState {
     Normal,
     NoCard,

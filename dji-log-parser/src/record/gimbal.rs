@@ -32,11 +32,11 @@ pub struct Gimbal {
     #[br(temp)]
     _bitpack2: u8,
     #[br(calc(sub_byte_field(_bitpack2, 0x01) == 1))]
-    pub is_pitch_in_limit: bool,
+    pub is_pitch_at_limit: bool,
     #[br(calc(sub_byte_field(_bitpack2, 0x02) == 1))]
-    pub is_roll_in_limit: bool,
+    pub is_roll_at_limit: bool,
     #[br(calc(sub_byte_field(_bitpack2, 0x04) == 1))]
-    pub is_yaw_in_limit: bool,
+    pub is_yaw_at_limit: bool,
     #[br(calc(sub_byte_field(_bitpack2, 0x08) == 1))]
     pub is_auto_calibration: bool,
     #[br(calc(sub_byte_field(_bitpack2, 0x10) == 1))]
@@ -57,7 +57,7 @@ pub struct Gimbal {
     pub is_single_click: bool,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 pub enum GimbalMode {
     /// The gimbal can move independently of the aircraft's yaw. In this mode, even if
     /// the aircraft yaw changes, the camera will continue pointing in the same world
