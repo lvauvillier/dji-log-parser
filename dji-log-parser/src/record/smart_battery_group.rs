@@ -40,9 +40,11 @@ pub struct SmartBatteryStatic {
 pub struct SmartBatteryDynamic {
     pub index: u8,
     /// volts
-    #[br(map = |x: i32| x as f64 / 1000.0)]
-    pub current_voltage: f64,
-    pub current_current: i32,
+    #[br(map = |x: i32| x as f32 / 1000.0)]
+    pub current_voltage: f32,
+    // ampere
+    #[br(map = |x: i32| x.abs() as f32 / 1000.0)]
+    pub current_current: f32,
     /// mAh
     pub full_capacity: u32,
     /// mAh
@@ -61,6 +63,6 @@ pub struct SmartBatteryDynamic {
 pub struct SmartBatterySingleVoltage {
     pub index: u8,
     pub cell_count: u8,
-    #[br(count = cell_count)]
-    pub cell_voltages: Vec<u16>,
+    #[br(count = cell_count, map = |xs: Vec<u16>| xs.into_iter().map(|x| x as f32 / 1000.0).collect())]
+    pub cell_voltages: Vec<f32>,
 }
