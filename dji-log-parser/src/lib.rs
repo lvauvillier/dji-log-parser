@@ -26,8 +26,8 @@
 //! println!("Info: {:?}", parser.info);
 //! ```
 //!
-//! ### Accessing Records
-//! Decrypt records based on the log file version.
+//! ### Accessing raw Records
+//! Decrypt raw records based on the log file version.
 //!
 //! For versions prior to 13:
 //! ```rust
@@ -39,14 +39,35 @@
 //! let records = parser.records(DecryptMethod::ApiKey("__DJI_API_KEY__"));
 //! ```
 //!
+//! ### Accessing Frames
+//! Decrypt frames based on the log file version.
+//!
+//! A `Frame` is a standardized representation of log data, normalized across
+//! different log versions. It provides a consistent and easy-to-use format
+//! for analyzing and processing DJI log information.
+//!
+//! For versions prior to 13:
+//! ```rust
+//! let frames = parser.frames(DecryptMethod::None);
+//! ```
+//!
+//! For version 13 and later:
+//! ```rust
+//! let frames = parser.frames(DecryptMethod::ApiKey("__DJI_API_KEY__"));
+//! ```
+//!
 //!
 //! ### Advanced: Manual Keychain Retrieval
-//! For scenarios like caching, offline use, or custom server communication, the library
-//! exposes the internal keychain retrieval process:
+//! For scenarios like caching, multiple calls, offline use, or custom server communication,
+//! the library exposes the internal keychain retrieval process:
 //! ```rust
+//! // We want to get both records and frames.
+//! // We manually retrieve keychains once to avoid running two network requests.
 //! let keychain_request = parser.keychain_request().unwrap();
 //! let keychains = keychain_request.fetch("__DJI_API_KEY__").unwrap();
-//! let records = parser.records(DecryptMethod::Keychains(keychains));
+//!
+//! let records = parser.records(DecryptMethod::Keychains(keychains.clone()));
+//! let frames = parser.frames(DecryptMethod::Keychains(keychains));
 //! ```
 //!
 //! Note: Replace `__DJI_API_KEY__` with your actual apiKey.
