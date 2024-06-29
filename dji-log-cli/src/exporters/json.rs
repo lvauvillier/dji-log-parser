@@ -1,3 +1,4 @@
+use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::{DJILog, Info};
 use serde::Serialize;
@@ -11,12 +12,13 @@ struct JsonData<'a> {
     version: u8,
     info: Info,
     records: Vec<&'a Record>,
+    frames: &'a Vec<Frame>,
 }
 
 pub struct JsonExporter;
 
 impl Exporter for JsonExporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, args: &Cli) {
+    fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
         let json_data = JsonData {
             version: parser.version,
             info: parser.info.clone(),
@@ -32,6 +34,7 @@ impl Exporter for JsonExporter {
                     )
                 })
                 .collect(),
+            frames,
         };
 
         let json_data = serde_json::to_string(&json_data).unwrap();

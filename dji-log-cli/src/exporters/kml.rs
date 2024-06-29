@@ -1,3 +1,4 @@
+use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use kml::types::{AltitudeMode, Coord, Geometry, LineString, Placemark};
@@ -11,18 +12,17 @@ use crate::{Cli, Exporter};
 pub struct KmlExporter;
 
 impl Exporter for KmlExporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, args: &Cli) {
+    fn export(&self, parser: &DJILog, _records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
         if let Some(kml_path) = &args.kml {
             let mut coords = vec![];
-            records.iter().for_each(|record| {
-                if let Record::OSD(osd) = record {
-                    let coord = Coord {
-                        x: osd.longitude,
-                        y: osd.latitude,
-                        z: Some(osd.altitude as f64),
-                    };
-                    coords.push(coord);
-                }
+
+            frames.iter().for_each(|frame| {
+                let coord = Coord {
+                    x: frame.osd_latitude,
+                    y: frame.osd_longitude,
+                    z: Some(frame.osd_altitude as f64),
+                };
+                coords.push(coord);
             });
 
             let mut document_attrs = HashMap::new();

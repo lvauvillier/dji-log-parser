@@ -1,3 +1,4 @@
+use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use geojson::{Feature, GeoJson, Geometry, JsonObject, JsonValue, Value};
@@ -8,18 +9,16 @@ use crate::{Cli, Exporter};
 pub struct GeoJsonExporter;
 
 impl Exporter for GeoJsonExporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, args: &Cli) {
+    fn export(&self, parser: &DJILog, _records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
         if let Some(geojson_path) = &args.geojson {
             // Create a Value::LineString from all the coords.
             let mut coords = vec![];
-            records.iter().for_each(|r| {
-                if let Record::OSD(osd) = r {
-                    let lat = osd.latitude;
-                    let lon = osd.longitude;
-                    let alt = osd.altitude as f64;
-                    let coord = vec![lon, lat, alt];
-                    coords.push(coord);
-                }
+            frames.iter().for_each(|frame| {
+                let lat = frame.osd_latitude;
+                let lon = frame.osd_longitude;
+                let alt = frame.osd_altitude as f64;
+                let coord = vec![lon, lat, alt];
+                coords.push(coord);
             });
             let mut properties = JsonObject::new();
             let info = parser.info.clone();

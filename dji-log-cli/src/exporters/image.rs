@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use dji_log_parser::frame::Frame;
 use dji_log_parser::layout::info::ProductType;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
@@ -23,19 +24,24 @@ struct ExifInfo {
 pub struct ImageExporter;
 
 impl Exporter for ImageExporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, args: &Cli) {
+    fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
         // Get fallback GPS point from track in case of no GPS available on startup
         let mut fallback_latitude = 0.0;
         let mut fallback_longitude = 0.0;
 
-        records.iter().for_each(|record| {
-            if let Record::OSD(data) = record {
-                if data.latitude != 0.0 || data.longitude != 0.0 {
-                    fallback_latitude = data.latitude;
-                    fallback_longitude = data.longitude;
-                }
+        for frame in frames {
+            // Use home point
+            if frame.home_latitude != 0.0 || frame.home_longitude != 0.0 {
+                fallback_latitude = frame.osd_latitude;
+                fallback_longitude = frame.osd_longitude;
+                break;
+            // Use first valid track point
+            } else if frame.osd_latitude != 0.0 || frame.osd_longitude != 0.0 {
+                fallback_latitude = frame.osd_latitude;
+                fallback_longitude = frame.osd_longitude;
+                break;
             }
-        });
+        }
 
         // Export Images
         if let Some(image_path) = &args.images {

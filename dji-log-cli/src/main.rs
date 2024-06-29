@@ -1,4 +1,5 @@
 use clap::Parser;
+use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::{DJILog, DecryptMethod};
 use exporters::{CSVExporter, GeoJsonExporter, ImageExporter, JsonExporter, KmlExporter};
@@ -44,7 +45,7 @@ pub(crate) struct Cli {
 }
 
 pub(crate) trait Exporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, args: &Cli);
+    fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli);
 }
 
 fn main() {
@@ -56,7 +57,12 @@ fn main() {
     // Configure a decrypt method
     let decrypt_method = if parser.version >= 13 {
         if let Some(api_key) = &args.api_key {
-            DecryptMethod::ApiKey(api_key.clone())
+            let keychains = parser
+                .keychain_request()
+                .expect("Unable to create keychain request")
+                .fetch(api_key)
+                .expect("Unable parse keychain result");
+            DecryptMethod::Keychains(keychains)
         } else {
             panic!("Api Key required");
         }
@@ -64,9 +70,13 @@ fn main() {
         DecryptMethod::None
     };
 
-    let records: Vec<Record> = parser
-        .records(decrypt_method)
+    let records = parser
+        .records(decrypt_method.clone())
         .expect("Unable to parse records");
+
+    let frames = parser
+        .frames(decrypt_method)
+        .expect("Unable to parse frames");
 
     let exporters: Vec<Box<dyn Exporter>> = vec![
         Box::new(JsonExporter),
@@ -77,6 +87,6 @@ fn main() {
     ];
 
     for exporter in exporters {
-        exporter.export(&parser, &records, &args);
+        exporter.export(&parser, &records, &frames, &args);
     }
 }

@@ -113,11 +113,13 @@ use std::collections::{HashMap, VecDeque};
 use thiserror::Error;
 
 mod decoder;
+pub mod frame;
 pub mod keychain;
 pub mod layout;
 pub mod record;
 mod utils;
 
+use frame::{records_to_frames, Frame};
 use keychain::{Keychain, KeychainCipherText, KeychainRequest};
 use layout::auxiliary::Auxiliary;
 pub use layout::info::Info;
@@ -154,7 +156,7 @@ pub enum DJILogError {
     NetworkError(String),
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 pub enum DecryptMethod {
     ApiKey(String),
     Keychains(Vec<Keychain>),
@@ -313,9 +315,9 @@ impl DJILog {
         Ok(keychain_request)
     }
 
-    /// Retrieves the parsed records from the DJI log.
+    /// Retrieves the parsed raw records from the DJI log.
     ///
-    /// This function decodes the records from the log file based on the specified decryption method.
+    /// This function decodes the raw records from the log file based on the specified decryption method.
     /// For log versions less than 13, `DecryptMethod::None` should be used as there is no encryption.
     /// For versions 13 and above, records are encrypted and require a decryption method:
     /// - `DecryptMethod::Keychains` if you want to manually provide the keychains,
@@ -372,5 +374,41 @@ impl DJILog {
         }
 
         Ok(records)
+    }
+
+    /// Retrieves the normalized frames from the DJI log.
+    ///
+    /// This function processes the raw records from the log file and converts them into standardized
+    /// frames. Frames are a more user-friendly representation of the log data, normalized across all
+    /// log versions for easier use and analysis.
+    ///
+    /// The function first decodes the raw records based on the specified decryption method, then
+    /// converts these records into frames. This normalization process makes it easier to work with
+    /// log data from different DJI log versions.
+    ///
+    /// # Arguments
+    ///
+    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based
+    ///   on the log version and available decryption keys:
+    ///   - For log versions < 13, use `DecryptMethod::None` (no encryption).
+    ///   - For log versions >= 13, use either:
+    ///     - `DecryptMethod::Keychains` if manually providing keychains, or
+    ///     - `DecryptMethod::ApiKey` if using an API key for decryption.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result<Vec<Frame>, DJILogError>`. On success, it provides a vector of `Frame`
+    /// instances representing the normalized log data. On failure, it returns a `DJILogError`
+    /// indicating the type of error encountered during frame processing.
+    ///
+    /// # Note
+    ///
+    /// This method consumes and processes the raw records to create frames. It's generally preferred
+    /// over using raw records directly, as frames provide a consistent format across different log
+    /// versions, simplifying data analysis and interpretation.
+    ///
+    pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>, DJILogError> {
+        let records = self.records(decrypt_method)?;
+        Ok(records_to_frames(records))
     }
 }
