@@ -122,7 +122,7 @@ mod utils;
 use frame::{records_to_frames, Frame};
 use keychain::{Keychain, KeychainCipherText, KeychainRequest};
 use layout::auxiliary::Auxiliary;
-pub use layout::info::Info;
+use layout::info::Info;
 use layout::prefix::Prefix;
 use record::Record;
 

@@ -1,6 +1,7 @@
 use dji_log_parser::frame::Frame;
+use dji_log_parser::layout::info::Info;
 use dji_log_parser::record::Record;
-use dji_log_parser::{DJILog, Info};
+use dji_log_parser::DJILog;
 use serde::Serialize;
 use std::fs::File;
 use std::io::Write;

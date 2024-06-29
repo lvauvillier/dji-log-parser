@@ -20,11 +20,11 @@ pub struct Prefix {
 }
 
 impl Prefix {
-    pub fn recover_detail_offset(&mut self, detail_offset: u64) {
+    pub(crate) fn recover_detail_offset(&mut self, detail_offset: u64) {
         self.detail_offset = detail_offset;
     }
 
-    pub fn info_offset(&self) -> u64 {
+    pub(crate) fn info_offset(&self) -> u64 {
         if self.version < 12 {
             self.detail_offset
         } else {
@@ -32,7 +32,7 @@ impl Prefix {
         }
     }
 
-    pub fn records_offset(&self) -> u64 {
+    pub(crate) fn records_offset(&self) -> u64 {
         if self.version < 6 {
             OLD_PREFIX_SIZE
         } else if self.version < 12 {
@@ -44,7 +44,7 @@ impl Prefix {
         }
     }
 
-    pub fn records_end_offset(&self, file_size: impl Into<u64>) -> u64 {
+    pub(crate) fn records_end_offset(&self, file_size: impl Into<u64>) -> u64 {
         if self.version < 12 {
             self.detail_offset
         } else {
