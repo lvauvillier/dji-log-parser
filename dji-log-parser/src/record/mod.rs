@@ -15,6 +15,7 @@ pub mod app_tip;
 pub mod app_warn;
 pub mod camera;
 pub mod center_battery;
+pub mod component_serial;
 pub mod custom;
 pub mod deform;
 pub mod firmware;
@@ -38,6 +39,7 @@ use app_tip::AppTip;
 use app_warn::AppWarn;
 use camera::Camera;
 use center_battery::CenterBattery;
+use component_serial::ComponentSerial;
 use custom::Custom;
 use deform::Deform;
 use firmware::Firmware;
@@ -265,6 +267,16 @@ pub enum Record {
             map_stream = |reader| record_decoder(reader, 33, version, keychain, self_0),
         )]
         VirtualStick,
+        #[br(temp, assert(self_2 == END_BYTE))] u8,
+    ),
+    #[br(magic = 40u8)]
+    ComponentSerial(
+        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
+        #[br(
+            pad_size_to = self_0,
+            map_stream = |reader| record_decoder(reader, 40, version, keychain, self_0),
+        )]
+        ComponentSerial,
         #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 49u8)]
