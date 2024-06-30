@@ -561,9 +561,9 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
 
                 let max_voltage = frame
                     .battery_cell_voltage1
-                    .min(frame.battery_cell_voltage2)
-                    .min(frame.battery_cell_voltage3)
-                    .min(frame.battery_cell_voltage4);
+                    .max(frame.battery_cell_voltage2)
+                    .max(frame.battery_cell_voltage3)
+                    .max(frame.battery_cell_voltage4);
 
                 let mut min_voltage = 0.0;
 
@@ -574,10 +574,10 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                     min_voltage = min_voltage.min(frame.battery_cell_voltage2);
                 }
                 if frame.battery_cell_voltage3 > f32::default() {
-                    min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                    min_voltage = min_voltage.min(frame.battery_cell_voltage3);
                 }
                 if frame.battery_cell_voltage4 > f32::default() {
-                    min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                    min_voltage = min_voltage.min(frame.battery_cell_voltage4);
                 }
 
                 frame.battery_cell_voltage_deviation =
@@ -639,9 +639,9 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
 
                     let max_voltage = frame
                         .battery_cell_voltage1
-                        .min(frame.battery_cell_voltage2)
-                        .min(frame.battery_cell_voltage3)
-                        .min(frame.battery_cell_voltage4);
+                        .max(frame.battery_cell_voltage2)
+                        .max(frame.battery_cell_voltage3)
+                        .max(frame.battery_cell_voltage4);
 
                     let mut min_voltage = 0.0;
 
@@ -652,10 +652,10 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                         min_voltage = min_voltage.min(frame.battery_cell_voltage2);
                     }
                     if frame.battery_cell_voltage3 > f32::default() {
-                        min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                        min_voltage = min_voltage.min(frame.battery_cell_voltage3);
                     }
                     if frame.battery_cell_voltage4 > f32::default() {
-                        min_voltage = min_voltage.min(frame.battery_cell_voltage2);
+                        min_voltage = min_voltage.min(frame.battery_cell_voltage4);
                     }
 
                     frame.battery_cell_voltage_deviation =
