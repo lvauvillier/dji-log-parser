@@ -202,7 +202,7 @@ impl From<u8> for DroneType {
     }
 }
 
-#[derive(Serialize, Debug, Copy, Clone)]
+#[derive(Serialize, Debug, Copy, Clone, PartialEq, Eq)]
 pub enum FlightMode {
     /// Manual mode. Shown as Manual in DJI app.
     Manual,

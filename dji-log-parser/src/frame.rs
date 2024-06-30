@@ -11,6 +11,7 @@ use crate::record::osd::{
 };
 use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
+use crate::utils::append_message;
 
 /// Represents a normalized frame of data from a DJI log.
 ///
@@ -269,9 +270,9 @@ pub struct Frame {
     /// Home point altitude in meters
     #[serde(rename = "HOME.altitude")]
     pub home_altitude: f32,
-    /// meters
-    /// #[serde(rename = "HOME.heightLimit")]
-    /// pub home_height_limit: f32,
+    /// Max allowed height in meters
+    #[serde(rename = "HOME.heightLimit")]
+    pub home_height_limit: f32,
     /// Indicates if home point is recorded
     #[serde(rename = "HOME.isHomeRecord")]
     pub home_is_home_record: bool,
@@ -463,6 +464,13 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.osd_pitch = osd.pitch;
                 frame.osd_yaw = osd.yaw;
                 frame.osd_roll = osd.roll;
+
+                if frame.osd_flyc_state != Some(osd.flight_mode) {
+                    frame.app_tip = append_message(
+                        frame.app_tip,
+                        format!("Flight mode changed to {:?}.", osd.flight_mode),
+                    );
+                }
                 frame.osd_flyc_state = Some(osd.flight_mode);
                 if let AppCommand::Unknown(0) = osd.app_command {
                     frame.osd_flyc_command = None;
@@ -504,8 +512,20 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.gimbal_pitch = gimbal.pitch;
                 frame.gimbal_roll = gimbal.roll;
                 frame.gimbal_yaw = gimbal.yaw;
+                if !frame.gimbal_is_pitch_at_limit && gimbal.is_pitch_at_limit {
+                    frame.app_tip =
+                        append_message(frame.app_tip, "Gimbal pitch axis endpoint reached.")
+                }
                 frame.gimbal_is_pitch_at_limit = gimbal.is_pitch_at_limit;
+                if !frame.gimbal_is_roll_at_limit && gimbal.is_roll_at_limit {
+                    frame.app_tip =
+                        append_message(frame.app_tip, "Gimbal roll axis endpoint reached.")
+                }
                 frame.gimbal_is_roll_at_limit = gimbal.is_roll_at_limit;
+                if !frame.gimbal_is_yaw_at_limit && gimbal.is_yaw_at_limit {
+                    frame.app_tip =
+                        append_message(frame.app_tip, "Gimbal yaw axis endpoint reached.")
+                }
                 frame.gimbal_is_yaw_at_limit = gimbal.is_yaw_at_limit;
                 frame.gimbal_is_stuck = gimbal.is_stuck;
             }
@@ -667,6 +687,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                     frame.osd_altitude = frame.osd_altitude + home.altitude;
                 }
                 frame.home_altitude = home.altitude;
+                frame.home_height_limit = home.max_allowed_height;
                 frame.home_is_home_record = home.is_home_record;
                 frame.home_go_home_mode = Some(home.go_home_mode);
                 frame.home_is_dynamic_home_point_enabled = home.is_dynamic_home_point_enabled;
@@ -699,10 +720,13 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.recover_battery_sn = recover.battery_sn;
             }
             Record::AppTip(app_tip) => {
-                frame.app_tip = app_tip.tip;
+                frame.app_tip = append_message(frame.app_tip, app_tip.message);
             }
             Record::AppWarn(app_warn) => {
-                frame.app_warn = app_warn.warn;
+                frame.app_warn = append_message(frame.app_warn, app_warn.message);
+            }
+            Record::AppSeriousWarn(app_serious_warn) => {
+                frame.app_warn = append_message(frame.app_warn, app_serious_warn.message);
             }
             _ => {}
         }

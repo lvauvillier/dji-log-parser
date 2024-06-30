@@ -7,5 +7,5 @@ use serde::Serialize;
 #[br(little, import { length: u16 })]
 pub struct AppSeriousWarn {
     #[br(count=length, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
-    pub tip: String,
+    pub message: String,
 }
