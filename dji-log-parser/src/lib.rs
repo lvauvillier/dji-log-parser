@@ -23,7 +23,7 @@
 //! ```
 //! let parser = DJILog::from_bytes(&bytes).unwrap();
 //! println!("Version: {:?}", parser.version);
-//! println!("Info: {:?}", parser.info);
+//! println!("Details: {:?}", parser.details);
 //! ```
 //!
 //! ### Accessing raw Records
@@ -82,7 +82,7 @@
 //! ├─────────────────┤                │
 //! │     Records     │                │
 //! ├─────────────────┤<───────────────┘
-//! │      Info       │ detail_length
+//! │     Details     │ detail_length
 //! └─────────────────┘
 //! ```
 //!
@@ -94,7 +94,7 @@
 //! │     Records     │                │
 //! │   (Encrypted)   │                |
 //! ├─────────────────┤<───────────────┘
-//! │      Info       │ detail_length
+//! │     Details     │ detail_length
 //! └─────────────────┘
 //!```
 //!
@@ -103,7 +103,7 @@
 //! ┌─────────────────┐
 //! │     Prefix      │ detail_offset ─┐
 //! ├─────────────────┤                │
-//! │      Info       │ detail_length  │
+//! │      Details    │ detail_length  │
 //! ├─────────────────┤                │
 //! │     Records     │                │
 //! │   (Encrypted)   │                │
@@ -115,8 +115,9 @@
 //! ┌─────────────────┐
 //! │     Prefix      │ detail_offset ─┐
 //! ├─────────────────┤                │
-//! │ Auxiliary Info  |  detail_length |
-//! │   (Encrypted)   |                |
+//! │ Auxiliary Info  |                |
+//! │ (Encrypted      │ detail_length  │
+//! │      Details)   |                |
 //! ├─────────────────┤                │
 //! │    Auxiliary    |                |
 //! │     Version     |                │
@@ -143,7 +144,7 @@ mod utils;
 use frame::{records_to_frames, Frame};
 use keychain::{Keychain, KeychainCipherText, KeychainRequest};
 use layout::auxiliary::Auxiliary;
-use layout::info::Info;
+use layout::details::Details;
 use layout::prefix::Prefix;
 use record::Record;
 
@@ -155,8 +156,8 @@ pub enum DJILogError {
     #[error("Failed to parse prefix: {0}")]
     PrefixParseError(String),
 
-    #[error("Failed to parse info: {0}")]
-    InfoParseError(String),
+    #[error("Failed to parse detail: {0}")]
+    DetailsParseError(String),
 
     #[error("Failed to parse auxiliary block: {0}")]
     AuxiliaryParseError(String),
@@ -190,8 +191,8 @@ pub struct DJILog {
     prefix: Prefix,
     /// Log format version
     pub version: u8,
-    /// Log info. Contains record summary and general informations
-    pub info: Info,
+    /// Log Details. Contains record summary and general informations
+    pub details: Details,
 }
 
 impl DJILog {
@@ -226,22 +227,24 @@ impl DJILog {
 
         let version = prefix.version;
 
-        // Decode Infos
-        let info_offset = prefix.info_offset() as usize;
-        let mut cursor = Cursor::new(pad_with_zeros(&bytes[info_offset..], 400));
+        // Decode Detail
+        let detail_offset = prefix.detail_offset() as usize;
+        let mut cursor = Cursor::new(pad_with_zeros(&bytes[detail_offset..], 400));
 
-        let info = if version < 13 {
-            Info::read_args(&mut cursor, (version,))
-                .map_err(|e| DJILogError::InfoParseError(e.to_string()))?
+        let details = if version < 13 {
+            Details::read_args(&mut cursor, (version,))
+                .map_err(|e| DJILogError::DetailsParseError(e.to_string()))?
         } else {
-            // Get info from first auxiliary block
+            // Get details from first auxiliary block
             if let Auxiliary::Info(data) = Auxiliary::read(&mut cursor)
                 .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
             {
-                Info::read_args(&mut Cursor::new(&data.info_data), (version,))
-                    .map_err(|e| DJILogError::InfoParseError(e.to_string()))?
+                Details::read_args(&mut Cursor::new(&data.info_data), (version,))
+                    .map_err(|e| DJILogError::DetailsParseError(e.to_string()))?
             } else {
-                Err(DJILogError::InfoParseError("Invalid auxiliary data".into()))?
+                Err(DJILogError::DetailsParseError(
+                    "Invalid auxiliary data".into(),
+                ))?
             }
         };
 
@@ -250,14 +253,14 @@ impl DJILog {
             // Skip second auxiliary block
             let _ = Auxiliary::read(&mut cursor)
                 .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
-            prefix.recover_detail_offset(cursor.position() + info_offset as u64);
+            prefix.recover_detail_offset(cursor.position() + detail_offset as u64);
         }
 
         Ok(DJILog {
             inner: bytes,
             prefix,
             version,
-            info,
+            details,
         })
     }
 
@@ -282,7 +285,7 @@ impl DJILog {
         }
 
         let mut cursor = Cursor::new(&self.inner);
-        cursor.set_position(self.prefix.info_offset());
+        cursor.set_position(self.prefix.detail_offset());
 
         // Skip first auxiliary block
         let _ = Auxiliary::read(&mut cursor)

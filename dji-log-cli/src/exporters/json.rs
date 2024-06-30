@@ -1,5 +1,5 @@
 use dji_log_parser::frame::Frame;
-use dji_log_parser::layout::info::Info;
+use dji_log_parser::layout::details::Details;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use serde::Serialize;
@@ -11,7 +11,7 @@ use crate::{Cli, Exporter};
 #[derive(Serialize, Debug)]
 struct JsonData<'a> {
     version: u8,
-    info: Info,
+    details: Details,
     records: Vec<&'a Record>,
     frames: &'a Vec<Frame>,
 }
@@ -22,7 +22,7 @@ impl Exporter for JsonExporter {
     fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
         let json_data = JsonData {
             version: parser.version,
-            info: parser.info.clone(),
+            details: parser.details.clone(),
             records: records
                 .iter()
                 .filter(|r| {

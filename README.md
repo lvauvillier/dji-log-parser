@@ -71,7 +71,7 @@ Initialize a `DJILog` instance from an array of bytes to access version informat
 ```rust
 let parser = DJILog::from_bytes(bytes).unwrap();
 println!("Version: {:?}", parser.version);
-println!("Info: {:?}", parser.info);
+println!("Details: {:?}", parser.details);
 ```
 
 ### Accessing Records

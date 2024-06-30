@@ -5,7 +5,7 @@ use serde::Serialize;
 
 use crate::decoder::record_decoder;
 
-use crate::layout::info::ProductType;
+use crate::layout::details::ProductType;
 use crate::utils;
 use crate::Keychain;
 

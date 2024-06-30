@@ -7,7 +7,7 @@ use std::io::SeekFrom;
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import(version: u8))]
-pub struct Info {
+pub struct Details {
     #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub sub_street: String,
     #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]

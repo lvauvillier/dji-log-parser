@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use dji_log_parser::frame::Frame;
-use dji_log_parser::layout::info::ProductType;
+use dji_log_parser::layout::details::ProductType;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use exif::experimental::Writer;
@@ -49,29 +49,29 @@ impl Exporter for ImageExporter {
             records.iter().for_each(|record| {
                 if let Record::JPEG(data) = record {
                     if index < 4
-                        && parser.info.moment_pic_image_buffer_len[index] == data.len() as i32
+                        && parser.details.moment_pic_image_buffer_len[index] == data.len() as i32
                     {
                         let file_name = image_path.replace("%d", &(index + 1).to_string());
                         self.save_image_with_exif_metadata(
                             data,
                             file_name,
                             ExifInfo {
-                                datetime: parser.info.start_time,
-                                latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
-                                    parser.info.moment_pic_latitude[index]
-                                } else if parser.info.latitude != 0.0 {
-                                    parser.info.latitude
+                                datetime: parser.details.start_time,
+                                latitude: if parser.details.moment_pic_latitude[index] != 0.0 {
+                                    parser.details.moment_pic_latitude[index]
+                                } else if parser.details.latitude != 0.0 {
+                                    parser.details.latitude
                                 } else {
                                     fallback_latitude
                                 },
-                                longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
-                                    parser.info.moment_pic_longitude[index]
-                                } else if parser.info.longitude != 0.0 {
-                                    parser.info.longitude
+                                longitude: if parser.details.moment_pic_longitude[index] != 0.0 {
+                                    parser.details.moment_pic_longitude[index]
+                                } else if parser.details.longitude != 0.0 {
+                                    parser.details.longitude
                                 } else {
                                     fallback_longitude
                                 },
-                                model: parser.info.product_type,
+                                model: parser.details.product_type,
                             },
                         );
                         index += 1;
@@ -86,7 +86,7 @@ impl Exporter for ImageExporter {
             records.iter().for_each(|record| {
                 if let Record::JPEG(data) = record {
                     if index < 4
-                        && parser.info.moment_pic_shrink_image_buffer_len[index]
+                        && parser.details.moment_pic_shrink_image_buffer_len[index]
                             == data.len() as i32
                     {
                         let file_name = thumbnails_path.replace("%d", &(index + 1).to_string());
@@ -94,22 +94,22 @@ impl Exporter for ImageExporter {
                             data,
                             file_name,
                             ExifInfo {
-                                datetime: parser.info.start_time,
-                                latitude: if parser.info.moment_pic_latitude[index] != 0.0 {
-                                    parser.info.moment_pic_latitude[index]
-                                } else if parser.info.latitude != 0.0 {
-                                    parser.info.latitude
+                                datetime: parser.details.start_time,
+                                latitude: if parser.details.moment_pic_latitude[index] != 0.0 {
+                                    parser.details.moment_pic_latitude[index]
+                                } else if parser.details.latitude != 0.0 {
+                                    parser.details.latitude
                                 } else {
                                     fallback_latitude
                                 },
-                                longitude: if parser.info.moment_pic_longitude[index] != 0.0 {
-                                    parser.info.moment_pic_longitude[index]
-                                } else if parser.info.longitude != 0.0 {
-                                    parser.info.longitude
+                                longitude: if parser.details.moment_pic_longitude[index] != 0.0 {
+                                    parser.details.moment_pic_longitude[index]
+                                } else if parser.details.longitude != 0.0 {
+                                    parser.details.longitude
                                 } else {
                                     fallback_longitude
                                 },
-                                model: parser.info.product_type,
+                                model: parser.details.product_type,
                             },
                         );
                         index += 1;

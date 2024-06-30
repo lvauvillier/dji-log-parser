@@ -1,7 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
 
-use crate::layout::info::ProductType;
+use crate::layout::details::ProductType;
 use crate::utils::sub_byte_field;
 
 #[binread]

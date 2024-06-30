@@ -1,3 +1,3 @@
 pub(crate) mod auxiliary;
-pub mod info;
+pub mod details;
 pub(crate) mod prefix;

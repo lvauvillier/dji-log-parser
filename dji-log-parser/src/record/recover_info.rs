@@ -2,7 +2,7 @@ use binrw::binread;
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
-use crate::layout::info::{Platform, ProductType};
+use crate::layout::details::{Platform, ProductType};
 
 #[binread]
 #[derive(Serialize, Debug)]

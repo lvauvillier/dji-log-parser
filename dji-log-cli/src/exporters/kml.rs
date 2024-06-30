@@ -47,7 +47,7 @@ impl Exporter for KmlExporter {
                 version: KmlVersion::V22,
                 attrs: document_attrs,
                 elements: vec![Kml::Placemark(Placemark {
-                    name: Some(parser.info.aircraft_name.to_string()),
+                    name: Some(parser.details.aircraft_name.to_string()),
                     geometry: Some(Geometry::LineString(LineString {
                         coords,
                         altitude_mode: AltitudeMode::RelativeToGround,

@@ -24,7 +24,7 @@ impl Prefix {
         self.detail_offset = detail_offset;
     }
 
-    pub(crate) fn info_offset(&self) -> u64 {
+    pub(crate) fn detail_offset(&self) -> u64 {
         if self.version < 12 {
             self.detail_offset
         } else {
