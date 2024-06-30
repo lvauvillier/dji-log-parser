@@ -433,6 +433,6 @@ impl DJILog {
     ///
     pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>, DJILogError> {
         let records = self.records(decrypt_method)?;
-        Ok(records_to_frames(records))
+        Ok(records_to_frames(records, self.details.clone()))
     }
 }

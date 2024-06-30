@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
+use crate::layout::details::{Details, Platform};
 use crate::record::camera::SDCardState;
 use crate::record::gimbal::GimbalMode;
 use crate::record::home::{CompassCalibrationState, GoHomeMode, IOCMode};
@@ -316,6 +317,73 @@ pub struct Frame {
     /// Index of the current flight record
     #[serde(rename = "HOME.currentFlightRecordIndex")]
     pub home_current_flight_record_index: u16,
+
+    /// The platform of the app used (e.g., iOS, Android)
+    #[serde(rename = "RECOVER.appPlatform")]
+    pub recover_app_platform: Option<Platform>,
+    /// Version of the app used
+    #[serde(rename = "RECOVER.appVersion")]
+    pub recover_app_version: String,
+    /// Name of the aircraft
+    #[serde(rename = "RECOVER.aircraftName")]
+    pub recover_aircraft_name: String,
+    /// Serial number of the aircraft
+    #[serde(rename = "RECOVER.aircraftSerial")]
+    pub recover_aircraft_sn: String,
+    // Serial number of the camera
+    #[serde(rename = "RECOVER.cameraSerial")]
+    pub recover_camera_sn: String,
+    /// Serial number of the remote control
+    #[serde(rename = "RECOVER.rcSerial")]
+    pub recover_rc_sn: String,
+    /// Serial number of the battery
+    #[serde(rename = "RECOVER.batterySerial")]
+    pub recover_battery_sn: String,
+
+    #[serde(rename = "APP.tip")]
+    pub app_tip: String,
+    #[serde(rename = "APP.warn")]
+    pub app_warn: String,
+
+    /// Total flight time in seconds
+    #[serde(rename = "DETAILS.totalTime")]
+    pub details_total_time: f32,
+    /// Total distance flown in meters
+    #[serde(rename = "DETAILS.totalDistance")]
+    pub details_total_distance: f32,
+    /// Maximum height reached during the flight in meters
+    #[serde(rename = "DETAILS.maxHeight")]
+    pub details_max_height: f32,
+    /// Maximum horizontal speed reached during the flight in meters per second
+    #[serde(rename = "DETAILS.maxHorizontalSpeed")]
+    pub details_max_horizontal_speed: f32,
+    /// Maximum vertical speed reached during the flight in meters per second
+    #[serde(rename = "DETAILS.maxVerticalSpeed")]
+    pub details_max_vertical_speed: f32,
+    /// Number of photos taken during the flight
+    #[serde(rename = "DETAILS.photoNum")]
+    pub details_photo_num: i32,
+    /// Total video recording time in seconds
+    #[serde(rename = "DETAILS.videoTime")]
+    pub details_video_time: i64,
+    /// Name of the aircraft
+    #[serde(rename = "DETAILS.aircraftName")]
+    pub details_aircraft_name: String,
+    /// Serial number of the aircraft
+    #[serde(rename = "DETAILS.aircraftSerial")]
+    pub details_aircraft_sn: String,
+    /// Serial number of the camera
+    #[serde(rename = "DETAILS.cameraSerial")]
+    pub details_camera_sn: String,
+    /// Serial number of the remote control
+    #[serde(rename = "DETAILS.rcSerial")]
+    pub details_rc_sn: String,
+    /// The platform of the app used (e.g., iOS, Android)
+    #[serde(rename = "DETAILS.appPlatform")]
+    pub details_app_platform: Option<Platform>,
+    /// Version of the app used
+    #[serde(rename = "DETAILS.appVersion")]
+    pub details_app_version: String,
 }
 
 /// Converts a vector of `Record` objects into a vector of `Frame` objects.
@@ -333,7 +401,7 @@ pub struct Frame {
 ///   Each `Frame` corresponds to one or more `Record` objects, depending on the
 ///   specific normalization logic.
 ///
-pub fn records_to_frames(records: Vec<Record>) -> Vec<Frame> {
+pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
     let mut frames = Vec::new();
 
     //let mut frames = vec![];
@@ -351,7 +419,25 @@ pub fn records_to_frames(records: Vec<Record>) -> Vec<Frame> {
                 // Reset non persistant values (one time events)
                 frame.camera_is_photo = bool::default();
                 frame.camera_is_video = bool::default();
+                frame.app_tip = String::default();
+                frame.app_warn = String::default();
 
+                // Add details values
+                frame.details_total_time = details.total_time as f32;
+                frame.details_total_distance = details.total_distance;
+                frame.details_max_height = details.max_height;
+                frame.details_max_horizontal_speed = details.max_horizontal_speed;
+                frame.details_max_vertical_speed = details.max_vertical_speed;
+                frame.details_photo_num = details.capture_num;
+                frame.details_video_time = details.video_time;
+                frame.details_aircraft_name = details.aircraft_name.clone();
+                frame.details_aircraft_sn = details.aircraft_sn.clone();
+                frame.details_camera_sn = details.camera_sn.clone();
+                frame.details_rc_sn = details.rc_sn.clone();
+                frame.details_app_platform = Some(details.app_platform.clone());
+                frame.details_app_version = details.app_version.clone();
+
+                // Fill OSD record
                 frame.osd_fly_time = osd.fly_time;
                 frame.osd_latitude = osd.latitude;
                 frame.osd_longitude = osd.longitude;
@@ -602,6 +688,21 @@ pub fn records_to_frames(records: Vec<Record>) -> Vec<Frame> {
                 }
                 frame.home_max_allowed_height = home.max_allowed_height;
                 frame.home_current_flight_record_index = home.current_flight_record_index;
+            }
+            Record::RecoverInfo(recover) => {
+                frame.recover_app_platform = Some(recover.app_platform);
+                frame.recover_app_version = recover.app_version;
+                frame.recover_aircraft_name = recover.aircraft_name;
+                frame.recover_aircraft_sn = recover.aircraft_sn;
+                frame.recover_camera_sn = recover.camera_sn;
+                frame.recover_rc_sn = recover.rc_sn;
+                frame.recover_battery_sn = recover.battery_sn;
+            }
+            Record::AppTip(app_tip) => {
+                frame.app_tip = app_tip.tip;
+            }
+            Record::AppWarn(app_warn) => {
+                frame.app_warn = app_warn.warn;
             }
             _ => {}
         }
