@@ -8,7 +8,7 @@ use crate::layout::details::{Platform, ProductType};
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import {version: u8})]
-pub struct RecoverInfo {
+pub struct Recover {
     #[br(map = |x: u8| ProductType::from(x))]
     pub product_type: ProductType,
     #[br(map = |x: u8| Platform::from(x))]

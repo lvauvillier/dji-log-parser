@@ -28,7 +28,7 @@ pub mod osd;
 pub mod rc;
 pub mod rc_display_field;
 pub mod rc_gps;
-pub mod recover_info;
+pub mod recover;
 pub mod smart_battery;
 pub mod smart_battery_group;
 pub mod virtual_stick;
@@ -52,7 +52,7 @@ use osd::OSD;
 use rc::RC;
 use rc_display_field::RCDisplayField;
 use rc_gps::RCGPS;
-use recover_info::RecoverInfo;
+use recover::Recover;
 use smart_battery::SmartBattery;
 use smart_battery_group::*;
 use virtual_stick::VirtualStick;
@@ -188,14 +188,14 @@ pub enum Record {
         #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 13u8)]
-    RecoverInfo(
+    Recover(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(
             pad_size_to = self_0,
             map_stream = |reader| record_decoder(reader, 13, version, keychain, self_0),
             args { version }
         )]
-        RecoverInfo,
+        Recover,
         #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 14u8)]
@@ -290,7 +290,7 @@ pub enum Record {
         #[br(temp, assert(self_2 == END_BYTE))] u8,
     ),
     #[br(magic = 50u8)]
-    Recover(
+    KeyStorageRecover(
         #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
         #[br(count = self_0)] Vec<u8>,
         #[br(temp, assert(self_2 == 0xff))] u8,

@@ -325,7 +325,7 @@ impl DJILog {
                         aes_ciphertext: Base64Standard.encode(&data.data),
                     });
                 }
-                Record::Recover(_) => {
+                Record::KeyStorageRecover(_) => {
                     // start a new keychain
                     keychain_request.keychains.push(keychain);
                     keychain = Vec::new();
@@ -390,7 +390,7 @@ impl DJILog {
                 Err(_) => break,
             };
 
-            if let Record::Recover(_) = record {
+            if let Record::KeyStorageRecover(_) = record {
                 keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
             }
 

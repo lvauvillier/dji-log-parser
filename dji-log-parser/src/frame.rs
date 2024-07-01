@@ -710,7 +710,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.home_max_allowed_height = home.max_allowed_height;
                 frame.home_current_flight_record_index = home.current_flight_record_index;
             }
-            Record::RecoverInfo(recover) => {
+            Record::Recover(recover) => {
                 frame.recover_app_platform = Some(recover.app_platform);
                 frame.recover_app_version = recover.app_version;
                 frame.recover_aircraft_name = recover.aircraft_name;
