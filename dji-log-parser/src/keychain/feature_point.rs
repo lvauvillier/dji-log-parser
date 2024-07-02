@@ -206,6 +206,8 @@ impl FeaturePoint {
             }
             // GOBusinessDataType
             54 => FeaturePoint::DJIFlyCustomFeature,
+            // Unknown
+            55 => FeaturePoint::SecurityFeature,
             // KeyStorage
             56 => FeaturePoint::PlaintextFeature,
             // HealthGroupDataType

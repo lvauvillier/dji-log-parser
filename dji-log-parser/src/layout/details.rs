@@ -223,6 +223,7 @@ impl From<u8> for ProductType {
 pub enum Platform {
     IOS,
     Android,
+    DJIFly,
     Window,
     Mac,
     Linux,
@@ -235,6 +236,7 @@ impl From<u8> for Platform {
         match num {
             1 => Platform::IOS,
             2 => Platform::Android,
+            6 => Platform::DJIFly,
             10 => Platform::Window,
             11 => Platform::Mac,
             12 => Platform::Linux,
