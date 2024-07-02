@@ -89,8 +89,6 @@ func main() {
 		fmt.Println("Error parsing GeoJSON:", err)
 		os.Exit(1)
 	}
-
-	// Print out some details about the parsed GeoJSON
 	fmt.Printf("GeoJSON Type: %s\n", geojson.Type)
 	fmt.Printf("Geometry Type: %s\n", geojson.Geometry.Type)
 	fmt.Printf("Number of Coordinates: %d\n", len(geojson.Geometry.Coordinates))
