@@ -196,30 +196,6 @@ pub struct DJILog {
 }
 
 impl DJILog {
-    /// Constructs a `DJILog` from an arry of bytes.
-    ///
-    /// This function parses the Prefix and Info blocks of the log file,
-    /// and handles different versions of the log format.
-    ///
-    /// # Arguments
-    ///
-    /// * `bytes` - An array of bytes representing the DJI log file.
-    ///
-    /// # Returns
-    ///
-    /// This function returns `Result<DJILog, DJILogError>`.
-    /// On success, it returns the `DJILog` instance. On failure, it returns
-    /// a `DJILogError` indicating the type of error encountered.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use djilog_parser::DJILog;
-    ///
-    /// let log_bytes = include_bytes!("path/to/log/file");
-    /// let log = DJILog::from_bytes(log_bytes).unwrap();
-    /// ```
-    ///
     pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog, DJILogError> {
         // Decode Prefix
         let mut prefix = Prefix::read(&mut Cursor::new(&bytes))
@@ -264,18 +240,6 @@ impl DJILog {
         })
     }
 
-    /// Creates a `KeychainRequest` object by parsing `KeyStorage` records.
-    ///
-    /// This function is used to build a request body for manually retrieving the keychain from the DJI API.
-    /// Keychains are required to decode records for logs with a version greater than or equal to 13.
-    /// For earlier versions, this function returns a default `KeychainRequest`.
-    ///
-    /// # Returns
-    ///
-    /// Returns a `Result<KeychainRequest, DJILogError>`. On success, it provides a `KeychainRequest`
-    /// instance, which contains the necessary information to fetch keychains from the DJI API.
-    /// On failure, it returns a `DJILogError` indicating the type of error encountered during parsing.
-    ///
     pub fn keychain_request(&self) -> Result<KeychainRequest, DJILogError> {
         let mut keychain_request = KeychainRequest::default();
 
@@ -339,24 +303,6 @@ impl DJILog {
         Ok(keychain_request)
     }
 
-    /// Retrieves the parsed raw records from the DJI log.
-    ///
-    /// This function decodes the raw records from the log file based on the specified decryption method.
-    /// For log versions less than 13, `DecryptMethod::None` should be used as there is no encryption.
-    /// For versions 13 and above, records are encrypted and require a decryption method:
-    /// - `DecryptMethod::Keychains` if you want to manually provide the keychains,
-    /// - `DecryptMethod::ApiKey` if you have an API key to decrypt the records.
-    ///
-    /// # Arguments
-    ///
-    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based on the log version and available decryption keys.
-    ///
-    /// # Returns
-    ///
-    /// Returns a `Result<Vec<Record>, DJILogError>`. On success, it provides a vector of `Record`
-    /// instances representing the parsed log records. On failure, it returns a `DJILogError` indicating
-    /// the type of error encountered during record parsing.
-    ///
     pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>, DJILogError> {
         if self.version >= 13 && decrypt_method == DecryptMethod::None {
             return Err(DJILogError::RecordParseError(
@@ -400,39 +346,159 @@ impl DJILog {
         Ok(records)
     }
 
-    /// Retrieves the normalized frames from the DJI log.
-    ///
-    /// This function processes the raw records from the log file and converts them into standardized
-    /// frames. Frames are a more user-friendly representation of the log data, normalized across all
-    /// log versions for easier use and analysis.
-    ///
-    /// The function first decodes the raw records based on the specified decryption method, then
-    /// converts these records into frames. This normalization process makes it easier to work with
-    /// log data from different DJI log versions.
-    ///
-    /// # Arguments
-    ///
-    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based
-    ///   on the log version and available decryption keys:
-    ///   - For log versions < 13, use `DecryptMethod::None` (no encryption).
-    ///   - For log versions >= 13, use either:
-    ///     - `DecryptMethod::Keychains` if manually providing keychains, or
-    ///     - `DecryptMethod::ApiKey` if using an API key for decryption.
-    ///
-    /// # Returns
-    ///
-    /// Returns a `Result<Vec<Frame>, DJILogError>`. On success, it provides a vector of `Frame`
-    /// instances representing the normalized log data. On failure, it returns a `DJILogError`
-    /// indicating the type of error encountered during frame processing.
-    ///
-    /// # Note
-    ///
-    /// This method consumes and processes the raw records to create frames. It's generally preferred
-    /// over using raw records directly, as frames provide a consistent format across different log
-    /// versions, simplifying data analysis and interpretation.
-    ///
     pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>, DJILogError> {
         let records = self.records(decrypt_method)?;
-        Ok(records_to_frames(records, self.details.clone()))
+        println!("Number of records: {}", records.len());
+        let frames = records_to_frames(records, self.details.clone());
+        println!("Number of frames: {}", frames.len());
+        Ok(frames)
+    }
+}
+
+use std::os::raw::c_char;
+use std::ffi::{CStr, CString};
+use std::fs;
+use std::path::Path;
+use serde_json;
+
+static mut LAST_ERROR: Option<String> = None;
+
+#[no_mangle]
+pub extern "C" fn parse_dji_log(filename: *const c_char, api_key: *const c_char) -> bool {
+    let c_str = unsafe { CStr::from_ptr(filename) };
+    let filename = match c_str.to_str() {
+        Ok(s) => s,
+        Err(_) => {
+            set_last_error("Invalid filename");
+            return false;
+        }
+    };
+    
+    let c_str_key = unsafe { CStr::from_ptr(api_key) };
+    let api_key = match c_str_key.to_str() {
+        Ok(s) => s,
+        Err(_) => {
+            set_last_error("Invalid API key");
+            return false;
+        }
+    };
+
+    println!("Parsing file: {}", filename);
+    println!("Using API key: {}", api_key);
+
+    // Read the file
+    let bytes = match fs::read(filename) {
+        Ok(b) => b,
+        Err(e) => {
+            set_last_error(&format!("Failed to read file: {}", e));
+            return false;
+        }
+    };
+
+    println!("File size: {} bytes", bytes.len());
+
+    // Parse the log
+    let parser = match DJILog::from_bytes(bytes) {
+        Ok(p) => p,
+        Err(e) => {
+            set_last_error(&format!("Failed to parse log: {}", e));
+            return false;
+        }
+    };
+
+    println!("Log version: {}", parser.version);
+
+    // Get frames
+    let frames = match parser.frames(DecryptMethod::ApiKey(api_key.to_string())) {
+        Ok(f) => f,
+        Err(e) => {
+            set_last_error(&format!("Failed to get frames: {}. Error details: {:?}", e, e));
+            return false;
+        }
+    };
+
+    println!("Number of frames: {}", frames.len());
+    if !frames.is_empty() {
+        println!("First frame: {:?}", frames[0]);
+    }
+
+    // Convert frames to GeoJSON
+    let geojson = frames_to_geojson(&frames);
+
+    if geojson.is_empty() {
+        set_last_error("GeoJSON conversion resulted in empty string");
+        return false;
+    }
+
+    // Write GeoJSON to a file
+    let output_path = Path::new(filename).with_extension("json");
+    if let Err(e) = fs::write(&output_path, &geojson) {
+        set_last_error(&format!("Failed to write GeoJSON: {}", e));
+        return false;
+    }
+
+    println!("GeoJSON written to: {:?}", output_path);
+
+    true
+}
+
+#[no_mangle]
+pub extern "C" fn get_last_error() -> *mut c_char {
+    let error = unsafe {
+        LAST_ERROR.take().unwrap_or_else(|| "No error".to_string())
+    };
+    CString::new(error).unwrap().into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn free_string(s: *mut c_char) {
+    unsafe {
+        if s.is_null() { return }
+        drop(CString::from_raw(s));
+    };
+}
+
+#[no_mangle]
+pub extern "C" fn get_geojson_file_path(filename: *const c_char) -> *mut c_char {
+    let c_str = unsafe { CStr::from_ptr(filename) };
+    let filename = match c_str.to_str() {
+        Ok(s) => s,
+        Err(_) => return CString::new("").unwrap().into_raw(),
+    };
+    
+    let path = Path::new(filename).with_extension("json");
+    CString::new(path.to_str().unwrap()).unwrap().into_raw()
+}
+
+fn set_last_error(error: &str) {
+    unsafe {
+        LAST_ERROR = Some(error.to_string());
+    }
+}
+
+fn frames_to_geojson(frames: &[Frame]) -> String {
+    println!("Converting {} frames to GeoJSON", frames.len());
+    if frames.is_empty() {
+        println!("No frames to convert!");
+        return "{}".to_string();
+    }
+    println!("First frame: {:?}", frames[0]);
+    let result = serde_json::to_string(&frames);
+    match result {
+        Ok(json) => {
+            println!("Successfully converted frames to JSON. First 100 characters: {}", &json[..std::cmp::min(100, json.len())]);
+            json
+        },
+        Err(e) => {
+            println!("Error converting frames to JSON: {}", e);
+            println!("Attempting to serialize individual frames:");
+            for (i, frame) in frames.iter().enumerate() {
+                match serde_json::to_string(frame) {
+                    Ok(_) => println!("Frame {} serialized successfully", i),
+                    Err(e) => println!("Error serializing frame {}: {}", i, e),
+                }
+            }
+            "{}".to_string()
+        }
     }
 }

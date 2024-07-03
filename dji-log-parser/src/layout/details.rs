@@ -1,6 +1,6 @@
 use binrw::binread;
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use std::io::SeekFrom;
 
 #[binread]
@@ -219,7 +219,7 @@ impl From<u8> for ProductType {
     }
 }
 
-#[derive(Serialize, Debug, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum Platform {
     IOS,
     Android,

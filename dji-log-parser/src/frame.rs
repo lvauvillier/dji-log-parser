@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
 use crate::layout::details::{Details, Platform};
 use crate::record::camera::SDCardState;
@@ -19,7 +19,7 @@ use crate::utils::append_message;
 /// different log versions. It provides a consistent and easy-to-use format
 /// for analyzing and processing DJI log information.
 ///
-#[derive(Serialize, Debug, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Frame {
     /// Custom date and time of the frame
     #[serde(rename = "CUSTOM.dateTime")]
@@ -297,6 +297,7 @@ pub struct Frame {
     /// Indicates if multiple flight modes are enabled
     #[serde(rename = "HOME.isMultipleModeEnabled")]
     pub home_is_multiple_mode_enabled: bool,
+
     /// Indicates if beginner mode is active
     #[serde(rename = "HOME.isBeginnerMode")]
     pub home_is_beginner_mode: bool,
@@ -385,6 +386,132 @@ pub struct Frame {
     /// Version of the app used
     #[serde(rename = "DETAILS.appVersion")]
     pub details_app_version: String,
+}
+
+impl Default for Frame {
+    fn default() -> Self {
+        Frame {
+            custom_date_time: chrono::Utc::now(),
+            osd_fly_time: 0.0,
+            osd_latitude: 0.0,
+            osd_longitude: 0.0,
+            osd_height: 0.0,
+            osd_height_max: 0.0,
+            osd_vps_height: 0.0,
+            osd_altitude: 0.0,
+            osd_x_speed: 0.0,
+            osd_x_speed_max: 0.0,
+            osd_y_speed: 0.0,
+            osd_y_speed_max: 0.0,
+            osd_z_speed: 0.0,
+            osd_z_speed_max: 0.0,
+            osd_pitch: 0.0,
+            osd_roll: 0.0,
+            osd_yaw: 0.0,
+            osd_flyc_state: None,
+            osd_flyc_command: None,
+            osd_flight_action: None,
+            osd_is_gpd_used: false,
+            osd_non_gps_cause: None,
+            osd_gps_num: 0,
+            osd_gps_level: 0,
+            osd_drone_type: None,
+            osd_is_swave_work: false,
+            osd_wave_error: false,
+            osd_go_home_status: None,
+            osd_battery_type: None,
+            osd_is_on_ground: true,
+            osd_is_motor_on: false,
+            osd_is_motor_blocked: false,
+            osd_motor_start_failed_cause: None,
+            osd_is_imu_preheated: false,
+            osd_imu_init_fail_reason: None,
+            osd_is_acceletor_over_range: false,
+            osd_is_barometer_dead_in_air: false,
+            osd_is_compass_error: false,
+            osd_is_go_home_height_modified: false,
+            osd_can_ioc_work: false,
+            osd_is_not_enough_force: false,
+            osd_is_out_of_limit: false,
+            osd_is_propeller_catapult: false,
+            osd_is_vibrating: false,
+            osd_is_vision_used: false,
+            osd_voltage_warning: 0,
+            gimbal_mode: None,
+            gimbal_pitch: 0.0,
+            gimbal_roll: 0.0,
+            gimbal_yaw: 0.0,
+            gimbal_is_pitch_at_limit: false,
+            gimbal_is_roll_at_limit: false,
+            gimbal_is_yaw_at_limit: false,
+            gimbal_is_stuck: false,
+            camera_is_photo: false,
+            camera_is_video: false,
+            camera_sd_card_is_inserted: false,
+            camera_sd_card_state: None,
+            rc_downlink_signal: None,
+            rc_uplink_signal: None,
+            rc_aileron: 0,
+            rc_elevator: 0,
+            rc_throttle: 0,
+            rc_rudder: 0,
+            battery_charge_level: 0,
+            battery_voltage: 0.0,
+            battery_current: 0.0,
+            battery_current_capacity: 0,
+            battery_full_capacity: 0,
+            battery_cell_voltage1: 0.0,
+            battery_cell_voltage2: 0.0,
+            battery_cell_voltage3: 0.0,
+            battery_cell_voltage4: 0.0,
+            battery_cell_voltage_deviation: 0.0,
+            battery_max_cell_voltage_deviation: 0.0,
+            battery_temperature: 0.0,
+            battery_min_temperature: 0.0,
+            battery_max_temperature: 0.0,
+            home_latitude: 0.0,
+            home_longitude: 0.0,
+            home_altitude: 0.0,
+            home_height_limit: 0.0,
+            home_is_home_record: false,
+            home_go_home_mode: None,
+            home_is_dynamic_home_point_enabled: false,
+            home_is_near_distance_limit: false,
+            home_is_near_height_limit: false,
+            home_is_compass_calibrating: false,
+            home_compass_calibration_state: None,
+            home_is_multiple_mode_enabled: false,
+            home_is_beginner_mode: false,
+            home_is_ioc_enabled: false,
+            home_ioc_mode: None,
+            home_go_home_height: 0,
+            home_ioc_course_lock_angle: None,
+            home_max_allowed_height: 0.0,
+            home_current_flight_record_index: 0,
+            recover_app_platform: None,
+            recover_app_version: String::new(),
+            recover_aircraft_name: String::new(),
+            recover_aircraft_sn: String::new(),
+            recover_camera_sn: String::new(),
+            recover_rc_sn: String::new(),
+            recover_battery_sn: String::new(),
+            app_tip: String::new(),
+            app_warn: String::new(),
+            details_total_time: 0.0,
+            details_total_distance: 0.0,
+            details_max_height: 0.0,
+            details_max_horizontal_speed: 0.0,
+            details_max_vertical_speed: 0.0,
+            details_photo_num: 0,
+            details_video_time: 0,
+            details_aircraft_name: String::new(),
+            details_aircraft_sn: String::new(),
+            details_camera_sn: String::new(),
+            details_rc_sn: String::new(),
+            details_app_platform: None,
+            details_app_version: String::new(),
+        }
+    }
 }
 
 /// Converts a vector of `Record` objects into a vector of `Frame` objects.

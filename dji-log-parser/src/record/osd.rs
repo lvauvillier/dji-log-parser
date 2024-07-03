@@ -1,7 +1,6 @@
 use binrw::binread;
-use serde::Serialize;
 use std::f64::consts::PI;
-
+use serde::{Serialize, Deserialize};
 use crate::utils::sub_byte_field;
 
 #[binread]
@@ -133,9 +132,9 @@ pub struct OSD {
     pub imu_init_fail_reason: ImuInitFailReason,
 }
 
-#[derive(Serialize, Debug, Default, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub enum DroneType {
-    #[default]
+    #[derive(Default)]
     None,
     Inspire1,
     Phantom3Advanced,
@@ -222,7 +221,7 @@ impl From<u8> for DroneType {
     }
 }
 
-#[derive(Serialize, Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum FlightMode {
     /// Manual mode. Shown as Manual in DJI app.
     Manual,
@@ -340,7 +339,7 @@ impl From<u8> for FlightMode {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum AppCommand {
     AutoFly,
     AutoLanding,
@@ -430,7 +429,7 @@ impl From<u8> for GroundOrSky {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum GoHomeStatus {
     Standby,
     Preascending,
@@ -458,7 +457,7 @@ impl From<u8> for GoHomeStatus {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum BatteryType {
     NonSmart,
     Smart,
@@ -476,8 +475,7 @@ impl From<u8> for BatteryType {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
-
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum FlightAction {
     None,
     WarningPowerGoHome,
@@ -561,7 +559,7 @@ impl From<u8> for FlightAction {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum MotorStartFailedCause {
     None,
     CompassError,
@@ -760,7 +758,7 @@ impl From<u8> for MotorStartFailedCause {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum NonGPSCause {
     Already,
     Forbid,
@@ -790,9 +788,9 @@ impl From<u8> for NonGPSCause {
     }
 }
 
-#[derive(Serialize, Debug, Default, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub enum ImuInitFailReason {
-    #[default]
+    #[derive(Default)]
     MonitorError,
     CollectingData,
     AcceDead,
