@@ -1,0 +1,24 @@
+[package]
+name = "dji-log-parser"
+categories.workspace = true
+version.workspace = true
+description = "Library for parsing DJI txt logs"
+authors.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords.workspace = true
+edition.workspace = true
+publish = true
+readme = "../README.md"
+
+[dependencies]
+aes.workspace = true
+base64.workspace = true
+binrw.workspace = true
+cbc.workspace = true
+chrono = { workspace = true, features = ["serde"] }
+crc64.workspace = true
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+thiserror.workspace = true
+ureq = { workspace = true, features = ["json"] }

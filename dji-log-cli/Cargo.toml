@@ -1,0 +1,27 @@
+[package]
+name = "dji-log-cli"
+version.workspace = true
+description = "CLI for parsing DJI txt logs"
+categories.workspace = true
+authors.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords.workspace = true
+edition.workspace = true
+publish = false
+
+[[bin]]
+name = "dji-log"
+path = "src/main.rs"
+
+[dependencies]
+chrono = { workspace = true, features = ["serde"] }
+clap = { workspace = true, features = ["derive"] }
+csv.workspace = true
+dji-log-parser.workspace = true
+geojson.workspace = true
+img-parts.workspace = true
+kamadak-exif.workspace = true
+kml.workspace = true
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
