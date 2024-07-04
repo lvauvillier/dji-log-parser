@@ -15,33 +15,37 @@ pub(crate) struct Cli {
     #[arg(value_name = "FILE")]
     filepath: String,
 
-    /// Output file path
+    /// Write JSON output to FILE instead of stdout
     #[arg(short, long)]
     output: Option<String>,
 
-    /// Image file path.
+    /// Extract images (use %d for sequence, e.g., image%d.jpeg)
     #[arg(short, long)]
     images: Option<String>,
 
-    /// Thumbnail file path.
+    /// Extract thumbnails (use %d for sequence, e.g., thumb%d.jpeg)
     #[arg(short, long)]
     thumbnails: Option<String>,
 
-    /// GeoJSON file path.
+    /// Generate GeoJSON file
     #[arg(short, long)]
     geojson: Option<String>,
 
-    /// KML file path.
+    /// Generate KML file
     #[arg(short, long)]
     kml: Option<String>,
 
-    /// CSV file path.
+    /// Generate CSV file
     #[arg(short, long)]
     csv: Option<String>,
 
     /// DJI keychain Api Key
     #[arg(short, long)]
     api_key: Option<String>,
+
+    /// Extract raw records instead of normalized frames
+    #[arg(short, long)]
+    raw: bool,
 }
 
 pub(crate) trait Exporter {
