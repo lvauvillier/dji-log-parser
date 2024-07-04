@@ -6,26 +6,26 @@ use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
 use crate::utils::append_message;
 
-pub mod app;
-pub mod battery;
-pub mod camera;
-pub mod custom;
+mod app;
+mod battery;
+mod camera;
+mod custom;
 pub mod details;
-pub mod gimbal;
-pub mod home;
-pub mod osd;
-pub mod rc;
-pub mod recover;
+mod gimbal;
+mod home;
+mod osd;
+mod rc;
+mod recover;
 
-use app::App;
-use battery::Battery;
-use camera::Camera;
-use custom::Custom;
-use gimbal::Gimbal;
-use home::Home;
-use osd::OSD;
-use rc::RC;
-use recover::Recover;
+pub use app::App;
+pub use battery::Battery;
+pub use camera::Camera;
+pub use custom::Custom;
+pub use gimbal::Gimbal;
+pub use home::Home;
+pub use osd::OSD;
+pub use rc::RC;
+pub use recover::Recover;
 
 /// Represents a normalized frame of data from a DJI log.
 ///
@@ -53,7 +53,7 @@ impl Frame {
     /// This method resets the state of the camera, application tips, and warnings.
     /// Additionally, if the battery cell voltage is estimated, it resets all cell voltages to zero.
     ///
-    pub fn reset(&mut self) {
+    fn reset(&mut self) {
         self.camera.is_photo = bool::default();
         self.camera.is_video = bool::default();
         self.app.tip = String::default();
