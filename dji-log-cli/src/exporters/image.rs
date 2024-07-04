@@ -31,14 +31,14 @@ impl Exporter for ImageExporter {
 
         for frame in frames {
             // Use home point
-            if frame.home_latitude != 0.0 || frame.home_longitude != 0.0 {
-                fallback_latitude = frame.osd_latitude;
-                fallback_longitude = frame.osd_longitude;
+            if frame.home.latitude != 0.0 || frame.home.longitude != 0.0 {
+                fallback_latitude = frame.osd.latitude;
+                fallback_longitude = frame.osd.longitude;
                 break;
             // Use first valid track point
-            } else if frame.osd_latitude != 0.0 || frame.osd_longitude != 0.0 {
-                fallback_latitude = frame.osd_latitude;
-                fallback_longitude = frame.osd_longitude;
+            } else if frame.osd.latitude != 0.0 || frame.osd.longitude != 0.0 {
+                fallback_latitude = frame.osd.latitude;
+                fallback_longitude = frame.osd.longitude;
                 break;
             }
         }

@@ -14,9 +14,9 @@ impl Exporter for GeoJsonExporter {
             // Create a Value::LineString from all the coords.
             let mut coords = vec![];
             frames.iter().for_each(|frame| {
-                let lat = frame.osd_latitude;
-                let lon = frame.osd_longitude;
-                let alt = frame.osd_altitude as f64;
+                let lat = frame.osd.latitude;
+                let lon = frame.osd.longitude;
+                let alt = frame.osd.altitude as f64;
                 let coord = vec![lon, lat, alt];
                 coords.push(coord);
             });
