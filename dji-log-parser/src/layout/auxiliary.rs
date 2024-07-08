@@ -16,7 +16,7 @@ pub enum Auxiliary {
     #[br(magic = 1u8)]
     Version(
         #[br(temp)] u16,
-        #[br(pad_size_to = self_0)] AuxiliaryVersion,
+        #[br(pad_size_to = self_0)] (),
     ),
 }
 
@@ -38,10 +38,23 @@ pub struct AuxiliaryInfo {
 #[binread]
 #[derive(Debug)]
 #[br(little)]
+#[allow(dead_code)]
 pub struct AuxiliaryVersion {
     pub version: u16,
     #[br(map = |x: u8| Department::from(x))]
     pub department: Department,
+}
+
+// Use the fields somewhere in your code
+#[allow(dead_code)]
+impl AuxiliaryVersion {
+    pub fn get_version(&self) -> u16 {
+        self.version
+    }
+
+    pub fn get_department(&self) -> &Department {
+        &self.department
+    }
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]

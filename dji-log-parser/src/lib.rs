@@ -139,6 +139,7 @@ pub mod frame;
 pub mod keychain;
 pub mod layout;
 pub mod record;
+pub mod c_api;
 mod utils;
 
 use frame::{records_to_frames, Frame};
@@ -147,6 +148,7 @@ use layout::auxiliary::Auxiliary;
 use layout::details::Details;
 use layout::prefix::Prefix;
 use record::Record;
+use log::{debug, error};
 
 use crate::utils::pad_with_zeros;
 
@@ -197,6 +199,7 @@ pub struct DJILog {
 
 impl DJILog {
     pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog, DJILogError> {
+        debug!("Parsing DJI log from bytes, length: {}", bytes.len());
         // Decode Prefix
         let mut prefix = Prefix::read(&mut Cursor::new(&bytes))
             .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
@@ -241,33 +244,19 @@ impl DJILog {
     }
 
     pub fn keychain_request(&self) -> Result<KeychainRequest, DJILogError> {
+        debug!("Creating keychain request, version: {}", self.version);
+        println!("Entering keychain_request method");
         let mut keychain_request = KeychainRequest::default();
-
-        // No keychain
-        if self.version < 13 {
-            return Ok(keychain_request);
-        }
-
-        let mut cursor = Cursor::new(&self.inner);
-        cursor.set_position(self.prefix.detail_offset());
-
-        // Skip first auxiliary block
-        let _ = Auxiliary::read(&mut cursor)
-            .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
-
-        // Get version from second auxilliary block
-        if let Auxiliary::Version(data) = Auxiliary::read(&mut cursor)
-            .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
-        {
-            keychain_request.version = data.version;
-            keychain_request.department = data.department.into();
-        }
-
+        
+        keychain_request.version = self.version as u16;
+        println!("Log version: {}", self.version);
+    
         // Extract keychains from KeyStorage Records
+        let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
-
+    
         let mut keychain: Vec<KeychainCipherText> = Vec::new();
-
+    
         while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             let empty_keychain = RefCell::new(HashMap::new());
             let record = match Record::read_args(
@@ -278,32 +267,41 @@ impl DJILog {
                 },
             ) {
                 Ok(record) => record,
-                Err(_) => break,
+                Err(e) => {
+                    println!("Error reading record: {:?}", e);
+                    break;
+                }
             };
-
+    
             match record {
                 Record::KeyStorage(data) => {
-                    // add KeychainCipherText to current keychain
                     keychain.push(KeychainCipherText {
                         feature_point: data.feature_point,
                         aes_ciphertext: Base64Standard.encode(&data.data),
                     });
+                    println!("Found KeyStorage record: {:?}", data.feature_point);
                 }
                 Record::KeyStorageRecover(_) => {
-                    // start a new keychain
-                    keychain_request.keychains.push(keychain);
-                    keychain = Vec::new();
+                    if !keychain.is_empty() {
+                        keychain_request.keychains.push(keychain);
+                        keychain = Vec::new();
+                    }
+                    println!("Found KeyStorageRecover record");
                 }
                 _ => {}
             }
         }
-
-        keychain_request.keychains.push(keychain);
-
+    
+        if !keychain.is_empty() {
+            keychain_request.keychains.push(keychain);
+        }
+    
+        println!("Keychain request: {:?}", keychain_request);
         Ok(keychain_request)
     }
 
     pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>, DJILogError> {
+        println!("Entering records method");
         if self.version >= 13 && decrypt_method == DecryptMethod::None {
             return Err(DJILogError::RecordParseError(
                 "Api Key or keychain is required to parse records".into(),
@@ -311,10 +309,17 @@ impl DJILog {
         }
 
         let mut keychains = VecDeque::from(match decrypt_method {
-            DecryptMethod::ApiKey(api_key) => self.keychain_request()?.fetch(&api_key)?,
+            DecryptMethod::ApiKey(api_key) => {
+                println!("Getting keychain request...");
+                let request = self.keychain_request()?;
+                println!("Fetching keychains...");
+                request.fetch(&api_key)?
+            },
             DecryptMethod::Keychains(keychains) => keychains,
             DecryptMethod::None => Vec::new(),
         });
+
+        println!("Parsing records...");
 
         let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
@@ -347,158 +352,21 @@ impl DJILog {
     }
 
     pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>, DJILogError> {
+        println!("Entering frames method");
+        println!("Attempting to get records...");
         let records = self.records(decrypt_method)?;
-        println!("Number of records: {}", records.len());
+        println!("Successfully got {} records", records.len());
+        if !records.is_empty() {
+            println!("First record: {:?}", records[0]);
+        }
+        println!("Calling records_to_frames...");
         let frames = records_to_frames(records, self.details.clone());
-        println!("Number of frames: {}", frames.len());
+        println!("records_to_frames returned {} frames", frames.len());
+        if !frames.is_empty() {
+            println!("First frame: {:?}", frames[0]);
+        }
         Ok(frames)
     }
 }
 
-use std::os::raw::c_char;
-use std::ffi::{CStr, CString};
-use std::fs;
-use std::path::Path;
-use serde_json;
 
-static mut LAST_ERROR: Option<String> = None;
-
-#[no_mangle]
-pub extern "C" fn parse_dji_log(filename: *const c_char, api_key: *const c_char) -> bool {
-    let c_str = unsafe { CStr::from_ptr(filename) };
-    let filename = match c_str.to_str() {
-        Ok(s) => s,
-        Err(_) => {
-            set_last_error("Invalid filename");
-            return false;
-        }
-    };
-    
-    let c_str_key = unsafe { CStr::from_ptr(api_key) };
-    let api_key = match c_str_key.to_str() {
-        Ok(s) => s,
-        Err(_) => {
-            set_last_error("Invalid API key");
-            return false;
-        }
-    };
-
-    println!("Parsing file: {}", filename);
-    println!("Using API key: {}", api_key);
-
-    // Read the file
-    let bytes = match fs::read(filename) {
-        Ok(b) => b,
-        Err(e) => {
-            set_last_error(&format!("Failed to read file: {}", e));
-            return false;
-        }
-    };
-
-    println!("File size: {} bytes", bytes.len());
-
-    // Parse the log
-    let parser = match DJILog::from_bytes(bytes) {
-        Ok(p) => p,
-        Err(e) => {
-            set_last_error(&format!("Failed to parse log: {}", e));
-            return false;
-        }
-    };
-
-    println!("Log version: {}", parser.version);
-
-    // Get frames
-    let frames = match parser.frames(DecryptMethod::ApiKey(api_key.to_string())) {
-        Ok(f) => f,
-        Err(e) => {
-            set_last_error(&format!("Failed to get frames: {}. Error details: {:?}", e, e));
-            return false;
-        }
-    };
-
-    println!("Number of frames: {}", frames.len());
-    if !frames.is_empty() {
-        println!("First frame: {:?}", frames[0]);
-    }
-
-    // Convert frames to GeoJSON
-    let geojson = frames_to_geojson(&frames);
-
-    if geojson.is_empty() {
-        set_last_error("GeoJSON conversion resulted in empty string");
-        return false;
-    }
-
-    // Write GeoJSON to a file
-    let output_path = Path::new(filename).with_extension("json");
-    if let Err(e) = fs::write(&output_path, &geojson) {
-        set_last_error(&format!("Failed to write GeoJSON: {}", e));
-        return false;
-    }
-
-    println!("GeoJSON written to: {:?}", output_path);
-
-    true
-}
-
-#[no_mangle]
-pub extern "C" fn get_last_error() -> *mut c_char {
-    let error = unsafe {
-        LAST_ERROR.take().unwrap_or_else(|| "No error".to_string())
-    };
-    CString::new(error).unwrap().into_raw()
-}
-
-#[no_mangle]
-pub extern "C" fn free_string(s: *mut c_char) {
-    unsafe {
-        if s.is_null() { return }
-        drop(CString::from_raw(s));
-    };
-}
-
-#[no_mangle]
-pub extern "C" fn get_geojson_file_path(filename: *const c_char) -> *mut c_char {
-    let c_str = unsafe { CStr::from_ptr(filename) };
-    let filename = match c_str.to_str() {
-        Ok(s) => s,
-        Err(_) => return CString::new("").unwrap().into_raw(),
-    };
-    
-    let path = Path::new(filename).with_extension("json");
-    CString::new(path.to_str().unwrap()).unwrap().into_raw()
-}
-
-fn set_last_error(error: &str) {
-    unsafe {
-        LAST_ERROR = Some(error.to_string());
-    }
-}
-
-fn frames_to_geojson(frames: &[Frame]) -> String {
-    println!("Converting {} frames to GeoJSON", frames.len());
-    if frames.is_empty() {
-        println!("No frames to convert!");
-        return "{}".to_string();
-    }
-    println!("First frame: {:?}", frames[0]);
-    let result = serde_json::to_string(&frames);
-    match result {
-        Ok(json) => {
-            println!("Successfully converted frames to JSON. First 100 characters: {}", &json[..std::cmp::min(100, json.len())]);
-            json
-        },
-        Err(e) => {
-            println!("Error converting frames to JSON: {}", e);
-            println!("Attempting to serialize individual frames:");
-            for (i, frame) in frames.iter().enumerate() {
-                match serde_json::to_string(frame) {
-                    Ok(_) => println!("Frame {} serialized successfully", i),
-                    Err(e) => println!("Error serializing frame {}: {}", i, e),
-                }
-            }
-            "{}".to_string()
-        }
-    }
-}

@@ -530,13 +530,13 @@ impl Default for Frame {
 ///   specific normalization logic.
 ///
 pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
+    println!("Entering records_to_frames");
     let mut frames = Vec::new();
-
-    //let mut frames = vec![];
     let mut frame = Frame::default();
     let mut frame_index = 0;
 
-    for record in records {
+    for (index, record) in records.into_iter().enumerate() {
+        println!("Processing record {}", index);
         match record {
             Record::OSD(osd) => {
                 // Push a new frame
@@ -592,7 +592,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.osd_yaw = osd.yaw;
                 frame.osd_roll = osd.roll;
 
-                if frame.osd_flyc_state != Some(osd.flight_mode) {
+                if frame.osd_flyc_state != Some(osd.flight_mode.clone()) {
                     frame.app_tip = append_message(
                         frame.app_tip,
                         format!("Flight mode changed to {:?}.", osd.flight_mode),
@@ -633,6 +633,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.osd_voltage_warning = osd.voltage_warning;
 
                 frame_index = frame_index + 1;
+                println!("Created new frame");
             }
             Record::Gimbal(gimbal) => {
                 frame.gimbal_mode = Some(gimbal.mode);
@@ -859,5 +860,11 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
         }
     }
 
+    // Push the last frame if it exists
+    if frame_index > 0 {
+        frames.push(frame);
+    }
+
+    println!("Total frames created: {}", frames.len());
     frames
 }

@@ -17,9 +17,10 @@ cbc.workspace = true
 chrono = { workspace = true, features = ["serde"] }
 crc64.workspace = true
 serde = { workspace = true, features = ["derive"] }
-serde_json.workspace = true
+serde_json = { workspace = true }
 thiserror.workspace = true
 ureq = { workspace = true, features = ["json"] }
+log = "0.4"
 
 [lib]
 name = "dji_log_parser"

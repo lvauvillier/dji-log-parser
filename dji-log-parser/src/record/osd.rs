@@ -132,9 +132,9 @@ pub struct OSD {
     pub imu_init_fail_reason: ImuInitFailReason,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum DroneType {
-    #[derive(Default)]
+    Unknown,
     None,
     Inspire1,
     Phantom3Advanced,
@@ -173,7 +173,13 @@ pub enum DroneType {
     Mini4Pro,
     Avata2,
     #[serde(untagged)]
-    Unknown(u8),
+    UnknownValue(u8),
+}
+
+impl Default for DroneType {
+    fn default() -> Self {
+        DroneType::Unknown
+    }
 }
 
 impl From<u8> for DroneType {
@@ -216,7 +222,7 @@ impl From<u8> for DroneType {
             89 => DroneType::Matrice350RTK,
             93 => DroneType::Mini4Pro,
             94 => DroneType::Avata2,
-            _ => DroneType::Unknown(value),
+            _ => DroneType::UnknownValue(value),
         }
     }
 }
@@ -788,9 +794,9 @@ impl From<u8> for NonGPSCause {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ImuInitFailReason {
-    #[derive(Default)]
+    Unknown,
     MonitorError,
     CollectingData,
     AcceDead,
@@ -807,7 +813,13 @@ pub enum ImuInitFailReason {
     McHeaderMoved,
     McVibrated,
     #[serde(untagged)]
-    Unknown(u8),
+    UnknownValue(u8),
+}
+
+impl Default for ImuInitFailReason {
+    fn default() -> Self {
+        ImuInitFailReason::Unknown
+    }
 }
 
 impl From<u8> for ImuInitFailReason {
@@ -828,7 +840,7 @@ impl From<u8> for ImuInitFailReason {
             13 => ImuInitFailReason::AcceMoveTooLarge,
             14 => ImuInitFailReason::McHeaderMoved,
             15 => ImuInitFailReason::McVibrated,
-            _ => ImuInitFailReason::Unknown(value),
+            _ =>  ImuInitFailReason::UnknownValue(value),
         }
     }
 }
