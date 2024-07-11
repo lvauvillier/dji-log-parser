@@ -113,8 +113,8 @@ impl<R: Read + Seek> XorDecoder<R> {
 impl<R: Read> Read for XorDecoder<R> {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
         let bytes_read = self.reader.read(buf)?;
-        for i in 0..bytes_read {
-            buf[i] ^= self.key[(self.decode_position + i) % 8];
+        for (i, byte) in buf.iter_mut().enumerate().take(bytes_read) {
+            *byte ^= self.key[(self.decode_position + i) % 8];
         }
         self.decode_position += bytes_read;
         Ok(bytes_read)

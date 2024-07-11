@@ -215,7 +215,7 @@ pub fn pad_with_zeros(input: &[u8], min_length: usize) -> Vec<u8> {
 ///
 ///
 pub fn append_message(original_message: String, message: impl Into<String>) -> String {
-    if original_message.len() > 0 {
+    if !original_message.is_empty() {
         format!("{}; {}", original_message, message.into())
     } else {
         message.into()

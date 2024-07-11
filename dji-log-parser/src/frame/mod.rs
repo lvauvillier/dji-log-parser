@@ -222,7 +222,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.osd.is_vision_used = osd.is_vision_used;
                 frame.osd.voltage_warning = osd.voltage_warning;
 
-                frame_index = frame_index + 1;
+                frame_index += 1;
             }
             Record::Gimbal(gimbal) => {
                 frame.gimbal.mode = Some(gimbal.mode);
@@ -324,7 +324,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
             },
             Record::OFDM(ofdm) => {
                 if ofdm.is_up {
-                    frame.rc.downlink_signal = Some(ofdm.signal_percent);
+                    frame.rc.uplink_signal = Some(ofdm.signal_percent);
                 } else {
                     frame.rc.downlink_signal = Some(ofdm.signal_percent);
                 }
@@ -337,7 +337,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.home.longitude = home.longitude;
                 // If home_altitude was not previously set, also update osd.altitude
                 if frame.home.altitude == f32::default() {
-                    frame.osd.altitude = frame.osd.altitude + home.altitude;
+                    frame.osd.altitude += home.altitude;
                 }
                 frame.home.altitude = home.altitude;
                 frame.home.height_limit = home.max_allowed_height;
