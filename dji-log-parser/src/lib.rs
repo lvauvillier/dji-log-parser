@@ -132,15 +132,16 @@ use binrw::io::Cursor;
 use binrw::BinRead;
 use std::cell::RefCell;
 use std::collections::{HashMap, VecDeque};
-use thiserror::Error;
 
 mod decoder;
+mod error;
 pub mod frame;
 pub mod keychain;
 pub mod layout;
 pub mod record;
 mod utils;
 
+pub use error::{Error, Result};
 use frame::{records_to_frames, Frame};
 use keychain::{Keychain, KeychainCipherText, KeychainRequest};
 use layout::auxiliary::Auxiliary;
@@ -149,34 +150,6 @@ use layout::prefix::Prefix;
 use record::Record;
 
 use crate::utils::pad_with_zeros;
-
-#[derive(PartialEq, Debug, Error)]
-#[non_exhaustive]
-pub enum DJILogError {
-    #[error("Failed to parse prefix: {0}")]
-    PrefixParseError(String),
-
-    #[error("Failed to parse detail: {0}")]
-    DetailsParseError(String),
-
-    #[error("Failed to parse auxiliary block: {0}")]
-    AuxiliaryParseError(String),
-
-    #[error("Failed to parse record: {0}")]
-    RecordParseError(String),
-
-    #[error("Failed to parse keychain: {0}")]
-    KeychainParseError(String),
-
-    #[error("Failed serialize object: {0}")]
-    SerializeError(String),
-
-    #[error("Deserialize error: {0}")]
-    DeserializeError(String),
-
-    #[error("Network error: {0}")]
-    NetworkError(String),
-}
 
 #[derive(PartialEq, Clone)]
 pub enum DecryptMethod {
@@ -207,9 +180,8 @@ impl DJILog {
     ///
     /// # Returns
     ///
-    /// This function returns `Result<DJILog, DJILogError>`.
-    /// On success, it returns the `DJILog` instance. On failure, it returns
-    /// a `DJILogError` indicating the type of error encountered.
+    /// This function returns `Result<DJILog>`.
+    /// On success, it returns the `DJILog` instance.
     ///
     /// # Examples
     ///
@@ -220,10 +192,9 @@ impl DJILog {
     /// let log = DJILog::from_bytes(log_bytes).unwrap();
     /// ```
     ///
-    pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog, DJILogError> {
+    pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog> {
         // Decode Prefix
-        let mut prefix = Prefix::read(&mut Cursor::new(&bytes))
-            .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
+        let mut prefix = Prefix::read(&mut Cursor::new(&bytes))?;
 
         let version = prefix.version;
 
@@ -232,27 +203,20 @@ impl DJILog {
         let mut cursor = Cursor::new(pad_with_zeros(&bytes[detail_offset..], 400));
 
         let details = if version < 13 {
-            Details::read_args(&mut cursor, (version,))
-                .map_err(|e| DJILogError::DetailsParseError(e.to_string()))?
+            Details::read_args(&mut cursor, (version,))?
         } else {
             // Get details from first auxiliary block
-            if let Auxiliary::Info(data) = Auxiliary::read(&mut cursor)
-                .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
-            {
-                Details::read_args(&mut Cursor::new(&data.info_data), (version,))
-                    .map_err(|e| DJILogError::DetailsParseError(e.to_string()))?
+            if let Auxiliary::Info(data) = Auxiliary::read(&mut cursor)? {
+                Details::read_args(&mut Cursor::new(&data.info_data), (version,))?
             } else {
-                Err(DJILogError::DetailsParseError(
-                    "Invalid auxiliary data".into(),
-                ))?
+                return Err(Error::MissingAuxilliaryData("Info".into()));
             }
         };
 
         // Try to recover detail offset
         if prefix.records_offset() == 0 && version >= 13 {
             // Skip second auxiliary block
-            let _ = Auxiliary::read(&mut cursor)
-                .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
+            let _ = Auxiliary::read(&mut cursor)?;
             prefix.recover_detail_offset(cursor.position() + detail_offset as u64);
         }
 
@@ -272,11 +236,10 @@ impl DJILog {
     ///
     /// # Returns
     ///
-    /// Returns a `Result<KeychainRequest, DJILogError>`. On success, it provides a `KeychainRequest`
+    /// Returns a `Result<KeychainRequest>`. On success, it provides a `KeychainRequest`
     /// instance, which contains the necessary information to fetch keychains from the DJI API.
-    /// On failure, it returns a `DJILogError` indicating the type of error encountered during parsing.
     ///
-    pub fn keychain_request(&self) -> Result<KeychainRequest, DJILogError> {
+    pub fn keychain_request(&self) -> Result<KeychainRequest> {
         let mut keychain_request = KeychainRequest::default();
 
         // No keychain
@@ -288,15 +251,14 @@ impl DJILog {
         cursor.set_position(self.prefix.detail_offset());
 
         // Skip first auxiliary block
-        let _ = Auxiliary::read(&mut cursor)
-            .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
+        let _ = Auxiliary::read(&mut cursor)?;
 
         // Get version from second auxilliary block
-        if let Auxiliary::Version(data) = Auxiliary::read(&mut cursor)
-            .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
-        {
+        if let Auxiliary::Version(data) = Auxiliary::read(&mut cursor)? {
             keychain_request.version = data.version;
             keychain_request.department = data.department.into();
+        } else {
+            return Err(Error::MissingAuxilliaryData("Version".into()));
         }
 
         // Extract keychains from KeyStorage Records
@@ -353,15 +315,12 @@ impl DJILog {
     ///
     /// # Returns
     ///
-    /// Returns a `Result<Vec<Record>, DJILogError>`. On success, it provides a vector of `Record`
-    /// instances representing the parsed log records. On failure, it returns a `DJILogError` indicating
-    /// the type of error encountered during record parsing.
+    /// Returns a `Result<Vec<Record>>`. On success, it provides a vector of `Record`
+    /// instances representing the parsed log records.
     ///
-    pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>, DJILogError> {
+    pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>> {
         if self.version >= 13 && decrypt_method == DecryptMethod::None {
-            return Err(DJILogError::RecordParseError(
-                "Api Key or keychain is required to parse records".into(),
-            ));
+            return Err(Error::InvalidDecryptMethod);
         }
 
         let mut keychains = VecDeque::from(match decrypt_method {
@@ -421,9 +380,8 @@ impl DJILog {
     ///
     /// # Returns
     ///
-    /// Returns a `Result<Vec<Frame>, DJILogError>`. On success, it provides a vector of `Frame`
-    /// instances representing the normalized log data. On failure, it returns a `DJILogError`
-    /// indicating the type of error encountered during frame processing.
+    /// Returns a `Result<Vec<Frame>>`. On success, it provides a vector of `Frame`
+    /// instances representing the normalized log data.
     ///
     /// # Note
     ///
@@ -431,7 +389,7 @@ impl DJILog {
     /// over using raw records directly, as frames provide a consistent format across different log
     /// versions, simplifying data analysis and interpretation.
     ///
-    pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>, DJILogError> {
+    pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>> {
         let records = self.records(decrypt_method)?;
         Ok(records_to_frames(records, self.details.clone()))
     }

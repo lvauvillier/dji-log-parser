@@ -8,7 +8,7 @@ use super::feature_point::FeaturePoint;
 use super::response::KeychainResponse;
 use super::Keychain;
 
-use crate::DJILogError;
+use crate::{Error, Result};
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -28,18 +28,22 @@ pub struct KeychainRequest {
 
 impl KeychainRequest {
     /// Fetches a `Vec<Keychain>` from the keychain API using the request details.
-    /// Returns a result containing a vector of `Keychain` or an error of type `DJILogError`.
-    pub fn fetch(&self, api_key: &str) -> Result<Vec<Keychain>, DJILogError> {
+    /// Returns a result containing a vector of `Keychain`.
+    pub fn fetch(&self, api_key: &str) -> Result<Vec<Keychain>> {
         let response = ureq::post("https://dev.dji.com/openapi/v1/flight-records/keychains")
             .set("Content-Type", "application/json")
             .set("Api-Key", api_key)
             .timeout(Duration::from_secs(30))
             .send_json(self)
-            .map_err(|e| DJILogError::NetworkError(e.to_string()))?;
+            .map_err(|e| {
+                if let ureq::Error::Status(403, _) = e {
+                    Error::ApiKeyError
+                } else {
+                    Error::Network(e)
+                }
+            })?;
 
-        let keychain_response: KeychainResponse = response
-            .into_json()
-            .map_err(|e| DJILogError::SerializeError(e.to_string()))?;
+        let keychain_response: KeychainResponse = response.into_json()?;
 
         let result = keychain_response
             .data
@@ -50,8 +54,12 @@ impl KeychainRequest {
                     map.insert(
                         keychain_aes.feature_point,
                         (
-                            Base64Standard.decode(keychain_aes.aes_iv.clone()).unwrap(),
-                            Base64Standard.decode(keychain_aes.aes_key.clone()).unwrap(),
+                            Base64Standard
+                                .decode(keychain_aes.aes_iv.clone())
+                                .unwrap_or(Vec::new()),
+                            Base64Standard
+                                .decode(keychain_aes.aes_key.clone())
+                                .unwrap_or(Vec::new()),
                         ),
                     );
                 }
