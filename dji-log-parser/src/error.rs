@@ -20,12 +20,15 @@ pub enum Error {
     #[error("Serialization error: {0}")]
     Serialization(#[from] serde_json::Error),
 
-    #[error("Network error: {0}")]
-    Network(#[from] ureq::Error),
-
     #[error("Io error: {0}")]
     Io(#[from] std::io::Error),
 
     #[error("Base64 decode error: {0}")]
     Base64Decode(#[from] base64::DecodeError),
+
+    #[error("Request request status error: {0}")]
+    NetworkRequestStatus(u16),
+
+    #[error("Network connection error")]
+    NetworkConnection,
 }

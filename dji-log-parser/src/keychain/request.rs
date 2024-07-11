@@ -35,12 +35,10 @@ impl KeychainRequest {
             .set("Api-Key", api_key)
             .timeout(Duration::from_secs(30))
             .send_json(self)
-            .map_err(|e| {
-                if let ureq::Error::Status(403, _) = e {
-                    Error::ApiKeyError
-                } else {
-                    Error::Network(e)
-                }
+            .map_err(|e| match e {
+                ureq::Error::Status(403, _) => Error::ApiKeyError,
+                ureq::Error::Status(status, _) => Error::NetworkRequestStatus(status),
+                _ => Error::NetworkConnection,
             })?;
 
         let keychain_response: KeychainResponse = response.into_json()?;
