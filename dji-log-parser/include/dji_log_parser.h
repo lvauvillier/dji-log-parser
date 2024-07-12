@@ -3,6 +3,7 @@
 
 // standard C header for boolean types
 #include <stdbool.h>
+#include <stddef.h>
 
 // Code to allow Go code to call Rust functions as if they were C functions.
 // It handles memory management and type conversions between the two languages. 
@@ -20,4 +21,11 @@ void free_string(char* s);
 
 // self explanatory, returns a char pointer to the path of the generated GeoJson file. 
 char* get_geojson_file_path(const char* input_path);
+
+// extention to code so that output is not just a file written to disk
+char* get_geojson_string(const char* input_path, const char* api_key);  
+
+// for use with io.Read in Go
+char* get_geojson_string_from_bytes(const unsigned char* bytes, size_t length, const char* api_key);
+
 #endif

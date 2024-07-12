@@ -107,3 +107,5 @@ For more information, including a more detailed overview of the log format, [vis
 ## License
 
 dji-log-parser is available under the MIT license. See the LICENSE.txt file for more info.
+
+

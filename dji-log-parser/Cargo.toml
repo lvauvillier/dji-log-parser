@@ -21,6 +21,8 @@ serde_json = { workspace = true }
 thiserror.workspace = true
 ureq = { workspace = true, features = ["json"] }
 log = "0.4"
+geojson = "0.24.0"
+once_cell = "1.8.0"
 
 [lib]
 name = "dji_log_parser"

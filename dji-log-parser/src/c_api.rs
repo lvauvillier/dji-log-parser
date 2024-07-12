@@ -1,38 +1,7 @@
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::path::Path;
-use crate::{DJILog, DecryptMethod, Frame};
-use serde_json::json;
-
-static mut LAST_ERROR: Option<String> = None;
-
-fn set_last_error(error: String) {
-    unsafe {
-        LAST_ERROR = Some(error);
-    }
-}
-
-fn frames_to_geojson(frames: &[Frame]) -> String {
-    let feature_collection = json!({
-        "type": "FeatureCollection",
-        "features": frames.iter().map(|frame| {
-            json!({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [frame.osd_longitude, frame.osd_latitude, frame.osd_altitude]
-                },
-                "properties": {
-                    "time": frame.custom_date_time,
-                    "height": frame.osd_height,
-                    "speed": (frame.osd_x_speed.powi(2) + frame.osd_y_speed.powi(2) + frame.osd_z_speed.powi(2)).sqrt(),
-                    // Add other properties as needed
-                }
-            })
-        }).collect::<Vec<_>>()
-    });
-    serde_json::to_string_pretty(&feature_collection).unwrap()
-}
+use crate::{DJILog, DecryptMethod, set_last_error};
 
 #[no_mangle]
 pub extern "C" fn parse_dji_log(input_path: *const c_char, api_key: *const c_char) -> bool {
@@ -44,26 +13,14 @@ pub extern "C" fn parse_dji_log(input_path: *const c_char, api_key: *const c_cha
             match DJILog::from_bytes(bytes) {
                 Ok(parser) => {
                     let decrypt_method = if parser.version >= 13 {
-                        match parser.keychain_request() {
-                            Ok(request) => match request.fetch(api_key) {
-                                Ok(keychains) => DecryptMethod::Keychains(keychains),
-                                Err(e) => {
-                                    set_last_error(format!("Failed to fetch keychains: {}", e));
-                                    return false;
-                                }
-                            },
-                            Err(e) => {
-                                set_last_error(format!("Failed to create keychain request: {}", e));
-                                return false;
-                            }
-                        }
+                        DecryptMethod::ApiKey(api_key.to_string())
                     } else {
                         DecryptMethod::None
                     };
 
                     match parser.frames(decrypt_method) {
                         Ok(frames) => {
-                            let geojson = frames_to_geojson(&frames);
+                            let geojson = DJILog::frames_to_geojson(&frames);
                             let output_path = Path::new(input_path).with_extension("json");
                             if let Err(e) = std::fs::write(&output_path, geojson) {
                                 set_last_error(format!("Failed to write GeoJSON: {}", e));
@@ -86,24 +43,6 @@ pub extern "C" fn parse_dji_log(input_path: *const c_char, api_key: *const c_cha
         Err(e) => {
             set_last_error(format!("Failed to read file: {}", e));
             false
-        }
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn get_last_error() -> *mut c_char {
-    unsafe {
-        LAST_ERROR
-            .take()
-            .map_or(std::ptr::null_mut(), |s| CString::new(s).unwrap().into_raw())
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn free_string(s: *mut c_char) {
-    unsafe {
-        if !s.is_null() {
-            drop(CString::from_raw(s));
         }
     }
 }

@@ -133,6 +133,12 @@ use binrw::BinRead;
 use std::cell::RefCell;
 use std::collections::{HashMap, VecDeque};
 use thiserror::Error;
+use std::ffi::{CStr, CString};
+use std::os::raw::c_char;
+use std::slice;
+use serde_json::json;
+use std::sync::Mutex;
+use once_cell::sync::Lazy;
 
 mod decoder;
 pub mod frame;
@@ -151,6 +157,13 @@ use record::Record;
 use log::{debug, error};
 
 use crate::utils::pad_with_zeros;
+
+static LAST_ERROR: Lazy<Mutex<Option<String>>> = Lazy::new(|| Mutex::new(None));
+
+pub(crate) fn set_last_error(error: String) {
+    let mut last_error = LAST_ERROR.lock().unwrap();
+    *last_error = Some(error);
+}
 
 #[derive(PartialEq, Debug, Error)]
 #[non_exhaustive]
@@ -178,6 +191,86 @@ pub enum DJILogError {
 
     #[error("Network error: {0}")]
     NetworkError(String),
+}
+
+#[no_mangle]
+pub extern "C" fn get_geojson_string(input_path: *const c_char, api_key: *const c_char) -> *mut c_char {
+    let input_path = unsafe { CStr::from_ptr(input_path).to_str().unwrap() };
+    let api_key = unsafe { CStr::from_ptr(api_key).to_str().unwrap() };
+
+    match std::fs::read(input_path) {
+        Ok(bytes) => {
+            match DJILog::from_bytes(bytes) {
+                Ok(parser) => {
+                    let decrypt_method = if parser.version >= 13 {
+                        DecryptMethod::ApiKey(api_key.to_string())
+                    } else {
+                        DecryptMethod::None
+                    };
+
+                    match parser.frames(decrypt_method) {
+                        Ok(frames) => {
+                            let geojson = DJILog::frames_to_geojson(&frames);
+                            CString::new(geojson).unwrap().into_raw()
+                        },
+                        Err(e) => {
+                            set_last_error(format!("Failed to parse frames: {}", e));
+                            std::ptr::null_mut()
+                        }
+                    }
+                }
+                Err(e) => {
+                    set_last_error(format!("Failed to parse DJI log: {}", e));
+                    std::ptr::null_mut()
+                }
+            }
+        }
+        Err(e) => {
+            set_last_error(format!("Failed to read file: {}", e));
+            std::ptr::null_mut()
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn get_geojson_string_from_bytes(bytes: *const u8, length: usize, api_key: *const c_char) -> *mut c_char {
+    let input_bytes = unsafe { slice::from_raw_parts(bytes, length) };
+    let api_key = unsafe { CStr::from_ptr(api_key).to_str().unwrap() };
+
+    match process_dji_log(input_bytes, api_key) {
+        Ok(geojson) => CString::new(geojson).unwrap().into_raw(),
+        Err(e) => {
+            set_last_error(format!("Failed to process DJI log: {}", e));
+            std::ptr::null_mut()
+        }
+    }
+}
+
+fn process_dji_log(bytes: &[u8], api_key: &str) -> Result<String, DJILogError> {
+    let dji_log = DJILog::from_bytes(bytes.to_vec())?;
+    
+    let decrypt_method = if dji_log.version >= 13 {
+        DecryptMethod::ApiKey(api_key.to_string())
+    } else {
+        DecryptMethod::None
+    };
+
+    let frames = dji_log.frames(decrypt_method)?;
+    Ok(DJILog::frames_to_geojson(&frames))
+}
+
+#[no_mangle]
+pub extern "C" fn get_last_error() -> *mut c_char {
+    LAST_ERROR.lock().unwrap().take().map_or(std::ptr::null_mut(), |s| CString::new(s).unwrap().into_raw())
+}
+
+#[no_mangle]
+pub extern "C" fn free_string(s: *mut c_char) {
+    unsafe {
+        if !s.is_null() {
+            drop(CString::from_raw(s));
+        }
+    }
 }
 
 #[derive(PartialEq, Clone)]
@@ -366,6 +459,27 @@ impl DJILog {
             println!("First frame: {:?}", frames[0]);
         }
         Ok(frames)
+    }
+
+    pub fn frames_to_geojson(frames: &[Frame]) -> String {
+        let feature_collection = json!({
+            "type": "FeatureCollection",
+            "features": frames.iter().map(|frame| {
+                json!({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [frame.osd_longitude, frame.osd_latitude, frame.osd_altitude]
+                    },
+                    "properties": {
+                        "time": frame.custom_date_time,
+                        "height": frame.osd_height,
+                        "speed": (frame.osd_x_speed.powi(2) + frame.osd_y_speed.powi(2) + frame.osd_z_speed.powi(2)).sqrt(),
+                    }
+                })
+            }).collect::<Vec<_>>()
+        });
+        serde_json::to_string(&feature_collection).unwrap()
     }
 }
 

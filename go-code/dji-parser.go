@@ -81,35 +81,22 @@ func main() {
 	defer C.free(unsafe.Pointer(cInputFile)) // C.free with unsafe.Pointer used to free the memory allocated for these C strings.
 	defer C.free(unsafe.Pointer(cApiKey))    // C.free with unsafe.Pointer used to free the memory allocated for these C strings.
 
-	// Call the Rust function through the C Interface
-	result := C.parse_dji_log(cInputFile, cApiKey)
-
-	fmt.Printf("C.parse_dji_log returned: %v\n", bool(result))
-	if !bool(result) {
-		errPtr := C.get_last_error() // retrieve the error string pointer
-		errStr := C.GoString(errPtr) // convert the C string to a Go string
-		C.free_string(errPtr)        // free the memory allocation for the C string
-		fmt.Printf("Parsing failed: %s\n", errStr)
+	geojsonPtr := C.get_geojson_string(cInputFile, cApiKey)
+	if geojsonPtr == nil {
+		errPtr := C.get_last_error()
+		errStr := C.GoString(errPtr)
+		C.free_string(errPtr)
+		fmt.Printf("Failed to get GeoJSON: %s\n", errStr)
 		os.Exit(1)
 	}
+	defer C.free_string(geojsonPtr)
 
-	fmt.Println("Parsing successful")
-
-	// Get the GeoJSON file path
-	geojsonFilePathPtr := C.get_geojson_file_path(cInputFile) // retrieve the geojson file path C string pointer
-	geojsonFilePath := C.GoString(geojsonFilePathPtr)         // convert the C string to Go string
-	C.free_string(geojsonFilePathPtr)                         // free the memory allocation for the C string
-
-	// Read GeoJSON from file
-	geojsonBytes, err := os.ReadFile(geojsonFilePath)
-	if err != nil {
-		fmt.Println("Error reading GeoJSON file:", err)
-		os.Exit(1)
-	}
+	// Convert C string to Go string
+	geojsonStr := C.GoString(geojsonPtr)
 
 	// Parse GeoJSON
 	var geojson GeoJSON
-	err = json.Unmarshal(geojsonBytes, &geojson)
+	err = json.Unmarshal([]byte(geojsonStr), &geojson)
 	if err != nil {
 		fmt.Println("Error parsing GeoJSON:", err)
 		os.Exit(1)
