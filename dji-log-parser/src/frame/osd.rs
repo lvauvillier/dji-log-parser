@@ -1,4 +1,6 @@
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::record::osd::{
     AppCommand, BatteryType, DroneType, FlightAction, FlightMode, GoHomeStatus, ImuInitFailReason,
@@ -7,7 +9,8 @@ use crate::record::osd::{
 
 #[derive(Serialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct OSD {
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+pub struct FrameOSD {
     /// Flight time in seconds
     pub fly_time: f32,
     /// Latitude in degrees
@@ -41,28 +44,35 @@ pub struct OSD {
     /// Yaw angle in degrees
     pub yaw: f32,
     /// Current flight mode
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub flyc_state: Option<FlightMode>,
     /// Current app command
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub flyc_command: Option<AppCommand>,
     /// Current flight action
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub flight_action: Option<FlightAction>,
     /// Indicates if GPS is being used
     pub is_gpd_used: bool,
     /// Reason for not using GPS
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub non_gps_cause: Option<NonGPSCause>,
     /// Number of GPS satellites detected
     pub gps_num: u8,
     /// GPS signal level
     pub gps_level: u8,
     /// Type of drone
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub drone_type: Option<DroneType>,
     /// Indicates if obstacle avoidance is active
     pub is_swave_work: bool,
     /// Indicates if there's an error with obstacle avoidance
     pub wave_error: bool,
     /// Current status of the return-to-home function
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub go_home_status: Option<GoHomeStatus>,
     /// Type of battery
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub battery_type: Option<BatteryType>,
     /// Indicates if the drone is on the ground
     pub is_on_ground: bool,
@@ -71,10 +81,12 @@ pub struct OSD {
     /// Indicates if the motor is blocked
     pub is_motor_blocked: bool,
     /// Reason for motor start failure
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub motor_start_failed_cause: Option<MotorStartFailedCause>,
     /// Indicates if the IMU is preheated
     pub is_imu_preheated: bool,
     /// Reason for IMU initialization failure
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub imu_init_fail_reason: Option<ImuInitFailReason>,
     /// Indicates if the accelerometer is over range
     pub is_acceletor_over_range: bool,

@@ -1,5 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::layout::details::ProductType;
 use crate::utils::sub_byte_field;
@@ -8,6 +10,7 @@ use crate::utils::sub_byte_field;
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import { version: u8, product_type: ProductType = ProductType::None })]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct RC {
     /// right stick - horizontal
     pub aileron: u16,
@@ -65,6 +68,7 @@ pub struct RC {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FlightModeSwitch {
     /// Position One. For all products except Mavic Pro, this is the left most position
     /// of the flight mode switch on a remote controller from the perspective of the

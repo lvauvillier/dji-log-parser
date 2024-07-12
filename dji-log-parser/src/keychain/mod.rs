@@ -2,6 +2,8 @@ use base64::engine::general_purpose::STANDARD as Base64Standard;
 use base64::Engine as _;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 mod api;
 mod feature_point;
@@ -11,6 +13,7 @@ pub use feature_point::FeaturePoint;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct EncodedKeychainFeaturePoint {
     pub feature_point: FeaturePoint,
     pub aes_ciphertext: String,
@@ -18,6 +21,7 @@ pub struct EncodedKeychainFeaturePoint {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct KeychainFeaturePoint {
     pub feature_point: FeaturePoint,
     pub aes_key: String,

@@ -1,10 +1,13 @@
 use binrw::binread;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use serde::{Deserialize, Serialize, Serializer};
 
 #[binread]
 #[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
 #[br(repr(u16))]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FeaturePoint {
     BaseFeature = 1,
     VisionFeature,

@@ -1,11 +1,14 @@
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
-use crate::layout::details::Details as LayoutDetails;
+use crate::layout::details::Details;
 use crate::layout::details::Platform;
 
 #[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Details {
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+pub struct FrameDetails {
     /// Total flight time in seconds
     pub total_time: f32,
     /// Total distance flown in meters
@@ -34,9 +37,9 @@ pub struct Details {
     pub app_version: String,
 }
 
-impl From<LayoutDetails> for Details {
-    fn from(value: LayoutDetails) -> Self {
-        Details {
+impl From<Details> for FrameDetails {
+    fn from(value: Details) -> Self {
+        FrameDetails {
             total_time: value.total_time as f32,
             total_distance: value.total_distance,
             max_height: value.max_height,

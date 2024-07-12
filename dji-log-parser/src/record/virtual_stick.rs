@@ -1,5 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
 
@@ -7,6 +9,7 @@ use crate::utils::sub_byte_field;
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct VirtualStick {
     #[br(temp)]
     _bitpack1: u8,
@@ -30,6 +33,7 @@ pub struct VirtualStick {
 }
 
 #[derive(Serialize, Debug)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum VirtualStickVerticalControlMode {
     /// Sets the virtual stick vertical control values to be a vertical velocity.
     /// Positive and negative vertical velocity is for the aircraft ascending and
@@ -54,6 +58,7 @@ impl From<u8> for VirtualStickVerticalControlMode {
 }
 
 #[derive(Serialize, Debug)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum VirtualStickRollPitchControlMode {
     /// Sets the roll and pitch values to be an angle relative to a level aircraft. In
     /// the body coordinate system, positive and negative pitch angle is for the
@@ -92,6 +97,7 @@ impl From<u8> for VirtualStickRollPitchControlMode {
 }
 
 #[derive(Serialize, Debug)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum VirtualStickYawControlMode {
     /// Sets the yaw values to be an angle relative to the north. Positive and negative
     /// yaw angle is for the aircraft rotating clockwise and counterclockwise,
@@ -118,6 +124,7 @@ impl From<u8> for VirtualStickYawControlMode {
 }
 
 #[derive(Serialize, Debug)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum VirtualStickFlightCoordinateSystem {
     /// Ground coordinate system.
     Ground,

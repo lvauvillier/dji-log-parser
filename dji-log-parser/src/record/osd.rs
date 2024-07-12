@@ -1,6 +1,8 @@
 use binrw::binread;
 use serde::Serialize;
 use std::f64::consts::PI;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
 
@@ -8,6 +10,7 @@ use crate::utils::sub_byte_field;
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br( import { version: u8 }, little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct OSD {
     /// degrees
     #[br(map = |x: f64| (x * 180.0) / PI)]
@@ -134,6 +137,7 @@ pub struct OSD {
 }
 
 #[derive(Serialize, Debug, Default, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum DroneType {
     #[default]
     None,
@@ -223,6 +227,7 @@ impl From<u8> for DroneType {
 }
 
 #[derive(Serialize, Debug, Copy, Clone, PartialEq, Eq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FlightMode {
     /// Manual mode. Shown as Manual in DJI app.
     Manual,
@@ -341,6 +346,7 @@ impl From<u8> for FlightMode {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum AppCommand {
     AutoFly,
     AutoLanding,
@@ -413,6 +419,7 @@ impl From<u8> for AppCommand {
 }
 
 #[derive(PartialEq, Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum GroundOrSky {
     Ground,
     Sky,
@@ -431,6 +438,7 @@ impl From<u8> for GroundOrSky {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum GoHomeStatus {
     Standby,
     Preascending,
@@ -459,6 +467,7 @@ impl From<u8> for GoHomeStatus {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum BatteryType {
     NonSmart,
     Smart,
@@ -477,7 +486,7 @@ impl From<u8> for BatteryType {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
-
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FlightAction {
     None,
     WarningPowerGoHome,
@@ -562,6 +571,7 @@ impl From<u8> for FlightAction {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum MotorStartFailedCause {
     None,
     CompassError,
@@ -761,6 +771,7 @@ impl From<u8> for MotorStartFailedCause {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum NonGPSCause {
     Already,
     Forbid,
@@ -791,6 +802,7 @@ impl From<u8> for NonGPSCause {
 }
 
 #[derive(Serialize, Debug, Default, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum ImuInitFailReason {
     #[default]
     MonitorError,

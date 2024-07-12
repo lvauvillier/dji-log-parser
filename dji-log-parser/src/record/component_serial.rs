@@ -1,9 +1,12 @@
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct ComponentSerial {
     #[br(map = |x: u16| ComponentType::from(x as u8))]
     pub component_type: ComponentType,
@@ -14,6 +17,7 @@ pub struct ComponentSerial {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum ComponentType {
     Camera,
     Aircraft,

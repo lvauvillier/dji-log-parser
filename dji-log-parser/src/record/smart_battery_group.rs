@@ -1,10 +1,13 @@
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(tag = "type")]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum SmartBatteryGroup {
     #[br(magic = 1u8)]
     SmartBatteryStatic(SmartBatteryStatic),
@@ -17,6 +20,7 @@ pub enum SmartBatteryGroup {
 #[binread]
 #[derive(Serialize, Debug)]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatteryStatic {
     pub index: u8,
     pub designed_capacity: u32,
@@ -37,6 +41,7 @@ pub struct SmartBatteryStatic {
 #[binread]
 #[derive(Serialize, Debug)]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatteryDynamic {
     pub index: u8,
     /// volts
@@ -60,6 +65,7 @@ pub struct SmartBatteryDynamic {
 #[binread]
 #[derive(Serialize, Debug)]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatterySingleVoltage {
     pub index: u8,
     pub cell_count: u8,

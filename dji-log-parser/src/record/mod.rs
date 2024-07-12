@@ -1,10 +1,10 @@
-use std::cell::RefCell;
-
 use binrw::binread;
 use serde::Serialize;
+use std::cell::RefCell;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::decoder::record_decoder;
-
 use crate::layout::details::ProductType;
 use crate::utils;
 use crate::Keychain;
@@ -69,6 +69,7 @@ const END_BYTE: u8 = 0xFF;
 #[derive(Serialize, Debug)]
 #[serde(tag = "type", content = "content")]
 #[br(little, import { version: u8, keychain: &RefCell<Keychain>, product_type: ProductType = ProductType::None })]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum Record {
     #[br(magic = 1u8)]
     OSD(

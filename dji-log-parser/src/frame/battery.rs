@@ -1,8 +1,11 @@
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 #[derive(Serialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Battery {
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+pub struct FrameBattery {
     /// Battery charge level in percentage
     pub charge_level: u8,
     /// Battery voltage

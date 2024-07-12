@@ -1,11 +1,14 @@
 use crate::utils::sub_byte_field;
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(import { version: u8 }, little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Gimbal {
     /// degrees
     #[br(map = |x: i16| (x as f32 / 10.0))]
@@ -58,6 +61,7 @@ pub struct Gimbal {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum GimbalMode {
     /// The gimbal can move independently of the aircraft's yaw. In this mode, even if
     /// the aircraft yaw changes, the camera will continue pointing in the same world

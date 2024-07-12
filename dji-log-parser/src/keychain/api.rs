@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 #[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use super::{EncodedKeychainFeaturePoint, KeychainFeaturePoint};
 
@@ -9,6 +11,7 @@ use crate::{Error, Result};
 
 /// Request structure for keychain API.
 #[derive(Debug, Default, Serialize)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct KeychainsRequest {
     pub version: u16,
     pub department: u8,

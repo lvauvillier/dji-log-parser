@@ -1,5 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
 
@@ -7,6 +9,7 @@ use crate::utils::sub_byte_field;
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Camera {
     #[br(temp)]
     _bitpack1: u8,
@@ -73,6 +76,7 @@ pub struct Camera {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum SDCardState {
     Normal,
     NoCard,
@@ -114,6 +118,7 @@ impl From<u8> for SDCardState {
 }
 
 #[derive(Serialize, Debug)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum CameraWorkMode {
     Capture,
     Recording,

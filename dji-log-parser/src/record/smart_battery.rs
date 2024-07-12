@@ -1,5 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
 
@@ -7,6 +9,7 @@ use crate::utils::sub_byte_field;
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBattery {
     pub useful_time: u16,
     pub go_home_time: u16,
@@ -16,8 +19,8 @@ pub struct SmartBattery {
     pub safe_fly_radius: f32,
     pub volume_consume: f32,
     pub status: u32,
-    #[br(map = |x: u8| GoHomeStatus::from(x))]
-    pub go_home_status: GoHomeStatus,
+    #[br(map = |x: u8| BatteryGoHomeStatus::from(x))]
+    pub go_home_status: BatteryGoHomeStatus,
     pub go_home_countdown: u8,
     /// volts
     #[br(map = |x: u16| x as f32 / 1000.0)]
@@ -42,7 +45,8 @@ pub struct SmartBattery {
 }
 
 #[derive(Serialize, Debug)]
-pub enum GoHomeStatus {
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+pub enum BatteryGoHomeStatus {
     NonGoHome,
     GoHome,
     GoHomeAlready,
@@ -50,13 +54,13 @@ pub enum GoHomeStatus {
     Unknown(u8),
 }
 
-impl From<u8> for GoHomeStatus {
+impl From<u8> for BatteryGoHomeStatus {
     fn from(value: u8) -> Self {
         match value {
-            0 => GoHomeStatus::NonGoHome,
-            1 => GoHomeStatus::GoHome,
-            2 => GoHomeStatus::GoHomeAlready,
-            _ => GoHomeStatus::Unknown(value),
+            0 => BatteryGoHomeStatus::NonGoHome,
+            1 => BatteryGoHomeStatus::GoHome,
+            2 => BatteryGoHomeStatus::GoHomeAlready,
+            _ => BatteryGoHomeStatus::Unknown(value),
         }
     }
 }

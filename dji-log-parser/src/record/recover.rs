@@ -1,6 +1,8 @@
 use binrw::binread;
 use chrono::{DateTime, Utc};
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::layout::details::{Platform, ProductType};
 
@@ -8,6 +10,7 @@ use crate::layout::details::{Platform, ProductType};
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import {version: u8})]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Recover {
     #[br(map = |x: u8| ProductType::from(x))]
     pub product_type: ProductType,
@@ -20,6 +23,7 @@ pub struct Recover {
     #[br(count = 32, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub aircraft_name: String,
     #[br(map = |x: i64| DateTime::from_timestamp(x, 0).unwrap_or_default())]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "string"))]
     pub timestamp: DateTime<Utc>,
     #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub camera_sn: String,

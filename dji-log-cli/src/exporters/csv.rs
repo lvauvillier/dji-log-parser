@@ -1,6 +1,6 @@
 use csv::WriterBuilder;
-use dji_log_parser::frame::Details;
 use dji_log_parser::frame::Frame;
+use dji_log_parser::frame::FrameDetails;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use serde::Serialize;
@@ -10,7 +10,7 @@ use crate::{Cli, Exporter};
 #[derive(Serialize)]
 struct FrameWithDetails<'a> {
     frame: &'a Frame,
-    details: &'a Details,
+    details: &'a FrameDetails,
 }
 
 #[derive(Default)]
@@ -24,7 +24,7 @@ impl Exporter for CSVExporter {
                 .from_path(csv_path)
                 .unwrap();
 
-            let details: Details = parser.details.clone().into();
+            let details: FrameDetails = parser.details.clone().into();
 
             frames.iter().enumerate().for_each(|(index, frame)| {
                 // write headers

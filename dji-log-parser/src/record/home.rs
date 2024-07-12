@@ -1,13 +1,16 @@
-use std::f64::consts::PI;
-
-use crate::utils::sub_byte_field;
 use binrw::binread;
 use serde::Serialize;
+use std::f64::consts::PI;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
+
+use crate::utils::sub_byte_field;
 
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import { version: u8 })]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Home {
     /// degrees
     #[br(map = |x: f64| (x * 180.0) / PI)]
@@ -64,6 +67,7 @@ pub struct Home {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum IOCMode {
     CourseLock,
     HomeLock,
@@ -84,6 +88,7 @@ impl From<u8> for IOCMode {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum GoHomeMode {
     Normal,
     FixedHeight,
@@ -99,6 +104,7 @@ impl From<bool> for GoHomeMode {
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum CompassCalibrationState {
     NotCalibrating,
     Horizontal,

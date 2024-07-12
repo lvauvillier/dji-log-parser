@@ -2,11 +2,14 @@ use binrw::binread;
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 use std::io::SeekFrom;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 #[binread]
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import(version: u8))]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Details {
     #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub sub_street: String,
@@ -21,6 +24,7 @@ pub struct Details {
     pub needs_upload: u8,
     pub record_line_count: i32,
     pub detail_info_checksum: i32,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "string"))]
     #[br(map = |x: i64| DateTime::from_timestamp(x / 1000, (x % 1000 * 1000000) as u32).unwrap_or_default())]
     pub start_time: DateTime<Utc>,
     /// degrees
@@ -87,6 +91,7 @@ pub struct Details {
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq, Default, Copy)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum ProductType {
     #[default]
     None,
@@ -326,6 +331,7 @@ impl ProductType {
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum Platform {
     IOS,
     Android,

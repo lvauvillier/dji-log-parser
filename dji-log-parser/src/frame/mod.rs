@@ -1,6 +1,8 @@
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
-use crate::layout::details::Details as LayoutDetails;
+use crate::layout::details::Details;
 use crate::record::osd::{AppCommand, GroundOrSky};
 use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
@@ -17,16 +19,16 @@ mod osd;
 mod rc;
 mod recover;
 
-pub use app::App;
-pub use battery::Battery;
-pub use camera::Camera;
-pub use custom::Custom;
-pub use details::Details;
-pub use gimbal::Gimbal;
-pub use home::Home;
-pub use osd::OSD;
-pub use rc::RC;
-pub use recover::Recover;
+pub use app::FrameApp;
+pub use battery::FrameBattery;
+pub use camera::FrameCamera;
+pub use custom::FrameCustom;
+pub use details::FrameDetails;
+pub use gimbal::FrameGimbal;
+pub use home::FrameHome;
+pub use osd::FrameOSD;
+pub use rc::FrameRC;
+pub use recover::FrameRecover;
 
 /// Represents a normalized frame of data from a DJI log.
 ///
@@ -36,16 +38,17 @@ pub use recover::Recover;
 ///
 #[derive(Serialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Frame {
-    pub custom: Custom,
-    pub osd: OSD,
-    pub gimbal: Gimbal,
-    pub camera: Camera,
-    pub rc: RC,
-    pub battery: Battery,
-    pub home: Home,
-    pub recover: Recover,
-    pub app: App,
+    pub custom: FrameCustom,
+    pub osd: FrameOSD,
+    pub gimbal: FrameGimbal,
+    pub camera: FrameCamera,
+    pub rc: FrameRC,
+    pub battery: FrameBattery,
+    pub home: FrameHome,
+    pub recover: FrameRecover,
+    pub app: FrameApp,
 }
 
 impl Frame {
@@ -144,14 +147,14 @@ impl Frame {
 ///   Each `Frame` corresponds to one or more `Record` objects, depending on the
 ///   specific normalization logic.
 ///
-pub fn records_to_frames(records: Vec<Record>, details: LayoutDetails) -> Vec<Frame> {
+pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
     let mut frames = Vec::new();
     let mut frame = Frame {
-        battery: Battery {
+        battery: FrameBattery {
             cell_num: details.product_type.battery_cell_num(),
             cell_voltages: vec![0.0; details.product_type.battery_cell_num() as usize],
             is_cell_voltage_estimated: true,
-            ..Battery::default()
+            ..FrameBattery::default()
         },
         ..Frame::default()
     };

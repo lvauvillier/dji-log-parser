@@ -1,11 +1,15 @@
 use serde::Serialize;
+#[cfg(target_arch = "wasm32")]
+use tsify_next::Tsify;
 
 use crate::record::gimbal::GimbalMode;
 
 #[derive(Serialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Gimbal {
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+pub struct FrameGimbal {
     /// Current gimbal mode
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub mode: Option<GimbalMode>,
     /// Gimbal pitch angle in degrees
     pub pitch: f32,
