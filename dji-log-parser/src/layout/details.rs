@@ -330,7 +330,7 @@ pub enum Platform {
     IOS,
     Android,
     DJIFly,
-    Window,
+    Windows,
     Mac,
     Linux,
     #[serde(untagged)]
@@ -343,7 +343,7 @@ impl From<u8> for Platform {
             1 => Platform::IOS,
             2 => Platform::Android,
             6 => Platform::DJIFly,
-            10 => Platform::Window,
+            10 => Platform::Windows,
             11 => Platform::Mac,
             12 => Platform::Linux,
             _ => Platform::Unknown(num),
