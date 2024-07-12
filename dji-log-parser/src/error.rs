@@ -8,22 +8,25 @@ pub enum Error {
     #[error("Invalid Api Key")]
     ApiKeyError,
 
-    #[error("Api Key or keychain is required")]
-    InvalidDecryptMethod,
+    #[error("DJI Api error: {0}")]
+    ApiError(String),
+
+    #[error("Keychain is required")]
+    KeychainRequired,
 
     #[error("Missing Auxilliary data: {0}")]
     MissingAuxilliaryData(String),
 
-    #[error("Parse error: {0}")]
+    #[error("Parse error")]
     Parse(#[from] binrw::Error),
 
-    #[error("Serialization error: {0}")]
+    #[error("Serialization error")]
     Serialization(#[from] serde_json::Error),
 
-    #[error("Io error: {0}")]
+    #[error("Io error")]
     Io(#[from] std::io::Error),
 
-    #[error("Base64 decode error: {0}")]
+    #[error("Base64 decode error")]
     Base64Decode(#[from] base64::DecodeError),
 
     #[error("Request request status error: {0}")]

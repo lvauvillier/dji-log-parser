@@ -31,12 +31,13 @@
 //!
 //! For versions prior to 13:
 //! ```rust
-//! let records = parser.records(DecryptMethod::None);
+//! let records = parser.records(None);
 //! ```
 //!
 //! For version 13 and later:
 //! ```rust
-//! let records = parser.records(DecryptMethod::ApiKey("__DJI_API_KEY__"));
+//! let keychains = parser.fetch_keychains("__DJI_API_KEY__");
+//! let records = parser.records(Some(keychains));
 //! ```
 //!
 //! ### Accessing Frames
@@ -48,26 +49,13 @@
 //!
 //! For versions prior to 13:
 //! ```rust
-//! let frames = parser.frames(DecryptMethod::None);
+//! let frames = parser.frames(None);
 //! ```
 //!
 //! For version 13 and later:
 //! ```rust
-//! let frames = parser.frames(DecryptMethod::ApiKey("__DJI_API_KEY__"));
-//! ```
-//!
-//!
-//! ### Advanced: Manual Keychain Retrieval
-//! For scenarios like caching, multiple calls, offline use, or custom server communication,
-//! the library exposes the internal keychain retrieval process:
-//! ```rust
-//! // We want to get both records and frames.
-//! // We manually retrieve keychains once to avoid running two network requests.
-//! let keychain_request = parser.keychain_request().unwrap();
-//! let keychains = keychain_request.fetch("__DJI_API_KEY__").unwrap();
-//!
-//! let records = parser.records(DecryptMethod::Keychains(keychains.clone()));
-//! let frames = parser.frames(DecryptMethod::Keychains(keychains));
+//! let keychains = parser.fetch_keychains("__DJI_API_KEY__");
+//! let frames = parser.frames(keychains);
 //! ```
 //!
 //! Note: Replace `__DJI_API_KEY__` with your actual apiKey.
@@ -131,7 +119,7 @@ use base64::Engine as _;
 use binrw::io::Cursor;
 use binrw::BinRead;
 use std::cell::RefCell;
-use std::collections::{HashMap, VecDeque};
+use std::collections::VecDeque;
 
 mod decoder;
 mod error;
@@ -143,20 +131,13 @@ mod utils;
 
 pub use error::{Error, Result};
 use frame::{records_to_frames, Frame};
-use keychain::{Keychain, KeychainCipherText, KeychainRequest};
+use keychain::{EncodedKeychainEntry, Keychain, KeychainEntry, KeychainsRequest};
 use layout::auxiliary::Auxiliary;
 use layout::details::Details;
 use layout::prefix::Prefix;
 use record::Record;
 
 use crate::utils::pad_with_zeros;
-
-#[derive(PartialEq, Clone)]
-pub enum DecryptMethod {
-    ApiKey(String),
-    Keychains(Vec<Keychain>),
-    None,
-}
 
 #[derive(Debug)]
 pub struct DJILog {
@@ -239,8 +220,8 @@ impl DJILog {
     /// Returns a `Result<KeychainRequest>`. On success, it provides a `KeychainRequest`
     /// instance, which contains the necessary information to fetch keychains from the DJI API.
     ///
-    pub fn keychain_request(&self) -> Result<KeychainRequest> {
-        let mut keychain_request = KeychainRequest::default();
+    pub fn keychains_request(&self) -> Result<KeychainsRequest> {
+        let mut keychain_request = KeychainsRequest::default();
 
         // No keychain
         if self.version < 13 {
@@ -264,15 +245,15 @@ impl DJILog {
         // Extract keychains from KeyStorage Records
         cursor.set_position(self.prefix.records_offset());
 
-        let mut keychain: Vec<KeychainCipherText> = Vec::new();
+        let mut keychain: Vec<EncodedKeychainEntry> = Vec::new();
 
         while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
-            let empty_keychain = RefCell::new(HashMap::new());
+            let empty_keychain = &RefCell::new(Keychain::empty());
             let record = match Record::read_args(
                 &mut cursor,
                 binrw::args! {
                     version: self.version,
-                    keychain: &empty_keychain
+                    keychain: empty_keychain
                 },
             ) {
                 Ok(record) => record,
@@ -281,8 +262,8 @@ impl DJILog {
 
             match record {
                 Record::KeyStorage(data) => {
-                    // add KeychainCipherText to current keychain
-                    keychain.push(KeychainCipherText {
+                    // add EncodedKeychainEntry to current keychain
+                    keychain.push(EncodedKeychainEntry {
                         feature_point: data.feature_point,
                         aes_ciphertext: Base64Standard.encode(&data.data),
                     });
@@ -301,38 +282,62 @@ impl DJILog {
         Ok(keychain_request)
     }
 
-    /// Retrieves the parsed raw records from the DJI log.
+    /// Fetches keychains using the provided API key.
     ///
-    /// This function decodes the raw records from the log file based on the specified decryption method.
-    /// For log versions less than 13, `DecryptMethod::None` should be used as there is no encryption.
-    /// For versions 13 and above, records are encrypted and require a decryption method:
-    /// - `DecryptMethod::Keychains` if you want to manually provide the keychains,
-    /// - `DecryptMethod::ApiKey` if you have an API key to decrypt the records.
+    /// This function first creates a `KeychainRequest` using the `keychain_request()` method,
+    /// then uses that request to fetch the actual keychains from the DJI API.
+    /// Keychains are required to decode records for logs with a version greater than or equal to 13.
     ///
     /// # Arguments
     ///
-    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based on the log version and available decryption keys.
+    /// * `api_key` - A string slice that holds the API key for authentication with the DJI API.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result<Vec<Vec<KeychainEntry>>>`. On success, it provides a vector of vectors,
+    /// where each inner vector represents a keychain, and each `KeychainEntry` within that vector
+    /// represents a decoded entry from the keychain.
+    pub fn fetch_keychains(&self, api_key: &str) -> Result<Vec<Vec<KeychainEntry>>> {
+        if self.version >= 13 {
+            self.keychains_request()?.fetch(api_key)
+        } else {
+            Ok(Vec::new())
+        }
+    }
+
+    /// Retrieves the parsed raw records from the DJI log.
+    ///
+    /// This function decodes the raw records from the log file
+    ///
+    /// # Arguments
+    ///
+    /// * `keychains` - An optional vector of vectors containing `KeychainEntry` instances. This parameter
+    ///   is used for decryption when working with encrypted logs (versions >= 13). If `None` is provided,
+    ///   the function will attempt to process the log without decryption.
+    ///
     ///
     /// # Returns
     ///
     /// Returns a `Result<Vec<Record>>`. On success, it provides a vector of `Record`
     /// instances representing the parsed log records.
     ///
-    pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>> {
-        if self.version >= 13 && decrypt_method == DecryptMethod::None {
-            return Err(Error::InvalidDecryptMethod);
+    pub fn records(&self, keychains: Option<Vec<Vec<KeychainEntry>>>) -> Result<Vec<Record>> {
+        if self.version >= 13 && keychains.is_none() {
+            return Err(Error::KeychainRequired);
         }
 
-        let mut keychains = VecDeque::from(match decrypt_method {
-            DecryptMethod::ApiKey(api_key) => self.keychain_request()?.fetch(&api_key)?,
-            DecryptMethod::Keychains(keychains) => keychains,
-            DecryptMethod::None => Vec::new(),
+        let mut keychains = VecDeque::from(match keychains {
+            Some(keychains) => keychains
+                .iter()
+                .map(|keychain| Keychain::from_entries(keychain))
+                .collect(),
+            None => Vec::new(),
         });
 
         let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
 
-        let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+        let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(Keychain::empty()));
 
         let mut records = Vec::new();
 
@@ -350,7 +355,7 @@ impl DJILog {
             };
 
             if let Record::KeyStorageRecover(_) = record {
-                keychain = RefCell::new(keychains.pop_front().unwrap_or(HashMap::new()));
+                keychain = RefCell::new(keychains.pop_front().unwrap_or(Keychain::empty()));
             }
 
             records.push(record);
@@ -371,12 +376,10 @@ impl DJILog {
     ///
     /// # Arguments
     ///
-    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based
-    ///   on the log version and available decryption keys:
-    ///   - For log versions < 13, use `DecryptMethod::None` (no encryption).
-    ///   - For log versions >= 13, use either:
-    ///     - `DecryptMethod::Keychains` if manually providing keychains, or
-    ///     - `DecryptMethod::ApiKey` if using an API key for decryption.
+    /// * `keychains` - An optional vector of vectors containing `KeychainEntry` instances. This parameter
+    ///   is used for decryption when working with encrypted logs (versions >= 13). If `None` is provided,
+    ///   the function will attempt to process the log without decryption.
+    ///
     ///
     /// # Returns
     ///
@@ -389,8 +392,8 @@ impl DJILog {
     /// over using raw records directly, as frames provide a consistent format across different log
     /// versions, simplifying data analysis and interpretation.
     ///
-    pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>> {
-        let records = self.records(decrypt_method)?;
+    pub fn frames(&self, keychains: Option<Vec<Vec<KeychainEntry>>>) -> Result<Vec<Frame>> {
+        let records = self.records(keychains)?;
         Ok(records_to_frames(records, self.details.clone()))
     }
 }

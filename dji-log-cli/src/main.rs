@@ -1,7 +1,7 @@
 use clap::Parser;
 use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
-use dji_log_parser::{DJILog, DecryptMethod};
+use dji_log_parser::DJILog;
 use exporters::{CSVExporter, GeoJsonExporter, ImageExporter, JsonExporter, KmlExporter};
 use std::fs;
 
@@ -58,29 +58,25 @@ fn main() {
     let bytes = fs::read(&args.filepath).expect("Unable to read file");
     let parser = DJILog::from_bytes(bytes).expect("Unable to parse file");
 
-    // Configure a decrypt method
-    let decrypt_method = if parser.version >= 13 {
-        if let Some(api_key) = &args.api_key {
-            let keychains = parser
-                .keychain_request()
-                .expect("Unable to create keychain request")
-                .fetch(api_key)
-                .expect("Unable parse keychain result");
-            DecryptMethod::Keychains(keychains)
-        } else {
-            panic!("Api Key required");
+    let keychains = if parser.version >= 13 {
+        match &args.api_key {
+            Some(api_key) => parser
+                .fetch_keychains(api_key)
+                .map_err(|e| format!("Unable to fetch keychain: {}", e))
+                .ok(),
+            None => {
+                panic!("API Key is required for version 13 and above");
+            }
         }
     } else {
-        DecryptMethod::None
+        None
     };
 
     let records = parser
-        .records(decrypt_method.clone())
+        .records(keychains.clone())
         .expect("Unable to parse records");
 
-    let frames = parser
-        .frames(decrypt_method)
-        .expect("Unable to parse frames");
+    let frames = parser.frames(keychains).expect("Unable to parse frames");
 
     let exporters: Vec<Box<dyn Exporter>> = vec![
         Box::new(JsonExporter),
