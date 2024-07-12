@@ -134,7 +134,7 @@ mod utils;
 
 pub use error::{Error, Result};
 use frame::{records_to_frames, Frame};
-use keychain::{EncodedKeychainEntry, Keychain, KeychainEntry, KeychainsRequest};
+use keychain::{EncodedKeychainFeaturePoint, Keychain, KeychainFeaturePoint, KeychainsRequest};
 use layout::auxiliary::Auxiliary;
 use layout::details::Details;
 use layout::prefix::Prefix;
@@ -248,7 +248,7 @@ impl DJILog {
         // Extract keychains from KeyStorage Records
         cursor.set_position(self.prefix.records_offset());
 
-        let mut keychain: Vec<EncodedKeychainEntry> = Vec::new();
+        let mut keychain: Vec<EncodedKeychainFeaturePoint> = Vec::new();
 
         while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             let empty_keychain = &RefCell::new(Keychain::empty());
@@ -265,8 +265,8 @@ impl DJILog {
 
             match record {
                 Record::KeyStorage(data) => {
-                    // add EncodedKeychainEntry to current keychain
-                    keychain.push(EncodedKeychainEntry {
+                    // add EncodedKeychainFeaturePoint to current keychain
+                    keychain.push(EncodedKeychainFeaturePoint {
                         feature_point: data.feature_point,
                         aes_ciphertext: Base64Standard.encode(&data.data),
                     });
@@ -297,10 +297,10 @@ impl DJILog {
     ///
     /// # Returns
     ///
-    /// Returns a `Result<Vec<Vec<KeychainEntry>>>`. On success, it provides a vector of vectors,
+    /// Returns a `Result<Vec<Vec<KeychainFeaturePoint>>>`. On success, it provides a vector of vectors,
     /// where each inner vector represents a keychain.
     #[cfg(not(target_arch = "wasm32"))]
-    pub fn fetch_keychains(&self, api_key: &str) -> Result<Vec<Vec<KeychainEntry>>> {
+    pub fn fetch_keychains(&self, api_key: &str) -> Result<Vec<Vec<KeychainFeaturePoint>>> {
         if self.version >= 13 {
             self.keychains_request()?.fetch(api_key)
         } else {
@@ -314,7 +314,7 @@ impl DJILog {
     ///
     /// # Arguments
     ///
-    /// * `keychains` - An optional vector of vectors containing `KeychainEntry` instances. This parameter
+    /// * `keychains` - An optional vector of vectors containing `KeychainFeaturePoint` instances. This parameter
     ///   is used for decryption when working with encrypted logs (versions >= 13). If `None` is provided,
     ///   the function will attempt to process the log without decryption.
     ///
@@ -324,13 +324,19 @@ impl DJILog {
     /// Returns a `Result<Vec<Record>>`. On success, it provides a vector of `Record`
     /// instances representing the parsed log records.
     ///
-    pub fn records(&self, keychains: Option<Vec<Vec<KeychainEntry>>>) -> Result<Vec<Record>> {
+    pub fn records(
+        &self,
+        keychains: Option<Vec<Vec<KeychainFeaturePoint>>>,
+    ) -> Result<Vec<Record>> {
         if self.version >= 13 && keychains.is_none() {
             return Err(Error::KeychainRequired);
         }
 
         let mut keychains = VecDeque::from(match keychains {
-            Some(keychains) => keychains.iter().map(Keychain::from_entries).collect(),
+            Some(keychains) => keychains
+                .iter()
+                .map(Keychain::from_feature_points)
+                .collect(),
             None => Vec::new(),
         });
 
@@ -376,7 +382,7 @@ impl DJILog {
     ///
     /// # Arguments
     ///
-    /// * `keychains` - An optional vector of vectors containing `KeychainEntry` instances. This parameter
+    /// * `keychains` - An optional vector of vectors containing `KeychainFeaturePoint` instances. This parameter
     ///   is used for decryption when working with encrypted logs (versions >= 13). If `None` is provided,
     ///   the function will attempt to process the log without decryption.
     ///
@@ -392,7 +398,7 @@ impl DJILog {
     /// over using raw records directly, as frames provide a consistent format across different log
     /// versions, simplifying data analysis and interpretation.
     ///
-    pub fn frames(&self, keychains: Option<Vec<Vec<KeychainEntry>>>) -> Result<Vec<Frame>> {
+    pub fn frames(&self, keychains: Option<Vec<Vec<KeychainFeaturePoint>>>) -> Result<Vec<Frame>> {
         let records = self.records(keychains)?;
         Ok(records_to_frames(records, self.details.clone()))
     }

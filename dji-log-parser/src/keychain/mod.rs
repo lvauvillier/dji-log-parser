@@ -11,14 +11,14 @@ pub use feature_point::FeaturePoint;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct EncodedKeychainEntry {
+pub struct EncodedKeychainFeaturePoint {
     pub feature_point: FeaturePoint,
     pub aes_ciphertext: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct KeychainEntry {
+pub struct KeychainFeaturePoint {
     pub feature_point: FeaturePoint,
     pub aes_key: String,
     pub aes_iv: String,
@@ -35,7 +35,7 @@ impl Keychain {
         Keychain(HashMap::new())
     }
 
-    pub fn from_entries(keychain_entries: &Vec<KeychainEntry>) -> Self {
+    pub fn from_feature_points(keychain_entries: &Vec<KeychainFeaturePoint>) -> Self {
         Keychain(
             keychain_entries
                 .into_iter()

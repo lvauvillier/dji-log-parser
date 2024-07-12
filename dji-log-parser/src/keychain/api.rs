@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
 
-use super::{EncodedKeychainEntry, KeychainEntry};
+use super::{EncodedKeychainFeaturePoint, KeychainFeaturePoint};
 
 #[cfg(not(target_arch = "wasm32"))]
 use crate::{Error, Result};
@@ -13,13 +13,13 @@ pub struct KeychainsRequest {
     pub version: u16,
     pub department: u8,
     #[serde(rename = "keychainsArray")]
-    pub keychains: Vec<Vec<EncodedKeychainEntry>>,
+    pub keychains: Vec<Vec<EncodedKeychainFeaturePoint>>,
 }
 
 /// Response structure received from the keychain API.
 #[derive(Debug, Deserialize)]
 pub struct KeychainsResponse {
-    pub data: Option<Vec<Vec<KeychainEntry>>>,
+    pub data: Option<Vec<Vec<KeychainFeaturePoint>>>,
     pub result: KeychainResponseResult,
 }
 
@@ -34,7 +34,7 @@ pub struct KeychainResponseResult {
 impl KeychainsRequest {
     /// Fetches a `Vec<Keychain>` from the keychain API using the request details.
     /// Returns a result containing a vector of `Keychain`.
-    pub fn fetch(&self, api_key: &str) -> Result<Vec<Vec<KeychainEntry>>> {
+    pub fn fetch(&self, api_key: &str) -> Result<Vec<Vec<KeychainFeaturePoint>>> {
         let response = ureq::post("https://dev.dji.com/openapi/v1/flight-records/keychains")
             .set("Content-Type", "application/json")
             .set("Api-Key", api_key)
