@@ -1,8 +1,10 @@
 use serde::{Deserialize, Serialize};
+#[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
 
 use super::{EncodedKeychainEntry, KeychainEntry};
 
+#[cfg(not(target_arch = "wasm32"))]
 use crate::{Error, Result};
 
 /// Request structure for keychain API.

@@ -1,4 +1,4 @@
-use dji_log_parser::frame::details::Details as FrameDetails;
+use dji_log_parser::frame::Details as FrameDetails;
 use dji_log_parser::frame::Frame;
 use dji_log_parser::layout::details::Details;
 use dji_log_parser::record::Record;

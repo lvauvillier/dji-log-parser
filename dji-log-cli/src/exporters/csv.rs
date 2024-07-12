@@ -1,5 +1,5 @@
 use csv::WriterBuilder;
-use dji_log_parser::frame::details::Details;
+use dji_log_parser::frame::Details;
 use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;

@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::layout::details::Details;
+use crate::layout::details::Details as LayoutDetails;
 use crate::record::osd::{AppCommand, GroundOrSky};
 use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
@@ -10,7 +10,7 @@ mod app;
 mod battery;
 mod camera;
 mod custom;
-pub mod details;
+mod details;
 mod gimbal;
 mod home;
 mod osd;
@@ -21,6 +21,7 @@ pub use app::App;
 pub use battery::Battery;
 pub use camera::Camera;
 pub use custom::Custom;
+pub use details::Details;
 pub use gimbal::Gimbal;
 pub use home::Home;
 pub use osd::OSD;
@@ -143,7 +144,7 @@ impl Frame {
 ///   Each `Frame` corresponds to one or more `Record` objects, depending on the
 ///   specific normalization logic.
 ///
-pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
+pub fn records_to_frames(records: Vec<Record>, details: LayoutDetails) -> Vec<Frame> {
     let mut frames = Vec::new();
     let mut frame = Frame {
         battery: Battery {

@@ -150,7 +150,7 @@ pub struct DJILog {
 }
 
 impl DJILog {
-    /// Constructs a `DJILog` from an arry of bytes.
+    /// Constructs a `DJILog` from an array of bytes.
     ///
     /// This function parses the Prefix and Info blocks of the log file,
     /// and handles different versions of the log format.
@@ -209,15 +209,15 @@ impl DJILog {
         })
     }
 
-    /// Creates a `KeychainRequest` object by parsing `KeyStorage` records.
+    /// Creates a `KeychainsRequest` object by parsing `KeyStorage` records.
     ///
     /// This function is used to build a request body for manually retrieving the keychain from the DJI API.
     /// Keychains are required to decode records for logs with a version greater than or equal to 13.
-    /// For earlier versions, this function returns a default `KeychainRequest`.
+    /// For earlier versions, this function returns a default `KeychainsRequest`.
     ///
     /// # Returns
     ///
-    /// Returns a `Result<KeychainRequest>`. On success, it provides a `KeychainRequest`
+    /// Returns a `Result<KeychainsRequest>`. On success, it provides a `KeychainsRequest`
     /// instance, which contains the necessary information to fetch keychains from the DJI API.
     ///
     pub fn keychains_request(&self) -> Result<KeychainsRequest> {
@@ -295,8 +295,8 @@ impl DJILog {
     /// # Returns
     ///
     /// Returns a `Result<Vec<Vec<KeychainEntry>>>`. On success, it provides a vector of vectors,
-    /// where each inner vector represents a keychain, and each `KeychainEntry` within that vector
-    /// represents a decoded entry from the keychain.
+    /// where each inner vector represents a keychain.
+    #[cfg(not(target_arch = "wasm32"))]
     pub fn fetch_keychains(&self, api_key: &str) -> Result<Vec<Vec<KeychainEntry>>> {
         if self.version >= 13 {
             self.keychains_request()?.fetch(api_key)
@@ -327,10 +327,7 @@ impl DJILog {
         }
 
         let mut keychains = VecDeque::from(match keychains {
-            Some(keychains) => keychains
-                .iter()
-                .map(|keychain| Keychain::from_entries(keychain))
-                .collect(),
+            Some(keychains) => keychains.iter().map(Keychain::from_entries).collect(),
             None => Vec::new(),
         });
 

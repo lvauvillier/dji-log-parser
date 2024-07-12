@@ -16,7 +16,7 @@ pub struct EncodedKeychainEntry {
     pub aes_ciphertext: String,
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct KeychainEntry {
     pub feature_point: FeaturePoint,
@@ -28,7 +28,7 @@ pub struct KeychainEntry {
 /// It associates each `FeaturePoint` with its corresponding AES initialization vector (IV)
 /// and encryption key. In this hashmap, each `FeaturePoint` is linked to a tuple containing
 /// the AES IV and key as array of bytes.
-pub struct Keychain(HashMap<FeaturePoint, (Vec<u8>, Vec<u8>)>);
+pub(crate) struct Keychain(HashMap<FeaturePoint, (Vec<u8>, Vec<u8>)>);
 
 impl Keychain {
     pub fn empty() -> Self {
