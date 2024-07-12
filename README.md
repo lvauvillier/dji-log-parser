@@ -3,17 +3,21 @@
 [![crates](https://img.shields.io/crates/v/dji-log-parser.svg)](https://crates.io/crates/dji-log-parser)
 [![docs.rs](https://docs.rs/dji-log-parser/badge.svg)](https://docs.rs/dji-log-parser)
 
-A library / cli for parsing DJI txt logs
+A library and CLI tool for parsing DJI txt logs with support for all log versions and encryptions.
 
 ## Features
 
-- Supports all log versions and encryptions
-- Parse records and extract embedded images
-- Export flight tracks to GeoJSON and KML
+- Parse records and extract embedded images from DJI logs
+- Normalize records across different log versions for a consistent frame format
+- Export frames to CSV for easy analysis
+- Generate flight tracks in GeoJSON and KML formats
+- Support for all log versions, including encrypted logs (version 13+)
 
 ## Encryption in Version 13 and Later
 
 Starting with version 13, log records are AES encrypted and require a specific keychain for decryption. This keychain must be obtained from DJI using their API. An apiKey is necessary to access the DJI API.
+
+Once keychains are retrieved from DJI API, they can be stored along with the original log for further offline use.
 
 ### Obtaining an ApiKey
 
@@ -33,71 +37,80 @@ To acquire an apiKey, follow these steps:
 ### Basic usage
 
 ```bash
-dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ > records.json
+dji-log --api-key __DJI_API_KEY__ DJIFlightRecord.txt > frames.json
 ```
 
 or with an output arg
 
 ```bash
-dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --output records.json
+dji-log --api-key __DJI_API_KEY__ --output frames.json DJIFlightRecord.txt
 ```
 
-### With image / thumbnails extraction
+### Additional Options
+
+- `--raw`: Export raw records instead of normalized frames
+- `--images image%d.jpeg`: Extract embedded images
+- `--thumbnails thumbnail%d.jpeg`: Extract thumbnails
+- `--csv`: Generate a CSV file of frames
+- `--kml track.kml`: Generate a KML file of the flight track
+- `--geojson track.json`: Generate a GeoJSON file of the flight track
+
+For a complete list of options, run:
+
+```bash
+dji-log --help
+```
 
 Use `%d` in the images or thumbnails option to specify a sequence.
-
-```bash
-dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --images image%d.jpeg --thumbnails thumbnail%d.jpeg --output records.json
-```
-
-### With kml generation
-
-```bash
-dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --kml track.kml --output records.json
-```
-
-### With geojson generation
-
-```bash
-dji-log DJIFlightRecord_YYYY-MM-DD_\[00-00-00\].txt --api-key __DJI_API_KEY__ --geojson track.json --output records.json
-```
 
 ## Library Usage
 
 ### Initialization
 
-Initialize a `DJILog` instance from an array of bytes to access version information and metadata:
+Initialize a `DJILog` instance from a byte slice to access version information and metadata:
 
 ```rust
-let parser = DJILog::from_bytes(bytes).unwrap();
+let parser = DJILog::from_bytes(&bytes).unwrap();
 println!("Version: {:?}", parser.version);
-println!("Details: {:?}", parser.details);
+println!("Details: {}", parser.details);
 ```
 
-### Accessing Records
+### Accessing Frames
 
-Decrypt records based on the log file version.
+Decrypt frames based on the log file version.
+
+A `Frame` is a standardized representation of log data, normalized across different log versions.
+It provides a consistent and easy-to-use format for analyzing and processing DJI log information.
+
 For versions prior to 13:
 
 ```rust
-let records = parser.records(DecryptMethod::None);
+let frames = parser.frames(None);
 ```
 
 For version 13 and later:
 
 ```rust
-let records = parser.records(DecryptMethod::ApiKey("__DJI_API_KEY__"));
+// Fetch the decoded keychains from the online DJI API.
+let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
+let frames = parser.frames(Some(keychains));
 ```
 
-### Advanced: Manual Keychain Retrieval
+### Accessing raw Records
 
-For scenarios like caching, offline use, or custom server communication, the library
-exposes the internal keychain retrieval process:
+Decrypt raw records based on the log file version.
+For versions prior to 13:
 
 ```rust
-let keychain_request = parser.keychain_request().unwrap();
-let keychains = keychain_request.fetch("__DJI_API_KEY__").unwrap();
-let records = parser.records(DecryptMethod::Keychains(keychains));
+let records = parser.records(None);
+```
+
+For version 13 and later:
+
+```rust
+// Fetch the decoded keychains from the online DJI API.
+let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
+let records = parser.records(Some(keychains));
 ```
 
 Note: Replace `__DJI_API_KEY__` with your actual apiKey

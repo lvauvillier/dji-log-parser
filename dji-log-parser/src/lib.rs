@@ -7,6 +7,9 @@
 //! for decryption. This keychain must be obtained from DJI using their API. An apiKey is
 //! necessary to access the DJI API.
 //!
+//! Once keychains are retrieved, they can be stored along with the original log for further
+//! offline use.
+//!
 //! ### Obtaining an ApiKey
 //! To acquire an apiKey, follow these steps:
 //! 1. Visit [DJI Developer Technologies](https://developer.dji.com/user) and log in.
@@ -23,7 +26,7 @@
 //! ```
 //! let parser = DJILog::from_bytes(&bytes).unwrap();
 //! println!("Version: {:?}", parser.version);
-//! println!("Details: {:?}", parser.details);
+//! println!("Details: {}", parser.details);
 //! ```
 //!
 //! ### Accessing raw Records
@@ -36,7 +39,7 @@
 //!
 //! For version 13 and later:
 //! ```rust
-//! let keychains = parser.fetch_keychains("__DJI_API_KEY__");
+//! let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
 //! let records = parser.records(Some(keychains));
 //! ```
 //!
@@ -54,8 +57,8 @@
 //!
 //! For version 13 and later:
 //! ```rust
-//! let keychains = parser.fetch_keychains("__DJI_API_KEY__");
-//! let frames = parser.frames(keychains);
+//! let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
+//! let frames = parser.frames(Some(keychains));
 //! ```
 //!
 //! Note: Replace `__DJI_API_KEY__` with your actual apiKey.
