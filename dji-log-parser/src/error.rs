@@ -17,16 +17,16 @@ pub enum Error {
     #[error("Missing Auxilliary data: {0}")]
     MissingAuxilliaryData(String),
 
-    #[error("Parse error")]
+    #[error("Parse error: {0}")]
     Parse(#[from] binrw::Error),
 
-    #[error("Serialization error")]
+    #[error("Serialization error: {0}")]
     Serialization(#[from] serde_json::Error),
 
-    #[error("Io error")]
+    #[error("Io error: {0}")]
     Io(#[from] std::io::Error),
 
-    #[error("Base64 decode error")]
+    #[error("Base64 decode error: {0}")]
     Base64Decode(#[from] base64::DecodeError),
 
     #[error("Request request status error: {0}")]
