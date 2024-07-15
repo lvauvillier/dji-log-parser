@@ -70,7 +70,7 @@ Use `%d` in the images or thumbnails option to specify a sequence.
 Initialize a `DJILog` instance from a byte slice to access version information and metadata:
 
 ```rust
-let parser = DJILog::from_bytes(&bytes).unwrap();
+let parser = DJILog::from_bytes(bytes).unwrap();
 ```
 
 ### Access general data

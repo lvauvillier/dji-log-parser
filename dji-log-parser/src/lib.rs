@@ -24,44 +24,65 @@
 //! ### Initialization
 //! Initialize a `DJILog` instance from a byte slice to access version information and metadata:
 //! ```
-//! let parser = DJILog::from_bytes(&bytes).unwrap();
+//! let parser = DJILog::from_bytes(bytes).unwrap();
+//! ```
+//!
+//! ### Access general data
+//!
+//! General data are not encrypted and can be accessed from the parser for all log versions:
+//!
+//! ```
+//! // Print the log version
 //! println!("Version: {:?}", parser.version);
+//!
+//! // Print the log details section
 //! println!("Details: {}", parser.details);
 //! ```
 //!
-//! ### Accessing raw Records
-//! Decrypt raw records based on the log file version.
+//! ### Retrieve keychains
 //!
-//! For versions prior to 13:
-//! ```rust
-//! let records = parser.records(None);
+//! For logs version 13 and later, keychains must be retrieved from the DJI API to decode the records:
+//!
 //! ```
-//!
-//! For version 13 and later:
-//! ```rust
+//! // Replace `__DJI_API_KEY__` with your actual apiKey
 //! let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
-//! let records = parser.records(Some(keychains));
 //! ```
+//!
+//! Keychains can be retrieved once, serialized, and stored along with the log file for future offline use.
 //!
 //! ### Accessing Frames
+//!
 //! Decrypt frames based on the log file version.
 //!
-//! A `Frame` is a standardized representation of log data, normalized across
-//! different log versions. It provides a consistent and easy-to-use format
-//! for analyzing and processing DJI log information.
+//! A `Frame` is a standardized representation of log data, normalized across different log versions.
+//! It provides a consistent and easy-to-use format for analyzing and processing DJI log information.
 //!
 //! For versions prior to 13:
-//! ```rust
+//!
+//! ```
 //! let frames = parser.frames(None);
 //! ```
 //!
 //! For version 13 and later:
-//! ```rust
-//! let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
+//!
+//! ```
 //! let frames = parser.frames(Some(keychains));
 //! ```
 //!
-//! Note: Replace `__DJI_API_KEY__` with your actual apiKey.
+//! ### Accessing raw Records
+//!
+//! Decrypt raw records based on the log file version.
+//! For versions prior to 13:
+//!
+//! ```
+//! let records = parser.records(None);
+//! ```
+//!
+//! For version 13 and later:
+//!
+//! ```
+//! let records = parser.records(Some(keychains));
+//! ```
 //!
 //!
 //! ## Binary structure of log files:
