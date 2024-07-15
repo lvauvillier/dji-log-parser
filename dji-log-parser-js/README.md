@@ -1,17 +1,28 @@
-# dji-log-parser
+# dji-log-parser-js
 
-[![crates](https://img.shields.io/crates/v/dji-log-parser.svg)](https://crates.io/crates/dji-log-parser)
-[![docs.rs](https://docs.rs/dji-log-parser/badge.svg)](https://docs.rs/dji-log-parser)
-
-A library and CLI tool for parsing DJI txt logs with support for all log versions and encryptions.
+A powerful JavaScript library for parsing DJI txt logs with support for all log versions and encryptions.
 
 ## Features
 
 - Parse records and extract embedded images from DJI logs
 - Normalize records across different log versions for a consistent frame format
-- Export frames to CSV for easy analysis
-- Generate flight tracks in GeoJSON and KML formats
 - Support for all log versions, including encrypted logs (version 13+)
+- Easy-to-use API for accessing general data, frames, and raw records
+- Ability to fetch and store keychains for offline use with encrypted logs
+
+## Installation
+
+To install the DJI Log Parser library, use npm:
+
+```bash
+npm install dji-log-parser-js
+```
+
+Or using yarn:
+
+```bash
+yarn add dji-log-parser-js
+```
 
 ## Encryption in Version 13 and Later
 
@@ -28,61 +39,30 @@ To acquire an apiKey, follow these steps:
 3. After creating the app, activate it through the link sent to your email.
 4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key).
 
-## Cli Usage
-
-### Installation
-
-[Download](https://github.com/lvauvillier/dji-log-parser/releases) binary from latest release
-
-### Basic usage
-
-```bash
-dji-log --api-key __DJI_API_KEY__ DJIFlightRecord.txt > frames.json
-```
-
-or with an output arg
-
-```bash
-dji-log --api-key __DJI_API_KEY__ --output frames.json DJIFlightRecord.txt
-```
-
-### Additional Options
-
-- `--raw`: Export raw records instead of normalized frames
-- `--images image%d.jpeg`: Extract embedded images
-- `--thumbnails thumbnail%d.jpeg`: Extract thumbnails
-- `--csv`: Generate a CSV file of frames
-- `--kml track.kml`: Generate a KML file of the flight track
-- `--geojson track.json`: Generate a GeoJSON file of the flight track
-
-For a complete list of options, run:
-
-```bash
-dji-log --help
-```
-
-Use `%d` in the images or thumbnails option to specify a sequence.
-
 ## Library Usage
 
 ### Initialization
 
-Initialize a `DJILog` instance from a byte slice to access version information and metadata:
+Initialize a `DJILog` instance from a byte buffer to access version information and metadata:
 
-```rust
-let parser = DJILog::from_bytes(&bytes).unwrap();
+```js
+import { DJILog } from "dji-log-parser-js";
+import { readFileSync } from "fs";
+
+const buffer = readFileSync("./DJIFlightRecord.txt");
+const parser = new DJILog(buffer);
 ```
 
 ### Access general data
 
 General data are not encrypted and can be accessed from the parser for all log versions:
 
-```rust
+```js
 // Print the log version
-println!("Version: {:?}", parser.version);
+console.log("Version:", parser.version);
 
 // Print the log details section
-println!("Details: {}", parser.details);
+console.log("Details:", parser.details);
 ```
 
 ### Retrieve keychains
@@ -91,7 +71,7 @@ For logs version 13 and later, keychains must be retrieved from the DJI API to d
 
 ```js
 // Replace `__DJI_API_KEY__` with your actual apiKey
-let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
+const keychains = await parser.fetchKeychains("__DJI_API_KEY__");
 ```
 
 Keychains can be retrieved once, serialized, and stored along with the log file for future offline use.
@@ -105,14 +85,14 @@ It provides a consistent and easy-to-use format for analyzing and processing DJI
 
 For versions prior to 13:
 
-```rust
-let frames = parser.frames(None);
+```js
+const frames = parser.frames();
 ```
 
 For version 13 and later:
 
-```rust
-let frames = parser.frames(Some(keychains));
+```js
+const frames = parser.frames(keychains);
 ```
 
 ### Accessing raw Records
@@ -120,18 +100,16 @@ let frames = parser.frames(Some(keychains));
 Decrypt raw records based on the log file version.
 For versions prior to 13:
 
-```rust
-let records = parser.records(None);
+```js
+const records = parser.records();
 ```
 
 For version 13 and later:
 
-```rust
-let records = parser.records(Some(keychains));
+```js
+const records = parser.records(keychains);
 ```
-
-For more information, including a more detailed overview of the log format, [visit the documentation](https://docs.rs/dji-log-parser).
 
 ## License
 
-dji-log-parser is available under the MIT license. See the LICENSE.txt file for more info.
+dji-log-parser-js is available under the MIT license. See the LICENSE.txt file for more info.
