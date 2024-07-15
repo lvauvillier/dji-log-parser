@@ -361,7 +361,7 @@ dependencies = [
 
 [[package]]
 name = "dji-log-cli"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "chrono",
  "clap",
@@ -377,7 +377,7 @@ dependencies = [
 
 [[package]]
 name = "dji-log-parser"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "aes",
  "base64",
@@ -395,7 +395,7 @@ dependencies = [
 
 [[package]]
 name = "dji-log-parser-js"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "dji-log-parser",
  "js-sys",
