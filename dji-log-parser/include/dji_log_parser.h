@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-// Code to allow Go code to call Rust functions as if they were C functions.
+// Code to allow other languages call Rust functions as if they were C functions. 
 // It handles memory management and type conversions between the two languages. 
 // A wrapper serves as a bridge, herein defining the interface both Rust (implementation side)
 // and Go (calling side) agree to use. 
