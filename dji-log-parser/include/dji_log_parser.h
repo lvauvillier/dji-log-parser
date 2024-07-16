@@ -17,15 +17,13 @@ bool parse_dji_log(const char* input_path, const char* api_key);
 char* get_last_error();
 
 // this function is used to free memory allocated for strings, use for the prevention of memory leaks.
-void free_string(char* s);
+void c_api_free_string(char* s);
 
-// self explanatory, returns a char pointer to the path of the generated GeoJson file. 
-char* get_geojson_file_path(const char* input_path);
-
-// extention to code so that output is not just a file written to disk
-char* get_geojson_string(const char* input_path, const char* api_key);  
-
-// for use with io.Read in Go
+// Generate a GeoJSON string from a byte array containing DJI log data
+// bytes: Pointer to the byte array containing DJI log data
+// length: Length of the byte array
+// api_key: DJI API key for decryption (if needed)
+// Returns: A pointer to a null-terminated string containing the GeoJSON data
 char* get_geojson_string_from_bytes(const unsigned char* bytes, size_t length, const char* api_key);
 
 #endif

@@ -1,7 +1,6 @@
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
-use std::path::Path;
-use crate::{DJILog, DecryptMethod, set_last_error};
+use crate::{DJILog, DecryptMethod, set_last_error };
 
 #[no_mangle]
 pub extern "C" fn parse_dji_log(input_path: *const c_char, api_key: *const c_char) -> bool {
@@ -19,13 +18,7 @@ pub extern "C" fn parse_dji_log(input_path: *const c_char, api_key: *const c_cha
                     };
 
                     match parser.frames(decrypt_method) {
-                        Ok(frames) => {
-                            let geojson = DJILog::frames_to_geojson(&frames);
-                            let output_path = Path::new(input_path).with_extension("json");
-                            if let Err(e) = std::fs::write(&output_path, geojson) {
-                                set_last_error(format!("Failed to write GeoJSON: {}", e));
-                                return false;
-                            }
+                        Ok(_frames) => {
                             true
                         },
                         Err(e) => {
@@ -48,8 +41,19 @@ pub extern "C" fn parse_dji_log(input_path: *const c_char, api_key: *const c_cha
 }
 
 #[no_mangle]
-pub extern "C" fn get_geojson_file_path(input_path: *const c_char) -> *mut c_char {
-    let input_path = unsafe { CStr::from_ptr(input_path).to_str().unwrap() };
-    let geojson_path = Path::new(input_path).with_extension("json");
-    CString::new(geojson_path.to_str().unwrap()).unwrap().into_raw()
+pub extern "C" fn get_last_error() -> *mut c_char {
+    let error = crate::get_last_error();
+    match CString::new(error) {
+        Ok(c_str) => c_str.into_raw(),
+        Err(_) => std::ptr::null_mut(),
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn c_api_free_string(s: *mut c_char) {
+    unsafe {
+        if !s.is_null() {
+            drop(CString::from_raw(s));
+        }
+    }
 }

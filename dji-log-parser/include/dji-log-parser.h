@@ -10,12 +10,10 @@ char *get_geojson_string(const char *input_path, const char *api_key);
 
 char *get_geojson_string_from_bytes(const uint8_t *bytes, uintptr_t length, const char *api_key);
 
-char *get_last_error();
-
-void free_string(char *s);
-
 bool parse_dji_log(const char *input_path, const char *api_key);
 
-char *get_geojson_file_path(const char *input_path);
+char *get_last_error();
+
+void c_api_free_string(char *s);
 
 } // extern "C"

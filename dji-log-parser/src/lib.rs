@@ -259,18 +259,8 @@ fn process_dji_log(bytes: &[u8], api_key: &str) -> Result<String, DJILogError> {
     Ok(DJILog::frames_to_geojson(&frames))
 }
 
-#[no_mangle]
-pub extern "C" fn get_last_error() -> *mut c_char {
-    LAST_ERROR.lock().unwrap().take().map_or(std::ptr::null_mut(), |s| CString::new(s).unwrap().into_raw())
-}
-
-#[no_mangle]
-pub extern "C" fn free_string(s: *mut c_char) {
-    unsafe {
-        if !s.is_null() {
-            drop(CString::from_raw(s));
-        }
-    }
+fn get_last_error() -> String {
+    LAST_ERROR.lock().unwrap().take().unwrap_or_default()
 }
 
 #[derive(PartialEq, Clone)]
