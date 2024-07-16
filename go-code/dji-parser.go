@@ -3,7 +3,7 @@ package main
 /*
 #cgo LDFLAGS: -L${SRCDIR}/../target/release -ldji_log_parser
 #cgo CFLAGS: -I${SRCDIR}/../dji-log-parser/include
-#include "dji_log_parser.h"
+#include "dji-log-parser.h"
 #include <stdlib.h>
 */
 import "C"
@@ -75,11 +75,10 @@ func main() {
     processReader(reader, apiKey)
 }
 
-func processReader(reader io.Reader, apiKey string) (*geom.Geometry){
+func processReader(reader io.Reader, apiKey string) (*geom.Geometry, error) {
     data, err := io.ReadAll(reader)
     if err != nil {
-        fmt.Printf("Error reading data: %s\n", err)
-        os.Exit(1)
+        return nil, fmt.Errorf("error reading data: %s", err)
     }
 
     cData := C.CBytes(data)
@@ -88,13 +87,12 @@ func processReader(reader io.Reader, apiKey string) (*geom.Geometry){
     cApiKey := C.CString(apiKey)
     defer C.free(unsafe.Pointer(cApiKey))
 
-    geojsonPtr := C.get_geojson_string_from_bytes((*C.uchar)(cData), cLength, cApiKey)
+    geojsonPtr := C.get_geojson_string_from_bytes((*C.uchar)(unsafe.Pointer(cData)), cLength, cApiKey)
     if geojsonPtr == nil {
         errPtr := C.get_last_error()
         errStr := C.GoString(errPtr)
         C.c_api_free_string(errPtr)
-        fmt.Printf("Failed to get GeoJSON: %s\n", errStr)
-        os.Exit(1)
+        return nil, fmt.Errorf("failed to get GeoJSON: %s", errStr)
     }
     defer C.c_api_free_string(geojsonPtr)
 
@@ -103,13 +101,12 @@ func processReader(reader io.Reader, apiKey string) (*geom.Geometry){
     var geojson GeoJSON
     err = json.Unmarshal([]byte(geojsonStr), &geojson)
     if err != nil {
-        fmt.Println("Error parsing GeoJSON:", err)
-        os.Exit(1)
+        return nil, fmt.Errorf("error parsing GeoJSON: %s", err)
     }
 
     printGeoJSONDetails(geojson)
     calculateStatistics(geojson)
-	return createGeometryFromData(geojson)
+    return createGeometryFromData(geojson), nil
 }
 
 func printGeoJSONDetails(geojson GeoJSON) {
