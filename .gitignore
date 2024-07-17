@@ -3,6 +3,7 @@
 /go-code
 /test-data
 /.vscode
+.DS_Store
 go.mod
 go.sum
-.DS_Store
+
