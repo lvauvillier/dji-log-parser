@@ -1,4 +1,3 @@
-
 [package]
 name = "dji-log-parser"
 version.workspace = true
