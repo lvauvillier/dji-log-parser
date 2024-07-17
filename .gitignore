@@ -2,6 +2,7 @@
 /data
 /go-code
 /test-data
+/.vscode
 .DS_Store
 
 
