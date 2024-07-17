@@ -1,0 +1,14 @@
+language = "C"
+
+[export]
+include = [
+    "get_geojson_string",
+    "get_geojson_string_from_bytes",
+    "parse_dji_log",
+    "get_last_error",
+    "c_api_free_string"
+]
+
+[parse]
+parse_deps = true
+include = ["dji_log_parser"]

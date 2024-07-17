@@ -8,8 +8,12 @@ fn main() {
         .join("include")
         .join(format!("{}.h", package_name));
 
+    let config = cbindgen::Config::from_file("cbindgen.toml")
+        .expect("Unable to find cbindgen.toml configuration file");
+
     cbindgen::Builder::new()
         .with_crate(crate_dir)
+        .with_config(config)
         .generate()
         .expect("Unable to generate bindings")
         .write_to_file(output_file);
