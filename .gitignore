@@ -1,3 +1,8 @@
 /target
 /data
+/go-code
+/test-data
+/.vscode
+go.mod
+go.sum
 .DS_Store
