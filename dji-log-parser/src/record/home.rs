@@ -1,8 +1,7 @@
 use std::f64::consts::PI;
-
+use serde::{Serialize, Deserialize};
 use crate::utils::sub_byte_field;
 use binrw::binread;
-use serde::Serialize;
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -62,8 +61,7 @@ pub struct Home {
     #[br(if(version >= 8))]
     pub max_allowed_height: f32,
 }
-
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum IOCMode {
     CourseLock,
     HomeLock,
@@ -83,7 +81,7 @@ impl From<u8> for IOCMode {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum GoHomeMode {
     Normal,
     FixedHeight,
@@ -98,7 +96,7 @@ impl From<bool> for GoHomeMode {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum CompassCalibrationState {
     NotCalibrating,
     Horizontal,
