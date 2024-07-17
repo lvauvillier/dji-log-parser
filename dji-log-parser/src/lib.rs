@@ -133,12 +133,19 @@ use binrw::BinRead;
 use std::cell::RefCell;
 use std::collections::{HashMap, VecDeque};
 use thiserror::Error;
+use std::ffi::{CStr, CString};
+use std::os::raw::c_char;
+use std::slice;
+use serde_json::json;
+use std::sync::Mutex;
+use once_cell::sync::Lazy;
 
 mod decoder;
 pub mod frame;
 pub mod keychain;
 pub mod layout;
 pub mod record;
+pub mod c_api;
 mod utils;
 
 use frame::{records_to_frames, Frame};
@@ -147,8 +154,16 @@ use layout::auxiliary::Auxiliary;
 use layout::details::Details;
 use layout::prefix::Prefix;
 use record::Record;
+use log::{debug, error};
 
 use crate::utils::pad_with_zeros;
+
+static LAST_ERROR: Lazy<Mutex<Option<String>>> = Lazy::new(|| Mutex::new(None));
+
+pub(crate) fn set_last_error(error: String) {
+    let mut last_error = LAST_ERROR.lock().unwrap();
+    *last_error = Some(error);
+}
 
 #[derive(PartialEq, Debug, Error)]
 #[non_exhaustive]
@@ -178,6 +193,76 @@ pub enum DJILogError {
     NetworkError(String),
 }
 
+#[no_mangle]
+pub extern "C" fn get_geojson_string(input_path: *const c_char, api_key: *const c_char) -> *mut c_char {
+    let input_path = unsafe { CStr::from_ptr(input_path).to_str().unwrap() };
+    let api_key = unsafe { CStr::from_ptr(api_key).to_str().unwrap() };
+
+    match std::fs::read(input_path) {
+        Ok(bytes) => {
+            match DJILog::from_bytes(bytes) {
+                Ok(parser) => {
+                    let decrypt_method = if parser.version >= 13 {
+                        DecryptMethod::ApiKey(api_key.to_string())
+                    } else {
+                        DecryptMethod::None
+                    };
+
+                    match parser.frames(decrypt_method) {
+                        Ok(frames) => {
+                            let geojson = DJILog::frames_to_geojson(&frames);
+                            CString::new(geojson).unwrap().into_raw()
+                        },
+                        Err(e) => {
+                            set_last_error(format!("Failed to parse frames: {}", e));
+                            std::ptr::null_mut()
+                        }
+                    }
+                }
+                Err(e) => {
+                    set_last_error(format!("Failed to parse DJI log: {}", e));
+                    std::ptr::null_mut()
+                }
+            }
+        }
+        Err(e) => {
+            set_last_error(format!("Failed to read file: {}", e));
+            std::ptr::null_mut()
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn get_geojson_string_from_bytes(bytes: *const u8, length: usize, api_key: *const c_char) -> *mut c_char {
+    let input_bytes = unsafe { slice::from_raw_parts(bytes, length) };
+    let api_key = unsafe { CStr::from_ptr(api_key).to_str().unwrap() };
+
+    match process_dji_log(input_bytes, api_key) {
+        Ok(geojson) => CString::new(geojson).unwrap().into_raw(),
+        Err(e) => {
+            set_last_error(format!("Failed to process DJI log: {}", e));
+            std::ptr::null_mut()
+        }
+    }
+}
+
+fn process_dji_log(bytes: &[u8], api_key: &str) -> Result<String, DJILogError> {
+    let dji_log = DJILog::from_bytes(bytes.to_vec())?;
+    
+    let decrypt_method = if dji_log.version >= 13 {
+        DecryptMethod::ApiKey(api_key.to_string())
+    } else {
+        DecryptMethod::None
+    };
+
+    let frames = dji_log.frames(decrypt_method)?;
+    Ok(DJILog::frames_to_geojson(&frames))
+}
+
+fn get_last_error() -> String {
+    LAST_ERROR.lock().unwrap().take().unwrap_or_default()
+}
+
 #[derive(PartialEq, Clone)]
 pub enum DecryptMethod {
     ApiKey(String),
@@ -196,31 +281,8 @@ pub struct DJILog {
 }
 
 impl DJILog {
-    /// Constructs a `DJILog` from an arry of bytes.
-    ///
-    /// This function parses the Prefix and Info blocks of the log file,
-    /// and handles different versions of the log format.
-    ///
-    /// # Arguments
-    ///
-    /// * `bytes` - An array of bytes representing the DJI log file.
-    ///
-    /// # Returns
-    ///
-    /// This function returns `Result<DJILog, DJILogError>`.
-    /// On success, it returns the `DJILog` instance. On failure, it returns
-    /// a `DJILogError` indicating the type of error encountered.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use djilog_parser::DJILog;
-    ///
-    /// let log_bytes = include_bytes!("path/to/log/file");
-    /// let log = DJILog::from_bytes(log_bytes).unwrap();
-    /// ```
-    ///
     pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog, DJILogError> {
+        debug!("Parsing DJI log from bytes, length: {}", bytes.len());
         // Decode Prefix
         let mut prefix = Prefix::read(&mut Cursor::new(&bytes))
             .map_err(|e| DJILogError::PrefixParseError(e.to_string()))?;
@@ -264,46 +326,20 @@ impl DJILog {
         })
     }
 
-    /// Creates a `KeychainRequest` object by parsing `KeyStorage` records.
-    ///
-    /// This function is used to build a request body for manually retrieving the keychain from the DJI API.
-    /// Keychains are required to decode records for logs with a version greater than or equal to 13.
-    /// For earlier versions, this function returns a default `KeychainRequest`.
-    ///
-    /// # Returns
-    ///
-    /// Returns a `Result<KeychainRequest, DJILogError>`. On success, it provides a `KeychainRequest`
-    /// instance, which contains the necessary information to fetch keychains from the DJI API.
-    /// On failure, it returns a `DJILogError` indicating the type of error encountered during parsing.
-    ///
     pub fn keychain_request(&self) -> Result<KeychainRequest, DJILogError> {
+        debug!("Creating keychain request, version: {}", self.version);
+        println!("Entering keychain_request method");
         let mut keychain_request = KeychainRequest::default();
-
-        // No keychain
-        if self.version < 13 {
-            return Ok(keychain_request);
-        }
-
-        let mut cursor = Cursor::new(&self.inner);
-        cursor.set_position(self.prefix.detail_offset());
-
-        // Skip first auxiliary block
-        let _ = Auxiliary::read(&mut cursor)
-            .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()));
-
-        // Get version from second auxilliary block
-        if let Auxiliary::Version(data) = Auxiliary::read(&mut cursor)
-            .map_err(|e| DJILogError::AuxiliaryParseError(e.to_string()))?
-        {
-            keychain_request.version = data.version;
-            keychain_request.department = data.department.into();
-        }
-
+        
+        keychain_request.version = self.version as u16;
+        println!("Log version: {}", self.version);
+    
         // Extract keychains from KeyStorage Records
+        let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
-
+    
         let mut keychain: Vec<KeychainCipherText> = Vec::new();
-
+    
         while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             let empty_keychain = RefCell::new(HashMap::new());
             let record = match Record::read_args(
@@ -314,50 +350,41 @@ impl DJILog {
                 },
             ) {
                 Ok(record) => record,
-                Err(_) => break,
+                Err(e) => {
+                    println!("Error reading record: {:?}", e);
+                    break;
+                }
             };
-
+    
             match record {
                 Record::KeyStorage(data) => {
-                    // add KeychainCipherText to current keychain
                     keychain.push(KeychainCipherText {
                         feature_point: data.feature_point,
                         aes_ciphertext: Base64Standard.encode(&data.data),
                     });
+                    println!("Found KeyStorage record: {:?}", data.feature_point);
                 }
                 Record::KeyStorageRecover(_) => {
-                    // start a new keychain
-                    keychain_request.keychains.push(keychain);
-                    keychain = Vec::new();
+                    if !keychain.is_empty() {
+                        keychain_request.keychains.push(keychain);
+                        keychain = Vec::new();
+                    }
+                    println!("Found KeyStorageRecover record");
                 }
                 _ => {}
             }
         }
-
-        keychain_request.keychains.push(keychain);
-
+    
+        if !keychain.is_empty() {
+            keychain_request.keychains.push(keychain);
+        }
+    
+        println!("Keychain request: {:?}", keychain_request);
         Ok(keychain_request)
     }
 
-    /// Retrieves the parsed raw records from the DJI log.
-    ///
-    /// This function decodes the raw records from the log file based on the specified decryption method.
-    /// For log versions less than 13, `DecryptMethod::None` should be used as there is no encryption.
-    /// For versions 13 and above, records are encrypted and require a decryption method:
-    /// - `DecryptMethod::Keychains` if you want to manually provide the keychains,
-    /// - `DecryptMethod::ApiKey` if you have an API key to decrypt the records.
-    ///
-    /// # Arguments
-    ///
-    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based on the log version and available decryption keys.
-    ///
-    /// # Returns
-    ///
-    /// Returns a `Result<Vec<Record>, DJILogError>`. On success, it provides a vector of `Record`
-    /// instances representing the parsed log records. On failure, it returns a `DJILogError` indicating
-    /// the type of error encountered during record parsing.
-    ///
     pub fn records(&self, decrypt_method: DecryptMethod) -> Result<Vec<Record>, DJILogError> {
+        println!("Entering records method");
         if self.version >= 13 && decrypt_method == DecryptMethod::None {
             return Err(DJILogError::RecordParseError(
                 "Api Key or keychain is required to parse records".into(),
@@ -365,10 +392,17 @@ impl DJILog {
         }
 
         let mut keychains = VecDeque::from(match decrypt_method {
-            DecryptMethod::ApiKey(api_key) => self.keychain_request()?.fetch(&api_key)?,
+            DecryptMethod::ApiKey(api_key) => {
+                println!("Getting keychain request...");
+                let request = self.keychain_request()?;
+                println!("Fetching keychains...");
+                request.fetch(&api_key)?
+            },
             DecryptMethod::Keychains(keychains) => keychains,
             DecryptMethod::None => Vec::new(),
         });
+
+        println!("Parsing records...");
 
         let mut cursor = Cursor::new(&self.inner);
         cursor.set_position(self.prefix.records_offset());
@@ -400,39 +434,43 @@ impl DJILog {
         Ok(records)
     }
 
-    /// Retrieves the normalized frames from the DJI log.
-    ///
-    /// This function processes the raw records from the log file and converts them into standardized
-    /// frames. Frames are a more user-friendly representation of the log data, normalized across all
-    /// log versions for easier use and analysis.
-    ///
-    /// The function first decodes the raw records based on the specified decryption method, then
-    /// converts these records into frames. This normalization process makes it easier to work with
-    /// log data from different DJI log versions.
-    ///
-    /// # Arguments
-    ///
-    /// * `decrypt_method` - The method used to decrypt the log records. This should be chosen based
-    ///   on the log version and available decryption keys:
-    ///   - For log versions < 13, use `DecryptMethod::None` (no encryption).
-    ///   - For log versions >= 13, use either:
-    ///     - `DecryptMethod::Keychains` if manually providing keychains, or
-    ///     - `DecryptMethod::ApiKey` if using an API key for decryption.
-    ///
-    /// # Returns
-    ///
-    /// Returns a `Result<Vec<Frame>, DJILogError>`. On success, it provides a vector of `Frame`
-    /// instances representing the normalized log data. On failure, it returns a `DJILogError`
-    /// indicating the type of error encountered during frame processing.
-    ///
-    /// # Note
-    ///
-    /// This method consumes and processes the raw records to create frames. It's generally preferred
-    /// over using raw records directly, as frames provide a consistent format across different log
-    /// versions, simplifying data analysis and interpretation.
-    ///
     pub fn frames(&self, decrypt_method: DecryptMethod) -> Result<Vec<Frame>, DJILogError> {
+        println!("Entering frames method");
+        println!("Attempting to get records...");
         let records = self.records(decrypt_method)?;
-        Ok(records_to_frames(records, self.details.clone()))
+        println!("Successfully got {} records", records.len());
+        if !records.is_empty() {
+            println!("First record: {:?}", records[0]);
+        }
+        println!("Calling records_to_frames...");
+        let frames = records_to_frames(records, self.details.clone());
+        println!("records_to_frames returned {} frames", frames.len());
+        if !frames.is_empty() {
+            println!("First frame: {:?}", frames[0]);
+        }
+        Ok(frames)
+    }
+
+    pub fn frames_to_geojson(frames: &[Frame]) -> String {
+        let feature_collection = json!({
+            "type": "FeatureCollection",
+            "features": frames.iter().map(|frame| {
+                json!({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [frame.osd_longitude, frame.osd_latitude, frame.osd_altitude]
+                    },
+                    "properties": {
+                        "time": frame.custom_date_time,
+                        "height": frame.osd_height,
+                        "speed": (frame.osd_x_speed.powi(2) + frame.osd_y_speed.powi(2) + frame.osd_z_speed.powi(2)).sqrt(),
+                    }
+                })
+            }).collect::<Vec<_>>()
+        });
+        serde_json::to_string(&feature_collection).unwrap()
     }
 }
+
+
