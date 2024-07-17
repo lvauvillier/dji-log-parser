@@ -1,7 +1,6 @@
 use binrw::binread;
-use serde::Serialize;
 use std::f64::consts::PI;
-
+use serde::{Serialize, Deserialize};
 use crate::utils::sub_byte_field;
 
 #[binread]
@@ -133,9 +132,9 @@ pub struct OSD {
     pub imu_init_fail_reason: ImuInitFailReason,
 }
 
-#[derive(Serialize, Debug, Default, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum DroneType {
-    #[default]
+    Unknown,
     None,
     Inspire1,
     Phantom3Advanced,
@@ -174,7 +173,13 @@ pub enum DroneType {
     Mini4Pro,
     Avata2,
     #[serde(untagged)]
-    Unknown(u8),
+    UnknownValue(u8),
+}
+
+impl Default for DroneType {
+    fn default() -> Self {
+        DroneType::Unknown
+    }
 }
 
 impl From<u8> for DroneType {
@@ -217,12 +222,12 @@ impl From<u8> for DroneType {
             89 => DroneType::Matrice350RTK,
             93 => DroneType::Mini4Pro,
             94 => DroneType::Avata2,
-            _ => DroneType::Unknown(value),
+            _ => DroneType::UnknownValue(value),
         }
     }
 }
 
-#[derive(Serialize, Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum FlightMode {
     /// Manual mode. Shown as Manual in DJI app.
     Manual,
@@ -340,7 +345,7 @@ impl From<u8> for FlightMode {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum AppCommand {
     AutoFly,
     AutoLanding,
@@ -430,7 +435,7 @@ impl From<u8> for GroundOrSky {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum GoHomeStatus {
     Standby,
     Preascending,
@@ -458,7 +463,7 @@ impl From<u8> for GoHomeStatus {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum BatteryType {
     NonSmart,
     Smart,
@@ -476,8 +481,7 @@ impl From<u8> for BatteryType {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
-
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum FlightAction {
     None,
     WarningPowerGoHome,
@@ -561,7 +565,7 @@ impl From<u8> for FlightAction {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum MotorStartFailedCause {
     None,
     CompassError,
@@ -760,7 +764,7 @@ impl From<u8> for MotorStartFailedCause {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum NonGPSCause {
     Already,
     Forbid,
@@ -790,9 +794,9 @@ impl From<u8> for NonGPSCause {
     }
 }
 
-#[derive(Serialize, Debug, Default, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ImuInitFailReason {
-    #[default]
+    Unknown,
     MonitorError,
     CollectingData,
     AcceDead,
@@ -809,7 +813,13 @@ pub enum ImuInitFailReason {
     McHeaderMoved,
     McVibrated,
     #[serde(untagged)]
-    Unknown(u8),
+    UnknownValue(u8),
+}
+
+impl Default for ImuInitFailReason {
+    fn default() -> Self {
+        ImuInitFailReason::Unknown
+    }
 }
 
 impl From<u8> for ImuInitFailReason {
@@ -830,7 +840,7 @@ impl From<u8> for ImuInitFailReason {
             13 => ImuInitFailReason::AcceMoveTooLarge,
             14 => ImuInitFailReason::McHeaderMoved,
             15 => ImuInitFailReason::McVibrated,
-            _ => ImuInitFailReason::Unknown(value),
+            _ =>  ImuInitFailReason::UnknownValue(value),
         }
     }
 }
