@@ -55,13 +55,13 @@ dji-log --api-key __DJI_API_KEY__ --output frames.json DJIFlightRecord.txt
 - `--kml track.kml`: Generate a KML file of the flight track
 - `--geojson track.json`: Generate a GeoJSON file of the flight track
 
+Use `%d` in the images or thumbnails option to specify a sequence.
+
 For a complete list of options, run:
 
 ```bash
 dji-log --help
 ```
-
-Use `%d` in the images or thumbnails option to specify a sequence.
 
 ## Library Usage
 
