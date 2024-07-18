@@ -46,12 +46,44 @@ To acquire an apiKey, follow these steps:
 
 Initialize a `DJILog` instance from a byte buffer to access version information and metadata:
 
+#### Node
+
 ```js
 import { DJILog } from "dji-log-parser-js";
 import { readFileSync } from "fs";
 
 const buffer = readFileSync("./DJIFlightRecord.txt");
 const parser = new DJILog(buffer);
+```
+
+#### Browser
+
+Html
+
+```html
+<input type="file" id="file" name="file" />
+```
+
+Javascript
+
+```js
+import { DJILog } from "dji-log-parser-js";
+
+document
+  .getElementById("file")
+  .addEventListener("change", handleFileSelect, false);
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = async function (e) {
+      const bytes = new Uint8Array(e.target.result);
+      const parser = new DJILog(bytes);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+}
 ```
 
 ### Access general data
