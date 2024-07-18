@@ -43,8 +43,8 @@ impl DJILogWrapper {
     /// * `bytes` - An Uint8Array representing the DJI log file.
     ///
     #[wasm_bindgen(constructor)]
-    pub fn from_bytes(bytes: &[u8]) -> Result<DJILogWrapper, JsValue> {
-        DJILog::from_bytes(bytes.to_vec())
+    pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILogWrapper, JsValue> {
+        DJILog::from_bytes(bytes)
             .map(|value| DJILogWrapper { inner: value })
             .map_err(|e| JsValue::from_str(&e.to_string()))
     }
@@ -89,10 +89,21 @@ impl DJILogWrapper {
     ///
     /// # Arguments
     ///
-    /// * `api_key` - A string slice that holds the API key for authentication with the DJI API.
+    /// * `api_key` - A string that holds the API key for authentication with the DJI API.
+    /// * `endpoint` - An optional string that specifies the endpoint for the DJI API. If not provided, a default endpoint will be used.
     ///
     #[wasm_bindgen(js_name = "fetchKeychains")]
-    pub async fn fetch_keychains(&self, api_key: &str) -> Result<JSKeychains, JsValue> {
+    pub async fn fetch_keychains(
+        &self,
+        api_key: String,
+        endpoint: Option<String>,
+    ) -> Result<JSKeychains, JsValue> {
+        if self.inner.version < 13 {
+            return serde_wasm_bindgen::to_value(&Vec::<()>::new())
+                .map_err(|e| JsValue::from_str(&e.to_string()))
+                .map(|value| value.unchecked_into());
+        }
+
         let keychain_request = self
             .inner
             .keychains_request()
@@ -106,12 +117,13 @@ impl DJILogWrapper {
         init.body(Some(&JsValue::from_str(&body)));
 
         let request = Request::new_with_str_and_init(
-            "https://dev.dji.com/openapi/v1/flight-records/keychains",
+            &endpoint
+                .unwrap_or("https://dev.dji.com/openapi/v1/flight-records/keychains".to_string()),
             &init,
         )?;
 
         request.headers().set("Content-Type", "application/json")?;
-        request.headers().set("Api-Key", api_key)?;
+        request.headers().set("Api-Key", &api_key)?;
 
         let response: Response = JsFuture::from(js_fetch(&request)).await?.unchecked_into();
         if !response.ok() {
