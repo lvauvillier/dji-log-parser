@@ -17,8 +17,9 @@ categories = [
 ]
 
 [workspace.dependencies]
-dji-log-parser = { path = "dji-log-parser", default-features = false }
+dji-log-parser = { path = "dji-log-parser" }
 aes = "0.8"
+async-channel = "2.0"
 base64 = "0.21.5"
 binrw = "0.13.1"
 cbc = "0.1"

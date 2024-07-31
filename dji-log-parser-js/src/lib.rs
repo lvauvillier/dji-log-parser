@@ -1,9 +1,6 @@
-use dji_log_parser::keychain::{KeychainFeaturePoint, KeychainsResponse};
+use dji_log_parser::keychain::KeychainFeaturePoint;
 use dji_log_parser::DJILog;
 use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsValue};
-use wasm_bindgen_futures::js_sys::Promise;
-use wasm_bindgen_futures::JsFuture;
-use web_sys::{Request, RequestInit, Response};
 
 #[wasm_bindgen]
 extern "C" {
@@ -21,9 +18,6 @@ extern "C" {
 
     #[wasm_bindgen(typescript_type = "Frame[]")]
     pub type JSFrames;
-
-    #[wasm_bindgen(js_name = fetch)]
-    fn js_fetch(input: &Request) -> Promise;
 }
 
 #[wasm_bindgen(js_name = DJILog)]
@@ -98,50 +92,15 @@ impl DJILogWrapper {
         api_key: String,
         endpoint: Option<String>,
     ) -> Result<JSKeychains, JsValue> {
-        if self.inner.version < 13 {
-            return serde_wasm_bindgen::to_value(&Vec::<()>::new())
-                .map_err(|e| JsValue::from_str(&e.to_string()))
-                .map(|value| value.unchecked_into());
-        }
-
-        let keychain_request = self
+        let keychains = self
             .inner
             .keychains_request()
+            .map_err(|e| JsValue::from_str(&e.to_string()))?
+            .fetch_async(&api_key, endpoint.as_deref())
+            .await
             .map_err(|e| JsValue::from_str(&e.to_string()))?;
 
-        let body = serde_json::to_string(&keychain_request)
-            .map_err(|e| JsValue::from_str(&e.to_string()))?;
-
-        let mut init = RequestInit::new();
-        init.method("POST");
-        init.body(Some(&JsValue::from_str(&body)));
-
-        let request = Request::new_with_str_and_init(
-            &endpoint
-                .unwrap_or("https://dev.dji.com/openapi/v1/flight-records/keychains".to_string()),
-            &init,
-        )?;
-
-        request.headers().set("Content-Type", "application/json")?;
-        request.headers().set("Api-Key", &api_key)?;
-
-        let response: Response = JsFuture::from(js_fetch(&request)).await?.unchecked_into();
-        if !response.ok() {
-            return Err(JsValue::from_str("Invalid Api Key"));
-        }
-
-        let json = JsFuture::from(response.json()?).await?;
-
-        let keychain_response: KeychainsResponse = serde_wasm_bindgen::from_value(json)?;
-
-        if keychain_response.result.code != 0 {
-            return Err(JsValue::from_str(&format!(
-                "DJI Api error: {}",
-                keychain_response.result.msg
-            )));
-        }
-
-        serde_wasm_bindgen::to_value(&keychain_response.data)
+        serde_wasm_bindgen::to_value(&keychains)
             .map_err(|e| JsValue::from_str(&e.to_string()))
             .map(|value| value.unchecked_into())
     }

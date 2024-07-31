@@ -21,12 +21,6 @@ serde-wasm-bindgen.workspace = true
 serde_json.workspace = true
 wasm-bindgen.workspace = true
 wasm-bindgen-futures.workspace = true
-web-sys = { workspace = true, features = [
-    "Headers",
-    "Request",
-    "RequestInit",
-    "Response",
-] }
 
 [profile.release]
 lto = true

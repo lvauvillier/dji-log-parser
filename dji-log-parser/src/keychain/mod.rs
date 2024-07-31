@@ -11,7 +11,7 @@ mod feature_point;
 pub use api::*;
 pub use feature_point::FeaturePoint;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct EncodedKeychainFeaturePoint {

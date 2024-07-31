@@ -11,6 +11,9 @@ edition.workspace = true
 publish = true
 readme = "../README.md"
 
+[features]
+native-async = ["async-channel"]
+
 [dependencies]
 aes.workspace = true
 base64.workspace = true
@@ -23,8 +26,17 @@ serde_json.workspace = true
 thiserror.workspace = true
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+async-channel = { workspace = true, optional = true }
 ureq = { workspace = true, features = ["json"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+serde-wasm-bindgen.workspace = true
 tsify-next.workspace = true
 wasm-bindgen.workspace = true
+wasm-bindgen-futures.workspace = true
+web-sys = { workspace = true, features = [
+    "Headers",
+    "Request",
+    "RequestInit",
+    "Response",
+] }

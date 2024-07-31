@@ -320,10 +320,39 @@ impl DJILog {
     ///
     /// Returns a `Result<Vec<Vec<KeychainFeaturePoint>>>`. On success, it provides a vector of vectors,
     /// where each inner vector represents a keychain.
+    ///
     #[cfg(not(target_arch = "wasm32"))]
     pub fn fetch_keychains(&self, api_key: &str) -> Result<Vec<Vec<KeychainFeaturePoint>>> {
         if self.version >= 13 {
-            self.keychains_request()?.fetch(api_key)
+            self.keychains_request()?.fetch(api_key, None)
+        } else {
+            Ok(Vec::new())
+        }
+    }
+
+    /// Fetches keychains asynchronously using the provided API key.
+    /// Available on wasm and native behind the `native-async` feature.
+    ///
+    /// This function first creates a `KeychainRequest` using the `keychain_request()` method,
+    /// then uses that request to asynchronously fetch the actual keychains from the DJI API.
+    /// Keychains are required to decode records for logs with a version greater than or equal to 13.
+    ///
+    /// # Arguments
+    ///
+    /// * `api_key` - A string slice that holds the API key for authentication with the DJI API.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result<Vec<Vec<KeychainFeaturePoint>>>`. On success, it provides a vector of vectors,
+    /// where each inner vector represents a keychain.
+    ///
+    #[cfg(any(target_arch = "wasm32", feature = "native-async"))]
+    pub async fn fetch_keychains_async(
+        &self,
+        api_key: &str,
+    ) -> Result<Vec<Vec<KeychainFeaturePoint>>> {
+        if self.version >= 13 {
+            self.keychains_request()?.fetch_async(api_key, None).await
         } else {
             Ok(Vec::new())
         }
