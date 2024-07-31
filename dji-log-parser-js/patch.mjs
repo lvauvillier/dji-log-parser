@@ -20,14 +20,13 @@ const patched = jsContent
   // attach to `imports` instead of module.exports
   .replace("= module.exports", "= imports")
   .replace(/$/, "export default imports")
-  // map function exports
-  .replace(/\nmodule\.exports\.(__.*?)\s+/g, "\nexport const $1 = imports.$1 ")
-  // map class exports
   .replace(/\nclass (.*?) \{/g, "\nclass $1Class {")
   .replace(
     /\nmodule\.exports\.(.*?) = (.*?);/g,
     "\nexport const $1 = imports.$1 = $1Class"
   )
+  .replace(/\nmodule\.exports\.(.*?)\s+/g, "\nexport const $1 = imports.$1 ")
+
   // inline bytes Uint8Array
   .replace(
     /\nconst path.*\nconst bytes.*\n/,
