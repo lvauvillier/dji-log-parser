@@ -149,14 +149,14 @@ const records = parser.records(keychains);
 
 This library requires `fetch` to be globally available (Node >= 18.0) for retrieving keychains from the DJI endpoint.
 
-For older Node versions, you can manually retrieve the keychains using an alternative method, such as Axios. The library conveniently provides the necessary data for making keychains request through the `parser.keychainsRequest` property.
+For older Node versions, you can manually retrieve the keychains using an alternative method, such as Axios. The library conveniently provides the necessary data for making keychains request through the `parser.keychainsRequest()` function.
 
 Here’s an example with Axios:
 
 ```js
 const axios = require("axios");
 
-const body = JSON.stringify(parser.keychainsRequest);
+const body = JSON.stringify(parser.keychainsRequest());
 
 const response = await axios.post(
   "https://dev.dji.com/openapi/v1/flight-records/keychains",

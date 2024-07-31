@@ -63,7 +63,7 @@ impl DJILogWrapper {
     /// Keychains are required to decode records for logs with a version greater than or equal to 13.
     /// For earlier versions, this function returns a default `KeychainsRequest`.
     ///
-    #[wasm_bindgen(getter, js_name = "keychainsRequest")]
+    #[wasm_bindgen(js_name = "keychainsRequest")]
     pub fn keychains_request(&self) -> Result<JSKeychainsRequest, JsValue> {
         let keychain_request = self
             .inner
