@@ -1,7 +1,7 @@
 [package]
 name = "dji-log-parser-js"
 version.workspace = true
-description = "NodeJS bindings for dji-log-parser rust library"
+description = "Javascript bindings for dji-log-parser rust library"
 categories.workspace = true
 authors.workspace = true
 repository.workspace = true
