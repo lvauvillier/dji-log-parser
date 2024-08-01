@@ -22,7 +22,7 @@ const patched = jsContent
   .replace(/$/, "export default imports")
   .replace(/\nclass (.*?) \{/g, "\nclass $1Class {")
   .replace(
-    /\nmodule\.exports\.(.*?) = (.*?);/g,
+    /\nmodule\.exports\.(.*?) = \1;/g,
     "\nexport const $1 = imports.$1 = $1Class"
   )
   .replace(/\nmodule\.exports\.(.*?)\s+/g, "\nexport const $1 = imports.$1 ")
