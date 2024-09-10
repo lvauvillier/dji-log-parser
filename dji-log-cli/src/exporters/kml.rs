@@ -18,8 +18,8 @@ impl Exporter for KmlExporter {
 
             frames.iter().for_each(|frame| {
                 let coord = Coord {
-                    x: frame.osd.latitude,
-                    y: frame.osd.longitude,
+                    x: frame.osd.longitude,
+                    y: frame.osd.latitude,
                     z: Some(frame.osd.altitude as f64),
                 };
                 coords.push(coord);
