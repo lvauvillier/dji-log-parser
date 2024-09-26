@@ -96,14 +96,14 @@ impl DJILogWrapper {
             .inner
             .keychains_request()
             .map_err(|e| JsValue::from_str(&e.to_string()))?
-            .fetch_async(&api_key, endpoint.as_deref())
-            .await
+            .fetch(&api_key, endpoint.as_deref())
             .map_err(|e| JsValue::from_str(&e.to_string()))?;
 
         serde_wasm_bindgen::to_value(&keychains)
             .map_err(|e| JsValue::from_str(&e.to_string()))
             .map(|value| value.unchecked_into())
     }
+
 
     /// Retrieves the parsed raw records from the DJI log.
     ///
