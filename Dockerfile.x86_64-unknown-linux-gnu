@@ -1,0 +1,33 @@
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
+    g++ \
+    gcc-x86-64-linux-gnu \
+    g++-x86-64-linux-gnu \
+    libc6-dev-amd64-cross \
+    curl \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustup target add x86_64-unknown-linux-gnu
+
+RUN mkdir -p /root/.cargo && \
+    echo '[target.x86_64-unknown-linux-gnu]' >> /root/.cargo/config && \
+    echo 'linker = "x86_64-linux-gnu-gcc"' >> /root/.cargo/config
+
+ENV CC_x86_64_unknown_linux_gnu=x86_64-linux-gnu-gcc
+ENV CXX_x86_64_unknown_linux_gnu=x86_64-linux-gnu-g++
+
+WORKDIR /usr/src/myapp
+
+CMD cp -r /usr/src/myapp /tmp/build && \
+    cd /tmp/build && \
+    cargo build --release --target x86_64-unknown-linux-gnu && \
+    mkdir -p /usr/src/myapp/target/x86_64-unknown-linux-gnu/release && \
+    cp -r /tmp/build/target/x86_64-unknown-linux-gnu/release/* /usr/src/myapp/target/x86_64-unknown-linux-gnu/release/ && \
+    echo "Build completed for x86_64-unknown-linux-gnu"

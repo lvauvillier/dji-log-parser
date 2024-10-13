@@ -1,0 +1,22 @@
+FROM --platform=linux/arm64/v8 ubuntu:latest
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustup target add aarch64-unknown-linux-gnu
+
+WORKDIR /usr/src/myapp
+
+CMD cp -r /usr/src/myapp /tmp/build && \
+    cd /tmp/build && \
+    cargo build --release --target aarch64-unknown-linux-gnu && \
+    mkdir -p /usr/src/myapp/target/linux-arm64-v8/release && \
+    cp /tmp/build/target/aarch64-unknown-linux-gnu/release/libdji_log_parser.a /usr/src/myapp/target/linux-arm64-v8/release/ && \
+    echo "Build completed for linux-arm64-v8"

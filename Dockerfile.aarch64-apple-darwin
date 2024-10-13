@@ -1,0 +1,37 @@
+FROM rust:latest as builder
+
+# Install necessary packages and tools
+RUN apt-get update && apt-get install -y \
+    clang \
+    llvm \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the target and cross
+RUN rustup target add aarch64-apple-darwin && \
+    cargo install cross
+
+# Set up cargo config for cross-compilation
+RUN mkdir -p /root/.cargo && \
+    echo '[target.aarch64-apple-darwin]' >> /root/.cargo/config && \
+    echo 'linker = "clang"' >> /root/.cargo/config && \
+    echo 'ar = "llvm-ar"' >> /root/.cargo/config
+
+# Set environment variables for cross-compilation
+ENV CC_aarch64_apple_darwin=clang \
+    CXX_aarch64_apple_darwin=clang++
+
+WORKDIR /usr/src/myapp
+COPY . .
+
+# Build the project
+RUN cross build --release --target aarch64-apple-darwin
+
+# Use a minimal Linux image for the final stage
+FROM debian:buster-slim
+COPY --from=builder /usr/src/myapp/target/aarch64-apple-darwin/release/libdji_log_parser.a /libdji_log_parser.a
+
+# Add labels for better metadata management
+LABEL maintainer="Your Name <your.email@example.com>"
+LABEL version="0.4.1"
+LABEL description="DJI Log Parser for aarch64-apple-darwin"
