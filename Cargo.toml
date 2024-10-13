@@ -3,12 +3,12 @@ resolver = "2"
 members = ["dji-log-parser", "dji-log-cli"]
 
 [workspace.package]
-authors = ["Luc Vauvillier <luc.vauvillier@gmail.com>"]
-edition = "2024"
-version = "0.4.0"
-repository = "https://github.com/edancain/dji-log-parser"
+authors = ["Luc Vauvillier <luc.vauvillier@gmail.com>", "edan.cain@airspacelink.com"]
+edition = "2021"
+version = "0.4.1"
+repository = "https://github.com/airspace-link-inc/dji-log-parser"
 license = "MIT"
-keywords = ["dji", "UAV", "parser", "drones", "C Wrapper]
+keywords = ["dji", "UAV", "parser", "drones", "C Wrapper"]
 categories = [
     "aerospace::drones",
     "aerospace::protocols",

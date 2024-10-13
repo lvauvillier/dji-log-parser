@@ -1,8 +1,4 @@
 /target
 /data
-/go-code
-/test-data
 /.vscode
 .DS_Store
-go.mod
-go.sum
