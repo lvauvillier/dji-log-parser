@@ -59,7 +59,6 @@ impl Frame {
     ///
     fn reset(&mut self) {
         self.camera.is_photo = bool::default();
-        self.camera.is_video = bool::default();
         self.app.tip = String::default();
         self.app.warn = String::default();
 
