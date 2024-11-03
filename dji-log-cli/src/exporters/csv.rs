@@ -47,7 +47,7 @@ fn get_headers(frame: &Frame) -> Vec<String> {
     let mut headers = vec![
         "CUSTOM.dateTime".to_string(),    // Custom date and time of the frame
         "OSD.flyTime".to_string(),        // Flight time in seconds
-        "OSD.lalitude".to_string(),       // Latitude in degrees
+        "OSD.latitude".to_string(),       // Latitude in degrees
         "OSD.longitude".to_string(),      // Longitude in degrees
         "OSD.height".to_string(),         // Height above ground level in meters
         "OSD.heightMax".to_string(),      // Maximum height reached in meters
