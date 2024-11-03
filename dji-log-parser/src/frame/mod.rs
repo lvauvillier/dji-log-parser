@@ -333,7 +333,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 }
             }
             Record::Custom(custom) => {
-                frame.custom.date_time = custom.update_time_stamp;
+                frame.custom.date_time = custom.update_timestamp;
             }
             Record::Home(home) => {
                 frame.home.latitude = home.latitude;
