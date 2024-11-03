@@ -5,7 +5,7 @@ members = ["dji-log-parser", "dji-log-cli", "dji-log-parser-js"]
 [workspace.package]
 authors = ["Luc Vauvillier <luc.vauvillier@gmail.com>"]
 edition = "2021"
-version = "0.5.3"
+version = "0.5.4"
 repository = "https://github.com/lvauvillier/dji-log-parser"
 license = "MIT"
 keywords = ["dji", "UAV", "parser", "drones"]
