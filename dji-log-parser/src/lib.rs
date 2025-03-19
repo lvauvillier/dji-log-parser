@@ -156,7 +156,7 @@ mod utils;
 pub use error::{Error, Result};
 use frame::{records_to_frames, Frame};
 use keychain::{EncodedKeychainFeaturePoint, Keychain, KeychainFeaturePoint, KeychainsRequest};
-use layout::auxiliary::Auxiliary;
+use layout::auxiliary::{Auxiliary, Department};
 use layout::details::Details;
 use layout::prefix::Prefix;
 use record::Record;
@@ -261,7 +261,11 @@ impl DJILog {
         // Get version from second auxilliary block
         if let Auxiliary::Version(data) = Auxiliary::read(&mut cursor)? {
             keychain_request.version = data.version;
-            keychain_request.department = data.department.into();
+            // If deparment is unknown, fallback to DJIFly
+            keychain_request.department = match data.department {
+                Department::Unknown(_) => Department::DJIFly.into(),
+                _ => data.department.into(),
+            };
         } else {
             return Err(Error::MissingAuxilliaryData("Version".into()));
         }
