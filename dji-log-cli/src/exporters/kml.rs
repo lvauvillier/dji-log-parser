@@ -50,7 +50,7 @@ impl Exporter for KmlExporter {
                     name: Some(parser.details.aircraft_name.to_string()),
                     geometry: Some(Geometry::LineString(LineString {
                         coords,
-                        altitude_mode: AltitudeMode::RelativeToGround,
+                        altitude_mode: AltitudeMode::Absolute,
                         ..LineString::default()
                     })),
                     ..Placemark::default()
