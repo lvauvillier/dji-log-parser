@@ -6,7 +6,7 @@ use crate::decoder::XorDecoder;
 #[binread]
 #[derive(Debug)]
 #[br(little)]
-pub enum Auxiliary {
+pub(crate) enum Auxiliary {
     #[br(magic = 0u8)]
     Info(
         #[br(temp)] u16,
@@ -23,7 +23,7 @@ pub enum Auxiliary {
 #[binread]
 #[derive(Debug)]
 #[br(little)]
-pub struct AuxiliaryInfo {
+pub(crate) struct AuxiliaryInfo {
     pub version_data: u8,
     #[br(temp)]
     info_length: u16,
@@ -38,7 +38,7 @@ pub struct AuxiliaryInfo {
 #[binread]
 #[derive(Debug)]
 #[br(little)]
-pub struct AuxiliaryVersion {
+pub(crate) struct AuxiliaryVersion {
     pub version: u16,
     #[br(map = |x: u8| Department::from(x))]
     pub department: Department,

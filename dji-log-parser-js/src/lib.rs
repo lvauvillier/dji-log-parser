@@ -1,4 +1,5 @@
 use dji_log_parser::keychain::KeychainFeaturePoint;
+use dji_log_parser::layout::auxiliary::Department;
 use dji_log_parser::DJILog;
 use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsValue};
 
@@ -68,6 +69,36 @@ impl DJILogWrapper {
         let keychain_request = self
             .inner
             .keychains_request()
+            .map_err(|e| JsValue::from_str(&e.to_string()))?;
+
+        serde_wasm_bindgen::to_value(&keychain_request)
+            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map(|value| value.unchecked_into())
+    }
+    /// Creates a `KeychainsRequest` object by parsing `KeyStorage` records with manually specified params.
+    ///
+    /// This function is used to build a request body for manually retrieving the keychain from the DJI API.
+    /// Keychains are required to decode records for logs with a version greater than or equal to 13.
+    /// For earlier versions, this function returns a default `KeychainsRequest`.
+    ///
+    /// # Arguments
+    ///
+    /// * `department` - An optional `Department` to manually set in the request. If not provided, the department
+    ///   will be determined from the log file.
+    /// * `version` - An optional version number to manually set in the request. If not provided, the version
+    ///   will be determined from the log file.
+    ///
+    #[wasm_bindgen(js_name = "keychainsRequestWithCustomParams")]
+    pub fn keychains_request_with_custom_params(
+        &self,
+        department: Option<u8>,
+        version: Option<u16>,
+    ) -> Result<JSKeychainsRequest, JsValue> {
+        let department = department.map(Department::from);
+
+        let keychain_request = self
+            .inner
+            .keychains_request_with_custom_params(department, version)
             .map_err(|e| JsValue::from_str(&e.to_string()))?;
 
         serde_wasm_bindgen::to_value(&keychain_request)
