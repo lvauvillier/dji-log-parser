@@ -57,6 +57,11 @@ dji-log --api-key __DJI_API_KEY__ --output frames.json DJIFlightRecord.txt
 
 Use `%d` in the images or thumbnails option to specify a sequence.
 
+### Advanced Options
+
+- `--api-custom-department`: Manually set the department on keychains apis request
+- `--api-custom-version`: Manually set the department on keychains apis request
+
 For a complete list of options, run:
 
 ```bash
