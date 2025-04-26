@@ -1,5 +1,6 @@
 use clap::Parser;
 use dji_log_parser::frame::Frame;
+use dji_log_parser::layout::auxiliary::Department;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use exporters::{CSVExporter, GeoJsonExporter, ImageExporter, JsonExporter, KmlExporter};
@@ -46,6 +47,14 @@ pub(crate) struct Cli {
     /// Extract raw records instead of normalized frames
     #[arg(short, long)]
     raw: bool,
+
+    /// Custom department for keychain request
+    #[arg(long)]
+    api_custom_department: Option<u8>,
+
+    /// Custom version for keychain request
+    #[arg(long)]
+    api_custom_version: Option<u16>,
 }
 
 pub(crate) trait Exporter {
@@ -60,10 +69,18 @@ fn main() {
 
     let keychains = if parser.version >= 13 {
         match &args.api_key {
-            Some(api_key) => parser
-                .fetch_keychains(api_key)
-                .map_err(|e| format!("Unable to fetch keychain: {}", e))
-                .ok(),
+            Some(api_key) => {
+                let department = args.api_custom_department.map(Department::from);
+                let version = args.api_custom_version;
+
+                let req = parser
+                    .keychains_request_with_custom_params(department, version)
+                    .expect("Unable to create keychain request");
+
+                let keychains = req.fetch(api_key, None).expect("Unable to fetch keychain");
+
+                Some(keychains)
+            }
             None => {
                 panic!("API Key is required for version 13 and above");
             }
