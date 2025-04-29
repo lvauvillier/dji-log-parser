@@ -1,0 +1,12 @@
+language = "C"
+
+[export]
+include = [
+    "parse_from_bytes",
+    "get_error",
+    "c_api_free_string",
+]
+
+[parse]
+parse_deps = true
+include = ["dji_log_parser"]
