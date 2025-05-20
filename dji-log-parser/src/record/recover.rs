@@ -4,7 +4,7 @@ use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
-use crate::layout::details::{Platform, ProductType};
+use crate::layout::details::{Platform, ProductType, parse_battery_sn};
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -29,6 +29,9 @@ pub struct Recover {
     pub camera_sn: String,
     #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub rc_sn: String,
-    #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = if version <= 7 { 10 } else { 16 })]
+    #[br(temp)]
+    battery_buf: Vec<u8>,
+    #[br(calc = parse_battery_sn(product_type, battery_buf))]
     pub battery_sn: String,
 }

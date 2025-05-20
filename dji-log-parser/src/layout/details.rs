@@ -82,7 +82,10 @@ pub struct Details {
     pub camera_sn: String,
     #[br(count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
     pub rc_sn: String,
-    #[br(count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = if version <= 5 { 10 } else { 16 })]
+    #[br(temp)]
+    battery_buf: Vec<u8>,
+    #[br(calc = parse_battery_sn(product_type, battery_buf))]
     pub battery_sn: String,
     #[br(map = |x: u8| Platform::from(x))]
     pub app_platform: Platform,
@@ -359,4 +362,36 @@ impl From<u8> for Platform {
             _ => Platform::Unknown(num),
         }
     }
+}
+
+/// Decode the battery serial number from raw bytes, choosing the method based on model:
+/// - For Inspire1/Pro/RAW, interpret the low nibble of each byte as a BCD digit,
+///   reverse the sequence, and trim leading `'0'`.
+/// - Otherwise, treat the bytes as a UTF-8, null-terminated string.
+///
+pub fn parse_battery_sn(product_type: ProductType, buf: Vec<u8>) -> String {
+    const BCD_PRODUCTS: [ProductType; 3] = [
+        ProductType::Inspire1,
+        ProductType::Inspire1Pro,
+        ProductType::Inspire1RAW,
+    ];
+
+    if BCD_PRODUCTS.contains(&product_type) {
+        decode_reversed_bcd_battery_sn(buf)
+    } else {
+        String::from_utf8_lossy(&buf).trim_end_matches('\0').to_string()
+    }
+}
+
+/// Decode a reversed-BCD battery serial:
+/// 1. Take each byte’s low 4 bits (0–9) as a digit
+/// 2. Reverse the digit sequence
+/// 3. Skip any leading `'0'` characters
+///
+fn decode_reversed_bcd_battery_sn(buf: Vec<u8>) -> String {
+    buf.into_iter()
+        .map(|b| ((b & 0xF) + b'0') as char)
+        .rev()
+        .skip_while(|&c| c == '0')
+        .collect()
 }
