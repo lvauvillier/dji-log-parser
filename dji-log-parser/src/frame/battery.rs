@@ -12,6 +12,8 @@ pub struct FrameBattery {
     pub voltage: f32,
     /// Battery current
     pub current: f32,
+    /// Designed battery capacity
+    pub design_capacity: u32,
     /// Current battery capacity
     pub current_capacity: u32,
     /// Full battery capacity
@@ -32,4 +34,7 @@ pub struct FrameBattery {
     pub min_temperature: f32,
     /// Maximum battery temperature
     pub max_temperature: f32,
+    pub number_of_discharges: u16,
+    pub life: u8,
+    pub lifetime_remaining: u8,
 }

@@ -12,8 +12,11 @@ pub struct Firmware {
     #[br(map = |x: u8| SenderType::from(x))]
     pub sender_type: SenderType,
     pub sub_sender_type: u8,
-    #[br(map = |x: [u8; 4]| format!("{}.{}.{}", x[0], x[1], x[2]))]
+    #[br(map = |x: [u8; 5]| format!("{}.{}.{}.{}", x[0], x[1], x[2], x[3]))]
     pub version: String,
+    pub unknown: u8,
+    #[br(map = |x: [u8; 5]| format!("{}.{}.{}.{}", x[0], x[1], x[2], x[3]))]
+    pub rc_firmware_version: String,
 }
 
 #[derive(Serialize, Debug)]

@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
@@ -35,6 +36,32 @@ pub struct FrameDetails {
     pub app_platform: Platform,
     /// Version of the app used
     pub app_version: String,
+    /// Start time of the flight
+    pub start_time: DateTime<Utc>,
+}
+
+impl FrameDetails {
+    /// Creates FrameDetails from Details, but uses the most recent frame data 
+    /// for serial numbers if available (from ComponentSerial records)
+    pub fn from_details_and_frames(details: Details, frames: &[super::Frame]) -> Self {
+        let mut frame_details = Self::from(details.clone());
+        
+        // Find the most recent frame with updated serial numbers from ComponentSerial records
+        // We check if the frame serial is longer than the details serial, indicating it came from ComponentSerial
+        if let Some(last_frame) = frames.last() {
+            if last_frame.recover.aircraft_sn.len() > details.aircraft_sn.len() {
+                frame_details.aircraft_sn = last_frame.recover.aircraft_sn.clone();
+            }
+            if last_frame.recover.camera_sn.len() > details.camera_sn.len() {
+                frame_details.camera_sn = last_frame.recover.camera_sn.clone();
+            }
+            if last_frame.recover.rc_sn.len() > details.rc_sn.len() {
+                frame_details.rc_sn = last_frame.recover.rc_sn.clone();
+            }
+        }
+        
+        frame_details
+    }
 }
 
 impl From<Details> for FrameDetails {
@@ -53,6 +80,7 @@ impl From<Details> for FrameDetails {
             rc_sn: value.rc_sn.clone(),
             app_platform: value.app_platform.clone(),
             app_version: value.app_version.clone(),
+            start_time: value.start_time,
         }
     }
 }

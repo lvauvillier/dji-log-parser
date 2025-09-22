@@ -48,7 +48,7 @@ impl Exporter for JsonExporter {
         } else {
             serde_json::to_string(&FrameJsonData {
                 version: parser.version,
-                details: parser.details.clone().into(),
+                details: FrameDetails::from_details_and_frames(parser.details.clone(), frames),
                 frames,
             })
             .unwrap()

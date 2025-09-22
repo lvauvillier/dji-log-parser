@@ -3,6 +3,7 @@ use serde::Serialize;
 use tsify_next::Tsify;
 
 use crate::layout::details::Details;
+use crate::record::component_serial::ComponentType;
 use crate::record::osd::{AppCommand, GroundOrSky};
 use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
@@ -18,6 +19,7 @@ mod home;
 mod osd;
 mod rc;
 mod recover;
+mod firmware;
 
 pub use app::FrameApp;
 pub use battery::FrameBattery;
@@ -28,6 +30,7 @@ pub use gimbal::FrameGimbal;
 pub use home::FrameHome;
 pub use osd::FrameOSD;
 pub use rc::FrameRC;
+pub use firmware::FrameFirmware;
 pub use recover::FrameRecover;
 
 /// Represents a normalized frame of data from a DJI log.
@@ -49,6 +52,7 @@ pub struct Frame {
     pub home: FrameHome,
     pub recover: FrameRecover,
     pub app: FrameApp,
+    pub firmware: FrameFirmware,
 }
 
 impl Frame {
@@ -155,6 +159,15 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
             is_cell_voltage_estimated: true,
             ..FrameBattery::default()
         },
+        recover: FrameRecover {
+            app_platform: Some(details.app_platform.clone()),
+            app_version: details.app_version.clone(),
+            aircraft_name: details.aircraft_name.clone(),
+            aircraft_sn: details.aircraft_sn.clone(),
+            camera_sn: details.camera_sn.clone(),
+            rc_sn: details.rc_sn.clone(),
+            battery_sn: details.battery_sn.clone(),
+        },
         ..Frame::default()
     };
 
@@ -171,8 +184,11 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
 
                 // Fill OSD record
                 frame.osd.fly_time = osd.fly_time;
-                frame.osd.latitude = osd.latitude;
-                frame.osd.longitude = osd.longitude;
+                // Only update coordinates if they are valid, preserving any AppGPS coordinates
+                if osd.latitude != 0.0 && osd.longitude != 0.0 {
+                    frame.osd.latitude = osd.latitude;
+                    frame.osd.longitude = osd.longitude;
+                }
                 // Fix altitude by adding the home point altitude
                 frame.osd.altitude = osd.altitude + frame.home.altitude;
                 frame.osd.height = osd.altitude;
@@ -227,6 +243,10 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
 
                 frame_index += 1;
             }
+            Record::Firmware(firmware) => {
+                frame.firmware.version = firmware.version;
+                frame.firmware.rc_firmware_version = firmware.rc_firmware_version;
+            }
             Record::Gimbal(gimbal) => {
                 frame.gimbal.mode = Some(gimbal.mode);
                 frame.gimbal.pitch = gimbal.pitch;
@@ -272,7 +292,8 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.battery.voltage = battery.voltage;
                 frame.battery.current_capacity = battery.current_capacity as u32;
                 frame.battery.full_capacity = battery.full_capacity as u32;
-                frame.battery.full_capacity = battery.full_capacity as u32;
+                frame.battery.number_of_discharges = battery.number_of_discharges;
+                frame.battery.life = battery.life;
                 frame.battery.is_cell_voltage_estimated = false;
 
                 let cell_num = frame.battery.cell_voltages.len();
@@ -300,7 +321,11 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.battery.voltage = battery.voltage;
             }
             Record::SmartBatteryGroup(battery_group) => match battery_group {
-                SmartBatteryGroup::SmartBatteryStatic(_) => {}
+                SmartBatteryGroup::SmartBatteryStatic(battery) => {
+                    frame.battery.design_capacity = battery.designed_capacity;
+                    frame.battery.lifetime_remaining = battery.battery_life;
+                    frame.battery.number_of_discharges = battery.loop_times;
+                }
                 SmartBatteryGroup::SmartBatteryDynamic(battery) => {
                     // when there are multiple batteries, only one contains accurate values at index 1
                     if details.product_type.battery_num() < 2 || battery.index == 1 {
@@ -318,7 +343,8 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                         .cell_voltages
                         .len()
                         .min(battery.cell_count as usize);
-
+                    frame.battery.cell_voltages = vec![0.0; cell_num];
+                    
                     frame.battery.is_cell_voltage_estimated = false;
 
                     frame.battery.cell_voltages[..cell_num]
@@ -336,8 +362,11 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.custom.date_time = custom.update_timestamp;
             }
             Record::Home(home) => {
-                frame.home.latitude = home.latitude;
-                frame.home.longitude = home.longitude;
+                // Only update home coordinates if they are valid
+                if home.latitude != 0.0 && home.longitude != 0.0 {
+                    frame.home.latitude = home.latitude;
+                    frame.home.longitude = home.longitude;
+                }
                 // If home_altitude was not previously set, also update osd.altitude
                 if frame.home.altitude == f32::default() {
                     frame.osd.altitude += home.altitude;
@@ -370,10 +399,22 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.recover.app_platform = Some(recover.app_platform);
                 frame.recover.app_version = recover.app_version;
                 frame.recover.aircraft_name = recover.aircraft_name;
-                frame.recover.aircraft_sn = recover.aircraft_sn;
-                frame.recover.camera_sn = recover.camera_sn;
-                frame.recover.rc_sn = recover.rc_sn;
-                frame.recover.battery_sn = recover.battery_sn;
+                // Only update aircraft_sn if the current one is shorter (ComponentSerial takes precedence)
+                if frame.recover.aircraft_sn.len() <= recover.aircraft_sn.len() {
+                    frame.recover.aircraft_sn = recover.aircraft_sn;
+                }
+                // Only update camera_sn if the current one is shorter (ComponentSerial takes precedence)
+                if frame.recover.camera_sn.len() <= recover.camera_sn.len() {
+                    frame.recover.camera_sn = recover.camera_sn;
+                }
+                // Only update rc_sn if the current one is shorter (ComponentSerial takes precedence)
+                if frame.recover.rc_sn.len() <= recover.rc_sn.len() {
+                    frame.recover.rc_sn = recover.rc_sn;
+                }
+                // Only update battery_sn if the current one is shorter (ComponentSerial takes precedence)
+                if frame.recover.battery_sn.len() <= recover.battery_sn.len() {
+                    frame.recover.battery_sn = recover.battery_sn;
+                }
             }
             Record::AppTip(app_tip) => {
                 frame.app.tip = append_message(frame.app.tip, app_tip.message);
@@ -383,6 +424,34 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
             }
             Record::AppSeriousWarn(app_serious_warn) => {
                 frame.app.warn = append_message(frame.app.warn, app_serious_warn.message);
+            }
+            Record::AppGPS(app_gps) => {
+                // Use AppGPS coordinates when OSD coordinates are invalid (0.0)
+                // This is useful for version 11 logs where OSD coordinates are often corrupted
+                // For some reason, longitude and latitude are swapped in AppGPS
+                if frame.osd.latitude == 0.0 && frame.osd.longitude == 0.0 {
+                    frame.osd.longitude = app_gps.latitude;
+                    frame.osd.latitude = app_gps.longitude;
+                }
+            }
+            Record::ComponentSerial(component_serial) => {
+                match component_serial.component_type {
+                    ComponentType::Aircraft => {
+                        frame.recover.aircraft_sn = component_serial.serial;
+                    }
+                    ComponentType::Camera => {
+                        frame.recover.camera_sn = component_serial.serial;
+                    }
+                    ComponentType::RC => {
+                        frame.recover.rc_sn = component_serial.serial;
+                    }
+                    ComponentType::Battery => {
+                        frame.recover.battery_sn = component_serial.serial;
+                    }
+                    ComponentType::Unknown(_) => {
+                        // Ignore unknown component types
+                    }
+                }
             }
             _ => {}
         }

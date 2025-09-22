@@ -135,6 +135,11 @@ For version 13 and later:
 let records = parser.records(Some(keychains));
 ```
 
+Release:
+```bash
+cargo build --release --bin dji-log
+```
+
 For more information, including a more detailed overview of the log format, [visit the documentation](https://docs.rs/dji-log-parser).
 
 ## License
