@@ -59,7 +59,10 @@ pub struct SmartBatteryDynamic {
     pub temperature: f32,
     pub cell_count: u8,
     pub capacity_percent: u8,
-    pub battery_state: u64,
+    // Bitfield that can exceed 2^53; serialized as a string because
+    // serde-wasm-bindgen rejects u64 values not representable as a JS number.
+    #[br(map = |x: u64| x.to_string())]
+    pub battery_state: String,
 }
 
 #[binread]
