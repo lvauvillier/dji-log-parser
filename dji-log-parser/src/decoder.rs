@@ -142,19 +142,36 @@ pub struct AesDecoder {
 impl AesDecoder {
     pub fn new<R: Read>(mut reader: R, iv: &[u8], key: &[u8], size: u16) -> AesDecoder {
         let mut buffer = vec![0u8; size.into()];
-        reader.read_exact(&mut buffer).unwrap();
 
-        // Get next from last block
-        let next_iv = buffer[buffer.len() - Aes256::block_size()..].to_vec();
+        if reader.read_exact(&mut buffer).is_err() {
+            return AesDecoder {
+                buffer: Cursor::new(vec![]),
+                next_iv: vec![0u8; Aes256::block_size()],
+            };
+        }
 
-        let dec: cbc::Decryptor<Aes256> = Aes256CbcDec::new_from_slices(key, iv).unwrap();
+        // Get next IV from last AES block of ciphertext.
+        // Guard against records shorter than one block (e.g. small waypoint records).
+        let next_iv = if buffer.len() >= Aes256::block_size() {
+            buffer[buffer.len() - Aes256::block_size()..].to_vec()
+        } else {
+            vec![0u8; Aes256::block_size()]
+        };
+
+        let Ok(dec) = Aes256CbcDec::new_from_slices(key, iv) else {
+            return AesDecoder {
+                buffer: Cursor::new(vec![]),
+                next_iv,
+            };
+        };
+
         let plaintext = dec
             .decrypt_padded_mut::<Pkcs7>(&mut buffer)
             .unwrap_or_default()
             .to_vec();
 
         AesDecoder {
-            buffer: Cursor::new(plaintext.to_vec()),
+            buffer: Cursor::new(plaintext),
             next_iv,
         }
     }
