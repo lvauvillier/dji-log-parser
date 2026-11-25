@@ -1,4 +1,5 @@
-use binrw::binread;
+use binrw::io::{Read, Seek, SeekFrom};
+use binrw::{args, BinRead, BinResult, Endian};
 use serde::Serialize;
 use std::cell::RefCell;
 #[cfg(target_arch = "wasm32")]
@@ -65,274 +66,228 @@ const END_BYTE: u8 = 0xFF;
 /// Records typically consist of a 'magic' byte indicating the record type, followed by the length of the record,
 /// the actual data, and then a terminating byte of value `0xff`.
 ///
-#[binread]
 #[derive(Serialize, Debug)]
 #[serde(tag = "type", content = "content")]
-#[br(little, import { version: u8, keychain: &RefCell<Keychain>, product_type: ProductType = ProductType::None })]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum Record {
-    #[br(magic = 1u8)]
-    OSD(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 1, version, keychain, self_0),
-            args { version }
-        )]
-        OSD,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 2u8)]
-    Home(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 2, version, keychain, self_0),
-            args { version }
-        )]
-        Home,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 3u8)]
-    Gimbal(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 3, version, keychain, self_0),
-            args { version }
-        )]
-        Gimbal,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 4u8)]
-    RC(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 4, version, keychain, self_0),
-            args { product_type, version }
-        )]
-        RC,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 5u8)]
-    Custom(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 5, version, keychain, self_0)
-        )]
-        Custom,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 6u8)]
-    Deform(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 6, version, keychain, self_0)
-        )]
-        Deform,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 7u8)]
-    CenterBattery(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 7, version, keychain, self_0),
-            args { version }
-        )]
-        CenterBattery,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 8u8)]
-    SmartBattery(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 8, version, keychain, self_0)
-        )]
-        SmartBattery,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 9u8)]
-    AppTip(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 9, version, keychain, self_0),
-            args { length: self_0 }
-        )]
-        AppTip,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 10u8)]
-    AppWarn(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 10, version, keychain, self_0),
-            args { length: self_0 }
-        )]
-        AppWarn,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 11u8)]
-    RCGPS(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 11, version, keychain, self_0)
-        )]
-        RCGPS,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 13u8)]
-    Recover(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 13, version, keychain, self_0),
-            args { version }
-        )]
-        Recover,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 14u8)]
-    AppGPS(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 14, version, keychain, self_0)
-        )]
-        AppGPS,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 15u8)]
-    Firmware(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 15, version, keychain, self_0)
-        )]
-        Firmware,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 19u8)]
-    MCParams(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 19, version, keychain, self_0)
-        )]
-        MCParams,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 22u8)]
-    SmartBatteryGroup(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 22, version, keychain, self_0)
-        )]
-        SmartBatteryGroup,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 24u8)]
-    AppSeriousWarn(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 24, version, keychain, self_0),
-            args { length: self_0 }
-        )]
-        AppSeriousWarn,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 25u8)]
-    Camera(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 25, version, keychain, self_0),
-        )]
-        Camera,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 33u8)]
-    VirtualStick(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 33, version, keychain, self_0),
-        )]
-        VirtualStick,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 40u8)]
-    ComponentSerial(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 40, version, keychain, self_0),
-        )]
-        ComponentSerial,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 49u8)]
-    OFDM(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 49, version, keychain, self_0),
-        )]
-        OFDM,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 50u8)]
-    KeyStorageRecover(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(count = self_0)] Vec<u8>,
-        #[br(temp, assert(self_2 == 0xff))] u8,
-    ),
-    #[br(magic = 56u8)]
-    KeyStorage(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 56, version, keychain, self_0)
-        )]
-        KeyStorage,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    #[br(magic = 62u8)]
-    RCDisplayField(
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16)] u16,
-        #[br(
-            pad_size_to = self_0,
-            map_stream = |reader| record_decoder(reader, 62, version, keychain, self_0),
-        )]
-        RCDisplayField,
-        #[br(temp, assert(self_2 == END_BYTE))] u8,
-    ),
-    JPEG(#[br(parse_with = utils::read_jpeg)] Vec<u8>),
-    // Valid record of unknown data
-    Unknown(
-        u8, // record_type
-        #[br(temp, args(version <= 12), parse_with = utils::read_u16, assert(self_1 > 2))] u16,
-        #[br(
-            pad_size_to = self_1,
-            count = if version <= 6 {
-                self_1
-            } else {
-                self_1 - 2
-            },
-            map_stream = |reader| record_decoder(reader, self_0, version, keychain, self_1)
-        )]
-        Vec<u8>,
-        #[br(temp, assert(self_3 == END_BYTE))] u8,
-    ),
-    // Invalid data, try to seek to next record
-    Invalid(#[br(parse_with = utils::seek_to_next_record, assert(!self_0.is_empty()))] Vec<u8>),
+    OSD(OSD),
+    Home(Home),
+    Gimbal(Gimbal),
+    RC(RC),
+    Custom(Custom),
+    Deform(Deform),
+    CenterBattery(CenterBattery),
+    SmartBattery(SmartBattery),
+    AppTip(AppTip),
+    AppWarn(AppWarn),
+    RCGPS(RCGPS),
+    Recover(Recover),
+    AppGPS(AppGPS),
+    Firmware(Firmware),
+    MCParams(MCParams),
+    SmartBatteryGroup(SmartBatteryGroup),
+    AppSeriousWarn(AppSeriousWarn),
+    Camera(Camera),
+    VirtualStick(VirtualStick),
+    ComponentSerial(ComponentSerial),
+    OFDM(OFDM),
+    KeyStorageRecover(Vec<u8>),
+    KeyStorage(KeyStorage),
+    RCDisplayField(RCDisplayField),
+    JPEG(Vec<u8>),
+    /// Valid record of unknown data: record type and decoded content
+    Unknown(u8, Vec<u8>),
+    /// Invalid data, skipped until the next record
+    Invalid(Vec<u8>),
+}
+
+impl Record {
+    /// Reads the record at the current position.
+    ///
+    /// Tries, in order: the record type given by the first byte, a JPEG image, a record of
+    /// unknown content, and finally skips invalid data up to the next record. The position is
+    /// restored before each attempt.
+    pub(crate) fn read<R: Read + Seek>(
+        reader: &mut R,
+        version: u8,
+        keychain: &RefCell<Keychain>,
+    ) -> BinResult<Record> {
+        let start = reader.stream_position()?;
+        let restart = |reader: &mut R| reader.seek(SeekFrom::Start(start));
+
+        Self::read_known(reader, version, keychain)
+            .or_else(|_| {
+                restart(reader)?;
+                Self::read_jpeg(reader)
+            })
+            .or_else(|_| {
+                restart(reader)?;
+                Self::read_unknown(reader, version, keychain)
+            })
+            .or_else(|_| {
+                restart(reader)?;
+                Self::read_invalid(reader)
+            })
+    }
+
+    /// Reads a record of a known type. Fails for unknown types and invalid records.
+    fn read_known<R: Read + Seek>(
+        reader: &mut R,
+        version: u8,
+        keychain: &RefCell<Keychain>,
+    ) -> BinResult<Record> {
+        let mut content = RecordContent::read_header(reader, version, keychain)?;
+        let length = content.length;
+
+        let record = match content.record_type {
+            1 => Record::OSD(content.read::<OSD>(args! { version })?),
+            2 => Record::Home(content.read::<Home>(args! { version })?),
+            3 => Record::Gimbal(content.read::<Gimbal>(args! { version })?),
+            // The product type is not known when parsing records
+            4 => {
+                Record::RC(content.read::<RC>(args! { version, product_type: ProductType::None })?)
+            }
+            5 => Record::Custom(content.read(())?),
+            6 => Record::Deform(content.read(())?),
+            7 => Record::CenterBattery(content.read::<CenterBattery>(args! { version })?),
+            8 => Record::SmartBattery(content.read(())?),
+            9 => Record::AppTip(content.read::<AppTip>(args! { length })?),
+            10 => Record::AppWarn(content.read::<AppWarn>(args! { length })?),
+            11 => Record::RCGPS(content.read(())?),
+            13 => Record::Recover(content.read::<Recover>(args! { version })?),
+            14 => Record::AppGPS(content.read(())?),
+            15 => Record::Firmware(content.read(())?),
+            19 => Record::MCParams(content.read(())?),
+            22 => Record::SmartBatteryGroup(content.read(())?),
+            24 => Record::AppSeriousWarn(content.read::<AppSeriousWarn>(args! { length })?),
+            25 => Record::Camera(content.read(())?),
+            33 => Record::VirtualStick(content.read(())?),
+            40 => Record::ComponentSerial(content.read(())?),
+            49 => Record::OFDM(content.read(())?),
+            // Not encoded
+            50 => Record::KeyStorageRecover(content.read_raw()?),
+            56 => Record::KeyStorage(content.read(())?),
+            62 => Record::RCDisplayField(content.read(())?),
+            // Unknown type: no allocated error message, this is the common case for many logs
+            _ => return Err(binrw::Error::NoVariantMatch { pos: content.start }),
+        };
+
+        Ok(record)
+    }
+
+    fn read_jpeg<R: Read + Seek>(reader: &mut R) -> BinResult<Record> {
+        utils::read_jpeg(reader, Endian::Little, ()).map(Record::JPEG)
+    }
+
+    fn read_unknown<R: Read + Seek>(
+        reader: &mut R,
+        version: u8,
+        keychain: &RefCell<Keychain>,
+    ) -> BinResult<Record> {
+        let mut content = RecordContent::read_header(reader, version, keychain)?;
+        let length = content.length;
+        if length <= 2 {
+            return Err(binrw::Error::AssertFail {
+                pos: content.start,
+                message: "unknown record too short".to_owned(),
+            });
+        }
+
+        let count = if version <= 6 { length } else { length - 2 };
+        let data = content.read::<Vec<u8>>(args! { count: count.into() })?;
+        Ok(Record::Unknown(content.record_type, data))
+    }
+
+    fn read_invalid<R: Read + Seek>(reader: &mut R) -> BinResult<Record> {
+        let pos = reader.stream_position()?;
+        let data = utils::seek_to_next_record(reader, Endian::Little, ())?;
+        if data.is_empty() {
+            return Err(binrw::Error::AssertFail {
+                pos,
+                message: "no invalid data before next record".to_owned(),
+            });
+        }
+        Ok(Record::Invalid(data))
+    }
+}
+
+/// A record being read: its header has been parsed, its content is read with [`Self::read`].
+struct RecordContent<'r, 'k, R> {
+    reader: &'r mut R,
+    version: u8,
+    keychain: &'k RefCell<Keychain>,
+    record_type: u8,
+    length: u16,
+    /// Position of the content, right after the header
+    start: u64,
+}
+
+impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
+    /// Reads the record type and content length.
+    fn read_header(
+        reader: &'r mut R,
+        version: u8,
+        keychain: &'k RefCell<Keychain>,
+    ) -> BinResult<Self> {
+        let record_type = u8::read(reader)?;
+        // Up to v12, the length is stored on a single byte
+        let length = utils::read_u16(reader, Endian::Little, (version <= 12,))?;
+        let start = reader.stream_position()?;
+        Ok(RecordContent {
+            reader,
+            version,
+            keychain,
+            record_type,
+            length,
+            start,
+        })
+    }
+
+    /// Decodes and parses the content as `T`, then checks the record end byte.
+    fn read<T>(&mut self, args: T::Args<'_>) -> BinResult<T>
+    where
+        T: BinRead,
+    {
+        let value = {
+            let mut decoder = record_decoder(
+                &mut *self.reader,
+                self.record_type,
+                self.version,
+                self.keychain,
+                self.length,
+            );
+            T::read_options(&mut decoder, Endian::Little, args)?
+        };
+        self.finish()?;
+        Ok(value)
+    }
+
+    /// Reads the content as is, without decoding, then checks the record end byte.
+    fn read_raw(&mut self) -> BinResult<Vec<u8>> {
+        let value = Vec::<u8>::read_options(
+            self.reader,
+            Endian::Little,
+            args! { count: self.length.into() },
+        )?;
+        self.finish()?;
+        Ok(value)
+    }
+
+    /// Skips the content padding, if the parsed structure is shorter than the content, and
+    /// checks the end byte.
+    fn finish(&mut self) -> BinResult<()> {
+        let end = self.start + u64::from(self.length);
+        if self.reader.stream_position()? < end {
+            self.reader.seek(SeekFrom::Start(end))?;
+        }
+
+        let pos = self.reader.stream_position()?;
+        if u8::read(self.reader)? != END_BYTE {
+            return Err(binrw::Error::AssertFail {
+                pos,
+                message: "invalid record end byte".to_owned(),
+            });
+        }
+        Ok(())
+    }
 }

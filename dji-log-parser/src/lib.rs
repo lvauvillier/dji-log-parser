@@ -355,13 +355,7 @@ impl DJILog {
 
         while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             let empty_keychain = &RefCell::new(Keychain::empty());
-            let record = match Record::read_args(
-                &mut cursor,
-                binrw::args! {
-                    version: self.version,
-                    keychain: empty_keychain
-                },
-            ) {
+            let record = match Record::read(&mut cursor, self.version, empty_keychain) {
                 Ok(record) => record,
                 Err(_) => break,
             };
@@ -481,13 +475,7 @@ impl DJILog {
 
         while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
             // decode record
-            let record = match Record::read_args(
-                &mut cursor,
-                binrw::args! {
-                    version: self.version,
-                    keychain: &keychain
-                },
-            ) {
+            let record = match Record::read(&mut cursor, self.version, &keychain) {
                 Ok(record) => record,
                 Err(_) => break,
             };
