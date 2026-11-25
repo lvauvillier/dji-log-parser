@@ -90,9 +90,24 @@ fn v8() {
 }
 
 #[test]
-fn v14() {
+fn v8_phantom3() {
+    insta::assert_json_snapshot!(summarize(fixture("v8_phantom3.txt"), None));
+}
+
+#[test]
+fn v11_mavic2() {
+    insta::assert_json_snapshot!(summarize(fixture("v11_mavic2.txt"), None));
+}
+
+#[test]
+fn v11_spark() {
+    insta::assert_json_snapshot!(summarize(fixture("v11_spark.txt"), None));
+}
+
+#[test]
+fn v14_mini4pro() {
     insta::assert_json_snapshot!(summarize(
-        fixture("v14.txt"),
-        Some(keychains("v14.keychains.json"))
+        fixture("v14_mini4pro.txt"),
+        Some(keychains("v14_mini4pro.keychains.json"))
     ));
 }

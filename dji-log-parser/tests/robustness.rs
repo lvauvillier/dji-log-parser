@@ -12,8 +12,12 @@ fn fixture(name: &str) -> Vec<u8> {
     std::fs::read(&path).unwrap_or_else(|e| panic!("unable to read {}: {e}", path.display()))
 }
 
+fn keychains(name: &str) -> Vec<Vec<KeychainFeaturePoint>> {
+    serde_json::from_slice(&fixture(name)).unwrap()
+}
+
 fn v14_keychains() -> Vec<Vec<KeychainFeaturePoint>> {
-    serde_json::from_slice(&fixture("v14.keychains.json")).unwrap()
+    keychains("v14_mini4pro.keychains.json")
 }
 
 /// Parses everything that can be parsed, ignoring errors: only panics make the test fail.
@@ -39,7 +43,10 @@ fn truncated_logs_do_not_panic() {
     for (name, keychains) in [
         ("v4.txt", None),
         ("v8.txt", None),
-        ("v14.txt", Some(v14_keychains())),
+        ("v8_phantom3.txt", None),
+        ("v11_mavic2.txt", None),
+        ("v11_spark.txt", None),
+        ("v14_mini4pro.txt", Some(v14_keychains())),
     ] {
         let bytes = fixture(name);
         for offset in truncation_offsets(bytes.len()) {
@@ -66,7 +73,7 @@ fn wrong_aes_keys_do_not_panic() {
         feature_point.aes_iv = "A".repeat(22) + "==";
     }
 
-    parse_all(fixture("v14.txt"), Some(keychains));
+    parse_all(fixture("v14_mini4pro.txt"), Some(keychains));
 }
 
 #[test]
@@ -74,7 +81,7 @@ fn invalid_base64_keychain_is_an_error() {
     let mut keychains = v14_keychains();
     keychains[0][0].aes_key = "not base64!".to_owned();
 
-    let parser = DJILog::from_bytes(fixture("v14.txt")).unwrap();
+    let parser = DJILog::from_bytes(fixture("v14_mini4pro.txt")).unwrap();
     assert!(matches!(
         parser.records(Some(keychains)),
         Err(Error::InvalidKeychain(_))
@@ -87,7 +94,7 @@ fn wrong_length_keychain_is_an_error() {
     // 16 bytes instead of 32
     keychains[0][0].aes_key = "A".repeat(22) + "==";
 
-    let parser = DJILog::from_bytes(fixture("v14.txt")).unwrap();
+    let parser = DJILog::from_bytes(fixture("v14_mini4pro.txt")).unwrap();
     assert!(matches!(
         parser.records(Some(keychains)),
         Err(Error::InvalidKeychain(_))

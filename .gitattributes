@@ -1,2 +1,2 @@
 # DJI logs are binary despite their .txt extension: never convert line endings
-dji-log-parser/tests/fixtures/** binary
+dji-log-parser/tests/fixtures/*.txt binary

@@ -1,0 +1,953 @@
+[
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-11_16-48-56.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/1/DJIFlightRecord_2014-12-11_[16-48-56].txt",
+    "sha256": "f16e8e0304deb4ee81f8a00b4563dd77a6862767ae897e19177b91d2e7098774",
+    "version": 1,
+    "aircraft": "None",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-20-04.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-20-04].txt",
+    "sha256": "51e00889cf1fb3b2845e15781ee2732f48a2e968d6cc00392ce7a58e3208fb76",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-22-47.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-22-47].txt",
+    "sha256": "d172889b085802b23a8f0e15badb0fac3fcf32e9f1bce29ab6d019db607a10f2",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-26-19.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-26-19].txt",
+    "sha256": "597a707948492badf6400f6445bfcdcb8c1c5a20c300223d192fd3826c474508",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-27-59.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-27-59].txt",
+    "sha256": "a6becd5c248d70d61241bf336504bbcd7b3f866d6b252b42aba93ee8814edf2b",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-29-06.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-29-06].txt",
+    "sha256": "5c146aacd2af41871c90adb106cf3d78e4197da9db46d6050fc53360ec37bfce",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-31-22.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-31-22].txt",
+    "sha256": "0a71cd3fa18509929b3c6ef8648b0bb6e93c03f3c40fb8750fb55a9302b2eac3",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2014-12-31_18-33-12.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/2/DJIFlightRecord_2014-12-31_[18-33-12].txt",
+    "sha256": "3ded6cca5dcd68451fe59192aa9c67ccecb6b035eb51f1259bc84f7658138714",
+    "version": 2,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "WildEllie/flight_log_parser/DJIFlightRecord_2015-06-10_12-38-57.txt",
+    "url": "https://raw.githubusercontent.com/WildEllie/flight_log_parser/723c71d3d00535181bcabd3efd25108af15187ff/DJIFlightRecord_2015-06-10_%5B12-38-57%5D.txt",
+    "sha256": "5c41c151b7e35cb351d19d0ae183a487c298c849b921cdf5887b2cf18a3d0dca",
+    "version": 3,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/WildEllie/flight_log_parser",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2015-02-21_13-46-18.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/3/DJIFlightRecord_2015-02-21_[13-46-18].txt",
+    "sha256": "7d2103a5e602be676c2a7f9197b7458804cb22695a2d310339e2de42a8055e7a",
+    "version": 3,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2015-02-21_14-19-32.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/3/DJIFlightRecord_2015-02-21_[14-19-32].txt",
+    "sha256": "55e51e89270095e4c9d5675aaaf88f5fe8d771cca13d6840f6b9f0dd2286fb62",
+    "version": 3,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2015-02-27_15-14-23.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/3/DJIFlightRecord_2015-02-27_[15-14-23].txt",
+    "sha256": "3db299d8bc35385b8187aeca240c0a93a8d008bf35588fe02bca5b433ee68238",
+    "version": 3,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2015-12-08_11-17-46.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/4/DJIFlightRecord_2015-12-08_[11-17-46].txt",
+    "sha256": "1eec5ac5d90610a70e9c372c230ae011fcbf5250d974620658494f5fa82c742c",
+    "version": 4,
+    "aircraft": "Inspire1",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2015-12-01_22-29-00.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/4/DJIFlightRecord_2015-12-01_[22-29-00].txt",
+    "sha256": "2bbacd54d342397dc6500644758f6fb33360f37a001c60871376058fc112bf62",
+    "version": 4,
+    "aircraft": "Inspire1Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2015-12-12_13-31-24.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/4/DJIFlightRecord_2015-12-12_[13-31-24].txt",
+    "sha256": "4ad8a2bc7e7a7f227fdabc1026d83c8a6059a06317786d159843962aa221e187",
+    "version": 4,
+    "aircraft": "Phantom3Advanced",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-01-23_10-08-49.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/5/DJIFlightRecord_2016-01-23_[10-08-49].txt",
+    "sha256": "a22f9bdcf4688f40b9191ad424260fa5229fef75fc5b09eba3f21c61d9f72c15",
+    "version": 5,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-04_10-47-30.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/5/DJIFlightRecord_2016-02-04_[10-47-30].txt",
+    "sha256": "825dd963245a1c0edf86b7feef86627fcf69a2974e50ec98f3e6b360740a89a0",
+    "version": 5,
+    "aircraft": "Phantom4",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-04_14-32-37.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/5/DJIFlightRecord_2016-02-04_[14-32-37].txt",
+    "sha256": "f8f1d6932c2f8285a16f61ead8b3495d2ced98d39f9899462deca511aba56b25",
+    "version": 5,
+    "aircraft": "Phantom4",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-04_15-00-35.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/5/DJIFlightRecord_2016-02-04_[15-00-35].txt",
+    "sha256": "ee02ec0d8d759ff1dcd3bfa1ad75f6f628e9c1c0cce1f582b61ae8f392fdf5d7",
+    "version": 5,
+    "aircraft": "Phantom4",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-04_15-36-42.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/5/DJIFlightRecord_2016-02-04_[15-36-42].txt",
+    "sha256": "8857065c4c35006a91df688779220573a89f42e69b5f288532a6d7ed8eab3118",
+    "version": 5,
+    "aircraft": "Phantom4",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-04_15-38-49.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/5/DJIFlightRecord_2016-02-04_[15-38-49].txt",
+    "sha256": "9b3fbfa4135cf3d2788ebdbb690962c4a1353629d422dc992a7705f2467859d5",
+    "version": 5,
+    "aircraft": "Phantom4",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-08_12-03-21.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-08_[12-03-21].txt",
+    "sha256": "fc1149974af317d814322b9b575fa9ee5ae127af618ed8fd31bb151ddc05ac9e",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-08_12-09-43.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-08_[12-09-43].txt",
+    "sha256": "203d406d3b85e38b74df02ee6a4a17422c93cf362bc52c84ec2eae473402ded7",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-08_12-21-05.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-08_[12-21-05].txt",
+    "sha256": "b080491f861c236ad5c321ddcbfb28ada55b40b506760f6529470b742ee4ce7d",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-08_12-31-58.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-08_[12-31-58].txt",
+    "sha256": "2e08c1ea07fb90ba4ac6bf5c4a05aa81c7a66423755a4bfe8a243da3fd1fa877",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-08_12-40-36.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-08_[12-40-36].txt",
+    "sha256": "2ff69caca1af00cf5fe82403b1926b3abeef9a8559a77d883a7b24a91090f556",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-08_16-30-23.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-08_[16-30-23].txt",
+    "sha256": "985e4f3650040f09f7662f743e1b58f3916f12cd03de5022761f55361fc2ca6e",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_11-42-30.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[11-42-30].txt",
+    "sha256": "69f1fa3faaae23522db0bbf019468afda9bd5c5b716b6662a0ca30cbdb876bb0",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_12-03-40.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[12-03-40].txt",
+    "sha256": "b57659140ce39a597c1041213091a35d6201476ce9daafb2c7ba85daa66fcca6",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_12-17-36.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[12-17-36].txt",
+    "sha256": "8ec894a81c54b3b6f42d0a47de75b25fbb4dd9f9689f308f3ae5459a162de4c6",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_13-08-35.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[13-08-35].txt",
+    "sha256": "6400b35863c90cf80051209c1db76ceec091d2038e15204239725ba055446378",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_16-08-16.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[16-08-16].txt",
+    "sha256": "832a29f786f33b8a1012b47ab8c66620ea08038210c74062ffdbc51b315830fe",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_16-13-15.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[16-13-15].txt",
+    "sha256": "26013a44a452a1ec95dd69ca0763e9402239a75c737ecc7c8e695110a00eda5c",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "MAVProxyUser/UserPortrait/DJIFlightRecord_2016-02-09_18-07-43.txt",
+    "url": "https://raw.githubusercontent.com/MAVProxyUser/UserPortrait/19164b1a05c3bd49dde6b41b41880ae5e8a9b617/Fly%20Record.zip",
+    "archive_entry": "Fly Record/fly_record_test_data/6/DJIFlightRecord_2016-02-09_[18-07-43].txt",
+    "sha256": "fb5c70aefeeef001e4bf849db7af5b672071f991a26d55570dcfb503eab6fe21",
+    "version": 6,
+    "aircraft": "Phantom3Pro",
+    "source": "https://github.com/MAVProxyUser/UserPortrait",
+    "license": null
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_1.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_1.txt",
+    "sha256": "1f9f96b15bf30bdade351b494d7216a16d0e261433697bb86d85cc8aceb4141e",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_10.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_10.txt",
+    "sha256": "a49db10dfa9256ffc48dcafae5c7d174c47067eee4a520548f46791315151c87",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_13.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_13.txt",
+    "sha256": "cd6cf60f49292d7dcd5fd7dc3c1e90d5be27f274a2ab7b996e260411b576b748",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_14.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_14.txt",
+    "sha256": "31437eb5b9daa7bf5b084f42a3a65bc888dc4fabcf1643b87ea33d0f6264827d",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_2.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_2.txt",
+    "sha256": "8674f6175f2ec7c6a3dded2e96edf575606fafec71b44ea2f6cdf96016be36a7",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_5.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_5.txt",
+    "sha256": "c0d92bbc72793b43d8640656ccce4838292f6dca0b84e49e97edb92812afc470",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_7.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_7.txt",
+    "sha256": "ddd125c237e8f6361f77f13509089371d634a7312092edbb37a9d772c994ae09",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_9.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_9.txt",
+    "sha256": "03d361e339d54a4a0f888d6ae0575b4e4b4a6b0f6da3b2d51ef3a6f99fb6d85b",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom3_0.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom3/phantom3_0.txt",
+    "sha256": "3ba58ac546837c5674212f33eaec2915f398b61c50830d9e2eb395a793ef1ad6",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom3_1.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom3/phantom3_1.txt",
+    "sha256": "4b7bca287c1b5824599b6fccac5b35262c48a5dd00ce085c34e44fd51e8fbcf1",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom3_2.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom3/phantom3_2.txt",
+    "sha256": "ddafe368e84d1f5b07f4967d524b18dd987becfa10b83768bb79d9a3f28e9708",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom3_3.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom3/phantom3_3.txt",
+    "sha256": "857931754c11215b71237aef0a5ecc1fdf958086defd06d3cda747ed88e30520",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom3_5.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom3/phantom3_5.txt",
+    "sha256": "40b7ceec4dbea032f3e629cb51645c7474238344609fe82b7b5c9f9f161723b9",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom3_7.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom3/phantom3_7.txt",
+    "sha256": "ed21f406315d0d58f35322d8d7ad7bfa99a5903471d4df2035b8884e571e3f63",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "WildEllie/flight_log_parser/DJIFlightRecord_2017-09-21_15-37-52.txt",
+    "url": "https://raw.githubusercontent.com/WildEllie/flight_log_parser/723c71d3d00535181bcabd3efd25108af15187ff/DJIFlightRecord_2017-09-21_%5B15-37-52%5D.txt",
+    "sha256": "41bfcde950ab24582be9f87323bda23a15e2c451bd73c0be0c7bd3c079ba979b",
+    "version": 8,
+    "aircraft": "Phantom4Pro",
+    "source": "https://github.com/WildEllie/flight_log_parser",
+    "license": null
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_0.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_0.txt",
+    "sha256": "abfab40b8b010b44ea03b796977ad7f5e4af0877e973df4209c14da83c046f68",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_11.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_11.txt",
+    "sha256": "08f0b44d512b335da73a295252539ba2c0f29d1c7b9a8034ca91910081fdbfcd",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_15.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_15.txt",
+    "sha256": "83f969a7e19443ce0ce45ffa53afaa1eb8f2ec13f45121d9e0402fca581de7e2",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_16.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_16.txt",
+    "sha256": "fde93644b86a4461484f1aa467afa847f18a34a553cd1f18e8a299944ae691cf",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_17.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_17.txt",
+    "sha256": "64ff5631082eb8ea49c3a4df2465fd052fde93c910907a885d1b706420504f8d",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_3.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_3.txt",
+    "sha256": "d439a4221737d5e2d43d5a1666bf8d29f7fd7d440166f73e0e2d7eb66611306e",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_4.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_4.txt",
+    "sha256": "c60cce2a28b003f33cca448290f503d91230e62f9ec7eeb43510dc4d9f73b466",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_6.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_6.txt",
+    "sha256": "37b4efa6b54a3562672bf45af5be561b491d29ce28d14c618966e1d7e7ffd9eb",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/mavic2_8.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_8.txt",
+    "sha256": "3e543f66f40637df61ede158d75b38a69bdc0138d5fbd9f9d0d8f5197c671d8e",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "se0wtf/go-djilogs/testair.txt",
+    "url": "https://raw.githubusercontent.com/se0wtf/go-djilogs/c5730f351b05f2e05676775a14a9436154f04408/testair.txt",
+    "sha256": "51a8a9a27c4fd2e38c41550270b63502f62bde02d9028662679e3e285706c457",
+    "version": 11,
+    "aircraft": "MavicAir",
+    "source": "https://github.com/se0wtf/go-djilogs",
+    "license": null
+  },
+  {
+    "name": "se0wtf/go-djilogs/testv3.txt",
+    "url": "https://raw.githubusercontent.com/se0wtf/go-djilogs/c5730f351b05f2e05676775a14a9436154f04408/testv3.txt",
+    "sha256": "5853a2fb4bde941ea8607f5478251c820a93f518c03814ec1a2ce80b4784d1db",
+    "version": 11,
+    "aircraft": "MavicPro",
+    "source": "https://github.com/se0wtf/go-djilogs",
+    "license": null
+  },
+  {
+    "name": "chrisvm/node-djiparsetxt/phantom4_0.txt",
+    "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom4/phantom4_0.txt",
+    "sha256": "c598ad2955ae0dfad428a4fa558583fda6acf621c8edd8677992c96d090b67ac",
+    "version": 11,
+    "aircraft": "Phantom4Advanced",
+    "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue119_DJIFlightRecord_2025-05-09_22-46-53.txt",
+    "url": "https://github.com/user-attachments/files/25777289/DJIFlightRecord_2025-05-09_.22-46-53.txt",
+    "sha256": "392118ae7b3212d182b8c0fd58da476c1bd0d553515ecd74b8ad2474c5ec26f0",
+    "version": 14,
+    "aircraft": "Matrice30",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": "AGPL-3.0"
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_15-34-19.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B15-34-19%5D.txt",
+    "sha256": "aaf540f9af88a5451bed90bf01cca9854e09ec510b38ce883f41733948eafb2c",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_15-50-27.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B15-50-27%5D.txt",
+    "sha256": "e85d38759aed21effd434d72cc59a54b757578ba3fec2bd71556a1483eb14d87",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_16-48-31.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B16-48-31%5D.txt",
+    "sha256": "955c4f6a6e7ff216622a41a8af58313ed40ac80b524a5ccc4d9f086d4fecd88a",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_16-56-12.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B16-56-12%5D.txt",
+    "sha256": "d310925e8a2002a7a3450b09cbe4325c14cf61d98e5acfab5ecb6b0b5747d153",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_17-05-55.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B17-05-55%5D.txt",
+    "sha256": "19e62f2efb9e7bdf87242e88906b1478608e16bb56be82ffa677a16551d73bbf",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_17-13-09.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B17-13-09%5D.txt",
+    "sha256": "39f3a043e02f185cca4688c4e9857777bedff44fc6c1270ec8552b166fc9f0cb",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_17-20-03.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B17-20-03%5D.txt",
+    "sha256": "6f240460d439dd27431f55c93f0faf9b894b321cb525aec33c4a023f63b11de7",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_17-23-34.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B17-23-34%5D.txt",
+    "sha256": "bb7cb2d79e2873fc7a54cddec5a9da1d47ab759b6d12970a8aa31bc2857669c0",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_17-35-19.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B17-35-19%5D.txt",
+    "sha256": "84d9c0d93e4101067915436ffef49f3c1a2f18faa5faacc69d30458c0b42b1f8",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_17-45-12.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord0922/RawData/DJIFlightRecord_2023-09-22_%5B17-45-12%5D.txt",
+    "sha256": "61e2d9de385864ed599e0e1fc463a5b85e43bd0aa33797fdcc763e4c6e2c20f6",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_16-12-24.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B16-12-24%5D.txt",
+    "sha256": "cf8c422297e91ea2beef71500fd3abc512ab39e28a8732941942684fcdfb4617",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_16-27-23.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B16-27-23%5D.txt",
+    "sha256": "f81c8377b3f5d0f3cd05e0c36f6de55cfb6529f86f8b7f0f0b0ca3086b9ddafb",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_16-35-51.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B16-35-51%5D.txt",
+    "sha256": "c8cd67972cd55fe4518307817f31031e7075a4ea3a07f5597c5e9eefae56fb2b",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_16-54-33.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B16-54-33%5D.txt",
+    "sha256": "1623b7357c1698cacb99438311cf10f9c6196c09a0a2caa23e20718bf542351a",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_17-00-04.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B17-00-04%5D.txt",
+    "sha256": "39a7b39e51a419d835ce2bfe0afc8cb028faa410b279237d2d8b7901403985d6",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_17-31-47.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B17-31-47%5D.txt",
+    "sha256": "73ceec04fd57f4178318170f806258cb0f278b89984bc2ca3a5d1fa5c3587a2f",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_17-42-37.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B17-42-37%5D.txt",
+    "sha256": "ea78c09c31f8ca66c480213abd75457fbdaff183d38c7e479314f6f7ee2f1af9",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-01_18-01-21.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1001/RawData/DJIFlightRecord_2023-10-01_%5B18-01-21%5D.txt",
+    "sha256": "ff5948c0b8973f91fd5404940ddeaf9e53a46301441bd7c117ee31e6cbaf2f6e",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_17-37-53.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B17-37-53%5D.txt",
+    "sha256": "c6f4d6f328faa078a54caba7c3316b10bf72cba2d884ff0a702939076c0d143c",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_17-54-02.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B17-54-02%5D.txt",
+    "sha256": "d237d38c752d91213e9e1263d78d017439e19cc934c5aa628d0fb021fef823f7",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-02-46.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-02-46%5D.txt",
+    "sha256": "a05e57263a32cc290249239a6fe3b1a4c82a1b717b6b3f50b8c9e40068841f99",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-11-50.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-11-50%5D.txt",
+    "sha256": "9b558f0011489832431934a4c7265787505c634ad039b9e26f6419714d9504de",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-14-21.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-14-21%5D.txt",
+    "sha256": "8848c90813f90e9a35500e4927dd60e9cc5cbb01d179dc097e577f315447765c",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-20-57.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-20-57%5D.txt",
+    "sha256": "7b243ab0aa6be4f61564495a923952e1e3ae19fff0904d6ec3235b26d833d46e",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-25-54.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-25-54%5D.txt",
+    "sha256": "c742878a42c0f291b4b8c6780d59ae7cae2070582ba257ab0f391b601bb37510",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-28-15.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-28-15%5D.txt",
+    "sha256": "f095a81c28777a626996e3d086008e6354fa7a2ca6bfa03119a48ada03634dc5",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-10_18-36-33.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1010/RawData/DJIFlightRecord_2023-10-10_%5B18-36-33%5D.txt",
+    "sha256": "9a6db545ae92fa3a390e24ef0e9f565c92d1f87485f410d44f1af239ebdabc8b",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_16-23-03.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B16-23-03%5D.txt",
+    "sha256": "d69b10acca4994dd96b62daf2bd669e0d3e153245f04ba940ff08986e7c1c729",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_16-40-09.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B16-40-09%5D.txt",
+    "sha256": "72b84c175233b0d8ffd1b42f6b0cc29a8b1d59397d5676ce58db953784717057",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_16-47-23.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B16-47-23%5D.txt",
+    "sha256": "4530d59c9a0b88bf41df7870953fd509b0bbd88ebefb17068400999dc7293fbd",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_16-49-28.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B16-49-28%5D.txt",
+    "sha256": "a61d22737201bbd947573cd21385332a84dc7e506765d885c0a04705e816de44",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_17-11-12.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B17-11-12%5D.txt",
+    "sha256": "0c66eacc36993c206d90532c56ed12e753f7b31f9cb761bf04726f61bfacded1",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_17-14-49.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B17-14-49%5D.txt",
+    "sha256": "70aba029dd9ebefc1ecdc9dcb404cbbad51b388d85adb29fc65678c7995fdebb",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_17-22-09.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B17-22-09%5D.txt",
+    "sha256": "2e5f97a4a4c54d68f463325e23890bfb3b56a6d8a377caae8df4a9e39f9beecc",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-10-12_17-24-30.txt",
+    "url": "https://raw.githubusercontent.com/iSensUIUC/dji-flight-log/9f1960c8d9f0d889b29a7278faa18f9eabe9d008/FlightRecord1012/RawData/DJIFlightRecord_2023-10-12_%5B17-24-30%5D.txt",
+    "sha256": "8577f7f5b1e213ea4b90d3f43e743d00b16d6e852f0a307dae02e180f9bc3689",
+    "version": 14,
+    "aircraft": "Matrice350RTK",
+    "source": "https://github.com/iSensUIUC/dji-flight-log",
+    "license": null
+  },
+  {
+    "name": "lvauvillier/dji-log-parser/issue14_log1.txt",
+    "url": "https://github.com/user-attachments/files/17469456/log1.txt",
+    "sha256": "240937b6e70d1733faa0377a41c7ee9abf0702ecaa509337486cc0645b659146",
+    "version": 14,
+    "aircraft": "Mavic3Enterprise",
+    "source": "https://github.com/lvauvillier/dji-log-parser",
+    "license": "MIT"
+  },
+  {
+    "name": "lvauvillier/dji-log-parser/issue21_3.txt",
+    "url": "https://github.com/user-attachments/files/19217951/3.txt",
+    "sha256": "6b37147e25f9d10efe15b8fb6b7b9e7fb61d0803025abfa63a50accb1b4e3c4b",
+    "version": 14,
+    "aircraft": "Mavic3Enterprise",
+    "source": "https://github.com/lvauvillier/dji-log-parser",
+    "license": "MIT"
+  },
+  {
+    "name": "TheRobBrennan/dji-flight-record-review/DJIFlightRecord_2021-09-05_19-47-57.txt",
+    "url": "https://raw.githubusercontent.com/TheRobBrennan/dji-flight-record-review/eb105542818c30f97b200353dd08d124d6fdbc9f/dji/FlightRecordParsingLib/example-flight-records/air-2s/DJIFlightRecord_2021-09-05_%5B19-47-57%5D.txt",
+    "sha256": "3650c8d2037bfec9cdfab021de9bca7b806889d6360c244160ed8c2905311f05",
+    "version": 14,
+    "aircraft": "MavicAir2S",
+    "source": "https://github.com/TheRobBrennan/dji-flight-record-review",
+    "license": null
+  },
+  {
+    "name": "TheRobBrennan/dji-flight-record-review/DJIFlightRecord_2021-09-05_19-23-47.txt",
+    "url": "https://raw.githubusercontent.com/TheRobBrennan/dji-flight-record-review/eb105542818c30f97b200353dd08d124d6fdbc9f/dji/FlightRecordParsingLib/example-flight-records/mini-2/DJIFlightRecord_2021-09-05_%5B19-23-47%5D.txt",
+    "sha256": "bc739e565bdd61cc5a0146c4648440dfb7f629c0e9576813ec07888759d0b66b",
+    "version": 14,
+    "aircraft": "Mini2",
+    "source": "https://github.com/TheRobBrennan/dji-flight-record-review",
+    "license": null
+  },
+  {
+    "name": "ammar321an/decryption-dji-log/DJIFlightRecord_2025-06-20_09-10-24.txt",
+    "url": "https://raw.githubusercontent.com/ammar321an/decryption-dji-log/cccf141d5c7fd9c5e479119a3c97f63df82bc477/drone-logs/DJIFlightRecord_2025-06-20_%5B09-10-24%5D.txt",
+    "sha256": "563e01cb6284f9ea01a9f82d648f8ddf21d1f5e5f65990c499733f4a69a76e3e",
+    "version": 14,
+    "aircraft": "Mini4Pro",
+    "source": "https://github.com/ammar321an/decryption-dji-log",
+    "license": null
+  }
+]
