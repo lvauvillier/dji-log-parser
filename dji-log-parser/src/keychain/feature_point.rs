@@ -2,27 +2,45 @@ use binrw::binread;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Deserialize, Serialize};
 
+/// Feature point of a record, which determines the AES key used to decrypt it.
+///
+/// Serialized with the names used by the DJI keychains API.
 #[binread]
-#[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
+#[derive(Hash, Eq, PartialEq, Debug, Clone, Copy, Serialize, Deserialize)]
 #[br(repr(u16))]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FeaturePoint {
+    #[serde(rename = "FR_Standardization_Feature_Base_1")]
     BaseFeature = 1,
+    #[serde(rename = "FR_Standardization_Feature_Vision_2")]
     VisionFeature,
+    #[serde(rename = "FR_Standardization_Feature_Waypoint_3")]
     WaypointFeature,
+    #[serde(rename = "FR_Standardization_Feature_Agriculture_4")]
     AgricultureFeature,
+    #[serde(rename = "FR_Standardization_Feature_AirLink_5")]
     AirLinkFeature,
+    #[serde(rename = "FR_Standardization_Feature_AfterSales_6")]
     AfterSalesFeature,
+    #[serde(rename = "FR_Standardization_Feature_DJIFlyCustom_7")]
     DJIFlyCustomFeature,
+    #[serde(rename = "FR_Standardization_Feature_Plaintext_8")]
     PlaintextFeature,
+    #[serde(rename = "FR_Standardization_Feature_FlightHub_9")]
     FlightHubFeature,
+    #[serde(rename = "FR_Standardization_Feature_Gimbal_10")]
     GimbalFeature,
+    #[serde(rename = "FR_Standardization_Feature_RC_11")]
     RCFeature,
+    #[serde(rename = "FR_Standardization_Feature_Camera_12")]
     CameraFeature,
+    #[serde(rename = "FR_Standardization_Feature_Battery_13")]
     BatteryFeature,
+    #[serde(rename = "FR_Standardization_Feature_FlySafe_14")]
     FlySafeFeature,
+    #[serde(rename = "FR_Standardization_Feature_Security_15")]
     SecurityFeature,
 }
 
@@ -227,58 +245,56 @@ impl FeaturePoint {
     }
 }
 
-impl Serialize for FeaturePoint {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let feature_point_string = match self {
-            FeaturePoint::BaseFeature => "FR_Standardization_Feature_Base_1",
-            FeaturePoint::VisionFeature => "FR_Standardization_Feature_Vision_2",
-            FeaturePoint::WaypointFeature => "FR_Standardization_Feature_Waypoint_3",
-            FeaturePoint::AgricultureFeature => "FR_Standardization_Feature_Agriculture_4",
-            FeaturePoint::AirLinkFeature => "FR_Standardization_Feature_AirLink_5",
-            FeaturePoint::AfterSalesFeature => "FR_Standardization_Feature_AfterSales_6",
-            FeaturePoint::DJIFlyCustomFeature => "FR_Standardization_Feature_DJIFlyCustom_7",
-            FeaturePoint::PlaintextFeature => "FR_Standardization_Feature_Plaintext_8",
-            FeaturePoint::FlightHubFeature => "FR_Standardization_Feature_FlightHub_9",
-            FeaturePoint::GimbalFeature => "FR_Standardization_Feature_Gimbal_10",
-            FeaturePoint::RCFeature => "FR_Standardization_Feature_RC_11",
-            FeaturePoint::CameraFeature => "FR_Standardization_Feature_Camera_12",
-            FeaturePoint::BatteryFeature => "FR_Standardization_Feature_Battery_13",
-            FeaturePoint::FlySafeFeature => "FR_Standardization_Feature_FlySafe_14",
-            FeaturePoint::SecurityFeature => "FR_Standardization_Feature_Security_15",
-        };
-        serializer.serialize_str(feature_point_string)
-    }
-}
+#[cfg(test)]
+mod tests {
+    use super::FeaturePoint::{self, *};
 
-impl<'de> Deserialize<'de> for FeaturePoint {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        match s.as_str() {
-            "FR_Standardization_Feature_Base_1" => Ok(FeaturePoint::BaseFeature),
-            "FR_Standardization_Feature_Vision_2" => Ok(FeaturePoint::VisionFeature),
-            "FR_Standardization_Feature_Waypoint_3" => Ok(FeaturePoint::WaypointFeature),
-            "FR_Standardization_Feature_Agriculture_4" => Ok(FeaturePoint::AgricultureFeature),
-            "FR_Standardization_Feature_AirLink_5" => Ok(FeaturePoint::AirLinkFeature),
-            "FR_Standardization_Feature_AfterSales_6" => Ok(FeaturePoint::AfterSalesFeature),
-            "FR_Standardization_Feature_DJIFlyCustom_7" => Ok(FeaturePoint::DJIFlyCustomFeature),
-            "FR_Standardization_Feature_Plaintext_8" => Ok(FeaturePoint::PlaintextFeature),
-            "FR_Standardization_Feature_FlightHub_9" => Ok(FeaturePoint::FlightHubFeature),
-            "FR_Standardization_Feature_Gimbal_10" => Ok(FeaturePoint::GimbalFeature),
-            "FR_Standardization_Feature_RC_11" => Ok(FeaturePoint::RCFeature),
-            "FR_Standardization_Feature_Camera_12" => Ok(FeaturePoint::CameraFeature),
-            "FR_Standardization_Feature_Battery_13" => Ok(FeaturePoint::BatteryFeature),
-            "FR_Standardization_Feature_FlySafe_14" => Ok(FeaturePoint::FlySafeFeature),
-            "FR_Standardization_Feature_Security_15" => Ok(FeaturePoint::SecurityFeature),
-            _ => Err(serde::de::Error::custom(format!(
-                "Invalid feature point: {}",
-                s
-            ))),
+    const ALL: [FeaturePoint; 15] = [
+        BaseFeature,
+        VisionFeature,
+        WaypointFeature,
+        AgricultureFeature,
+        AirLinkFeature,
+        AfterSalesFeature,
+        DJIFlyCustomFeature,
+        PlaintextFeature,
+        FlightHubFeature,
+        GimbalFeature,
+        RCFeature,
+        CameraFeature,
+        BatteryFeature,
+        FlySafeFeature,
+        SecurityFeature,
+    ];
+
+    #[test]
+    fn serializes_with_api_names() {
+        assert_eq!(
+            serde_json::to_string(&BaseFeature).unwrap(),
+            r#""FR_Standardization_Feature_Base_1""#
+        );
+        assert_eq!(
+            serde_json::to_string(&SecurityFeature).unwrap(),
+            r#""FR_Standardization_Feature_Security_15""#
+        );
+    }
+
+    #[test]
+    fn api_names_match_discriminants() {
+        for feature_point in ALL {
+            let name = serde_json::to_string(&feature_point).unwrap();
+            assert!(
+                name.ends_with(&format!("_{}\"", feature_point as u16)),
+                "{name} doesn't match {feature_point:?} = {}",
+                feature_point as u16
+            );
+            let parsed: FeaturePoint = serde_json::from_str(&name).unwrap();
+            assert_eq!(parsed, feature_point);
         }
+    }
+
+    #[test]
+    fn rejects_unknown_names() {
+        assert!(serde_json::from_str::<FeaturePoint>(r#""FR_Unknown""#).is_err());
     }
 }
