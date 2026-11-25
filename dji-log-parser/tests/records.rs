@@ -2,7 +2,9 @@
 
 use std::path::PathBuf;
 
+use dji_log_parser::keychain::KeychainFeaturePoint;
 use dji_log_parser::record::rc::FlightModeSwitch;
+use dji_log_parser::record::smart_battery_group::{SmartBatteryGroup, SmartBatteryStatic};
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 
@@ -11,6 +13,10 @@ fn fixture(name: &str) -> Vec<u8> {
         .join("tests/fixtures")
         .join(name);
     std::fs::read(&path).unwrap_or_else(|e| panic!("unable to read {}: {e}", path.display()))
+}
+
+fn keychains(name: &str) -> Vec<Vec<KeychainFeaturePoint>> {
+    serde_json::from_slice(&fixture(name)).unwrap()
 }
 
 fn flight_mode_switches(name: &str) -> Vec<FlightModeSwitch> {
@@ -38,5 +44,31 @@ fn mavic_pro_p_mode_is_position_two() {
                 .all(|switch| *switch == FlightModeSwitch::Two),
             "{name}: {switches:?}"
         );
+    }
+}
+
+fn smart_battery_statics(name: &str, keychains: &str) -> Vec<SmartBatteryStatic> {
+    let parser = DJILog::from_bytes(fixture(name)).unwrap();
+    parser
+        .records(Some(self::keychains(keychains)))
+        .unwrap()
+        .into_iter()
+        .filter_map(|record| match record {
+            Record::SmartBatteryGroup(SmartBatteryGroup::SmartBatteryStatic(battery)) => {
+                Some(battery)
+            }
+            _ => None,
+        })
+        .collect()
+}
+
+/// The Mini 4 Pro battery has a capacity of 2590 mAh.
+#[test]
+fn mini_4_pro_battery_static_info() {
+    let batteries = smart_battery_statics("v14_mini4pro.txt", "v14_mini4pro.keychains.json");
+    assert!(!batteries.is_empty(), "no SmartBatteryStatic record");
+    for battery in batteries {
+        assert_eq!(battery.index, 0);
+        assert_eq!(battery.designed_capacity, 2590);
     }
 }

@@ -6,11 +6,11 @@ use tsify_next::Tsify;
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(tag = "type")]
-#[br(little)]
+#[br(little, import { version: u8 })]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum SmartBatteryGroup {
     #[br(magic = 1u8)]
-    SmartBatteryStatic(SmartBatteryStatic),
+    SmartBatteryStatic(#[br(args { version })] SmartBatteryStatic),
     #[br(magic = 2u8)]
     SmartBatteryDynamic(SmartBatteryDynamic),
     #[br(magic = 3u8)]
@@ -19,9 +19,11 @@ pub enum SmartBatteryGroup {
 
 #[binread]
 #[derive(Serialize, Debug)]
-#[br(little)]
+#[br(little, import { version: u8 })]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatteryStatic {
+    #[br(temp, if(version >= 14))]
+    _unknown0: u8,
     pub index: u8,
     pub designed_capacity: u32,
     pub loop_times: u16,
