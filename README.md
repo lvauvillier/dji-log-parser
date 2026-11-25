@@ -87,7 +87,7 @@ General data are not encrypted and can be accessed from the parser for all log v
 println!("Version: {:?}", parser.version);
 
 // Print the log details section
-println!("Details: {}", parser.details);
+println!("Details: {:?}", parser.details);
 ```
 
 ### Retrieve keychains

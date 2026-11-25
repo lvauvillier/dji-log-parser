@@ -110,7 +110,6 @@ pub fn seek_to_next_record() -> BinResult<Vec<u8>> {
 ///
 /// # Errors
 /// This function will return an error if the reader fails to provide the necessary number of bytes (1 or 2, based on `from_u8`).
-/// ```
 #[parser(reader)]
 pub fn read_u16(from_u8: bool) -> BinResult<u16> {
     let mut bytes = [0; 2];
@@ -128,7 +127,7 @@ pub fn read_u16(from_u8: bool) -> BinResult<u16> {
 ///
 /// # Examples
 ///
-/// ```
+/// ```ignore
 /// let byte = 0b10101100;
 /// let mask = 0b11100000;
 /// assert_eq!(sub_byte_field(byte, mask), 0b00000101);
@@ -184,7 +183,7 @@ pub fn sub_byte_field(byte: u8, mask: u8) -> u8 {
 ///
 /// Basic usage:
 ///
-/// ```
+/// ```ignore
 /// let bytes = b"Hello, world!";
 /// let padded_bytes = pad_with_zeros(&bytes[..], 16);
 /// assert_eq!(padded_bytes, b"Hello, world!\x00\x00\x00");

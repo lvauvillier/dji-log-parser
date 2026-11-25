@@ -23,29 +23,40 @@
 //!
 //! ### Initialization
 //! Initialize a `DJILog` instance from a byte slice to access version information and metadata:
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
 //! let parser = DJILog::from_bytes(bytes).unwrap();
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //! ### Access general data
 //!
 //! General data are not encrypted and can be accessed from the parser for all log versions:
 //!
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
 //! // Print the log version
 //! println!("Version: {:?}", parser.version);
 //!
 //! // Print the log details section
-//! println!("Details: {}", parser.details);
+//! println!("Details: {:?}", parser.details);
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //! ### Retrieve keychains
 //!
 //! For logs version 13 and later, keychains must be retrieved from the DJI API to decode the records:
 //!
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
 //! // Replace `__DJI_API_KEY__` with your actual apiKey
 //! let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //! Keychains can be retrieved once, serialized, and stored along with the log file for future offline use.
@@ -59,14 +70,23 @@
 //!
 //! For versions prior to 13:
 //!
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
 //! let frames = parser.frames(None);
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //! For version 13 and later:
 //!
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
+//! # let keychains = parser.fetch_keychains("__DJI_API_KEY__")?;
 //! let frames = parser.frames(Some(keychains));
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //! ### Accessing raw Records
@@ -74,14 +94,23 @@
 //! Decrypt raw records based on the log file version.
 //! For versions prior to 13:
 //!
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
 //! let records = parser.records(None);
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //! For version 13 and later:
 //!
-//! ```
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
+//! # let keychains = parser.fetch_keychains("__DJI_API_KEY__")?;
 //! let records = parser.records(Some(keychains));
+//! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
 //!
@@ -190,11 +219,12 @@ impl DJILog {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use djilog_parser::DJILog;
+    /// ```no_run
+    /// use dji_log_parser::DJILog;
     ///
-    /// let log_bytes = include_bytes!("path/to/log/file");
-    /// let log = DJILog::from_bytes(log_bytes).unwrap();
+    /// let log_bytes = std::fs::read("DJIFlightRecord.txt")?;
+    /// let log = DJILog::from_bytes(log_bytes)?;
+    /// # Ok::<(), dji_log_parser::Error>(())
     /// ```
     ///
     pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILog> {
