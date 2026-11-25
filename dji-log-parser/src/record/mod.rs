@@ -107,15 +107,18 @@ impl Record {
     /// Tries, in order: the record type given by the first byte, a JPEG image, a record of
     /// unknown content, and finally skips invalid data up to the next record. The position is
     /// restored before each attempt.
+    ///
+    /// `product_type` is needed by some records whose values depend on the aircraft model.
     pub(crate) fn read<R: Read + Seek>(
         reader: &mut R,
         version: u8,
+        product_type: ProductType,
         keychain: &RefCell<Keychain>,
     ) -> BinResult<Record> {
         let start = reader.stream_position()?;
         let restart = |reader: &mut R| reader.seek(SeekFrom::Start(start));
 
-        Self::read_known(reader, version, keychain)
+        Self::read_known(reader, version, product_type, keychain)
             .or_else(|_| {
                 restart(reader)?;
                 Self::read_jpeg(reader)
@@ -134,6 +137,7 @@ impl Record {
     fn read_known<R: Read + Seek>(
         reader: &mut R,
         version: u8,
+        product_type: ProductType,
         keychain: &RefCell<Keychain>,
     ) -> BinResult<Record> {
         let mut content = RecordContent::read_header(reader, version, keychain)?;
@@ -143,10 +147,7 @@ impl Record {
             1 => Record::OSD(content.read::<OSD>(args! { version })?),
             2 => Record::Home(content.read::<Home>(args! { version })?),
             3 => Record::Gimbal(content.read::<Gimbal>(args! { version })?),
-            // The product type is not known when parsing records
-            4 => {
-                Record::RC(content.read::<RC>(args! { version, product_type: ProductType::None })?)
-            }
+            4 => Record::RC(content.read::<RC>(args! { version, product_type })?),
             5 => Record::Custom(content.read(())?),
             6 => Record::Deform(content.read(())?),
             7 => Record::CenterBattery(content.read::<CenterBattery>(args! { version })?),

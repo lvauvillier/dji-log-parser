@@ -9,7 +9,7 @@ use crate::utils::sub_byte_field;
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
-#[br(little, import { version: u8, product_type: ProductType = ProductType::None })]
+#[br(little, import { version: u8, product_type: ProductType })]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct RC {
     /// right stick - horizontal
@@ -67,7 +67,7 @@ pub struct RC {
     pub gimbal_control_enable: u8,
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(Serialize, Debug, Clone, Copy, PartialEq)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FlightModeSwitch {
     /// Position One. For all products except Mavic Pro, this is the left most position
@@ -94,22 +94,51 @@ pub enum FlightModeSwitch {
 
 impl FlightModeSwitch {
     pub fn from(value: u8, product_type: ProductType) -> Self {
-        let mapped_value = match product_type {
-            // Remap values for Mavic Pro
-            ProductType::MavicPro => match value {
-                0 => 2,
-                1 => 3,
-                2 => 1,
-                _ => value,
-            },
-            _ => value,
-        };
-
-        match mapped_value {
-            0 => FlightModeSwitch::One,
-            1 => FlightModeSwitch::Two,
-            2 => FlightModeSwitch::Three,
-            _ => FlightModeSwitch::Unknown(mapped_value),
+        match (product_type, value) {
+            (ProductType::MavicPro, 0) => FlightModeSwitch::Two,
+            (ProductType::MavicPro, 1) => FlightModeSwitch::Three,
+            (ProductType::MavicPro, 2) => FlightModeSwitch::One,
+            (_, 0) => FlightModeSwitch::One,
+            (_, 1) => FlightModeSwitch::Two,
+            (_, 2) => FlightModeSwitch::Three,
+            (_, value) => FlightModeSwitch::Unknown(value),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn positions(product_type: ProductType) -> Vec<FlightModeSwitch> {
+        (0..=3)
+            .map(|value| FlightModeSwitch::from(value, product_type))
+            .collect()
+    }
+
+    #[test]
+    fn flight_mode_switch_is_not_remapped_for_other_products() {
+        assert_eq!(
+            positions(ProductType::Phantom4),
+            [
+                FlightModeSwitch::One,
+                FlightModeSwitch::Two,
+                FlightModeSwitch::Three,
+                FlightModeSwitch::Unknown(3),
+            ]
+        );
+    }
+
+    #[test]
+    fn flight_mode_switch_is_remapped_for_mavic_pro() {
+        assert_eq!(
+            positions(ProductType::MavicPro),
+            [
+                FlightModeSwitch::Two,
+                FlightModeSwitch::Three,
+                FlightModeSwitch::One,
+                FlightModeSwitch::Unknown(3),
+            ]
+        );
     }
 }
