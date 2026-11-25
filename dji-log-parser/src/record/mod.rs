@@ -1,4 +1,4 @@
-use binrw::io::{Read, Seek, SeekFrom};
+use binrw::io::{Cursor, Read, Seek, SeekFrom};
 use binrw::{args, BinRead, BinResult, Endian};
 use serde::Serialize;
 use std::cell::RefCell;
@@ -148,7 +148,7 @@ impl Record {
             2 => Record::Home(content.read::<Home>(args! { version })?),
             3 => Record::Gimbal(content.read::<Gimbal>(args! { version })?),
             4 => Record::RC(content.read::<RC>(args! { version, product_type })?),
-            5 => Record::Custom(content.read(())?),
+            5 => Record::Custom(content.read::<Custom>(args! { version })?),
             6 => Record::Deform(content.read(())?),
             7 => Record::CenterBattery(content.read::<CenterBattery>(args! { version })?),
             8 => Record::SmartBattery(content.read(())?),
@@ -211,6 +211,9 @@ impl Record {
     }
 }
 
+/// Zeros appended to the content of a record, read as the fields missing from older formats.
+const SHORT_RECORD_PADDING: usize = 64;
+
 /// A record being read: its header has been parsed, its content is read with [`Self::read`].
 struct RecordContent<'r, 'k, R> {
     reader: &'r mut R,
@@ -254,20 +257,25 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
     }
 
     /// Decodes and parses the content as `T`, then checks the record end byte.
+    ///
+    /// Records written by older apps can be shorter than the structure, which grew over time:
+    /// like DJI does, the missing trailing fields are read as zeros.
     fn read<T>(&mut self, args: T::Args<'_>) -> BinResult<T>
     where
         T: BinRead,
     {
-        let value = {
-            let mut decoder = record_decoder(
-                &mut *self.reader,
-                self.record_type,
-                self.version,
-                self.keychain,
-                self.length,
-            );
-            T::read_options(&mut decoder, Endian::Little, args)?
-        };
+        let mut data = vec![0; self.data_length().into()];
+        record_decoder(
+            &mut *self.reader,
+            self.record_type,
+            self.version,
+            self.keychain,
+            self.length,
+        )
+        .read_exact(&mut data)?;
+        data.resize(data.len() + SHORT_RECORD_PADDING, 0);
+
+        let value = T::read_options(&mut Cursor::new(data), Endian::Little, args)?;
         self.finish()?;
         Ok(value)
     }
@@ -299,5 +307,55 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
             });
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Builds a record as written up to v6: type, length on one byte, content, end byte.
+    fn raw_record(record_type: u8, content: &[u8]) -> Vec<u8> {
+        let mut bytes = vec![record_type, content.len() as u8];
+        bytes.extend_from_slice(content);
+        bytes.push(END_BYTE);
+        bytes
+    }
+
+    fn read(version: u8, bytes: Vec<u8>) -> Record {
+        let keychain = RefCell::new(Keychain::empty());
+        Record::read(
+            &mut Cursor::new(bytes),
+            version,
+            ProductType::None,
+            &keychain,
+        )
+        .unwrap()
+    }
+
+    #[test]
+    fn missing_fields_of_short_records_are_zeros() {
+        // OSD records are 49 bytes long in some v3 logs, shorter than the structure
+        let mut content = vec![0; 49];
+        content[16..18].copy_from_slice(&1234i16.to_le_bytes());
+
+        let Record::OSD(osd) = read(3, raw_record(1, &content)) else {
+            panic!("not an OSD record");
+        };
+        assert_eq!(osd.altitude, 123.4);
+    }
+
+    #[test]
+    fn custom_timestamp_is_in_seconds_up_to_v2() {
+        let mut content = vec![0; 18];
+        content[10..].copy_from_slice(&1_418_287_736i64.to_le_bytes());
+
+        let Record::Custom(custom) = read(2, raw_record(5, &content)) else {
+            panic!("not a Custom record");
+        };
+        assert_eq!(
+            custom.update_timestamp.to_rfc3339(),
+            "2014-12-11T08:48:56+00:00"
+        );
     }
 }
