@@ -95,6 +95,16 @@ fn v8_phantom3() {
 }
 
 #[test]
+fn v8_mavicpro() {
+    insta::assert_json_snapshot!(summarize(fixture("v8_mavicpro.txt"), None));
+}
+
+#[test]
+fn v8_mavicpro_2017() {
+    insta::assert_json_snapshot!(summarize(fixture("v8_mavicpro_2017.txt"), None));
+}
+
+#[test]
 fn v11_mavic2() {
     insta::assert_json_snapshot!(summarize(fixture("v11_mavic2.txt"), None));
 }

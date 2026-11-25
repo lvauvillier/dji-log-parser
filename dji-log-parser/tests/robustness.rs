@@ -44,6 +44,8 @@ fn truncated_logs_do_not_panic() {
         ("v4.txt", None),
         ("v8.txt", None),
         ("v8_phantom3.txt", None),
+        ("v8_mavicpro.txt", None),
+        ("v8_mavicpro_2017.txt", None),
         ("v11_mavic2.txt", None),
         ("v11_spark.txt", None),
         ("v14_mini4pro.txt", Some(v14_keychains())),
