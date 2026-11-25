@@ -141,7 +141,7 @@ impl Record {
         keychain: &RefCell<Keychain>,
     ) -> BinResult<Record> {
         let mut content = RecordContent::read_header(reader, version, keychain)?;
-        let length = content.length;
+        let length = content.data_length();
 
         let record = match content.record_type {
             1 => Record::OSD(content.read::<OSD>(args! { version })?),
@@ -186,16 +186,15 @@ impl Record {
         keychain: &RefCell<Keychain>,
     ) -> BinResult<Record> {
         let mut content = RecordContent::read_header(reader, version, keychain)?;
-        let length = content.length;
-        if length <= 2 {
+        if content.length <= 2 {
             return Err(binrw::Error::AssertFail {
                 pos: content.start,
                 message: "unknown record too short".to_owned(),
             });
         }
 
-        let count = if version <= 6 { length } else { length - 2 };
-        let data = content.read::<Vec<u8>>(args! { count: count.into() })?;
+        let count = content.data_length().into();
+        let data = content.read::<Vec<u8>>(args! { count })?;
         Ok(Record::Unknown(content.record_type, data))
     }
 
@@ -242,6 +241,16 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
             length,
             start,
         })
+    }
+
+    /// Size of the decoded data. From v7, the content starts with the xor seed and ends with a
+    /// checksum, which are not part of the data.
+    fn data_length(&self) -> u16 {
+        if self.version <= 6 {
+            self.length
+        } else {
+            self.length.saturating_sub(2)
+        }
     }
 
     /// Decodes and parses the content as `T`, then checks the record end byte.

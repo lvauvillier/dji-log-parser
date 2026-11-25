@@ -59,6 +59,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
     "appVersion": "4.3.4"
   },
   "record_counts": {
+    "AppSeriousWarn": 1,
+    "AppWarn": 5,
     "ComponentSerial": 4,
     "Custom": 244,
     "Firmware": 6,
@@ -70,7 +72,7 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
     "Recover": 3,
     "SmartBattery": 25,
     "SmartBatteryGroup": 50,
-    "Unknown": 155
+    "Unknown": 149
   },
   "frame_count": 252,
   "sample_frames": [

@@ -60,6 +60,7 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
   },
   "record_counts": {
     "AppGPS": 11,
+    "AppTip": 2,
     "Camera": 75,
     "CenterBattery": 65,
     "ComponentSerial": 9,
@@ -74,7 +75,7 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
     "RC": 434,
     "Recover": 5,
     "SmartBattery": 74,
-    "Unknown": 29
+    "Unknown": 27
   },
   "frame_count": 747,
   "sample_frames": [

@@ -60,6 +60,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
   },
   "record_counts": {
     "AppGPS": 18,
+    "AppTip": 1,
+    "AppWarn": 1,
     "Camera": 303,
     "ComponentSerial": 2,
     "Custom": 2969,
@@ -73,7 +75,7 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
     "Recover": 5,
     "SmartBattery": 304,
     "SmartBatteryGroup": 605,
-    "Unknown": 2312
+    "Unknown": 2310
   },
   "frame_count": 3043,
   "sample_frames": [

@@ -59,6 +59,8 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
     "appVersion": "4.1.5"
   },
   "record_counts": {
+    "AppTip": 9,
+    "AppWarn": 4,
     "Camera": 491,
     "Custom": 4515,
     "Firmware": 5,
@@ -71,7 +73,7 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
     "RC": 631,
     "Recover": 5,
     "SmartBattery": 450,
-    "Unknown": 3857
+    "Unknown": 3844
   },
   "frame_count": 4515,
   "sample_frames": [
@@ -202,7 +204,7 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "batterySn": ""
         },
         "app": {
-          "tip": "Flight mode changed to EngineStart.",
+          "tip": "Tips__Taking Off; Flight mode changed to EngineStart.",
           "warn": ""
         }
       }

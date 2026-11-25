@@ -1,6 +1,5 @@
 ---
 source: dji-log-parser/tests/snapshots.rs
-assertion_line: 89
 expression: "summarize(fixture(\"v8.txt\"), None)"
 ---
 {
@@ -61,6 +60,7 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
   },
   "record_counts": {
     "AppGPS": 44,
+    "AppWarn": 2,
     "CenterBattery": 862,
     "Custom": 8984,
     "Deform": 759,
@@ -74,7 +74,7 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
     "RC": 6493,
     "Recover": 5,
     "SmartBattery": 902,
-    "Unknown": 10685
+    "Unknown": 10683
   },
   "frame_count": 8984,
   "sample_frames": [

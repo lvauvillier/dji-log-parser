@@ -106,12 +106,8 @@ fn try_record_decoder<R: Read + Seek>(
                 .checked_sub(2)
                 .ok_or_else(|| Error::new(ErrorKind::InvalidData, "record too short"))?;
 
-            let aes_reader = AesDecoder::new(
-                XorDecoder::new(reader, record_type)?,
-                params,
-                content_size,
-                size,
-            )?;
+            let aes_reader =
+                AesDecoder::new(XorDecoder::new(reader, record_type)?, params, content_size)?;
 
             // The iv of the next record is the last ciphertext block of this one
             params.iv = aes_reader.next_iv;
@@ -223,14 +219,9 @@ pub struct AesDecoder {
 impl AesDecoder {
     /// Reads and decrypts `size` bytes from `reader`.
     ///
-    /// The plaintext is exposed as a stream of `stream_size` bytes, padded with zeros: some record
-    /// structures are parsed over the full record size, which is larger than the encrypted content.
-    pub(crate) fn new<R: Read>(
-        mut reader: R,
-        params: &AesParams,
-        size: u16,
-        stream_size: u16,
-    ) -> Result<AesDecoder> {
+    /// The plaintext is exposed as a stream of `size` bytes, padded with zeros after the PKCS7
+    /// padding is removed.
+    pub(crate) fn new<R: Read>(mut reader: R, params: &AesParams, size: u16) -> Result<AesDecoder> {
         let mut buffer = vec![0u8; size.into()];
         reader.read_exact(&mut buffer)?;
 
@@ -251,7 +242,7 @@ impl AesDecoder {
             .unwrap_or(0);
 
         buffer.truncate(plaintext_len);
-        buffer.resize(stream_size.max(size).into(), 0);
+        buffer.resize(size.into(), 0);
 
         Ok(AesDecoder {
             buffer: Cursor::new(buffer),

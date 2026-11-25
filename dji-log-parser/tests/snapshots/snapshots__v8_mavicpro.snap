@@ -59,6 +59,8 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
     "appVersion": "4.2.21"
   },
   "record_counts": {
+    "AppTip": 1,
+    "AppWarn": 5,
     "Camera": 496,
     "ComponentSerial": 32,
     "Custom": 4693,
@@ -72,7 +74,7 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
     "Recover": 5,
     "SmartBattery": 498,
     "SmartBatteryGroup": 1244,
-    "Unknown": 2703
+    "Unknown": 2697
   },
   "frame_count": 4982,
   "sample_frames": [
