@@ -175,6 +175,7 @@ use base64::engine::general_purpose::STANDARD as Base64Standard;
 use base64::Engine as _;
 use binrw::io::Cursor;
 use binrw::BinRead;
+use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 
@@ -245,7 +246,14 @@ impl DJILog {
                 format!("detail offset {detail_offset} is beyond end of file"),
             )
         })?;
-        let mut cursor = Cursor::new(pad_with_zeros(detail_bytes, 400));
+        // Details parsing expects at least 400 bytes: only copy the end of the file when it is
+        // shorter, instead of copying the whole log
+        let detail_bytes = if detail_bytes.len() < 400 {
+            Cow::Owned(pad_with_zeros(detail_bytes, 400))
+        } else {
+            Cow::Borrowed(detail_bytes)
+        };
+        let mut cursor = Cursor::new(detail_bytes);
 
         let details = if version < 13 {
             Details::read_args(&mut cursor, (version,))?

@@ -1,16 +1,52 @@
 use aes::cipher::block_padding::Pkcs7;
-use aes::cipher::{BlockDecryptMut, BlockSizeUser, KeyIvInit};
+use aes::cipher::{BlockModeDecrypt, BlockSizeUser, KeyIvInit};
 use aes::Aes256;
 use crc64::crc64;
 use std::cell::RefCell;
 use std::io::{Cursor, Error, ErrorKind, Read, Result, Seek, SeekFrom};
 
-use crate::keychain::{FeaturePoint, Keychain};
+use crate::keychain::{AesParams, FeaturePoint, Keychain};
 
 type Aes256CbcDec = cbc::Decryptor<Aes256>;
 
-pub trait SeekRead: Seek + Read {}
-impl<T> SeekRead for T where T: Seek + Read {}
+/// Reader over the content of a record, decoded according to the log version.
+///
+/// An enum rather than a `Box<dyn Read + Seek>`: a decoder is built for every record, so this
+/// avoids an allocation and dynamic dispatch on each one.
+pub enum Decoder<R> {
+    Raw(R),
+    Xor(XorDecoder<R>),
+    Aes(AesDecoder),
+    Failed(FailedDecoder),
+}
+
+impl<R> From<Result<Decoder<R>>> for Decoder<R> {
+    fn from(result: Result<Decoder<R>>) -> Self {
+        result.unwrap_or_else(|error| Decoder::Failed(FailedDecoder::from(error)))
+    }
+}
+
+impl<R: Read> Read for Decoder<R> {
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
+        match self {
+            Decoder::Raw(reader) => reader.read(buf),
+            Decoder::Xor(reader) => reader.read(buf),
+            Decoder::Aes(reader) => reader.read(buf),
+            Decoder::Failed(reader) => reader.read(buf),
+        }
+    }
+}
+
+impl<R: Seek> Seek for Decoder<R> {
+    fn seek(&mut self, pos: SeekFrom) -> Result<u64> {
+        match self {
+            Decoder::Raw(reader) => reader.seek(pos),
+            Decoder::Xor(reader) => reader.seek(pos),
+            Decoder::Aes(reader) => reader.seek(pos),
+            Decoder::Failed(reader) => reader.seek(pos),
+        }
+    }
+}
 
 /// Constructs a reader based on the given record type, version, and keychain.
 ///
@@ -24,63 +60,45 @@ impl<T> SeekRead for T where T: Seek + Read {}
 ///
 /// # Returns
 ///
-/// A boxed reader implementing `Read + Seek`. binrw's `map_stream` cannot propagate errors,
+/// A reader implementing `Read + Seek`. binrw's `map_stream` cannot propagate errors,
 /// so if the decoder cannot be built (truncated or corrupted data), the returned reader
 /// fails on first access and binrw reports it as a regular parse error.
-pub fn record_decoder<'a, R>(
+pub fn record_decoder<R: Read + Seek>(
     reader: R,
     record_type: u8,
     version: u8,
     keychain: &RefCell<Keychain>,
     size: u16,
-) -> Box<dyn SeekRead + 'a>
-where
-    R: Read + Seek + 'a,
-{
-    try_record_decoder(reader, record_type, version, keychain, size)
-        .unwrap_or_else(|error| Box::new(FailedDecoder::from(error)))
+) -> Decoder<R> {
+    try_record_decoder(reader, record_type, version, keychain, size).into()
 }
 
 /// Xor decoder for use in binrw's `map_stream`, with the same error fallback as [`record_decoder`].
-pub fn xor_decoder<'a, R>(reader: R, record_type: u8) -> Box<dyn SeekRead + 'a>
-where
-    R: Read + Seek + 'a,
-{
-    match XorDecoder::new(reader, record_type) {
-        Ok(decoder) => Box::new(decoder),
-        Err(error) => Box::new(FailedDecoder::from(error)),
-    }
+pub fn xor_decoder<R: Read + Seek>(reader: R, record_type: u8) -> Decoder<R> {
+    XorDecoder::new(reader, record_type)
+        .map(Decoder::Xor)
+        .into()
 }
 
-fn try_record_decoder<'a, R>(
+fn try_record_decoder<R: Read + Seek>(
     reader: R,
     record_type: u8,
     version: u8,
     keychain: &RefCell<Keychain>,
     size: u16,
-) -> Result<Box<dyn SeekRead + 'a>>
-where
-    R: Read + Seek + 'a,
-{
+) -> Result<Decoder<R>> {
     match version {
         // Raw
-        0..=6 => Ok(Box::new(reader)),
+        0..=6 => Ok(Decoder::Raw(reader)),
         // Xor
-        7..=12 => Ok(Box::new(XorDecoder::new(reader, record_type)?)),
+        7..=12 => Ok(Decoder::Xor(XorDecoder::new(reader, record_type)?)),
         // Xor + AES
         _ => {
             let feature_point = FeaturePoint::from_record_type(record_type, version);
-            if feature_point == FeaturePoint::PlaintextFeature {
-                return Ok(Box::new(XorDecoder::new(reader, record_type)?));
-            }
-
-            let pair = keychain
-                .borrow()
-                .get(&feature_point)
-                .map(|value| (value.0.clone(), value.1.clone()));
-
-            let Some((iv, key)) = pair else {
-                return Ok(Box::new(XorDecoder::new(reader, record_type)?));
+            let mut keychain = keychain.borrow_mut();
+            let params = match keychain.get_mut(&feature_point) {
+                Some(params) if feature_point != FeaturePoint::PlaintextFeature => params,
+                _ => return Ok(Decoder::Xor(XorDecoder::new(reader, record_type)?)),
             };
 
             // firstChar and lastChar are not part of the content
@@ -90,25 +108,22 @@ where
 
             let aes_reader = AesDecoder::new(
                 XorDecoder::new(reader, record_type)?,
-                &iv,
-                &key,
+                params,
                 content_size,
                 size,
             )?;
 
-            // Update keychain with next iv
-            keychain
-                .borrow_mut()
-                .insert(feature_point, (aes_reader.next_iv.clone(), key));
+            // The iv of the next record is the last ciphertext block of this one
+            params.iv = aes_reader.next_iv;
 
-            Ok(Box::new(aes_reader))
+            Ok(Decoder::Aes(aes_reader))
         }
     }
 }
 
 /// Reader returned when a record decoder cannot be built: every access fails with the
 /// original error, which binrw then reports as a parse error for this record.
-struct FailedDecoder {
+pub struct FailedDecoder {
     kind: ErrorKind,
     message: String,
 }
@@ -202,7 +217,7 @@ impl<R: Seek> Seek for XorDecoder<R> {
 
 pub struct AesDecoder {
     buffer: Cursor<Vec<u8>>,
-    pub next_iv: Vec<u8>,
+    next_iv: [u8; 16],
 }
 
 impl AesDecoder {
@@ -210,10 +225,9 @@ impl AesDecoder {
     ///
     /// The plaintext is exposed as a stream of `stream_size` bytes, padded with zeros: some record
     /// structures are parsed over the full record size, which is larger than the encrypted content.
-    pub fn new<R: Read>(
+    pub(crate) fn new<R: Read>(
         mut reader: R,
-        iv: &[u8],
-        key: &[u8],
+        params: &AesParams,
         size: u16,
         stream_size: u16,
     ) -> Result<AesDecoder> {
@@ -225,14 +239,14 @@ impl AesDecoder {
             .len()
             .checked_sub(Aes256::block_size())
             .ok_or_else(|| Error::new(ErrorKind::InvalidData, "encrypted record too short"))?;
-        let next_iv = buffer[next_iv_start..].to_vec();
+        let mut next_iv = [0u8; 16];
+        next_iv.copy_from_slice(&buffer[next_iv_start..]);
 
-        let decryptor = Aes256CbcDec::new_from_slices(key, iv)
-            .map_err(|_| Error::new(ErrorKind::InvalidInput, "invalid AES key or iv length"))?;
+        let decryptor = Aes256CbcDec::new(&params.key.into(), &params.iv.into());
         // Some valid records have an invalid PKCS7 padding: they are kept, read as zeros, so the
         // iv chain (and therefore the following records) stays in sync
         let plaintext_len = decryptor
-            .decrypt_padded_mut::<Pkcs7>(&mut buffer)
+            .decrypt_padded::<Pkcs7>(&mut buffer)
             .map(|plaintext| plaintext.len())
             .unwrap_or(0);
 

@@ -1,4 +1,5 @@
 use serde::Serialize;
+use std::borrow::Borrow;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
@@ -139,14 +140,19 @@ impl Frame {
 /// to work with.
 ///
 /// # Arguments
-/// - `records`: A vector of `Record` objects representing the raw log data.
+/// - `records`: The `Record` objects representing the raw log data, owned or borrowed
+///   (e.g. `Vec<Record>` or `&[Record]`), so that records can be kept after conversion.
 ///
 /// # Returns
 /// - `Vec<Frame>`: A vector of `Frame` objects representing the normalized log data.
 ///   Each `Frame` corresponds to one or more `Record` objects, depending on the
 ///   specific normalization logic.
 ///
-pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
+pub fn records_to_frames<I>(records: I, details: Details) -> Vec<Frame>
+where
+    I: IntoIterator,
+    I::Item: Borrow<Record>,
+{
     let mut frames = Vec::new();
     let mut frame = Frame {
         battery: FrameBattery {
@@ -161,7 +167,7 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
     let mut frame_index = 0;
 
     for record in records {
-        match record {
+        match record.borrow() {
             Record::OSD(osd) => {
                 if frame_index > 0 {
                     frame.finalize();
@@ -367,22 +373,22 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
                 frame.home.current_flight_record_index = home.current_flight_record_index;
             }
             Record::Recover(recover) => {
-                frame.recover.app_platform = Some(recover.app_platform);
-                frame.recover.app_version = recover.app_version;
-                frame.recover.aircraft_name = recover.aircraft_name;
-                frame.recover.aircraft_sn = recover.aircraft_sn;
-                frame.recover.camera_sn = recover.camera_sn;
-                frame.recover.rc_sn = recover.rc_sn;
-                frame.recover.battery_sn = recover.battery_sn;
+                frame.recover.app_platform = Some(recover.app_platform.clone());
+                frame.recover.app_version = recover.app_version.clone();
+                frame.recover.aircraft_name = recover.aircraft_name.clone();
+                frame.recover.aircraft_sn = recover.aircraft_sn.clone();
+                frame.recover.camera_sn = recover.camera_sn.clone();
+                frame.recover.rc_sn = recover.rc_sn.clone();
+                frame.recover.battery_sn = recover.battery_sn.clone();
             }
             Record::AppTip(app_tip) => {
-                frame.app.tip = append_message(frame.app.tip, app_tip.message);
+                frame.app.tip = append_message(frame.app.tip, app_tip.message.as_str());
             }
             Record::AppWarn(app_warn) => {
-                frame.app.warn = append_message(frame.app.warn, app_warn.message);
+                frame.app.warn = append_message(frame.app.warn, app_warn.message.as_str());
             }
             Record::AppSeriousWarn(app_serious_warn) => {
-                frame.app.warn = append_message(frame.app.warn, app_serious_warn.message);
+                frame.app.warn = append_message(frame.app.warn, app_serious_warn.message.as_str());
             }
             _ => {}
         }
