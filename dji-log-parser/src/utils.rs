@@ -1,55 +1,87 @@
 use binrw::{parser, BinResult, Error};
 
-use std::io::SeekFrom;
+use std::io::{Read, SeekFrom};
 
-/// Parses bytes from a reader, checking for the JPEG header `0xFFD8` and reading until the end JPEG marker `0xFFD9` is encountered.
+/// Marker written before images: before the images at the end of v13+ logs, and before the
+/// images embedded in the records of older logs.
+const IMAGE_MARKER: [u8; 4] = 12345i32.to_le_bytes();
+
+fn invalid_jpeg(message: &str) -> Error {
+    Error::Io(std::io::Error::new(
+        std::io::ErrorKind::InvalidData,
+        message,
+    ))
+}
+
+fn read_byte<R: Read>(reader: &mut R) -> BinResult<u8> {
+    let mut byte = [0];
+    reader.read_exact(&mut byte)?;
+    Ok(byte[0])
+}
+
+/// Reads a JPEG image, optionally preceded by the image marker.
 ///
-/// This function first checks if the initial two bytes match `0xFFD8`. If so, it continuously reads bytes from the given reader and checks
-/// for the occurrence of the byte sequence `0xFFD9`. Once this sequence is found, the function stops reading and returns the accumulated bytes
-/// (excluding `0xFFD9`). If the initial bytes do not match `0xFFD8`, an error is returned.
-///
-/// # Parameters
-///
-/// * `reader`: A mutable reference to an object implementing the `Read` and `Seek` traits.
-///             This reader is used to fetch the bytes.
-///
-/// # Returns
-///
-/// Returns a `BinResult<Vec<u8>>` which is Ok containing a vector of bytes read until (but
-/// not including) `0xFFD9`, or an error (`binrw::Error`) if an issue occurs during reading or
-/// if the initial bytes are not `0xFFD8`.
-///
-/// # Errors
-///
-/// This function will return an error if there is a problem reading from the reader or if the initial bytes do not match the JPEG header.
+/// The image is read segment by segment, skipping each segment by its length, up to the end of
+/// image marker `0xFFD9`: the EXIF data can contain a thumbnail, with its own end of image marker.
 #[parser(reader)]
 pub fn read_jpeg() -> BinResult<Vec<u8>> {
-    let mut buffer = Vec::new();
-    let mut temp_buffer = [0; 2];
-
-    reader.read_exact(&mut temp_buffer)?;
-
-    if temp_buffer != [0xFF, 0xD8] {
-        return Err(Error::Io(std::io::Error::new(
-            std::io::ErrorKind::InvalidData,
-            "Invalid JPEG header",
-        )));
+    let start = reader.stream_position()?;
+    let mut marker = [0; 4];
+    if reader.read_exact(&mut marker).is_err() || marker != IMAGE_MARKER {
+        reader.seek(SeekFrom::Start(start))?;
     }
 
-    buffer.extend_from_slice(&temp_buffer);
+    let mut image = vec![read_byte(reader)?, read_byte(reader)?];
+    if image != [0xFF, 0xD8] {
+        return Err(invalid_jpeg("invalid JPEG header"));
+    }
 
-    while reader.read_exact(&mut temp_buffer).is_ok() {
-        buffer.push(temp_buffer[0]);
+    loop {
+        if read_byte(reader)? != 0xFF {
+            return Err(invalid_jpeg("invalid JPEG marker"));
+        }
+        image.push(0xFF);
+        // Markers can be preceded by any number of 0xFF fill bytes
+        let mut code = read_byte(reader)?;
+        while code == 0xFF {
+            image.push(code);
+            code = read_byte(reader)?;
+        }
+        image.push(code);
 
-        if temp_buffer == [0xFF, 0xD9] {
-            buffer.push(temp_buffer[1]);
-            break;
+        match code {
+            // End of image
+            0xD9 => return Ok(image),
+            // Markers without segment
+            0x01 | 0xD0..=0xD7 => continue,
+            _ => {}
         }
 
-        reader.seek(SeekFrom::Current(-1))?;
-    }
+        let length = [read_byte(reader)?, read_byte(reader)?];
+        image.extend_from_slice(&length);
+        let mut segment = vec![0; usize::from(u16::from_be_bytes(length)).saturating_sub(2)];
+        reader.read_exact(&mut segment)?;
+        image.extend_from_slice(&segment);
 
-    Ok(buffer)
+        // Start of scan: the entropy-coded data runs up to the next marker. In this data, 0xFF is
+        // followed by 0x00 (stuffing) or a restart marker.
+        if code == 0xDA {
+            loop {
+                let byte = read_byte(reader)?;
+                if byte != 0xFF {
+                    image.push(byte);
+                    continue;
+                }
+                let next = read_byte(reader)?;
+                if next == 0x00 || (0xD0..=0xD7).contains(&next) {
+                    image.extend_from_slice(&[byte, next]);
+                    continue;
+                }
+                reader.seek(SeekFrom::Current(-2))?;
+                break;
+            }
+        }
+    }
 }
 
 /// Seeks through a byte stream to find the start of a JPEG record or an end marker.
@@ -86,6 +118,8 @@ pub fn seek_to_next_record() -> BinResult<Vec<u8>> {
         }
         if temp_buffer[0] == 0xFF {
             buffer.push(temp_buffer[0]);
+            // The second byte is the start of the next record
+            reader.seek(SeekFrom::Current(-1))?;
             break;
         }
         buffer.push(temp_buffer[0]);

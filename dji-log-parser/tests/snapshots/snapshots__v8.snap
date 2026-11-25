@@ -67,7 +67,6 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
     "Firmware": 6,
     "Gimbal": 5269,
     "Home": 10,
-    "Invalid": 1,
     "JPEG": 8,
     "MCParams": 89,
     "OSD": 8984,

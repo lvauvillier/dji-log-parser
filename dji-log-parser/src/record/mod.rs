@@ -259,7 +259,7 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
     /// Decodes and parses the content as `T`, then checks the record end byte.
     ///
     /// Records written by older apps can be shorter than the structure, which grew over time:
-    /// like DJI does, the missing trailing fields are read as zeros.
+    /// the missing trailing fields are read as zeros.
     fn read<T>(&mut self, args: T::Args<'_>) -> BinResult<T>
     where
         T: BinRead,
@@ -343,6 +343,45 @@ mod tests {
             panic!("not an OSD record");
         };
         assert_eq!(osd.altitude, 123.4);
+    }
+
+    #[test]
+    fn next_record_is_read_after_invalid_data() {
+        let mut bytes = vec![0xAA, 0xBB, END_BYTE];
+        bytes.extend(raw_record(1, &[0; 53]));
+        let keychain = RefCell::new(Keychain::empty());
+        let mut reader = Cursor::new(bytes);
+
+        let invalid = Record::read(&mut reader, 6, ProductType::None, &keychain).unwrap();
+        assert!(matches!(invalid, Record::Invalid(data) if data == [0xAA, 0xBB, END_BYTE]));
+        let next = Record::read(&mut reader, 6, ProductType::None, &keychain).unwrap();
+        assert!(matches!(next, Record::OSD(_)));
+    }
+
+    #[test]
+    fn embedded_image_is_read_up_to_its_end() {
+        let image = [
+            &[0xFF, 0xD8][..],
+            // EXIF segment containing a thumbnail, with its own end of image marker
+            &[0xFF, 0xE1, 0x00, 0x08, 0xFF, 0xD8, 0x01, 0x02, 0xFF, 0xD9],
+            // Start of scan, then entropy-coded data with a stuffed 0xFF and a restart marker
+            &[
+                0xFF, 0xDA, 0x00, 0x02, 0x12, 0xFF, 0x00, 0x34, 0xFF, 0xD0, 0x56,
+            ],
+            &[0xFF, 0xD9],
+        ]
+        .concat();
+        // Images are preceded by a 12345 marker
+        let mut bytes = 12345i32.to_le_bytes().to_vec();
+        bytes.extend(&image);
+        bytes.extend(raw_record(1, &[0; 53]));
+        let keychain = RefCell::new(Keychain::empty());
+        let mut reader = Cursor::new(bytes);
+
+        let jpeg = Record::read(&mut reader, 6, ProductType::None, &keychain).unwrap();
+        assert!(matches!(jpeg, Record::JPEG(data) if data == image));
+        let next = Record::read(&mut reader, 6, ProductType::None, &keychain).unwrap();
+        assert!(matches!(next, Record::OSD(_)));
     }
 
     #[test]
