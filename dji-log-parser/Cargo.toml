@@ -10,6 +10,8 @@ keywords.workspace = true
 edition.workspace = true
 publish = true
 readme = "../README.md"
+# Real flight logs used by snapshot tests: not needed by crate users
+exclude = ["tests"]
 
 [features]
 native-async = ["async-channel"]
@@ -40,3 +42,6 @@ web-sys = { workspace = true, features = [
     "RequestInit",
     "Response",
 ] }
+
+[dev-dependencies]
+insta = { workspace = true, features = ["json"] }

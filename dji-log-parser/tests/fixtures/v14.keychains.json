@@ -1,0 +1,54 @@
+[
+  [
+    {
+      "featurePoint": "FR_Standardization_Feature_Base_1",
+      "aesKey": "DClSeYsYfQE9l2CVrNyn+glvhd4f7778JXuRET/OMks=",
+      "aesIv": "+ITEg5xBhNnY5G6FwRV/yg=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_Vision_2",
+      "aesKey": "hASppPNnoBniMiohAF1s+OEwfH5xAFdJ5cbOpttNcGA=",
+      "aesIv": "UhkERYCkXmLWiYPX5u/Pxw=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_AirLink_5",
+      "aesKey": "H0tFkEyd2jFjqNc+9keeSGGijeFH7EQddcf0W7fEItY=",
+      "aesIv": "D2hnWwVBjGjpY6bfq0UnDA=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_RC_11",
+      "aesKey": "57XtLqExTBb5QHGwBJOGFPvtbwAu/GgYXw/3ClQfFjs=",
+      "aesIv": "1ARqdTW2iy72/N77j2UPiw=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_Battery_13",
+      "aesKey": "Un6LgXr0mdoDkORXr/uSg//8+DSyg2Opf0GkD6azmvk=",
+      "aesIv": "MSV6rBkThhyjanNTZQbWZA=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_AfterSales_6",
+      "aesKey": "As+ZtVL8XtI9AuHktXvd5qBXkrpqGNYNg0pg6FA3TVI=",
+      "aesIv": "BuYHWOJlKh9nCwMchuADJw=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_Agriculture_4",
+      "aesKey": "N5Xhoa63rzEBDxlRRmakTEyrpS4Rz05421GVYTKYiGk=",
+      "aesIv": "LWkL2yG6DCLJJnQQjBhc2Q=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_DJIFlyCustom_7",
+      "aesKey": "wwEH1NFVTayn4g3ZepZCp/9NgyAHj0PRtbfhQs89G5I=",
+      "aesIv": "PyJnEHi0vB+WyfgQXzq3Xw=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_Camera_12",
+      "aesKey": "iDp/j8rCYH95QcFIf9zbvv9Cznf2ipaMU46cs8hTElA=",
+      "aesIv": "jpHgWFRA182CmRYBdfG/dA=="
+    },
+    {
+      "featurePoint": "FR_Standardization_Feature_Gimbal_10",
+      "aesKey": "6YvlHBjQRS9S+plhS7c58OZiIqdqrbyzD59+CpdKeoE=",
+      "aesIv": "1V+d7TDjHILdtuMpbR0ZUw=="
+    }
+  ]
+]
