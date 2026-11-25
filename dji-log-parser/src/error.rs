@@ -14,6 +14,9 @@ pub enum Error {
     #[error("Keychain is required")]
     KeychainRequired,
 
+    #[error("Invalid keychain: {0}")]
+    InvalidKeychain(String),
+
     #[error("Missing Auxilliary data: {0}")]
     MissingAuxilliaryData(String),
 

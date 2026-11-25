@@ -239,7 +239,13 @@ impl DJILog {
 
         // Decode Detail
         let detail_offset = prefix.detail_offset() as usize;
-        let mut cursor = Cursor::new(pad_with_zeros(&bytes[detail_offset..], 400));
+        let detail_bytes = bytes.get(detail_offset..).ok_or_else(|| {
+            std::io::Error::new(
+                std::io::ErrorKind::UnexpectedEof,
+                format!("detail offset {detail_offset} is beyond end of file"),
+            )
+        })?;
+        let mut cursor = Cursor::new(pad_with_zeros(detail_bytes, 400));
 
         let details = if version < 13 {
             Details::read_args(&mut cursor, (version,))?
@@ -454,7 +460,7 @@ impl DJILog {
             Some(keychains) => keychains
                 .iter()
                 .map(|keychain| Keychain::from_feature_points(keychain))
-                .collect(),
+                .collect::<Result<Vec<_>>>()?,
             None => Vec::new(),
         });
 

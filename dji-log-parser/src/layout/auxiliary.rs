@@ -1,7 +1,7 @@
 use binrw::binread;
 use serde::Serialize;
 
-use crate::decoder::XorDecoder;
+use crate::decoder::xor_decoder;
 
 #[binread]
 #[derive(Debug)]
@@ -10,7 +10,7 @@ pub(crate) enum Auxiliary {
     #[br(magic = 0u8)]
     Info(
         #[br(temp)] u16,
-        #[br(pad_size_to = self_0, map_stream = |reader| XorDecoder::new(reader, 0))] AuxiliaryInfo,
+        #[br(pad_size_to = self_0, map_stream = |reader| xor_decoder(reader, 0))] AuxiliaryInfo,
     ),
 
     #[br(magic = 1u8)]
