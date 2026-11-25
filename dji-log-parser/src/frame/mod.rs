@@ -388,5 +388,11 @@ pub fn records_to_frames(records: Vec<Record>, details: Details) -> Vec<Frame> {
         }
     }
 
+    // A frame is only pushed when the next OSD record starts a new one: push the last one too
+    if frame_index > 0 {
+        frame.finalize();
+        frames.push(frame);
+    }
+
     frames
 }

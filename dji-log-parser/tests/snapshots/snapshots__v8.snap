@@ -1,6 +1,7 @@
 ---
 source: dji-log-parser/tests/snapshots.rs
-expression: "summarize(fixture(\"v8.txt\"))"
+assertion_line: 89
+expression: "summarize(fixture(\"v8.txt\"), None)"
 ---
 {
   "version": 8,
@@ -75,7 +76,7 @@ expression: "summarize(fixture(\"v8.txt\"))"
     "SmartBattery": 902,
     "Unknown": 10685
   },
-  "frame_count": 8983,
+  "frame_count": 8984,
   "sample_frames": [
     {
       "index": 0,
@@ -211,15 +212,15 @@ expression: "summarize(fixture(\"v8.txt\"))"
       }
     },
     {
-      "index": 4491,
+      "index": 4492,
       "frame": {
         "custom": {
-          "dateTime": "2016-12-03T15:07:59.311Z"
+          "dateTime": "2016-12-03T15:07:59.314Z"
         },
         "osd": {
-          "flyTime": 486.6,
-          "latitude": 48.615104640487274,
-          "longitude": 7.801272314782695,
+          "flyTime": 486.7,
+          "latitude": 48.61510445093055,
+          "longitude": 7.801272588518447,
           "height": 2.7,
           "heightMax": 16.9,
           "vpsHeight": 3.2,
@@ -232,7 +233,7 @@ expression: "summarize(fixture(\"v8.txt\"))"
           "zSpeedMax": 4.1,
           "pitch": 0.0,
           "roll": 9.5,
-          "yaw": -76.0,
+          "yaw": -76.2,
           "flycState": "GPSSport",
           "flycCommand": null,
           "flightAction": "RCAssistantTakeoff",
@@ -284,7 +285,7 @@ expression: "summarize(fixture(\"v8.txt\"))"
           "uplinkSignal": null,
           "aileron": 1024,
           "elevator": 1024,
-          "throttle": 1024,
+          "throttle": 787,
           "rudder": 1024
         },
         "battery": {
@@ -344,15 +345,15 @@ expression: "summarize(fixture(\"v8.txt\"))"
       }
     },
     {
-      "index": 8982,
+      "index": 8983,
       "frame": {
         "custom": {
-          "dateTime": "2016-12-03T15:15:46.835Z"
+          "dateTime": "2016-12-03T15:15:46.939Z"
         },
         "osd": {
-          "flyTime": 954.2,
-          "latitude": 48.615110750728284,
-          "longitude": 7.801063823136281,
+          "flyTime": 954.3,
+          "latitude": 48.615110906677444,
+          "longitude": 7.801063838886032,
           "height": 0.9,
           "heightMax": 43.4,
           "vpsHeight": 0.1,
@@ -363,9 +364,9 @@ expression: "summarize(fixture(\"v8.txt\"))"
           "ySpeedMax": 14.9,
           "zSpeed": 0.0,
           "zSpeedMax": 4.1,
-          "pitch": 5.7,
+          "pitch": 6.1,
           "roll": 1.4,
-          "yaw": -144.8,
+          "yaw": -144.6,
           "flycState": "GPSAtti",
           "flycCommand": null,
           "flightAction": "RCAssistantTakeoff",
@@ -400,7 +401,7 @@ expression: "summarize(fixture(\"v8.txt\"))"
           "mode": "YawFollow",
           "pitch": -6.5,
           "roll": 0.0,
-          "yaw": -132.8,
+          "yaw": -134.8,
           "isPitchAtLimit": false,
           "isRollAtLimit": false,
           "isYawAtLimit": false,
@@ -422,19 +423,19 @@ expression: "summarize(fixture(\"v8.txt\"))"
         },
         "battery": {
           "chargeLevel": 14,
-          "voltage": 14.333,
+          "voltage": 14.536,
           "current": 0.0,
           "currentCapacity": 764,
           "fullCapacity": 5458,
           "cellNum": 4,
           "isCellVoltageEstimated": false,
           "cellVoltages": [
-            3.586,
-            3.598,
-            3.599,
-            3.578
+            3.596,
+            3.597,
+            3.618,
+            3.594
           ],
-          "cellVoltageDeviation": 0.021,
+          "cellVoltageDeviation": 0.024,
           "maxCellVoltageDeviation": 0.083,
           "temperature": 0.0,
           "minTemperature": 0.0,
@@ -444,7 +445,7 @@ expression: "summarize(fixture(\"v8.txt\"))"
           "latitude": 48.615102514664656,
           "longitude": 7.800967181857053,
           "altitude": 57.61842,
-          "heightLimit": 500.0,
+          "heightLimit": 0.0,
           "isHomeRecord": true,
           "goHomeMode": "FixedHeight",
           "isDynamicHomePointEnabled": false,
@@ -458,7 +459,7 @@ expression: "summarize(fixture(\"v8.txt\"))"
           "iocMode": null,
           "goHomeHeight": 300,
           "iocCourseLockAngle": null,
-          "maxAllowedHeight": 500.0,
+          "maxAllowedHeight": 0.0,
           "currentFlightRecordIndex": 49
         },
         "recover": {

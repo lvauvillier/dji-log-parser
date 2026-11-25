@@ -1,6 +1,7 @@
 ---
 source: dji-log-parser/tests/snapshots.rs
-expression: "summarize(fixture(\"v4.txt\"))"
+assertion_line: 84
+expression: "summarize(fixture(\"v4.txt\"), None)"
 ---
 {
   "version": 4,
@@ -73,7 +74,7 @@ expression: "summarize(fixture(\"v4.txt\"))"
     "Recover": 6,
     "SmartBattery": 87
   },
-  "frame_count": 871,
+  "frame_count": 872,
   "sample_frames": [
     {
       "index": 0,
@@ -209,28 +210,28 @@ expression: "summarize(fixture(\"v4.txt\"))"
       }
     },
     {
-      "index": 435,
+      "index": 436,
       "frame": {
         "custom": {
-          "dateTime": "2015-12-29T19:06:33.899Z"
+          "dateTime": "2015-12-29T19:06:34Z"
         },
         "osd": {
-          "flyTime": 45.4,
-          "latitude": 53.73594864524888,
-          "longitude": -1.7666213790158372,
-          "height": 39.1,
+          "flyTime": 45.5,
+          "latitude": 53.735948475302386,
+          "longitude": -1.7666214563505636,
+          "height": 39.0,
           "heightMax": 39.3,
           "vpsHeight": 25.5,
-          "altitude": 57.9132,
+          "altitude": 57.8132,
           "xSpeed": -0.1,
           "xSpeedMax": 1.5,
           "ySpeed": 0.0,
           "ySpeedMax": 0.6,
           "zSpeed": 0.0,
           "zSpeedMax": 0.0,
-          "pitch": -0.4,
-          "roll": 11.3,
-          "yaw": 77.3,
+          "pitch": -0.3,
+          "roll": 11.5,
+          "yaw": 78.2,
           "flycState": "GPSAtti",
           "flycCommand": "AutoFly",
           "flightAction": "AppAutoTakeoff",
@@ -282,8 +283,8 @@ expression: "summarize(fixture(\"v4.txt\"))"
           "uplinkSignal": null,
           "aileron": 1024,
           "elevator": 1024,
-          "throttle": 1039,
-          "rudder": 1109
+          "throttle": 1036,
+          "rudder": 1110
         },
         "battery": {
           "chargeLevel": 85,
@@ -342,15 +343,15 @@ expression: "summarize(fixture(\"v4.txt\"))"
       }
     },
     {
-      "index": 870,
+      "index": 871,
       "frame": {
         "custom": {
-          "dateTime": "2015-12-29T19:07:21.224Z"
+          "dateTime": "2015-12-29T19:07:21.326Z"
         },
         "osd": {
-          "flyTime": 92.7,
-          "latitude": 53.7358975970114,
-          "longitude": -1.7665801222483661,
+          "flyTime": 92.8,
+          "latitude": 53.735897550303456,
+          "longitude": -1.7665799692272353,
           "height": 2.9,
           "heightMax": 39.5,
           "vpsHeight": 0.0,
@@ -361,9 +362,9 @@ expression: "summarize(fixture(\"v4.txt\"))"
           "ySpeedMax": 1.3,
           "zSpeed": 0.0,
           "zSpeedMax": 1.9,
-          "pitch": -1.0,
-          "roll": -9.8,
-          "yaw": 173.1,
+          "pitch": -1.7,
+          "roll": -10.1,
+          "yaw": 173.4,
           "flycState": "GPSAtti",
           "flycCommand": "AutoFly",
           "flightAction": "AppAutoTakeoff",
@@ -398,7 +399,7 @@ expression: "summarize(fixture(\"v4.txt\"))"
           "mode": "YawFollow",
           "pitch": 0.0,
           "roll": 0.0,
-          "yaw": 176.7,
+          "yaw": 176.5,
           "isPitchAtLimit": false,
           "isRollAtLimit": false,
           "isYawAtLimit": false,

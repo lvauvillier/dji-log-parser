@@ -1,5 +1,6 @@
 ---
 source: dji-log-parser/tests/snapshots.rs
+assertion_line: 94
 expression: "summarize(fixture(\"v14.txt\"), Some(keychains(\"v14.keychains.json\")))"
 ---
 {
@@ -78,7 +79,7 @@ expression: "summarize(fixture(\"v14.txt\"), Some(keychains(\"v14.keychains.json
     "SmartBatteryGroup": 3424,
     "Unknown": 23321
   },
-  "frame_count": 4404,
+  "frame_count": 4405,
   "sample_frames": [
     {
       "index": 0,
@@ -347,27 +348,27 @@ expression: "summarize(fixture(\"v14.txt\"), Some(keychains(\"v14.keychains.json
       }
     },
     {
-      "index": 4403,
+      "index": 4404,
       "frame": {
         "custom": {
           "dateTime": "2024-05-15T15:21:49.458Z"
         },
         "osd": {
-          "flyTime": 884.2,
-          "latitude": 45.75251131923643,
-          "longitude": -119.80310769447763,
-          "height": 0.2,
+          "flyTime": 884.3,
+          "latitude": 45.75251129658641,
+          "longitude": -119.80310753118614,
+          "height": 0.0,
           "heightMax": 20.1,
           "vpsHeight": 0.0,
-          "altitude": 154.93849,
+          "altitude": 154.7385,
           "xSpeed": 0.0,
           "xSpeedMax": 14.4,
           "ySpeed": 0.0,
           "ySpeedMax": 13.8,
           "zSpeed": 0.0,
           "zSpeedMax": 3.7,
-          "pitch": -2.4,
-          "roll": -1.3,
+          "pitch": -2.1,
+          "roll": -3.0,
           "yaw": -103.9,
           "flycState": "GPSAtti",
           "flycCommand": null,
@@ -381,8 +382,8 @@ expression: "summarize(fixture(\"v14.txt\"), Some(keychains(\"v14.keychains.json
           "waveError": false,
           "goHomeStatus": "Standby",
           "batteryType": "Smart",
-          "isOnGround": false,
-          "isMotorOn": true,
+          "isOnGround": true,
+          "isMotorOn": false,
           "isMotorBlocked": false,
           "motorStartFailedCause": "None",
           "isImuPreheated": true,
