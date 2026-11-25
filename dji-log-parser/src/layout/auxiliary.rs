@@ -2,6 +2,7 @@ use binrw::binread;
 use serde::Serialize;
 
 use crate::decoder::xor_decoder;
+use num_enum::{FromPrimitive, IntoPrimitive};
 
 #[binread]
 #[derive(Debug)]
@@ -45,48 +46,18 @@ pub(crate) struct AuxiliaryVersion {
     pub department: Department,
 }
 
-#[derive(Serialize, Debug, Clone, PartialEq)]
+#[derive(FromPrimitive, IntoPrimitive, Serialize, Debug, Clone, PartialEq)]
+#[repr(u8)]
 pub enum Department {
-    SDK,
-    DJIGO,
-    DJIFly,
-    AgriculturalMachinery,
-    Terra,
-    DJIGlasses,
-    DJIPilot,
-    GSPro,
+    SDK = 1,
+    DJIGO = 2,
+    DJIFly = 3,
+    AgriculturalMachinery = 4,
+    Terra = 5,
+    DJIGlasses = 6,
+    DJIPilot = 7,
+    GSPro = 8,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for Department {
-    fn from(num: u8) -> Self {
-        match num {
-            1 => Department::SDK,
-            2 => Department::DJIGO,
-            3 => Department::DJIFly,
-            4 => Department::AgriculturalMachinery,
-            5 => Department::Terra,
-            6 => Department::DJIGlasses,
-            7 => Department::DJIPilot,
-            8 => Department::GSPro,
-            _ => Department::Unknown(num),
-        }
-    }
-}
-
-impl From<Department> for u8 {
-    fn from(department: Department) -> Self {
-        match department {
-            Department::SDK => 1,
-            Department::DJIGO => 2,
-            Department::DJIFly => 3,
-            Department::AgriculturalMachinery => 4,
-            Department::Terra => 5,
-            Department::DJIGlasses => 6,
-            Department::DJIPilot => 7,
-            Department::GSPro => 8,
-            Department::Unknown(num) => num,
-        }
-    }
 }

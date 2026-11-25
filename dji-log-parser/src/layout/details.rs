@@ -1,5 +1,6 @@
 use binrw::binread;
 use chrono::{DateTime, Utc};
+use num_enum::FromPrimitive;
 use serde::Serialize;
 use std::io::SeekFrom;
 #[cfg(target_arch = "wasm32")]
@@ -93,139 +94,80 @@ pub struct Details {
     pub app_version: String,
 }
 
-#[derive(Serialize, Debug, Clone, PartialEq, Default, Copy)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, PartialEq, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum ProductType {
-    #[default]
-    None,
-    Inspire1,
-    Phantom3Standard,
-    Phantom3Advanced,
-    Phantom3Pro,
-    OSMO,
-    Matrice100,
-    Phantom4,
-    LB2,
-    Inspire1Pro,
-    A3,
-    Matrice600,
-    Phantom34K,
-    MavicPro,
-    ZenmuseXT,
-    Inspire1RAW,
-    A2,
-    Inspire2,
-    OSMOPro,
-    OSMORaw,
-    OSMOPlus,
-    Mavic,
-    OSMOMobile,
-    OrangeCV600,
-    Phantom4Pro,
-    N3FC,
-    Spark,
-    Matrice600Pro,
-    Phantom4Advanced,
-    Phantom3SE,
-    AG405,
-    Matrice200,
-    Matrice210,
-    Matrice210RTK,
-    MavicAir,
-    Mavic2,
-    Phantom4ProV2,
-    Phantom4RTK,
-    Phantom4Multispectral,
-    Mavic2Enterprise,
-    MavicMini,
-    Matrice200V2,
-    Matrice210V2,
-    Matrice210RTKV2,
-    MavicAir2,
-    Matrice300RTK,
-    FPV,
-    MavicAir2S,
-    Mini2,
-    Mavic3,
-    MiniSE,
-    Mini3Pro,
-    Mavic3Pro,
-    Mini2SE,
-    Matrice30,
-    Mavic3Enterprise,
-    Avata,
-    Mini4Pro,
-    Avata2,
-    Matrice350RTK,
+    None = 0,
+    Inspire1 = 1,
+    Phantom3Standard = 2,
+    Phantom3Advanced = 3,
+    Phantom3Pro = 4,
+    OSMO = 5,
+    Matrice100 = 6,
+    Phantom4 = 7,
+    LB2 = 8,
+    Inspire1Pro = 9,
+    A3 = 10,
+    Matrice600 = 11,
+    Phantom34K = 12,
+    MavicPro = 13,
+    ZenmuseXT = 14,
+    Inspire1RAW = 15,
+    A2 = 16,
+    Inspire2 = 17,
+    OSMOPro = 18,
+    OSMORaw = 19,
+    OSMOPlus = 20,
+    Mavic = 21,
+    OSMOMobile = 22,
+    OrangeCV600 = 23,
+    Phantom4Pro = 24,
+    N3FC = 25,
+    Spark = 26,
+    Matrice600Pro = 27,
+    Phantom4Advanced = 28,
+    Phantom3SE = 29,
+    AG405 = 30,
+    Matrice200 = 31,
+    Matrice210 = 33,
+    Matrice210RTK = 34,
+    MavicAir = 38,
+    Mavic2 = 42,
+    Phantom4ProV2 = 44,
+    Phantom4RTK = 46,
+    Phantom4Multispectral = 57,
+    Mavic2Enterprise = 58,
+    MavicMini = 59,
+    Matrice200V2 = 60,
+    Matrice210V2 = 61,
+    Matrice210RTKV2 = 62,
+    MavicAir2 = 67,
+    Matrice300RTK = 70,
+    FPV = 73,
+    MavicAir2S = 75,
+    Mini2 = 76,
+    Mavic3 = 77,
+    MiniSE = 96,
+    Mini3Pro = 103,
+    Mavic3Pro = 111,
+    Mini2SE = 113,
+    Matrice30 = 116,
+    Mavic3Enterprise = 118,
+    Avata = 121,
+    Mini4Pro = 126,
+    Avata2 = 152,
+    Matrice350RTK = 170,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
 }
 
-impl From<u8> for ProductType {
-    fn from(num: u8) -> Self {
-        match num {
-            0 => ProductType::None,
-            1 => ProductType::Inspire1,
-            2 => ProductType::Phantom3Standard,
-            3 => ProductType::Phantom3Advanced,
-            4 => ProductType::Phantom3Pro,
-            5 => ProductType::OSMO,
-            6 => ProductType::Matrice100,
-            7 => ProductType::Phantom4,
-            8 => ProductType::LB2,
-            9 => ProductType::Inspire1Pro,
-            10 => ProductType::A3,
-            11 => ProductType::Matrice600,
-            12 => ProductType::Phantom34K,
-            13 => ProductType::MavicPro,
-            14 => ProductType::ZenmuseXT,
-            15 => ProductType::Inspire1RAW,
-            16 => ProductType::A2,
-            17 => ProductType::Inspire2,
-            18 => ProductType::OSMOPro,
-            19 => ProductType::OSMORaw,
-            20 => ProductType::OSMOPlus,
-            21 => ProductType::Mavic,
-            22 => ProductType::OSMOMobile,
-            23 => ProductType::OrangeCV600,
-            24 => ProductType::Phantom4Pro,
-            25 => ProductType::N3FC,
-            26 => ProductType::Spark,
-            27 => ProductType::Matrice600Pro,
-            28 => ProductType::Phantom4Advanced,
-            29 => ProductType::Phantom3SE,
-            30 => ProductType::AG405,
-            31 => ProductType::Matrice200,
-            33 => ProductType::Matrice210,
-            34 => ProductType::Matrice210RTK,
-            38 => ProductType::MavicAir,
-            42 => ProductType::Mavic2,
-            44 => ProductType::Phantom4ProV2,
-            46 => ProductType::Phantom4RTK,
-            57 => ProductType::Phantom4Multispectral,
-            58 => ProductType::Mavic2Enterprise,
-            59 => ProductType::MavicMini,
-            60 => ProductType::Matrice200V2,
-            61 => ProductType::Matrice210V2,
-            62 => ProductType::Matrice210RTKV2,
-            67 => ProductType::MavicAir2,
-            70 => ProductType::Matrice300RTK,
-            73 => ProductType::FPV,
-            75 => ProductType::MavicAir2S,
-            76 => ProductType::Mini2,
-            77 => ProductType::Mavic3,
-            96 => ProductType::MiniSE,
-            103 => ProductType::Mini3Pro,
-            111 => ProductType::Mavic3Pro,
-            113 => ProductType::Mini2SE,
-            116 => ProductType::Matrice30,
-            118 => ProductType::Mavic3Enterprise,
-            121 => ProductType::Avata,
-            126 => ProductType::Mini4Pro,
-            152 => ProductType::Avata2,
-            170 => ProductType::Matrice350RTK,
-            _ => ProductType::Unknown(num),
-        }
+// Not derived: num_enum reserves `#[default]` and it conflicts with `catch_all`
+#[allow(clippy::derivable_impls)]
+impl Default for ProductType {
+    fn default() -> Self {
+        ProductType::None
     }
 }
 
@@ -337,31 +279,19 @@ impl ProductType {
     }
 }
 
-#[derive(Serialize, Debug, Clone, PartialEq)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, PartialEq)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum Platform {
-    IOS,
-    Android,
-    DJIFly,
-    Windows,
-    Mac,
-    Linux,
+    IOS = 1,
+    Android = 2,
+    DJIFly = 6,
+    Windows = 10,
+    Mac = 11,
+    Linux = 12,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for Platform {
-    fn from(num: u8) -> Self {
-        match num {
-            1 => Platform::IOS,
-            2 => Platform::Android,
-            6 => Platform::DJIFly,
-            10 => Platform::Windows,
-            11 => Platform::Mac,
-            12 => Platform::Linux,
-            _ => Platform::Unknown(num),
-        }
-    }
 }
 
 /// Decode the battery serial number from raw bytes, choosing the method based on model:

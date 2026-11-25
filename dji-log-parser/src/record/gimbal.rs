@@ -1,5 +1,6 @@
 use crate::utils::sub_byte_field;
 use binrw::binread;
+use num_enum::FromPrimitive;
 use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
@@ -60,33 +61,24 @@ pub struct Gimbal {
     pub is_single_click: bool,
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum GimbalMode {
     /// The gimbal can move independently of the aircraft's yaw. In this mode, even if
     /// the aircraft yaw changes, the camera will continue pointing in the same world
     /// direction. This mode is only available for the Ronin-MX when the M600 or M600
     /// Pro landing gear is retracted.
-    Free,
+    Free = 0,
     /// The gimbal's work mode is FPV mode. In this mode, the gimbal yaw will follow the
     /// aircraft's heading, and the gimbal roll will follow the RC's roll channel value.
     /// The pitch will be available to move.
     /// This mode is only available for the Ronin-MX when the M600 landing gear is retracted.
-    FPV,
+    FPV = 1,
     /// The gimbal's work mode is such that it will follow the yaw. In this mode, the
     /// gimbal yaw will be fixed, while pitch and roll will be available to move.
-    YawFollow,
+    YawFollow = 2,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for GimbalMode {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => GimbalMode::Free,
-            1 => GimbalMode::FPV,
-            2 => GimbalMode::YawFollow,
-            _ => GimbalMode::Unknown(value),
-        }
-    }
 }

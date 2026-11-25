@@ -4,6 +4,7 @@ use serde::Serialize;
 use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
+use num_enum::FromPrimitive;
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -75,77 +76,43 @@ pub struct Camera {
     pub camera_type: u8,
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum SDCardState {
-    Normal,
-    NoCard,
-    InvalidCard,
-    WriteProtected,
-    Unformatted,
-    Formatting,
-    IllegalFileSys,
-    Busy,
-    Full,
-    LowSpeed,
-    IndexMax,
-    Initialize,
-    SuggestFormat,
-    Repairing,
+    Normal = 0,
+    NoCard = 1,
+    InvalidCard = 2,
+    WriteProtected = 3,
+    Unformatted = 4,
+    Formatting = 5,
+    IllegalFileSys = 6,
+    Busy = 7,
+    Full = 8,
+    LowSpeed = 9,
+    IndexMax = 11,
+    Initialize = 12,
+    SuggestFormat = 13,
+    Repairing = 14,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
 }
 
-impl From<u8> for SDCardState {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => SDCardState::Normal,
-            1 => SDCardState::NoCard,
-            2 => SDCardState::InvalidCard,
-            3 => SDCardState::WriteProtected,
-            4 => SDCardState::Unformatted,
-            5 => SDCardState::Formatting,
-            6 => SDCardState::IllegalFileSys,
-            8 => SDCardState::Full,
-            9 => SDCardState::LowSpeed,
-            11 => SDCardState::IndexMax,
-            12 => SDCardState::Initialize,
-            13 => SDCardState::SuggestFormat,
-            14 => SDCardState::Repairing,
-            _ => SDCardState::Unknown(value),
-        }
-    }
-}
-
-#[derive(Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum CameraWorkMode {
-    Capture,
-    Recording,
-    Playback,
-    Transcode,
-    Tuning,
-    PowerSave,
-    Download,
-    XcodePlayback,
-    Broadcast,
+    Capture = 0,
+    Recording = 1,
+    Playback = 2,
+    Transcode = 3,
+    Tuning = 4,
+    PowerSave = 5,
+    Download = 6,
+    XcodePlayback = 7,
+    Broadcast = 8,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for CameraWorkMode {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => CameraWorkMode::Capture,
-            1 => CameraWorkMode::Recording,
-            2 => CameraWorkMode::Playback,
-            3 => CameraWorkMode::Transcode,
-            4 => CameraWorkMode::Tuning,
-            5 => CameraWorkMode::PowerSave,
-            6 => CameraWorkMode::Download,
-            7 => CameraWorkMode::XcodePlayback,
-            8 => CameraWorkMode::Broadcast,
-            _ => CameraWorkMode::Unknown(value),
-        }
-    }
 }

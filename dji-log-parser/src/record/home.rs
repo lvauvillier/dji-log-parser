@@ -5,6 +5,7 @@ use std::f64::consts::PI;
 use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
+use num_enum::FromPrimitive;
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -66,25 +67,16 @@ pub struct Home {
     pub max_allowed_height: f32,
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum IOCMode {
-    CourseLock,
-    HomeLock,
-    HotspotSurround,
+    CourseLock = 1,
+    HomeLock = 2,
+    HotspotSurround = 3,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for IOCMode {
-    fn from(value: u8) -> Self {
-        match value {
-            1 => IOCMode::CourseLock,
-            2 => IOCMode::HomeLock,
-            3 => IOCMode::HotspotSurround,
-            _ => IOCMode::Unknown(value),
-        }
-    }
 }
 
 #[derive(Serialize, Debug, Clone, Copy)]
@@ -103,26 +95,15 @@ impl From<bool> for GoHomeMode {
     }
 }
 
-#[derive(Serialize, Debug, Clone, Copy)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum CompassCalibrationState {
-    NotCalibrating,
-    Horizontal,
-    Vertical,
-    Successful,
-    Failed,
-    Unnown(u8),
-}
-
-impl From<u8> for CompassCalibrationState {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => CompassCalibrationState::NotCalibrating,
-            1 => CompassCalibrationState::Horizontal,
-            2 => CompassCalibrationState::Vertical,
-            3 => CompassCalibrationState::Successful,
-            4 => CompassCalibrationState::Failed,
-            _ => CompassCalibrationState::Unnown(value),
-        }
-    }
+    NotCalibrating = 0,
+    Horizontal = 1,
+    Vertical = 2,
+    Successful = 3,
+    Failed = 4,
+    #[num_enum(catch_all)]
+    Unknown(u8),
 }

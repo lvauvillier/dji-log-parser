@@ -4,6 +4,7 @@ use serde::Serialize;
 use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
+use num_enum::FromPrimitive;
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -44,23 +45,14 @@ pub struct SmartBattery {
     pub reserve: u8,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum BatteryGoHomeStatus {
-    NonGoHome,
-    GoHome,
-    GoHomeAlready,
+    NonGoHome = 0,
+    GoHome = 1,
+    GoHomeAlready = 2,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for BatteryGoHomeStatus {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => BatteryGoHomeStatus::NonGoHome,
-            1 => BatteryGoHomeStatus::GoHome,
-            2 => BatteryGoHomeStatus::GoHomeAlready,
-            _ => BatteryGoHomeStatus::Unknown(value),
-        }
-    }
 }

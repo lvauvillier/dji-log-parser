@@ -4,6 +4,7 @@ use serde::Serialize;
 use tsify_next::Tsify;
 
 use crate::utils::sub_byte_field;
+use num_enum::FromPrimitive;
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -32,33 +33,26 @@ pub struct VirtualStick {
     pub throttle: f32,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum VirtualStickVerticalControlMode {
     /// Sets the virtual stick vertical control values to be a vertical velocity.
     /// Positive and negative vertical velocity is for the aircraft ascending and
     /// descending respectively. Maximum vertical velocity is defined as 4 m/s. Minimum
     /// vertical velocity is defined as -4 m/s.
-    Velocity,
+    Velocity = 0,
     /// Sets the virtual stick vertical control values to be an altitude. Maximum
     /// position is defined as 500 m. Minimum position is defined as 0 m.
-    Position,
+    Position = 1,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
 }
 
-impl From<u8> for VirtualStickVerticalControlMode {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => VirtualStickVerticalControlMode::Velocity,
-            1 => VirtualStickVerticalControlMode::Position,
-            _ => VirtualStickVerticalControlMode::Unknown(value),
-        }
-    }
-}
-
-#[derive(Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum VirtualStickRollPitchControlMode {
     /// Sets the roll and pitch values to be an angle relative to a level aircraft. In
     /// the body coordinate system, positive and negative pitch angle is for the
@@ -70,7 +64,7 @@ pub enum VirtualStickRollPitchControlMode {
     /// and negative roll angle is the angle when the aircraft is moving east and west,
     /// respectively. Maximum angle is defined as 30 degrees. Minimum angle is defined
     /// as -30 degrees.
-    Angle,
+    Angle = 0,
     /// Sets the roll and pitch values to be a velocity. In the body coordinate system,
     /// positive and negative pitch velocity is for the aircraft moving towards the
     /// positive direction or negative direction along the pitch axis and y-axis,
@@ -81,65 +75,40 @@ pub enum VirtualStickRollPitchControlMode {
     /// Positive and negative roll velocity is when the aircraft is moving north and
     /// south, respectively. Maximum velocity is defined as 15 meters/s. Minimum
     /// velocity is defined as -15 meters/s.
-    Velocity,
+    Velocity = 1,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
 }
 
-impl From<u8> for VirtualStickRollPitchControlMode {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => VirtualStickRollPitchControlMode::Angle,
-            1 => VirtualStickRollPitchControlMode::Velocity,
-            _ => VirtualStickRollPitchControlMode::Unknown(value),
-        }
-    }
-}
-
-#[derive(Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum VirtualStickYawControlMode {
     /// Sets the yaw values to be an angle relative to the north. Positive and negative
     /// yaw angle is for the aircraft rotating clockwise and counterclockwise,
     /// respectively. Maximum yaw angle is defined as 180 degrees. Minimum yaw angle is
     /// defined as -180 degrees.
-    Angle,
+    Angle = 0,
     /// Sets the yaw values to be an angular velocity. Positive and negative angular
     /// velocity is for the aircraft rotating clockwise and counterclockwise,
     /// respectively. Maximum yaw angular velocity is defined as 100 degrees/s. Minimum
     /// yaw angular velocity is defined as -100 degrees/s.
-    Velocity,
+    Velocity = 1,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
 }
 
-impl From<u8> for VirtualStickYawControlMode {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => VirtualStickYawControlMode::Angle,
-            1 => VirtualStickYawControlMode::Velocity,
-            _ => VirtualStickYawControlMode::Unknown(value),
-        }
-    }
-}
-
-#[derive(Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
 pub enum VirtualStickFlightCoordinateSystem {
     /// Ground coordinate system.
-    Ground,
+    Ground = 0,
     /// Body coordinate system.
-    Body,
+    Body = 1,
     #[serde(untagged)]
+    #[num_enum(catch_all)]
     Unknown(u8),
-}
-
-impl From<u8> for VirtualStickFlightCoordinateSystem {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => VirtualStickFlightCoordinateSystem::Ground,
-            1 => VirtualStickFlightCoordinateSystem::Body,
-            _ => VirtualStickFlightCoordinateSystem::Unknown(value),
-        }
-    }
 }
