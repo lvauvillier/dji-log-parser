@@ -19,25 +19,25 @@ pub struct OSD {
     #[br(map = |x: f64| (x * 180.0) / PI)]
     pub latitude: f64,
     /// meters
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub altitude: f32,
     /// meters / sec
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub speed_x: f32,
     /// meters / sec
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub speed_y: f32,
     /// meters / sec
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub speed_z: f32,
     /// degrees
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub pitch: f32,
     /// degrees
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub roll: f32,
     /// degrees
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub yaw: f32,
 
     #[br(temp)]
@@ -121,10 +121,10 @@ pub struct OSD {
 
     pub battery: u8,
     /// meters
-    #[br(map = |x: u8| (x as f32 / 10.0))]
+    #[br(map = |x: u8| x as f32 / 10.0)]
     pub s_wave_height: f32,
     /// second
-    #[br(map = |x: u16| (x as f32 / 10.0))]
+    #[br(map = |x: u16| x as f32 / 10.0)]
     pub fly_time: f32,
     pub motor_revolution: u8,
     #[br(temp)]

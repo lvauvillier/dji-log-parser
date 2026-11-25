@@ -3,7 +3,7 @@ use aes::cipher::{BlockDecryptMut, BlockSizeUser, KeyIvInit};
 use aes::Aes256;
 use crc64::crc64;
 use std::cell::RefCell;
-use std::io::{Cursor, Error, ErrorKind, Read, Result, Seek, SeekFrom};
+use std::io::{Cursor, Error, Read, Result, Seek, SeekFrom};
 
 use crate::keychain::{FeaturePoint, Keychain};
 
@@ -129,7 +129,7 @@ impl<R: Seek> Seek for XorDecoder<R> {
                 self.reader.seek(pos)
             }
             SeekFrom::Current(_) => self.reader.seek(pos),
-            _ => Err(Error::new(ErrorKind::Other, "Unsupported seek")),
+            _ => Err(Error::other("Unsupported seek")),
         }
     }
 }

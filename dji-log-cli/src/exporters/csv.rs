@@ -17,7 +17,7 @@ struct FrameWithDetails<'a> {
 pub struct CSVExporter;
 
 impl Exporter for CSVExporter {
-    fn export(&self, parser: &DJILog, _records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
+    fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
         if let Some(csv_path) = &args.csv {
             let mut writer = WriterBuilder::new()
                 .has_headers(false)
@@ -34,7 +34,7 @@ impl Exporter for CSVExporter {
                 // write frame with details
                 writer
                     .serialize(FrameWithDetails {
-                        frame: &frame,
+                        frame,
                         details: &details,
                     })
                     .unwrap();

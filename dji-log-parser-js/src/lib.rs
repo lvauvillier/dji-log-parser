@@ -148,12 +148,8 @@ impl DJILogWrapper {
     ///
     #[wasm_bindgen]
     pub fn records(&self, keychains: Option<JSKeychains>) -> Result<JSRecords, JsValue> {
-        let keychains: Option<Vec<Vec<KeychainFeaturePoint>>> = match keychains {
-            Some(keychains) => {
-                Some(serde_wasm_bindgen::from_value(keychains.unchecked_into()).unwrap())
-            }
-            None => None,
-        };
+        let keychains: Option<Vec<Vec<KeychainFeaturePoint>>> = keychains
+            .map(|keychains| serde_wasm_bindgen::from_value(keychains.unchecked_into()).unwrap());
 
         let records = self
             .inner
@@ -182,12 +178,8 @@ impl DJILogWrapper {
     ///   the function will attempt to process the log without decryption.
     ///
     pub fn frames(&self, keychains: Option<JSKeychains>) -> Result<JSFrames, JsValue> {
-        let keychains: Option<Vec<Vec<KeychainFeaturePoint>>> = match keychains {
-            Some(keychains) => {
-                Some(serde_wasm_bindgen::from_value(keychains.unchecked_into()).unwrap())
-            }
-            None => None,
-        };
+        let keychains: Option<Vec<Vec<KeychainFeaturePoint>>> = keychains
+            .map(|keychains| serde_wasm_bindgen::from_value(keychains.unchecked_into()).unwrap());
 
         let frames = self
             .inner

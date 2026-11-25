@@ -12,7 +12,7 @@ use crate::{Cli, Exporter};
 pub struct KmlExporter;
 
 impl Exporter for KmlExporter {
-    fn export(&self, parser: &DJILog, _records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
+    fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
         if let Some(kml_path) = &args.kml {
             let mut coords = vec![];
 

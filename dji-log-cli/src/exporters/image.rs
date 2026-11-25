@@ -24,7 +24,7 @@ struct ExifInfo {
 pub struct ImageExporter;
 
 impl Exporter for ImageExporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
+    fn export(&self, parser: &DJILog, records: &[Record], frames: &[Frame], args: &Cli) {
         // Get fallback GPS point from track in case of no GPS available on startup
         let mut fallback_latitude = 0.0;
         let mut fallback_longitude = 0.0;
@@ -121,10 +121,10 @@ impl Exporter for ImageExporter {
 }
 
 impl ImageExporter {
-    fn save_image_with_exif_metadata(&self, data: &Vec<u8>, file_name: String, info: ExifInfo) {
+    fn save_image_with_exif_metadata(&self, data: &[u8], file_name: String, info: ExifInfo) {
         let jpeg_result = Jpeg::from_bytes(Bytes::copy_from_slice(data));
 
-        if let Err(_) = jpeg_result {
+        if jpeg_result.is_err() {
             // Don't add exif metadata if JPEG creation fails
             let mut file = File::create(Path::new(&file_name)).unwrap();
             file.write_all(data).unwrap();

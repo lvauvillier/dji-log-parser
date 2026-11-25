@@ -9,7 +9,7 @@ use crate::{Cli, Exporter};
 pub struct GeoJsonExporter;
 
 impl Exporter for GeoJsonExporter {
-    fn export(&self, parser: &DJILog, _records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
+    fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
         if let Some(geojson_path) = &args.geojson {
             // Create a Value::LineString from all the coords.
             let mut coords = vec![];
@@ -62,7 +62,7 @@ impl Exporter for GeoJsonExporter {
             );
             properties.insert(
                 "totalTime".to_string(),
-                serde_json::Number::from_f64(details.total_time.into())
+                serde_json::Number::from_f64(details.total_time)
                     .map(JsonValue::Number)
                     .unwrap_or(JsonValue::Null),
             );
@@ -120,7 +120,7 @@ impl Exporter for GeoJsonExporter {
                         .moment_pic_longitude
                         .iter()
                         .map(|x| {
-                            serde_json::Number::from_f64((*x).into())
+                            serde_json::Number::from_f64(*x)
                                 .map(JsonValue::Number)
                                 .unwrap_or(JsonValue::Null)
                         })
@@ -134,7 +134,7 @@ impl Exporter for GeoJsonExporter {
                         .moment_pic_latitude
                         .iter()
                         .map(|x| {
-                            serde_json::Number::from_f64((*x).into())
+                            serde_json::Number::from_f64(*x)
                                 .map(JsonValue::Number)
                                 .unwrap_or(JsonValue::Null)
                         })

@@ -58,7 +58,7 @@ pub(crate) struct Cli {
 }
 
 pub(crate) trait Exporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli);
+    fn export(&self, parser: &DJILog, records: &[Record], frames: &[Frame], args: &Cli);
 }
 
 fn main() {

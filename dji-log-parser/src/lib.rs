@@ -167,6 +167,10 @@
 //! │(Encrypted + AES)|
 //! └─────────────────┘
 //! ```
+// binrw expands `#[br(count = ...)]` into a `try_into()` call, which triggers this lint on
+// every u8/u16 length field. The conversion is generated code, not ours.
+#![allow(clippy::unnecessary_fallible_conversions)]
+
 use base64::engine::general_purpose::STANDARD as Base64Standard;
 use base64::Engine as _;
 use binrw::io::Cursor;
@@ -449,7 +453,7 @@ impl DJILog {
         let mut keychains = VecDeque::from(match keychains {
             Some(keychains) => keychains
                 .iter()
-                .map(Keychain::from_feature_points)
+                .map(|keychain| Keychain::from_feature_points(keychain))
                 .collect(),
             None => Vec::new(),
         });

@@ -137,7 +137,8 @@ pub(crate) mod native {
 
         std::thread::spawn(move || {
             let response = fetch(&api_key, &endpoint, &request);
-            tx.send(response);
+            // The receiver is only dropped if the future is cancelled, nothing to do then
+            let _ = tx.send_blocking(response);
         });
 
         rx.recv().await.map_err(|_| Error::NetworkConnection)?
@@ -182,7 +183,7 @@ pub(crate) mod wasm {
             .map_err(|_| Error::ApiError("Unable to set Content-Type header".to_owned()))?;
         request
             .headers()
-            .set("Api-Key", &api_key)
+            .set("Api-Key", api_key)
             .map_err(|_| Error::ApiError("Unable to set Api-Key header".to_owned()))?;
 
         let response: Response = JsFuture::from(js_fetch(&request))

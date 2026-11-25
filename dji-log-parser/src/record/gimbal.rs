@@ -11,13 +11,13 @@ use tsify_next::Tsify;
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Gimbal {
     /// degrees
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub pitch: f32,
     /// degrees
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub roll: f32,
     /// degrees
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub yaw: f32,
 
     #[br(temp)]
@@ -27,9 +27,9 @@ pub struct Gimbal {
     #[br(calc(sub_byte_field(_bitpack1, 0x20)))]
     pub reset: u8,
 
-    #[br(map = |x: i8| (x as f32 / 10.0))]
+    #[br(map = |x: i8| x as f32 / 10.0)]
     pub roll_adjust: f32,
-    #[br(map = |x: i16| (x as f32 / 10.0))]
+    #[br(map = |x: i16| x as f32 / 10.0)]
     pub yaw_angle: f32,
 
     #[br(temp)]

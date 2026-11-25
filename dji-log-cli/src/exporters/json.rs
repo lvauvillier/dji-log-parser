@@ -20,13 +20,13 @@ struct RecordJsonData<'a> {
 struct FrameJsonData<'a> {
     version: u8,
     details: FrameDetails,
-    frames: &'a Vec<Frame>,
+    frames: &'a [Frame],
 }
 
 pub struct JsonExporter;
 
 impl Exporter for JsonExporter {
-    fn export(&self, parser: &DJILog, records: &Vec<Record>, frames: &Vec<Frame>, args: &Cli) {
+    fn export(&self, parser: &DJILog, records: &[Record], frames: &[Frame], args: &Cli) {
         let json_data = if args.raw {
             serde_json::to_string(&RecordJsonData {
                 version: parser.version,

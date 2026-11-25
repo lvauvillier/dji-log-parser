@@ -14,14 +14,11 @@ publish = false
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-dji-log-parser.workspace = true
+# native-async makes the crate build on native targets too (cargo build/clippy --workspace)
+dji-log-parser = { workspace = true, features = ["native-async"] }
 js-sys.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde-wasm-bindgen.workspace = true
 serde_json.workspace = true
 wasm-bindgen.workspace = true
 wasm-bindgen-futures.workspace = true
-
-[profile.release]
-lto = true
-opt-level = "s"

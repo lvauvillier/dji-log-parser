@@ -141,7 +141,7 @@ pub fn read_u16(from_u8: bool) -> BinResult<u16> {
 ///
 /// * `byte`: The byte from which to extract bits.
 /// * `mask`: A mask to specify which bits to extract. Bits corresponding to `1` bits in the mask
-///           are extracted, and `0` bits in the mask are ignored.
+///   are extracted, and `0` bits in the mask are ignored.
 ///
 /// # Returns
 ///
@@ -171,7 +171,7 @@ pub fn sub_byte_field(byte: u8, mask: u8) -> u8 {
 ///
 /// - `input`: A slice of bytes (`&[u8]`) to check and possibly extend.
 /// - `min_length`: The minimum length desired for the output vector. If `input` is shorter than this,
-///    it will be padded with zeros until it reaches `min_length`.
+///   it will be padded with zeros until it reaches `min_length`.
 ///
 /// # Returns
 ///

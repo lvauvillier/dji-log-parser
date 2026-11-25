@@ -379,7 +379,9 @@ pub fn parse_battery_sn(product_type: ProductType, buf: Vec<u8>) -> String {
     if BCD_PRODUCTS.contains(&product_type) {
         decode_reversed_bcd_battery_sn(buf)
     } else {
-        String::from_utf8_lossy(&buf).trim_end_matches('\0').to_string()
+        String::from_utf8_lossy(&buf)
+            .trim_end_matches('\0')
+            .to_string()
     }
 }
 

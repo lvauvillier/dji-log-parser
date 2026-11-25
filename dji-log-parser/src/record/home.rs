@@ -19,7 +19,7 @@ pub struct Home {
     #[br(map = |x: f64| (x * 180.0) / PI)]
     pub latitude: f64,
     /// meters
-    #[br(map = |x: f32| (x / 10.0))]
+    #[br(map = |x: f32| x / 10.0)]
     pub altitude: f32,
 
     #[br(temp)]

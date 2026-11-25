@@ -39,10 +39,10 @@ impl Keychain {
         Keychain(HashMap::new())
     }
 
-    pub fn from_feature_points(keychain_entries: &Vec<KeychainFeaturePoint>) -> Self {
+    pub fn from_feature_points(keychain_entries: &[KeychainFeaturePoint]) -> Self {
         Keychain(
             keychain_entries
-                .into_iter()
+                .iter()
                 .map(|entry| {
                     (
                         entry.feature_point,

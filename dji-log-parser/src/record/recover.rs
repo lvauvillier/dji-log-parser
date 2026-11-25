@@ -4,7 +4,7 @@ use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
-use crate::layout::details::{Platform, ProductType, parse_battery_sn};
+use crate::layout::details::{parse_battery_sn, Platform, ProductType};
 
 #[binread]
 #[derive(Serialize, Debug)]
