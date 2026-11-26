@@ -5,7 +5,7 @@ use std::cell::RefCell;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
-use crate::decoder::record_decoder;
+use crate::decoder::{record_decoder, xor_checksum_is_valid};
 use crate::layout::details::ProductType;
 use crate::utils;
 use crate::Keychain;
@@ -223,6 +223,8 @@ struct RecordContent<'r, 'k, R> {
     length: u16,
     /// Position of the content, right after the header
     start: u64,
+    /// Records with an overflowed length are followed by an arbitrary byte instead of the end byte
+    has_end_byte: bool,
 }
 
 impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
@@ -234,8 +236,18 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
     ) -> BinResult<Self> {
         let record_type = u8::read(reader)?;
         // Up to v12, the length is stored on a single byte
-        let length = utils::read_u16(reader, Endian::Little, (version <= 12,))?;
+        let mut length = utils::read_u16(reader, Endian::Little, (version <= 12,))?;
         let start = reader.stream_position()?;
+
+        let overflowed_length = if (7..=12).contains(&version) {
+            Self::overflowed_length(reader, record_type, length, start)?
+        } else {
+            None
+        };
+        if let Some(overflowed_length) = overflowed_length {
+            length = overflowed_length;
+        }
+
         Ok(RecordContent {
             reader,
             version,
@@ -243,7 +255,40 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
             record_type,
             length,
             start,
+            has_end_byte: overflowed_length.is_none(),
         })
+    }
+
+    /// Up to v12, records longer than 255 bytes only store the low byte of their length, and are
+    /// not followed by an end byte. When the checksum of the xor encoded content doesn't match its
+    /// length, the real length is found among the overflowed ones.
+    fn overflowed_length(
+        reader: &mut R,
+        record_type: u8,
+        length: u16,
+        start: u64,
+    ) -> BinResult<Option<u16>> {
+        let mut is_valid = |length: u16| -> BinResult<bool> {
+            if length < 2 {
+                return Ok(false);
+            }
+            reader.seek(SeekFrom::Start(start))?;
+            let first = u8::read(reader)?;
+            reader.seek(SeekFrom::Start(start + u64::from(length) - 1))?;
+            let last = u8::read(reader)?;
+            Ok(xor_checksum_is_valid(first, last, length, record_type))
+        };
+
+        let overflowed_length = if matches!(is_valid(length), Ok(true)) {
+            None
+        } else {
+            [256, 512, 768]
+                .into_iter()
+                .map(|overflow| length + overflow)
+                .find(|&length| matches!(is_valid(length), Ok(true)))
+        };
+        reader.seek(SeekFrom::Start(start))?;
+        Ok(overflowed_length)
     }
 
     /// Size of the decoded data. From v7, the content starts with the xor seed and ends with a
@@ -300,7 +345,7 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
         }
 
         let pos = self.reader.stream_position()?;
-        if u8::read(self.reader)? != END_BYTE {
+        if u8::read(self.reader)? != END_BYTE && self.has_end_byte {
             return Err(binrw::Error::AssertFail {
                 pos,
                 message: "invalid record end byte".to_owned(),
@@ -313,12 +358,32 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::decoder::xor_key;
 
     /// Builds a record as written up to v6: type, length on one byte, content, end byte.
     fn raw_record(record_type: u8, content: &[u8]) -> Vec<u8> {
         let mut bytes = vec![record_type, content.len() as u8];
         bytes.extend_from_slice(content);
         bytes.push(END_BYTE);
+        bytes
+    }
+
+    /// Builds a record as written from v7 up to v12: the content is xor encoded, starts with a
+    /// seed and ends with a checksum. Only the low byte of the length is written.
+    fn xor_record(record_type: u8, data: &[u8], end_byte: u8) -> Vec<u8> {
+        let seed = 0x42;
+        let key = xor_key(seed, record_type);
+        let mut decoded = data.to_vec();
+        decoded.push(seed.wrapping_add(record_type));
+
+        let mut bytes = vec![record_type, (decoded.len() + 1) as u8, seed];
+        bytes.extend(
+            decoded
+                .iter()
+                .enumerate()
+                .map(|(i, byte)| byte ^ key[i % 8]),
+        );
+        bytes.push(end_byte);
         bytes
     }
 
@@ -381,6 +446,21 @@ mod tests {
         let jpeg = Record::read(&mut reader, 6, ProductType::None, &keychain).unwrap();
         assert!(matches!(jpeg, Record::JPEG(data) if data == image));
         let next = Record::read(&mut reader, 6, ProductType::None, &keychain).unwrap();
+        assert!(matches!(next, Record::OSD(_)));
+    }
+
+    #[test]
+    fn length_of_records_longer_than_255_bytes_is_found_with_the_checksum() {
+        // Followed by an arbitrary byte instead of the end byte
+        let data: Vec<u8> = (0..300).map(|i| i as u8).collect();
+        let mut bytes = xor_record(26, &data, 0x00);
+        bytes.extend(xor_record(1, &[0; 53], END_BYTE));
+        let keychain = RefCell::new(Keychain::empty());
+        let mut reader = Cursor::new(bytes);
+
+        let long = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
+        assert!(matches!(long, Record::Unknown(26, content) if content == data));
+        let next = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
         assert!(matches!(next, Record::OSD(_)));
     }
 

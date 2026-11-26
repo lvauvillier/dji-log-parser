@@ -151,6 +151,26 @@ impl Seek for FailedDecoder {
     }
 }
 
+/// Key of the xor encoding, derived from the first byte of the content and the record type.
+pub(crate) fn xor_key(first_byte: u8, record_type: u8) -> [u8; 8] {
+    let magic: u64 = 0x123456789ABCDEF0;
+    crc64(
+        first_byte.wrapping_add(record_type).into(),
+        &magic.wrapping_mul(first_byte.into()).to_le_bytes(),
+    )
+    .to_le_bytes()
+}
+
+/// Checks the checksum ending an xor encoded content of `length` bytes: its last byte, once
+/// decoded, is the sum of the first byte and the record type.
+pub(crate) fn xor_checksum_is_valid(first: u8, last: u8, length: u16, record_type: u8) -> bool {
+    let Some(last_position) = length.checked_sub(2) else {
+        return false;
+    };
+    let key = xor_key(first, record_type);
+    last ^ key[usize::from(last_position) % 8] == first.wrapping_add(record_type)
+}
+
 /// Xor Encoding is an internal data encoding method used starting v4
 /// It doesn't require any external keychain
 pub struct XorDecoder<R> {
@@ -168,16 +188,9 @@ impl<R: Read + Seek> XorDecoder<R> {
 
         let start_position = reader.stream_position()?;
 
-        let magic: u64 = 0x123456789ABCDEF0;
-        let key = crc64(
-            first_byte.overflowing_add(record_type).0 as u64,
-            &magic.overflowing_mul(first_byte as u64).0.to_le_bytes(),
-        )
-        .to_le_bytes();
-
         Ok(XorDecoder {
             reader,
-            key,
+            key: xor_key(first_byte, record_type),
             start_position,
             decode_position: 0,
         })

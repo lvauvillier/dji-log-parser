@@ -105,8 +105,18 @@ fn v8_mavicpro_2017() {
 }
 
 #[test]
+fn v8_mavic2enterprise() {
+    insta::assert_json_snapshot!(summarize(fixture("v8_mavic2enterprise.txt"), None));
+}
+
+#[test]
 fn v11_mavic2() {
     insta::assert_json_snapshot!(summarize(fixture("v11_mavic2.txt"), None));
+}
+
+#[test]
+fn v11_mavic2enterprise() {
+    insta::assert_json_snapshot!(summarize(fixture("v11_mavic2enterprise.txt"), None));
 }
 
 #[test]
