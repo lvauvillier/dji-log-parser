@@ -10,6 +10,7 @@ use crate::layout::details::ProductType;
 use crate::utils;
 use crate::Keychain;
 
+pub mod adsb_flight_data;
 pub mod app_gps;
 pub mod app_joystick;
 pub mod app_serious_warn;
@@ -36,6 +37,7 @@ pub mod smart_battery_group;
 pub mod virtual_stick;
 pub mod vision_group;
 
+use adsb_flight_data::ADSBFlightData;
 use app_gps::AppGPS;
 use app_joystick::AppJoystick;
 use app_serious_warn::AppSeriousWarn;
@@ -100,6 +102,7 @@ pub enum Record {
     RCDisplayField(RCDisplayField),
     VisionGroup(VisionGroup),
     AppJoystick(AppJoystick),
+    ADSBFlightData(ADSBFlightData),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -185,6 +188,7 @@ impl Record {
             22 => Record::SmartBatteryGroup(content.read::<SmartBatteryGroup>((version, length))?),
             24 => Record::AppSeriousWarn(content.read::<AppSeriousWarn>(args! { length })?),
             25 => Record::Camera(content.read(())?),
+            26 => Record::ADSBFlightData(content.read::<ADSBFlightData>(args! { length })?),
             29 => Record::AppJoystick(content.read::<AppJoystick>(args! { length })?),
             33 => Record::VirtualStick(content.read(())?),
             40 => Record::ComponentSerial(content.read(())?),
@@ -518,13 +522,13 @@ mod tests {
     fn length_of_records_longer_than_255_bytes_is_found_with_the_checksum() {
         // Followed by an arbitrary byte instead of the end byte
         let data: Vec<u8> = (0..300).map(|i| i as u8).collect();
-        let mut bytes = xor_record(26, &data, 0x00);
+        let mut bytes = xor_record(16, &data, 0x00);
         bytes.extend(xor_record(1, &[0; 53], END_BYTE));
         let keychain = RefCell::new(Keychain::empty());
         let mut reader = Cursor::new(bytes);
 
         let long = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
-        assert!(matches!(long, Record::Unknown(26, content) if content == data));
+        assert!(matches!(long, Record::Unknown(16, content) if content == data));
         let next = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
         assert!(matches!(next, Record::OSD(_)));
     }

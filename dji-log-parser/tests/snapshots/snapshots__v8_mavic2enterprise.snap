@@ -59,6 +59,7 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
     "appVersion": "0.0.0"
   },
   "record_counts": {
+    "ADSBFlightData": 27,
     "Camera": 26,
     "Custom": 246,
     "Firmware": 12,
@@ -70,7 +71,7 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
     "RC": 16,
     "SmartBattery": 26,
     "SmartBatteryGroup": 131,
-    "Unknown": 48,
+    "Unknown": 21,
     "VisionGroup": 134
   },
   "frame_count": 262,
