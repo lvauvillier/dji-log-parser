@@ -254,3 +254,25 @@ pub fn append_message(original_message: String, message: impl Into<String>) -> S
         message.into()
     }
 }
+
+/// Reads a string of a fixed size field: it ends at the first `\0`, the bytes after it are
+/// leftovers.
+pub fn c_string(bytes: Vec<u8>) -> String {
+    let end = bytes
+        .iter()
+        .position(|byte| *byte == 0)
+        .unwrap_or(bytes.len());
+    String::from_utf8_lossy(&bytes[..end]).into_owned()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn c_string_ends_at_the_first_nul() {
+        assert_eq!(c_string(b"DF025\0\0\0\xf0\x02q\x01".to_vec()), "DF025");
+        assert_eq!(c_string(b"\0\0\0\x0003LD01514767".to_vec()), "");
+        assert_eq!(c_string(b"Mavic 2".to_vec()), "Mavic 2");
+    }
+}

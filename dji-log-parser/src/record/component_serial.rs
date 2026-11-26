@@ -3,6 +3,8 @@ use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
+use crate::utils::c_string;
+
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -12,7 +14,7 @@ pub struct ComponentSerial {
     pub component_type: ComponentType,
     #[br(temp)]
     length: u8,
-    #[br(count=length, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count=length, map = c_string)]
     pub serial: String,
 }
 

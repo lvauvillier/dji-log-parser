@@ -5,6 +5,7 @@ use serde::Serialize;
 use tsify_next::Tsify;
 
 use crate::layout::details::{parse_battery_sn, Platform, ProductType};
+use crate::utils::c_string;
 
 #[binread]
 #[derive(Serialize, Debug)]
@@ -18,16 +19,16 @@ pub struct Recover {
     pub app_platform: Platform,
     #[br(map = |x: [u8; 3]| format!("{}.{}.{}", x[0], x[1], x[2]))]
     pub app_version: String,
-    #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = if version <= 7 { 10 } else { 16 }, map = c_string)]
     pub aircraft_sn: String,
-    #[br(count = 32, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = 32, map = c_string)]
     pub aircraft_name: String,
     #[br(map = |x: i64| DateTime::from_timestamp(x, 0).unwrap_or_default())]
     #[cfg_attr(target_arch = "wasm32", tsify(type = "string"))]
     pub timestamp: DateTime<Utc>,
-    #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = if version <= 7 { 10 } else { 16 }, map = c_string)]
     pub camera_sn: String,
-    #[br(count = if version <= 7 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = if version <= 7 { 10 } else { 16 }, map = c_string)]
     pub rc_sn: String,
     #[br(count = if version <= 7 { 10 } else { 16 })]
     #[br(temp)]

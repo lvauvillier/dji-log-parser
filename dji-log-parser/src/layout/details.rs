@@ -6,19 +6,21 @@ use std::io::SeekFrom;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
+use crate::utils::c_string;
+
 #[binread]
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 #[br(little, import(version: u8))]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct Details {
-    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count=20, map = c_string)]
     pub sub_street: String,
-    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count=20, map = c_string)]
     pub street: String,
-    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count=20, map = c_string)]
     pub city: String,
-    #[br(count=20, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count=20, map = c_string)]
     pub area: String,
     pub is_favorite: u8,
     pub is_new: u8,
@@ -68,20 +70,20 @@ pub struct Details {
     _activation_timestamp: i64,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(278) } else { SeekFrom::Current(0) },
-        count = if version <= 5 { 24 } else { 32 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
+        count = if version <= 5 { 24 } else { 32 }, map = c_string
     )]
     pub aircraft_name: String,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(267) } else { SeekFrom::Current(0) },
-        count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
+        count = if version <= 5 { 10 } else { 16 }, map = c_string
     )]
     pub aircraft_sn: String,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(318) } else { SeekFrom::Current(0) },
-        count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string()
+        count = if version <= 5 { 10 } else { 16 }, map = c_string
     )]
     pub camera_sn: String,
-    #[br(count = if version <= 5 { 10 } else { 16 }, map = |s: Vec<u8>| String::from_utf8_lossy(&s).trim_end_matches('\0').to_string())]
+    #[br(count = if version <= 5 { 10 } else { 16 }, map = c_string)]
     pub rc_sn: String,
     #[br(count = if version <= 5 { 10 } else { 16 })]
     #[br(temp)]
@@ -306,7 +308,7 @@ pub enum Platform {
 /// Decode the battery serial number from raw bytes, choosing the method based on model:
 /// - For Inspire1/Pro/RAW, interpret the low nibble of each byte as a BCD digit,
 ///   reverse the sequence, and trim leading `'0'`.
-/// - Otherwise, treat the bytes as a UTF-8, null-terminated string.
+/// - Otherwise, read the bytes as a string ending at the first `\0`.
 ///
 pub fn parse_battery_sn(product_type: ProductType, buf: Vec<u8>) -> String {
     const BCD_PRODUCTS: [ProductType; 3] = [
@@ -318,9 +320,7 @@ pub fn parse_battery_sn(product_type: ProductType, buf: Vec<u8>) -> String {
     if BCD_PRODUCTS.contains(&product_type) {
         decode_reversed_bcd_battery_sn(buf)
     } else {
-        String::from_utf8_lossy(&buf)
-            .trim_end_matches('\0')
-            .to_string()
+        c_string(buf)
     }
 }
 
