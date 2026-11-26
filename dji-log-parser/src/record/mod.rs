@@ -134,6 +134,9 @@ impl Record {
     }
 
     /// Reads a record of a known type. Fails for unknown types and invalid records.
+    ///
+    /// A valid record whose data doesn't match the structure of its type is read as unknown,
+    /// from the data already decoded: decoding it again would use the next iv of its feature.
     fn read_known<R: Read + Seek>(
         reader: &mut R,
         version: u8,
@@ -141,6 +144,19 @@ impl Record {
         keychain: &RefCell<Keychain>,
     ) -> BinResult<Record> {
         let mut content = RecordContent::read_header(reader, version, keychain)?;
+        Self::parse_known(&mut content, version, product_type).or_else(|error| {
+            match content.unparsed.take() {
+                Some(data) if content.length > 2 => Ok(Record::Unknown(content.record_type, data)),
+                _ => Err(error),
+            }
+        })
+    }
+
+    fn parse_known<R: Read + Seek>(
+        content: &mut RecordContent<'_, '_, R>,
+        version: u8,
+        product_type: ProductType,
+    ) -> BinResult<Record> {
         let length = content.data_length();
 
         let record = match content.record_type {
@@ -193,8 +209,7 @@ impl Record {
             });
         }
 
-        let count = content.data_length().into();
-        let data = content.read::<Vec<u8>>(args! { count })?;
+        let data = content.decode()?;
         Ok(Record::Unknown(content.record_type, data))
     }
 
@@ -225,6 +240,8 @@ struct RecordContent<'r, 'k, R> {
     start: u64,
     /// Records with an overflowed length are followed by an arbitrary byte instead of the end byte
     has_end_byte: bool,
+    /// Decoded data of a valid record that doesn't match the structure of its type
+    unparsed: Option<Vec<u8>>,
 }
 
 impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
@@ -256,6 +273,7 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
             length,
             start,
             has_end_byte: overflowed_length.is_none(),
+            unparsed: None,
         })
     }
 
@@ -301,14 +319,27 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
         }
     }
 
-    /// Decodes and parses the content as `T`, then checks the record end byte.
+    /// Decodes the content and checks the record end byte, then parses the data as `T`.
     ///
     /// Records written by older apps can be shorter than the structure, which grew over time:
-    /// the missing trailing fields are read as zeros.
+    /// the missing trailing fields are read as zeros. When the data doesn't match `T`, it is
+    /// kept in `unparsed`.
     fn read<T>(&mut self, args: T::Args<'_>) -> BinResult<T>
     where
         T: BinRead,
     {
+        let mut data = self.decode()?;
+        let length = data.len();
+        data.resize(length + SHORT_RECORD_PADDING, 0);
+
+        T::read_options(&mut Cursor::new(&data), Endian::Little, args).inspect_err(|_| {
+            data.truncate(length);
+            self.unparsed = Some(data);
+        })
+    }
+
+    /// Decodes the content, then checks the record end byte.
+    fn decode(&mut self) -> BinResult<Vec<u8>> {
         let mut data = vec![0; self.data_length().into()];
         record_decoder(
             &mut *self.reader,
@@ -318,11 +349,8 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
             self.length,
         )
         .read_exact(&mut data)?;
-        data.resize(data.len() + SHORT_RECORD_PADDING, 0);
-
-        let value = T::read_options(&mut Cursor::new(data), Endian::Little, args)?;
         self.finish()?;
-        Ok(value)
+        Ok(data)
     }
 
     /// Reads the content as is, without decoding, then checks the record end byte.
@@ -359,6 +387,11 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
 mod tests {
     use super::*;
     use crate::decoder::xor_key;
+    use crate::keychain::{FeaturePoint, KeychainFeaturePoint};
+    use aes::cipher::block_padding::Pkcs7;
+    use aes::cipher::{BlockModeEncrypt, KeyIvInit};
+    use base64::engine::general_purpose::STANDARD as Base64Standard;
+    use base64::Engine as _;
 
     /// Builds a record as written up to v6: type, length on one byte, content, end byte.
     fn raw_record(record_type: u8, content: &[u8]) -> Vec<u8> {
@@ -368,22 +401,46 @@ mod tests {
         bytes
     }
 
-    /// Builds a record as written from v7 up to v12: the content is xor encoded, starts with a
-    /// seed and ends with a checksum. Only the low byte of the length is written.
-    fn xor_record(record_type: u8, data: &[u8], end_byte: u8) -> Vec<u8> {
+    /// Xor encodes the content of a record: a seed, the data and a checksum.
+    fn xor_content(record_type: u8, data: &[u8]) -> Vec<u8> {
         let seed = 0x42;
         let key = xor_key(seed, record_type);
         let mut decoded = data.to_vec();
         decoded.push(seed.wrapping_add(record_type));
 
-        let mut bytes = vec![record_type, (decoded.len() + 1) as u8, seed];
-        bytes.extend(
+        let mut content = vec![seed];
+        content.extend(
             decoded
                 .iter()
                 .enumerate()
                 .map(|(i, byte)| byte ^ key[i % 8]),
         );
+        content
+    }
+
+    /// Builds a record as written from v7 up to v12: the content is xor encoded, starts with a
+    /// seed and ends with a checksum. Only the low byte of the length is written.
+    fn xor_record(record_type: u8, data: &[u8], end_byte: u8) -> Vec<u8> {
+        let content = xor_content(record_type, data);
+        let mut bytes = vec![record_type, content.len() as u8];
+        bytes.extend(content);
         bytes.push(end_byte);
+        bytes
+    }
+
+    /// Builds a record as written from v13: the data is AES encrypted, then xor encoded.
+    fn aes_record(record_type: u8, data: &[u8], key: [u8; 32], iv: [u8; 16]) -> Vec<u8> {
+        let mut buffer = data.to_vec();
+        buffer.resize(data.len().next_multiple_of(16) + 16, 0);
+        let encrypted = cbc::Encryptor::<aes::Aes256>::new(&key.into(), &iv.into())
+            .encrypt_padded::<Pkcs7>(&mut buffer, data.len())
+            .unwrap();
+
+        let content = xor_content(record_type, encrypted);
+        let mut bytes = vec![record_type];
+        bytes.extend((content.len() as u16).to_le_bytes());
+        bytes.extend(content);
+        bytes.push(END_BYTE);
         bytes
     }
 
@@ -476,5 +533,34 @@ mod tests {
             custom.update_timestamp.to_rfc3339(),
             "2014-12-11T08:48:56+00:00"
         );
+    }
+
+    #[test]
+    fn invalid_data_of_encrypted_records_is_kept_decoded() {
+        let (key, iv) = ([7; 32], [9; 16]);
+        let keychain = RefCell::new(
+            Keychain::from_feature_points(&[KeychainFeaturePoint {
+                feature_point: FeaturePoint::DJIFlyCustomFeature,
+                aes_key: Base64Standard.encode(key),
+                aes_iv: Base64Standard.encode(iv),
+            }])
+            .unwrap(),
+        );
+        // Custom data with a timestamp of 0, rejected
+        let mut data = (1..=10).collect::<Vec<u8>>();
+        data.resize(18, 0);
+
+        let record = Record::read(
+            &mut Cursor::new(aes_record(5, &data, key, iv)),
+            14,
+            ProductType::None,
+            &keychain,
+        )
+        .unwrap();
+
+        let Record::Unknown(5, unknown) = record else {
+            panic!("not an unknown custom record: {record:?}");
+        };
+        assert_eq!(unknown[..18], data);
     }
 }
