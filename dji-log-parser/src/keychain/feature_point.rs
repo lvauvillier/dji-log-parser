@@ -231,14 +231,20 @@ impl FeaturePoint {
             55 => FeaturePoint::SecurityFeature,
             // KeyStorage
             56 => FeaturePoint::PlaintextFeature,
+            // 57, 60, 61, 253 and 254: unknown content, but encrypted like the other records
+            // of their feature
+            57 if version >= 14 => FeaturePoint::AirLinkFeature,
             // HealthGroupDataType
             58 => FeaturePoint::BaseFeature,
             // FCIMUInfoDataType
             59 => FeaturePoint::BaseFeature,
+            60 if version >= 14 => FeaturePoint::WaypointFeature,
+            61 if version >= 14 => FeaturePoint::VisionFeature,
             // RemoteControllerDisplayField
             62 => FeaturePoint::RCFeature,
             // FlightControllerCommonOSDField
             63 => FeaturePoint::BaseFeature,
+            253 | 254 if version >= 14 => FeaturePoint::DJIFlyCustomFeature,
             // Default
             _ => FeaturePoint::PlaintextFeature,
         }

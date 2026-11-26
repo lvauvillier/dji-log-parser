@@ -62,7 +62,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "AppGPS": 53,
     "Camera": 108,
     "ComponentSerial": 1,
-    "Custom": 1019,
+    "Custom": 1020,
     "Firmware": 6,
     "Gimbal": 2164,
     "Home": 74,
@@ -75,7 +75,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "RCDisplayField": 433,
     "Recover": 5,
     "SmartBatteryGroup": 351,
-    "Unknown": 476
+    "Unknown": 475
   },
   "frame_count": 1082,
   "sample_frames": [
@@ -83,7 +83,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
       "index": 0,
       "frame": {
         "custom": {
-          "dateTime": "1970-01-01T00:00:00Z"
+          "dateTime": "2024-09-01T12:55:49.479Z"
         },
         "osd": {
           "flyTime": 0.0,
@@ -280,7 +280,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "sdCardState": "Normal"
         },
         "rc": {
-          "downlinkSignal": 0,
+          "downlinkSignal": 90,
           "uplinkSignal": 90,
           "aileron": 1024,
           "elevator": 1024,
@@ -411,7 +411,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "sdCardState": "Normal"
         },
         "rc": {
-          "downlinkSignal": 0,
+          "downlinkSignal": 90,
           "uplinkSignal": 90,
           "aileron": 1024,
           "elevator": 1024,
