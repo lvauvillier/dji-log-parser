@@ -11,6 +11,7 @@ use crate::utils;
 use crate::Keychain;
 
 pub mod app_gps;
+pub mod app_joystick;
 pub mod app_serious_warn;
 pub mod app_tip;
 pub mod app_warn;
@@ -36,6 +37,7 @@ pub mod virtual_stick;
 pub mod vision_group;
 
 use app_gps::AppGPS;
+use app_joystick::AppJoystick;
 use app_serious_warn::AppSeriousWarn;
 use app_tip::AppTip;
 use app_warn::AppWarn;
@@ -97,6 +99,7 @@ pub enum Record {
     KeyStorage(KeyStorage),
     RCDisplayField(RCDisplayField),
     VisionGroup(VisionGroup),
+    AppJoystick(AppJoystick),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -182,6 +185,7 @@ impl Record {
             22 => Record::SmartBatteryGroup(content.read::<SmartBatteryGroup>((version, length))?),
             24 => Record::AppSeriousWarn(content.read::<AppSeriousWarn>(args! { length })?),
             25 => Record::Camera(content.read(())?),
+            29 => Record::AppJoystick(content.read::<AppJoystick>(args! { length })?),
             33 => Record::VirtualStick(content.read(())?),
             40 => Record::ComponentSerial(content.read(())?),
             49 => Record::OFDM(content.read(())?),
