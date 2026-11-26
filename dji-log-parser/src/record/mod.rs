@@ -177,7 +177,7 @@ impl Record {
             9 => Record::AppTip(content.read::<AppTip>(args! { length })?),
             10 => Record::AppWarn(content.read::<AppWarn>(args! { length })?),
             11 => Record::RCGPS(content.read(())?),
-            13 => Record::Recover(content.read::<Recover>(args! { version })?),
+            13 => Record::Recover(content.read::<Recover>(args! { length })?),
             14 => Record::AppGPS(content.read(())?),
             15 => Record::Firmware(content.read(())?),
             17 => Record::VisionGroup(content.read::<VisionGroup>((length,))?),

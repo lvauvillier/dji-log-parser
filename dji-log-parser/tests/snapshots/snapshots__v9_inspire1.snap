@@ -338,11 +338,11 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
         "recover": {
           "appPlatform": "Android",
           "appVersion": "3.1.38",
-          "aircraftName": "aft",
-          "aircraftSn": "0410059536RGP Cr",
+          "aircraftName": "RGP Craft",
+          "aircraftSn": "0410059536",
           "cameraSn": "",
-          "rcSn": "81073611",
-          "batterySn": ""
+          "rcSn": "03LD015147",
+          "batterySn": "1163701876"
         },
         "app": {
           "tip": "",
@@ -473,11 +473,11 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
         "recover": {
           "appPlatform": "Android",
           "appVersion": "3.1.38",
-          "aircraftName": "aft",
-          "aircraftSn": "0410059536RGP Cr",
+          "aircraftName": "RGP Craft",
+          "aircraftSn": "0410059536",
           "cameraSn": "",
-          "rcSn": "81073611",
-          "batterySn": ""
+          "rcSn": "03LD015147",
+          "batterySn": "1163701876"
         },
         "app": {
           "tip": "",
