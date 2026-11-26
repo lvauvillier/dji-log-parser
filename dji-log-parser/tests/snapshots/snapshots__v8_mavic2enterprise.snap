@@ -70,7 +70,8 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
     "RC": 16,
     "SmartBattery": 26,
     "SmartBatteryGroup": 131,
-    "Unknown": 182
+    "Unknown": 48,
+    "VisionGroup": 134
   },
   "frame_count": 262,
   "sample_frames": [

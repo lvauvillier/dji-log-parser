@@ -74,7 +74,8 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
     "Recover": 5,
     "SmartBattery": 498,
     "SmartBatteryGroup": 1244,
-    "Unknown": 2697
+    "Unknown": 166,
+    "VisionGroup": 2531
   },
   "frame_count": 4982,
   "sample_frames": [

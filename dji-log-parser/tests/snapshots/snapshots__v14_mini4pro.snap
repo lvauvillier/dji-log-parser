@@ -75,7 +75,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "RCDisplayField": 433,
     "Recover": 5,
     "SmartBatteryGroup": 351,
-    "Unknown": 475
+    "Unknown": 466,
+    "VisionGroup": 9
   },
   "frame_count": 1082,
   "sample_frames": [

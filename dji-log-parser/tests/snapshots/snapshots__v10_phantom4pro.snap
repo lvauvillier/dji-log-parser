@@ -72,7 +72,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
     "RC": 221,
     "Recover": 6,
     "SmartBattery": 22,
-    "Unknown": 1174
+    "Unknown": 979,
+    "VisionGroup": 195
   },
   "frame_count": 221,
   "sample_frames": [

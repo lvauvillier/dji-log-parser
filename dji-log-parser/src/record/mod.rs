@@ -33,6 +33,7 @@ pub mod recover;
 pub mod smart_battery;
 pub mod smart_battery_group;
 pub mod virtual_stick;
+pub mod vision_group;
 
 use app_gps::AppGPS;
 use app_serious_warn::AppSeriousWarn;
@@ -57,6 +58,7 @@ use recover::Recover;
 use smart_battery::SmartBattery;
 use smart_battery_group::*;
 use virtual_stick::VirtualStick;
+use vision_group::VisionGroup;
 
 const END_BYTE: u8 = 0xFF;
 
@@ -94,6 +96,7 @@ pub enum Record {
     KeyStorageRecover(Vec<u8>),
     KeyStorage(KeyStorage),
     RCDisplayField(RCDisplayField),
+    VisionGroup(VisionGroup),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -174,6 +177,7 @@ impl Record {
             13 => Record::Recover(content.read::<Recover>(args! { version })?),
             14 => Record::AppGPS(content.read(())?),
             15 => Record::Firmware(content.read(())?),
+            17 => Record::VisionGroup(content.read::<VisionGroup>((length,))?),
             19 => Record::MCParams(content.read(())?),
             22 => Record::SmartBatteryGroup(content.read::<SmartBatteryGroup>((version, length))?),
             24 => Record::AppSeriousWarn(content.read::<AppSeriousWarn>(args! { length })?),

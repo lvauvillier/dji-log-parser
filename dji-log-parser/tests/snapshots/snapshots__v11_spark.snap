@@ -75,7 +75,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
     "Recover": 5,
     "SmartBattery": 304,
     "SmartBatteryGroup": 605,
-    "Unknown": 2310
+    "Unknown": 5,
+    "VisionGroup": 2305
   },
   "frame_count": 3043,
   "sample_frames": [
