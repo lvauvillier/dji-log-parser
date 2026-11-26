@@ -208,7 +208,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
         },
         "app": {
           "tip": "Flight mode changed to Atti.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -363,7 +367,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -518,7 +526,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
         },
         "app": {
           "tip": "Flight mode changed to GPSSport.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

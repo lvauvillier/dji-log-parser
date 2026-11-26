@@ -5,7 +5,7 @@ use tsify_next::Tsify;
 
 /// Sticks of the app, on aircraft flown from the mobile device.
 ///
-/// Stick positions range from -1 to 1, 0 is the center.
+/// Stick positions range from 364 to 1684, 1024 is the center.
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -21,29 +21,24 @@ pub struct AppJoystick {
 
     /// right stick - horizontal
     #[br(calc(stick(&data, 0)))]
-    pub aileron: f32,
+    pub aileron: u16,
     /// right stick - vertical
     #[br(calc(stick(&data, 1)))]
-    pub elevator: f32,
+    pub elevator: u16,
     /// left stick - vertical
     #[br(calc(stick(&data, 2)))]
-    pub throttle: f32,
+    pub throttle: u16,
     /// left stick - horizontal
     #[br(calc(stick(&data, 3)))]
-    pub rudder: f32,
+    pub rudder: u16,
 }
 
 const DATA_LENGTH: usize = 13;
 
-/// Stick position, from a channel of 11 bits after the first byte: from 364 to 1684, 1024 is the
-/// center.
-fn stick(data: &[u8; DATA_LENGTH], index: u32) -> f32 {
-    const CENTER: f32 = 1024.0;
-    const RANGE: f32 = 660.0;
-
+/// Stick position, from a channel of 11 bits after the first byte.
+fn stick(data: &[u8; DATA_LENGTH], index: u32) -> u16 {
     let bits = u64::from_le_bytes(data[1..9].try_into().expect("8 bytes"));
-    let channel = (bits >> (11 * index)) & 0x7FF;
-    (channel as f32 - CENTER) / RANGE
+    ((bits >> (11 * index)) & 0x7FF) as u16
 }
 
 /// CRC-8 of polynomial 0x31 (reflected), with an initial value of 0x77.
@@ -77,17 +72,15 @@ mod tests {
         ])
         .unwrap();
 
-        // Channels of 1058, 1534, 1024 and 1024
-        assert_eq!(joystick.aileron, 34.0 / 660.0);
-        assert_eq!(joystick.elevator, 510.0 / 660.0);
-        assert_eq!(joystick.throttle, 0.0);
-        assert_eq!(joystick.rudder, 0.0);
+        assert_eq!(joystick.aileron, 1058);
+        assert_eq!(joystick.elevator, 1534);
+        assert_eq!(joystick.throttle, 1024);
+        assert_eq!(joystick.rudder, 1024);
     }
 
     #[test]
-    fn sticks_range_from_minus_1_to_1() {
+    fn sticks_range_from_364_to_1684() {
         let mut data = [0; DATA_LENGTH];
-        // Channels 0 and 1 at 364 and 1684
         let bits: u64 = 364 | (1684 << 11);
         data[1..9].copy_from_slice(&bits.to_le_bytes());
         let mut bytes = data.to_vec();
@@ -95,7 +88,7 @@ mod tests {
 
         let joystick = read(&bytes).unwrap();
 
-        assert_eq!((joystick.aileron, joystick.elevator), (-1.0, 1.0));
+        assert_eq!((joystick.aileron, joystick.elevator), (364, 1684));
     }
 
     #[test]

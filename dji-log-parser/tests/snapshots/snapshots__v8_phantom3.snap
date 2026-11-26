@@ -208,7 +208,11 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
         },
         "app": {
           "tip": "Flight mode changed to GPSAtti.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -364,7 +368,11 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -520,7 +528,11 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
         },
         "app": {
           "tip": "Flight mode changed to GPSAtti.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,

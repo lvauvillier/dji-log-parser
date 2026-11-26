@@ -206,7 +206,11 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
         },
         "app": {
           "tip": "Tips__Taking Off; Flight mode changed to EngineStart.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -361,7 +365,11 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -516,7 +524,11 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

@@ -206,7 +206,11 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
         },
         "app": {
           "tip": "Flight mode changed to EngineStart.; Gimbal yaw axis endpoint reached.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -362,7 +366,11 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -518,7 +526,11 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

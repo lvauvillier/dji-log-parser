@@ -276,6 +276,12 @@ where
                 frame.rc.throttle = rc.throttle;
                 frame.rc.rudder = rc.rudder;
             }
+            Record::AppJoystick(joystick) => {
+                frame.app.aileron = Some(joystick.aileron);
+                frame.app.elevator = Some(joystick.elevator);
+                frame.app.throttle = Some(joystick.throttle);
+                frame.app.rudder = Some(joystick.rudder);
+            }
             Record::CenterBattery(battery) => {
                 frame.battery.charge_level = battery.relative_capacity;
                 frame.battery.voltage = battery.voltage;

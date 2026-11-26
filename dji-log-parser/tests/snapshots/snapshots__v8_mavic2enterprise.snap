@@ -204,7 +204,11 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
         },
         "app": {
           "tip": "Flight mode changed to EngineStart.",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -360,7 +364,11 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -516,7 +524,11 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
         },
         "app": {
           "tip": "",
-          "warn": ""
+          "warn": "",
+          "aileron": null,
+          "elevator": null,
+          "throttle": null,
+          "rudder": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

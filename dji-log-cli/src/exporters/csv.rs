@@ -157,6 +157,10 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RECOVER.batterySerial".to_string(), // Serial number of the battery
         "APP.tip".to_string(),           // App tip
         "APP.warn".to_string(),          // App warning
+        "APP.aileron".to_string(),       // Right stick horizontal position of the app
+        "APP.elevator".to_string(),      // Right stick vertical position of the app
+        "APP.throttle".to_string(),      // Left stick vertical position of the app
+        "APP.rudder".to_string(),        // Left stick horizontal position of the app
         "VISION.isObstacleAvoidanceEnabled".to_string(), // Indicates if obstacle avoidance is enabled
         "VISION.isCollisionAvoidanceEnabled".to_string(), // Indicates if collision avoidance is enabled
         "VISION.isAvoidingObstacleLegacy".to_string(), // Indicates if the aircraft is avoiding an obstacle, on older aircraft
