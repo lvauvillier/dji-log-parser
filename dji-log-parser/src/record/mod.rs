@@ -65,6 +65,8 @@ use virtual_stick::VirtualStick;
 use vision_group::VisionGroup;
 
 const END_BYTE: u8 = 0xFF;
+/// First bytes of the JPEG images written between the records: the image marker, or the image
+const JPEG_STARTS: [[u8; 2]; 2] = [[0x39, 0x30], [0xFF, 0xD8]];
 
 /// Represents the different types of records.
 ///
@@ -289,16 +291,40 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
         })
     }
 
-    /// Up to v12, records longer than 255 bytes only store the low byte of their length, and are
-    /// not followed by an end byte. When the checksum of the xor encoded content doesn't match its
-    /// length, the real length is found among the overflowed ones.
+    /// Up to v12, the length of a record is kept on a single byte, which overflows from 256 bytes.
+    /// The end byte is written at this length from the start of the content. For a record of 262
+    /// bytes, the length is written as 6 and:
+    ///
+    /// - the end byte `0xFF` is written over the 7th byte of the content;
+    /// - the byte after the content is never written, it is arbitrary.
+    ///
+    /// The real length is the written one plus 0, 256, 512 or 768. The checksum alone matches by
+    /// chance once in 256 records: the first length whose checksum matches and that is followed
+    /// by another record is kept, else the first one whose checksum matches.
     fn overflowed_length(
         reader: &mut R,
         record_type: u8,
         length: u16,
         start: u64,
     ) -> BinResult<Option<u16>> {
-        let mut is_valid = |length: u16| -> BinResult<bool> {
+        let valid_lengths: Vec<u16> = [0, 256, 512, 768]
+            .map(|overflow| length + overflow)
+            .into_iter()
+            .filter(|&length| Self::checksum_is_valid(reader, record_type, start, length))
+            .collect();
+        let real_length = valid_lengths
+            .iter()
+            .copied()
+            .find(|&length| Self::record_starts_at(reader, start + u64::from(length) + 1))
+            .or(valid_lengths.first().copied());
+
+        reader.seek(SeekFrom::Start(start))?;
+        Ok(real_length.filter(|&real_length| real_length != length))
+    }
+
+    /// Checks the checksum of the xor encoded content of `length` bytes at `start`.
+    fn checksum_is_valid(reader: &mut R, record_type: u8, start: u64, length: u16) -> bool {
+        let mut read = || -> BinResult<bool> {
             if length < 2 {
                 return Ok(false);
             }
@@ -308,17 +334,34 @@ impl<'r, 'k, R: Read + Seek> RecordContent<'r, 'k, R> {
             let last = u8::read(reader)?;
             Ok(xor_checksum_is_valid(first, last, length, record_type))
         };
+        read().unwrap_or(false)
+    }
 
-        let overflowed_length = if matches!(is_valid(length), Ok(true)) {
-            None
-        } else {
-            [256, 512, 768]
-                .into_iter()
-                .map(|overflow| length + overflow)
-                .find(|&length| matches!(is_valid(length), Ok(true)))
+    /// Checks that a record, a JPEG image or the end of the data starts at `position`: a record
+    /// has an end byte at its written length from the start of its content, and a valid checksum
+    /// with one of its possible lengths.
+    fn record_starts_at(reader: &mut R, position: u64) -> bool {
+        let mut read = || -> BinResult<bool> {
+            reader.seek(SeekFrom::Start(position))?;
+            let record_type = match u8::read(reader) {
+                Ok(record_type) => record_type,
+                Err(error) if error.is_eof() => return Ok(true),
+                Err(error) => return Err(error),
+            };
+            let length = u8::read(reader)?;
+            if JPEG_STARTS.contains(&[record_type, length]) {
+                return Ok(true);
+            }
+            let start = position + 2;
+            reader.seek(SeekFrom::Start(start + u64::from(length)))?;
+            if u8::read(reader)? != END_BYTE {
+                return Ok(false);
+            }
+            Ok([0, 256, 512, 768].into_iter().any(|overflow| {
+                Self::checksum_is_valid(reader, record_type, start, u16::from(length) + overflow)
+            }))
         };
-        reader.seek(SeekFrom::Start(start))?;
-        Ok(overflowed_length)
+        read().unwrap_or(false)
     }
 
     /// Size of the decoded data. From v7, the content starts with the xor seed and ends with a
@@ -529,6 +572,24 @@ mod tests {
 
         let long = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
         assert!(matches!(long, Record::Unknown(16, content) if content == data));
+        let next = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
+        assert!(matches!(next, Record::OSD(_)));
+    }
+
+    #[test]
+    fn length_of_records_longer_than_255_bytes_is_found_when_the_shorter_one_matches_by_chance() {
+        // Content of 302 bytes, written as 46: the checksum of 46 bytes matches, and the end
+        // byte is written after them, over the data
+        let mut data: Vec<u8> = (0..300).map(|i| i as u8).collect();
+        data[44] = 0x42 + 16;
+        let mut bytes = xor_record(16, &data, 0x00);
+        bytes[2 + 46] = END_BYTE;
+        bytes.extend(xor_record(1, &[0; 53], END_BYTE));
+        let keychain = RefCell::new(Keychain::empty());
+        let mut reader = Cursor::new(bytes);
+
+        let long = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
+        assert!(matches!(long, Record::Unknown(16, content) if content.len() == data.len()));
         let next = Record::read(&mut reader, 8, ProductType::None, &keychain).unwrap();
         assert!(matches!(next, Record::OSD(_)));
     }
