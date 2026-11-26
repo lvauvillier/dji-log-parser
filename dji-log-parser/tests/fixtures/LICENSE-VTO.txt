@@ -5,6 +5,9 @@ The following fixtures come from the Drone Forensics Program dataset of VTO Inc.
 - v8_mavicpro_2017.txt: DF020 (DJI Mavic Pro), 2017_August/mobile_iOS_backup
 - v8_mavic2enterprise.txt: DF081 (DJI Mavic 2 Enterprise), 2018_November/mobile_iOS
 - v11_mavic2enterprise.txt: DF080 (DJI Mavic 2 Enterprise), 2018_November/mobile_android
+- v9_inspire1.txt: DF063 (DJI Phantom 4 Pro V2), 2018_June/mobile_android_logical, an Inspire 1 log
+  found on the mobile device
+- v10_phantom4pro.txt: DF005 (DJI Phantom 4), 2017_June/mobile_android_backup
 
 MIT License
 -----------

@@ -110,6 +110,16 @@ fn v8_mavic2enterprise() {
 }
 
 #[test]
+fn v9_inspire1() {
+    insta::assert_json_snapshot!(summarize(fixture("v9_inspire1.txt"), None));
+}
+
+#[test]
+fn v10_phantom4pro() {
+    insta::assert_json_snapshot!(summarize(fixture("v10_phantom4pro.txt"), None));
+}
+
+#[test]
 fn v11_mavic2() {
     insta::assert_json_snapshot!(summarize(fixture("v11_mavic2.txt"), None));
 }

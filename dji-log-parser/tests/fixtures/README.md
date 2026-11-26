@@ -15,6 +15,8 @@ so tests never hit the network.
 | `v8_mavicpro.txt`          | 8       | Mavic Pro          | [VTO Drone Forensics Program](https://cfreds-archive.nist.gov/drone-images.html) DF019         | MIT, see `LICENSE-VTO.txt` |
 | `v8_mavicpro_2017.txt`     | 8       | Mavic Pro          | [VTO Drone Forensics Program](https://cfreds-archive.nist.gov/drone-images.html) DF020         | MIT, see `LICENSE-VTO.txt` |
 | `v8_mavic2enterprise.txt`  | 8       | Mavic 2 Enterprise | [VTO Drone Forensics Program](https://cfreds-archive.nist.gov/drone-images.html) DF081         | MIT, see `LICENSE-VTO.txt` |
+| `v9_inspire1.txt`          | 9       | Inspire 1          | [VTO Drone Forensics Program](https://cfreds-archive.nist.gov/drone-images.html) DF063         | MIT, see `LICENSE-VTO.txt` |
+| `v10_phantom4pro.txt`      | 10      | Phantom 4 Pro      | [VTO Drone Forensics Program](https://cfreds-archive.nist.gov/drone-images.html) DF005         | MIT, see `LICENSE-VTO.txt` |
 | `v11_mavic2.txt`           | 11      | Mavic 2            | [chrisvm/node-djiparsetxt](https://github.com/chrisvm/node-djiparsetxt)                        | MIT                        |
 | `v11_mavic2enterprise.txt` | 11      | Mavic 2 Enterprise | [VTO Drone Forensics Program](https://cfreds-archive.nist.gov/drone-images.html) DF080         | MIT, see `LICENSE-VTO.txt` |
 | `v11_spark.txt`            | 11      | Spark              | [chrisvm/node-djiparsetxt](https://github.com/chrisvm/node-djiparsetxt)                        | MIT                        |
