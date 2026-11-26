@@ -339,6 +339,346 @@
     "license": null
   },
   {
+    "name": "vto/DF010/DJIFlightRecord_2018-06-19_17-16-06.txt",
+    "url": "https://drive.usercontent.google.com/download?id=19MVAAuAZaoUktzgdAnegIl7GYR7lcPsU&export=download&confirm=t",
+    "archive_entry": "ios_backup/13/13b24a296a991c05d04fc7d8bc0bc142dd556bdb",
+    "sha256": "c9d27a29e25906d5a68d79d73a88020e56e23c244ddfee9b388ecf9a066823fe",
+    "version": 8,
+    "aircraft": "Inspire1",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF011/DJIFlightRecord_2017-08-03_13-52-15.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeYk1TLXowRXpjeW8&export=download&confirm=t&resourcekey=0-h9ND1XXobo4BYyB2Nm2A8Q",
+    "archive_entry": "MC01 DF011/a1/a178591feb206efde1d64362cb9806e3628ec1d6",
+    "sha256": "6f4fca733df4eae03373cb64a75bab05e5a0feb6531076535ada37e815999159",
+    "version": 8,
+    "aircraft": "Inspire1",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF025/DJIFlightRecord_2017-08-29_13-07-17.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeTVh0cThnYmpnSnM&export=download&confirm=t&resourcekey=0-3qzqgt37iZPtnP9bx4I42g",
+    "archive_entry": "DF025 MC07 iOS/a5/a5fce756ac750fb4a5e067c6ab0da00cd2273998",
+    "sha256": "b75e0eda0541caec9e1752ce0944bb55c271cd32985520eb40f842480b69fbb0",
+    "version": 8,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF025/DJIFlightRecord_2017-08-29_13-10-40.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeTVh0cThnYmpnSnM&export=download&confirm=t&resourcekey=0-3qzqgt37iZPtnP9bx4I42g",
+    "archive_entry": "DF025 MC07 iOS/c3/c3787dc02a4ffa075848c532ada9946f6b112e16",
+    "sha256": "11bad4d3f66515285ecb3c44d3d3b19cc0b5e93340cf6f0597a5e87bc073e50e",
+    "version": 8,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF026/DJIFlightRecord_2017-08-29_13-30-41.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeV1lhalBRempqT0k&export=download&confirm=t&resourcekey=0-2Lxy5fqnrYj8Xk2iDud6qA",
+    "archive_entry": "DF026 MC08 iOS/cc/cc2d0234ec50879389b8b809fb777cc28870be70",
+    "sha256": "d61e463ce37bd19f7d8c22d8f44cc878495cc6a75a35c79f13f5f05652bdb644",
+    "version": 8,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF027/DJIFlightRecord_2017-08-29_13-53-27.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeR0FrR1o5S3pCNFU&export=download&confirm=t&resourcekey=0-DtWzJkKZv6LefcHG505T-A",
+    "archive_entry": "DF027 MC09 iOS/e2/e2dff3a1c91bbcf37b25c481fb785edd610ba9f7",
+    "sha256": "c14efb54721b7dbe316cc923bab77a4a88b9463fc0022a3406568281f31dedde",
+    "version": 8,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF027/DJIFlightRecord_2017-08-29_13-58-35.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeR0FrR1o5S3pCNFU&export=download&confirm=t&resourcekey=0-DtWzJkKZv6LefcHG505T-A",
+    "archive_entry": "DF027 MC09 iOS/46/46be3b7667c8303099803ef4099c903259386bc0",
+    "sha256": "a2be373003695154b84a4d01d67b89103d668ef63f3b63801f97042738ce5301",
+    "version": 8,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF027/DJIFlightRecord_2018-06-20_08-35-09.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1ZtlRV81q_YqGwf3QZJSzH71BD4XObt8j&export=download&confirm=t",
+    "archive_entry": "ios_backup/76/76c244af33c30f956940ce11938cc240db5d84e7",
+    "sha256": "a9473107fb3eed08a1d4a5e2b445ec09f0761e9e16e3186049d941a711cc55dd",
+    "version": 8,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF043/DJIFlightRecord_2018-06-20_12-11-24.txt",
+    "url": "https://drive.usercontent.google.com/download?id=17Fzy-t6isF41IjoVsSuFlwjno_Huy2x-&export=download&confirm=t",
+    "archive_entry": "iOS_Backup/02/02969dddcff860ac7f7529869fef1878d8142dc0",
+    "sha256": "7ced69dfc342feb8ed75a515755fcbe89c0b9f456a5ef02ea5db31df847a17a7",
+    "version": 8,
+    "aircraft": "LB2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF034/DJIFlightRecord_2018-06-20_12-00-35.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1amLBA-UwCR5UxnV7anNNI1yScHJrLFPO&export=download&confirm=t",
+    "archive_entry": "ios_backup/ff/ffc32ad353b78729ef1cb0e511a73f029e25abbb",
+    "sha256": "ab81c964bcc212e4d9f58c99a1b99b70cab97734d957c99d017c9995d423317d",
+    "version": 8,
+    "aircraft": "Matrice600Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF067/DJIFlightRecord_2018-09-26_11-57-33.txt",
+    "url": "https://drive.usercontent.google.com/download?id=16H3-Fv6ceCzsvMCU_jHLrkSXLtdgDpGe&export=download&confirm=t",
+    "archive_entry": "iOS_Backup/d0/d001d626c24a69ffd5dcae6db44bf2bece14da54",
+    "sha256": "80858b4b0d0e56cc9789147711cf129cebcb6d90dd152ca4045d33a884e6b033",
+    "version": 8,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF068/DJIFlightRecord_2018-09-26_12-36-55.txt",
+    "url": "https://drive.usercontent.google.com/download?id=12bEY_rpL-e6ddlWjZV14pNDJXTTtynwS&export=download&confirm=t",
+    "archive_entry": "iOS_Backup/89/8984df7e2b864c1c5ce8bc581e462f42d54cff64",
+    "sha256": "63775355c2094bc9906ee12f52c7b8b3ac068cec384c7ccac7427e88f1973470",
+    "version": 8,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF068/DJIFlightRecord_2018-09-26_12-43-47.txt",
+    "url": "https://drive.usercontent.google.com/download?id=12bEY_rpL-e6ddlWjZV14pNDJXTTtynwS&export=download&confirm=t",
+    "archive_entry": "iOS_Backup/d9/d93bbf30bdbcc41cf6fc6061fb9e1365c07cbd29",
+    "sha256": "2a3d488673432d62cd669914c5877fd8d983cc8af28f59de3fd9dc1f2aacaa1c",
+    "version": 8,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF069/DJIFlightRecord_2018-09-26_11-18-10.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1-Y8auLa7VxETuZ5TojfTkm7GC12SMb8f&export=download&confirm=t",
+    "archive_entry": "iOS_Backup/9f/9faa05f56fea38907fdaf6d8b9ba2df35daa8a98",
+    "sha256": "b9763ef7f9dc79d0aa2dd7c16a4c972ec04ed26fca4a33e5b0514efcfc0a5b28",
+    "version": 8,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF080/DJIFlightRecord_2018-11-20_15-11-25.txt",
+    "url": "https://drive.usercontent.google.com/download?id=11n4cF0kCEf4LpxkHDRzmgV5CIYWd4qMR&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/d4c192fdf9361ba93427178a45c16eefa4b4e2f5/2e/2e5eac353498130b1ded97e09e9ee53b1039b33a",
+    "sha256": "df4a7f33b18b96d7f6857c9832fd3835c7ae023ba8b4abdb76672c23986502a2",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF080/DJIFlightRecord_2018-11-20_15-16-22.txt",
+    "url": "https://drive.usercontent.google.com/download?id=11n4cF0kCEf4LpxkHDRzmgV5CIYWd4qMR&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/d4c192fdf9361ba93427178a45c16eefa4b4e2f5/aa/aa39d476c4b54e7bba874bbee1dfff5472bd4dec",
+    "sha256": "20fdc076bb9be236482f29a4e8e99384b72c7526e844a759850f11d8e364533a",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF080/DJIFlightRecord_2018-11-20_15-26-30.txt",
+    "url": "https://drive.usercontent.google.com/download?id=11n4cF0kCEf4LpxkHDRzmgV5CIYWd4qMR&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/d4c192fdf9361ba93427178a45c16eefa4b4e2f5/34/34b3c7a364b3079d932221b1b1b0ca92c2798b63",
+    "sha256": "c9d6c6505ad378cb61c5a46733b9dc207ff268e89b58f5bc7c56e84c7f81b081",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-33-23.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1L72sE5fbXs6MiG-XsiQCZLJofbbnCs3n&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/e2b758e967011a2a13a54246dae3d609242fc26f/e4/e43685b4e684330c61e5b44a7b28c2ffcd717f57",
+    "sha256": "44aa01e92dd375e1f68392c0528c9bec3647193de3fd6dd457987b68a2cea2e3",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-33-29.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1L72sE5fbXs6MiG-XsiQCZLJofbbnCs3n&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/e2b758e967011a2a13a54246dae3d609242fc26f/8d/8d61d89dbf4ff16389cbafebead4b3b9247825c0",
+    "sha256": "c83c68ee35d363e6c1a5d6fdcbdced65044b10f3fe965fca0c64898dd08cc636",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-37-17.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1L72sE5fbXs6MiG-XsiQCZLJofbbnCs3n&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/e2b758e967011a2a13a54246dae3d609242fc26f/88/88681b184eeff541537f91cae594acbf1d3254e6",
+    "sha256": "4c9f899891ba6370e379a6a26ceb66792ae8085624a5fe41f144e652a5e1f49c",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-41-59.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1L72sE5fbXs6MiG-XsiQCZLJofbbnCs3n&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/e2b758e967011a2a13a54246dae3d609242fc26f/cf/cfcc44ae5841853ac5b30e8c10932ef5ca58fe4f",
+    "sha256": "c9ec3f50ac28f85124cbb5af33ba92a077d29a3f4a0924627607e6f6d417c72f",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF082/DJIFlightRecord_2018-11-20_16-04-39.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1-LSPfIN_TCJvoF5kWzt3r6d4KHqdF87M&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/1888c183da731241a3c137e556be5021d2c37b0f/34/34ab8092fdc273be462367217949edc111f7bfcd",
+    "sha256": "f010cac0297deeeaac5ba8624cde9fb670340230128c14d9a0d58ea7bb47913d",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF082/DJIFlightRecord_2018-11-20_16-08-43.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1-LSPfIN_TCJvoF5kWzt3r6d4KHqdF87M&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/1888c183da731241a3c137e556be5021d2c37b0f/a6/a67a95f5c9e77567d7a1cbc05577bf3c7ffef98c",
+    "sha256": "586d50f85491373a5f2872e9cd78479191af79d32ca2789d60557eec19501212",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF082/DJIFlightRecord_2018-11-20_16-15-06.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1-LSPfIN_TCJvoF5kWzt3r6d4KHqdF87M&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/1888c183da731241a3c137e556be5021d2c37b0f/97/979e7b390d8537b62d4890daca003aef7d71a0b8",
+    "sha256": "28a38c612610bd0e4721916844ad7de66487c3be91107b555f63e0a04444fb2e",
+    "version": 8,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF048/DJIFlightRecord_2018-04-19_11-25-10.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1QrnKTrW2YhnZpX6VpRGZvr6QjEUQAlu1&export=download&confirm=t",
+    "archive_entry": "MC 04 iOS/7f05ad1235cea98920b1112ef14ddd9fdded744a/05/05959a0902e7d5475e0c729463f15990d4f8d34d",
+    "sha256": "70665f6b87164fef6f9c21bdb96ef7a9a6709b337900af71650d4f76ae1a2d82",
+    "version": 8,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF048/DJIFlightRecord_2018-06-19_12-25-59.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1a9qgfIOHhG2vGyHDxIehtfoGaL_1WEUG&export=download&confirm=t",
+    "archive_entry": "Mobile_iOS_Backup/28/28d60bd475e3a02a833382b39691cee3389150f1",
+    "sha256": "f81a98ad5fc3c4c827810faae5eb6a26edbcfec0b196aafd054dacfc8f05bd70",
+    "version": 8,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF048/DJIFlightRecord_2018-06-19_12-29-38.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1a9qgfIOHhG2vGyHDxIehtfoGaL_1WEUG&export=download&confirm=t",
+    "archive_entry": "Mobile_iOS_Backup/92/92e154f4429ac7167f9478d2a0dcd3e76cd0c915",
+    "sha256": "10cf71479b9c46a5c955f365c831e8b75efe60b93ca5218a7f4bbcb96ccecfee",
+    "version": 8,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF050/DJIFlightRecord_2018-04-19_13-17-23.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1d6KFwUVWEplBVv4cMltHel8gUZ70soes&export=download&confirm=t",
+    "archive_entry": "MC 06 iOS/c240c89bed00a26c189dfb0c687370a70514a423/bc/bc9e981f5312545e227fe88cd1b43144085498e2",
+    "sha256": "2c50beeb3c772f6194219a82861e1142e6a6fb00311fd9d520a453a0db2f4dae",
+    "version": 8,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF050/DJIFlightRecord_2018-04-19_13-33-57.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1d6KFwUVWEplBVv4cMltHel8gUZ70soes&export=download&confirm=t",
+    "archive_entry": "MC 06 iOS/c240c89bed00a26c189dfb0c687370a70514a423/7a/7a7d104bee6e5526e9def7c63c28d6a4f1f20cd9",
+    "sha256": "dbfa1002fd473e3074125dd7dde7ffd9cd1a1bd0af713d17e9319bb68b37f9f0",
+    "version": 8,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF019/DJIFlightRecord_2017-08-29_11-49-33.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebUhKRzcwQzNNaU0&export=download&confirm=t&resourcekey=0-8alvg7X1Ic08BWqPXCNNoA",
+    "archive_entry": "DF019 MC04 iOS/3d/3d96ea2d4d5fd1f7b5b1007f54412d6feaabc137",
+    "sha256": "1e6abf634721c823a363a917e06df41c493d812f98a4c89dfef31bd3cc256c22",
+    "version": 8,
+    "aircraft": "MavicPro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF019/DJIFlightRecord_2017-08-29_11-50-40.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebUhKRzcwQzNNaU0&export=download&confirm=t&resourcekey=0-8alvg7X1Ic08BWqPXCNNoA",
+    "archive_entry": "DF019 MC04 iOS/03/03ee3ff915a6901e507bb0e5928cd8615a4fda83",
+    "sha256": "a722cffa25823257ad652d2a8e5134923c093897b498c6fef907ee483f1e8937",
+    "version": 8,
+    "aircraft": "MavicPro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF019/DJIFlightRecord_2017-08-29_11-56-11.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebUhKRzcwQzNNaU0&export=download&confirm=t&resourcekey=0-8alvg7X1Ic08BWqPXCNNoA",
+    "archive_entry": "DF019 MC04 iOS/4e/4e3ea812c6cb494a6f25199f6d7a59073a6cc4fe",
+    "sha256": "6fb961ac585d91c2daf93500d8a850e4a1006fa56c8185b5fe659ad330d72f80",
+    "version": 8,
+    "aircraft": "MavicPro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF021/DJIFlightRecord_2017-08-29_12-44-40.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeNV9VYWRKZHVLYTA&export=download&confirm=t&resourcekey=0-0g6CMQ2wYl1jOD4HS1MaPA",
+    "archive_entry": "DF021 MC06 iOS/8e/8e0e5aaccf77a4fa2d66fd93f8ded7160d56d205",
+    "sha256": "c7db688e7ed7d5aed919b0c0fba599ade3b06a4a039f5fbd2e1ad65a0ff014a7",
+    "version": 8,
+    "aircraft": "MavicPro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF080/DJIFlightRecord_2018-11-20_15-21-07.txt",
+    "url": "https://drive.usercontent.google.com/download?id=11n4cF0kCEf4LpxkHDRzmgV5CIYWd4qMR&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/d4c192fdf9361ba93427178a45c16eefa4b4e2f5/43/43ecd07fd1564dfd6f9c38c055c5b9d420358b69",
+    "sha256": "615e75b3fa03ae5d94baf38cb76417d4748c8e28085a7667fb88817c4dda192c",
+    "version": 8,
+    "aircraft": "None",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
     "name": "chrisvm/node-djiparsetxt/mavic2_1.txt",
     "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/mavic2/mavic2_1.txt",
     "sha256": "1f9f96b15bf30bdade351b494d7216a16d0e261433697bb86d85cc8aceb4141e",
@@ -465,6 +805,46 @@
     "license": "MIT"
   },
   {
+    "name": "vto/DF001/DJIFlightRecord_2018-06-19_13-16-58.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1rHzC1ExIkhYNq_fT6duEDJixUnOetuFc&export=download&confirm=t",
+    "archive_entry": "ios_backup/7a/7aba745cbf5ca71879ef640a8075b2e3d56ff9eb",
+    "sha256": "f38be7c355fd16890c06e28602795aac66b425fa624e4edae05c76083ee67268",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF002/DJIFlightRecord_2017-06-29_10-13-30.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeYWE4Y1YtMjlRblU&export=download&confirm=t&resourcekey=0-8VX5hMNxNzuPOA_Zzfnh4Q",
+    "archive_entry": "MC01 DF002(2)M/cf/cf3c3800b3ff2e20817b3268e4a80e7f90792388",
+    "sha256": "8af23bb506f9032c173bc29b9e5d74fde5fb6ed3f9b409a29d158b71df49c478",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF003/DJIFlightRecord_2017-06-29_10-30-47.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebkhtQ1k4QXNfa0E&export=download&confirm=t&resourcekey=0-x2JLiNcFsgqKPoxcZTfJjA",
+    "archive_entry": "MC02 DF003(2)M/c2/c296300007686f82f99d963ab2e30fb2072a741d",
+    "sha256": "e20134ca41c3aad7b88485d606b35e87c78b527710afff29a628716a3f5a4ae4",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF003/DJIFlightRecord_2017-06-29_10-32-33.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebkhtQ1k4QXNfa0E&export=download&confirm=t&resourcekey=0-x2JLiNcFsgqKPoxcZTfJjA",
+    "archive_entry": "MC02 DF003(2)M/8e/8ea5ff7a7e41ff36a7422208e862eaa1024d6bdf",
+    "sha256": "1aee75e5afd15a043980433e777e0a731d64525d9952f079aeee71def19d8c36",
+    "version": 8,
+    "aircraft": "Phantom3Standard",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
     "name": "WildEllie/flight_log_parser/DJIFlightRecord_2017-09-21_15-37-52.txt",
     "url": "https://raw.githubusercontent.com/WildEllie/flight_log_parser/723c71d3d00535181bcabd3efd25108af15187ff/DJIFlightRecord_2017-09-21_%5B15-37-52%5D.txt",
     "sha256": "41bfcde950ab24582be9f87323bda23a15e2c451bd73c0be0c7bd3c079ba979b",
@@ -472,6 +852,226 @@
     "aircraft": "Phantom4Pro",
     "source": "https://github.com/WildEllie/flight_log_parser",
     "license": null
+  },
+  {
+    "name": "vto/DF005/DJIFlightRecord_2017-06-29_14-52-06.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeY2U0cXRqVE9BR0U&export=download&confirm=t&resourcekey=0-juLPVHbhVZg-IPweKEgadQ",
+    "archive_entry": "MC 02 DF005M(2)/cc/ccc4c72741e929bc96fb22fce619b26d5872e01c",
+    "sha256": "168634ecd25fd9d4872fbd0d454a8338976c1e0500f764d9d282916fb7b447e9",
+    "version": 8,
+    "aircraft": "Phantom4Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF005/DJIFlightRecord_2018-06-19_13-39-43.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1s5VA4TIv59jd-8z7_UYMpkbmPgn-HMVB&export=download&confirm=t",
+    "archive_entry": "ios_backup/48/484958cb48a80f64a3f53b49ed37a6f2b9ed06f0",
+    "sha256": "b056e5524596a35c58a9edcbf1285f2042d3e92c734c41f7c495c1967a94a87a",
+    "version": 8,
+    "aircraft": "Phantom4Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF061/DJIFlightRecord_2018-06-19_14-45-05.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1Y1mwxKi1yIcifcjGgeSjXyUceaLe8-R8&export=download&confirm=t",
+    "archive_entry": "mobile_ios_backup/c6/c6936a19fac251adba1105209b1de02f87324eda",
+    "sha256": "b5334179ae3e2f53d86de8f51707dc42f5c9c03f89c11a857a214bace85c448b",
+    "version": 8,
+    "aircraft": "Phantom4ProV2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF062/DJIFlightRecord_2018-06-19_14-29-54.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1iH4snV55XzEDrTPI9N-sGwcdhsLCtl2u&export=download&confirm=t",
+    "archive_entry": "Phantom4ProV2DF062/a8/a8dcb52a34c8ec2b1133d7d267394cfbdd8f71cf",
+    "sha256": "a8cce1e1507a4ec62ebe2206e535660eb975c57511ba66e4d1019e8ae3bf402a",
+    "version": 8,
+    "aircraft": "Phantom4ProV2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF063/DJIFlightRecord_2018-06-19_15-23-57.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1JYCjwDn3DMJuaWioFXjUyg0d6RU3CzVK&export=download&confirm=t",
+    "archive_entry": "mobile_iOS_backup/5c/5cd4c35379897fa7ffca130de772ed283231873a",
+    "sha256": "1e475651728284555dcd797ace08e2189cc970693817cec760c88557f8eb46e5",
+    "version": 8,
+    "aircraft": "Phantom4ProV2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF006/DJIFlightRecord_2017-06-29_13-00-45.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeYXpZY19QY1FQeFk&export=download&confirm=t&resourcekey=0-wXuhcY23wcl6UCl1IRdkmA",
+    "archive_entry": "MC 01 DF006(2)M/2e/2ecc67171e976a13baf1dee652a78e14bafc4cd0",
+    "sha256": "e95f139faa0531feab5beebb2663a8f864ebd449e522cc49c7764d9d656cbee2",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF007/DJIFlightRecord_2018-06-19_13-09-25.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1sltByQCDN1UIQigZN7jfsTWo1uJ-riqc&export=download&confirm=t",
+    "archive_entry": "ios_backup/d1/d1924bea9e7532d780ea24e37be3f01592b2c5e8",
+    "sha256": "fd6c61630b102deaa8655813e7a083e55c94780b36dc3f2a673745b7b38503b0",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF007/DJIFlightRecord_2018-06-19_13-10-26.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1sltByQCDN1UIQigZN7jfsTWo1uJ-riqc&export=download&confirm=t",
+    "archive_entry": "ios_backup/41/41150fa1989243ad5e07fb326aaf8259a5eea980",
+    "sha256": "50f3d79ccc9aea54059ff7f7427a470a264633b884ec3960cc290661acf0fe05",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF008/DJIFlightRecord_2017-06-29_13-21-08.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeX3NObHpid3dkdFE&export=download&confirm=t&resourcekey=0-Y5d1LW0Zz-MMhzlHJjmnOg",
+    "archive_entry": "MC 02 DF008(2)M/25/250bc6a9626c34af6bfc0ed439862a836386a783",
+    "sha256": "5a2cecef4388af6904af432e5da66fd7e3c2b8740b17e44499d0dee62d871628",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF008/DJIFlightRecord_2018-06-19_12-07-37.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1rTb2OiRxvC_66qg_0teYNY6TO-Edk8gt&export=download&confirm=t",
+    "archive_entry": "ios_backup/6f/6fb9ea42ef8d3db49271e5b5e23bbc7a8ef923d3",
+    "sha256": "0392499876a9d2fb4d38d4535c4abb1fe966822bab672a3d127cf28e049f8f73",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF010/DJIFlightRecord_2017-06-29_15-24-31.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeb05sR2NYRWU4a1E&export=download&confirm=t&resourcekey=0-5rGaJRSafDEytyUTSY2dFQ",
+    "archive_entry": "MC02 DF010/8b/8b26ab18cd607cbebb6a9581bd90c23c84ecdd62",
+    "sha256": "09baf521c248a76c01f49a42714b44fc749ee2ae7184f35fdb820d9929715296",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF010/DJIFlightRecord_2017-06-29_15-32-24.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeb05sR2NYRWU4a1E&export=download&confirm=t&resourcekey=0-5rGaJRSafDEytyUTSY2dFQ",
+    "archive_entry": "MC02 DF010/a2/a22019ae208d19901b32c02e96b7b87e460c9c09",
+    "sha256": "d96720dfe183e3102ea0bcc4a6189d9356ece0950ed285f4d599b5aa1d01c507",
+    "version": 8,
+    "aircraft": "Spark",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF043/DJIFlightRecord_2018-06-20_14-19-22.txt",
+    "url": "https://drive.usercontent.google.com/download?id=122GHxowBtuU5dDNqLGmZEj_fsEye1g9l&export=download&confirm=t",
+    "archive_entry": "Media01/sdcard/DJI/dji.pilot/FlightRecord/DJIFlightRecord_2018-06-20_[14-19-22].txt",
+    "sha256": "af4ba707831e5890e5d376b78063623e7a9cb36e61b39c5b4801034b84d6429f",
+    "version": 9,
+    "aircraft": "A2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF010/DJIFlightRecord_2018-06-20_09-16-53.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1Rwew5pa3JROxU0PUQZvf8aGB4kcDtdgp&export=download&confirm=t",
+    "archive_entry": "Media01/sdcard/DJI/dji.pilot/FlightRecord/DJIFlightRecord_2018-06-20_[09-16-53].txt",
+    "sha256": "8ec2c63ea8068a6d6a9d51bd4369c4e4570b650c6974a507fc0aa29a462be427",
+    "version": 9,
+    "aircraft": "Inspire1",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF020/DJIFlightRecord_2017-10-10_10-02-22.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1wuBF1a-jToqNbV-Pm2u1xCFBPFqrZfU3&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.pilot/FlightRecord/DJIFlightRecord_2017-10-10_[10-02-22].txt",
+    "sha256": "f134bef34e6877ae5a030297f56ae6e12fe946b468c5143ef9976c08170295f8",
+    "version": 9,
+    "aircraft": "Matrice600Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF034/DJIFlightRecord_2018-06-20_10-11-44.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1iemSHoZcz4pE3qLBUqBYvL99p772_LZI&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.pilot/FlightRecord/DJIFlightRecord_2018-06-20_[10-11-44].txt",
+    "sha256": "eadb025c7294662f54d821b8013dacd4da0ba19c69e0cccbbc53799bdb2bbadf",
+    "version": 9,
+    "aircraft": "Matrice600Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF001/DJIFlightRecord_2018-06-20_09-04-19.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1y6w4r2dXl34PD9z5_PQ59MYHRGWWn1W-&export=download&confirm=t",
+    "archive_entry": "Media01/sdcard/DJI/dji.pilot/FlightRecord/DJIFlightRecord_2018-06-20_[09-04-19].txt",
+    "sha256": "8815b0530e61b5b3c7d7ac1b5d526184e4bcf1e7911bb280c0fa72c9da1440e4",
+    "version": 9,
+    "aircraft": "Phantom3Standard",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF002/DJIFlightRecord_2017-06-29_13-39-52.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeQWV3LVJObnFPWG8&export=download&confirm=t&resourcekey=0-C_gFop5u7qrLebbegkOVKA",
+    "archive_entry": "FileSystem/Media01/sdcard/DJI/dji.pilot/FlightRecord/DJIFlightRecord_2017-06-29_[13-39-52].txt",
+    "sha256": "ebaeb3f04f8ed6392ada37f23dd6438c60487e6c1439bc7358db8c58937d73b3",
+    "version": 9,
+    "aircraft": "Phantom3Standard",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF005/DJIFlightRecord_2017-06-29_11-20-32.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSeUXVES1lRaXRac3c&export=download&confirm=t&resourcekey=0-kubdeeb5LIcudsbvlztpTQ",
+    "archive_entry": "FileSystem/Media01/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2017-06-29_[11-20-32].txt",
+    "sha256": "92a650412e5c516c6a32ac620401b7b7019c7d4339bc6317f0cd619ea4bdf7ae",
+    "version": 10,
+    "aircraft": "Phantom4Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF006/DJIFlightRecord_2017-06-29_12-39-25.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebDJzTDVZS1Q4NjQ&export=download&confirm=t&resourcekey=0-_bQSHQ68mJAoCqbNbpqhew",
+    "archive_entry": "FileSystem/Media01/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2017-06-29_[12-39-25].txt",
+    "sha256": "7f1d54d681ecfae94c806aafe509efad3e12ae59f482c6965431ef6ee26f9c08",
+    "version": 10,
+    "aircraft": "Phantom4Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF006/DJIFlightRecord_2017-06-29_12-52-14.txt",
+    "url": "https://drive.usercontent.google.com/download?id=0B1aBvVt_vSSebDJzTDVZS1Q4NjQ&export=download&confirm=t&resourcekey=0-_bQSHQ68mJAoCqbNbpqhew",
+    "archive_entry": "FileSystem/Media01/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2017-06-29_[12-52-14].txt",
+    "sha256": "cfae0772f409fe023ca42b4b5c6f55d193f6cfd6f66eb87bb295b04d1b22d3f8",
+    "version": 10,
+    "aircraft": "Phantom4Pro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF027/DJIFlightRecord_2018-06-20_09-11-02.txt",
+    "url": "https://drive.usercontent.google.com/download?id=10OEhEBLUw79tjDiZvzPAXHrUftxbpSj1&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-06-20_[09-11-02].txt",
+    "sha256": "d1013d791de13abbd9116d48e5f4854e1fcac5150a2ec8ba87e0dc801c144a5e",
+    "version": 11,
+    "aircraft": "Inspire2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
   },
   {
     "name": "chrisvm/node-djiparsetxt/mavic2_0.txt",
@@ -555,6 +1155,126 @@
     "license": "MIT"
   },
   {
+    "name": "vto/DF067/DJIFlightRecord_2018-09-26_14-08-27.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1-OtPsL2gV-xH9g5b6RoiOu3rpg5zCNSj&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-09-26_[14-08-27].txt",
+    "sha256": "a6ad9a287d301d0c35f564822abfe2340b2c1bf1824f61caeffca93b69235228",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF067/DJIFlightRecord_2018-09-26_14-15-34.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1-OtPsL2gV-xH9g5b6RoiOu3rpg5zCNSj&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-09-26_[14-15-34].txt",
+    "sha256": "6e32c39a7e22327eb2d2ae1a20b7b98df686bf5b906761d7a2e2c66881a1e835",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF068/DJIFlightRecord_2018-09-26_12-54-14.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1xs5AqVB1zGoeUwZ4NXB6_UOQ5s3RnAeE&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-09-26_[12-54-14].txt",
+    "sha256": "e330a5916b95416fb9828bdaff5715b4262a01678b41d99c7269b20268251a91",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF069/DJIFlightRecord_2018-09-26_13-30-44.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1rf4yhyI0wdhv0F_FHLEaGlQ5ZeQcpvZl&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-09-26_[13-30-44].txt",
+    "sha256": "d3033b99e3d3a7ff60c9ec5e7743477dce77003100b0809e4b9d895224b8b9fb",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF080/DJIFlightRecord_2018-11-20_14-55-49.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1ynkPad2jLnpDWg9ffFXtvzv-5ED0q4XU&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[14-55-49].txt",
+    "sha256": "51c04dc11b66bb03e0602b8cb917397f25434cf4580f986ee1d2cc787089a508",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF080/DJIFlightRecord_2018-11-20_15-06-06.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1ynkPad2jLnpDWg9ffFXtvzv-5ED0q4XU&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[15-06-06].txt",
+    "sha256": "015b9f428364f1f85f445e84dcf7537d22a0b61f2353e431e817bcea61a49250",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-48-27.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1bQcyRC5Pg-lfJtBXwgTTlrTlH65lW7Lh&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[15-48-27].txt",
+    "sha256": "ed23d3ff2faad3ad8d396b9319509e8b2737d3223ad34355f821e3022c47de47",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-54-10.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1bQcyRC5Pg-lfJtBXwgTTlrTlH65lW7Lh&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[15-54-10].txt",
+    "sha256": "267f53f64f4aa8947a88c79c4a2c7e5a17cff1a4bc27541b26c6b5944a573c3f",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF081/DJIFlightRecord_2018-11-20_15-57-52.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1bQcyRC5Pg-lfJtBXwgTTlrTlH65lW7Lh&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[15-57-52].txt",
+    "sha256": "031ca8f9f8b0e6b55115782d327876cd1192061c71d01843921a957594e68b94",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF082/DJIFlightRecord_2018-11-20_16-19-38.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1uiDRUQbA_fcvIDjJv8sFI-h6GL4wWf6O&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[16-19-38].txt",
+    "sha256": "8b0efdaf94f3332562b657c8875d14701f9c6dea0f230abf4f225403e5b5e685",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF082/DJIFlightRecord_2018-11-20_16-23-28.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1uiDRUQbA_fcvIDjJv8sFI-h6GL4wWf6O&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[16-23-28].txt",
+    "sha256": "94e6eec1bc245b7995b36e6cbdf0a26cb7199449b3aa45f725e003cd85229401",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF082/DJIFlightRecord_2018-11-20_16-27-41.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1uiDRUQbA_fcvIDjJv8sFI-h6GL4wWf6O&export=download&confirm=t",
+    "archive_entry": "mobile_android_logical/Media01/sdcard/DJI/com.dji.industry.pilot/FlightRecord/DJIFlightRecord_2018-11-20_[16-27-41].txt",
+    "sha256": "5150d8e39bb5b61de576e3caf228d51398d3d4d6ad65b566a3fa8d5a82564298",
+    "version": 11,
+    "aircraft": "Mavic2Enterprise",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
     "name": "se0wtf/go-djilogs/testair.txt",
     "url": "https://raw.githubusercontent.com/se0wtf/go-djilogs/c5730f351b05f2e05676775a14a9436154f04408/testair.txt",
     "sha256": "51a8a9a27c4fd2e38c41550270b63502f62bde02d9028662679e3e285706c457",
@@ -562,6 +1282,56 @@
     "aircraft": "MavicAir",
     "source": "https://github.com/se0wtf/go-djilogs",
     "license": null
+  },
+  {
+    "name": "vto/DF020/DJIFlightRecord_2018-06-19_14-50-34.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1wuBF1a-jToqNbV-Pm2u1xCFBPFqrZfU3&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-06-19_[14-50-34].txt",
+    "sha256": "0a9f1816d52a98f840f6e67c08a14473ae5a0a2e75e9484d5de66368c4fd4c4a",
+    "version": 11,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF048/DJIFlightRecord_2018-04-19_11-39-45.txt",
+    "url": "https://drive.usercontent.google.com/download?id=16arafTk1KCfjbyH_kkKPRIehD4m6UEO8&export=download&confirm=t",
+    "archive_entry": "MC 04/Media01/userdata/media/0/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-04-19_[11-39-45].txt",
+    "sha256": "cf67262239e3b970b24b8c423b8b2a6890348ff43f7b571de8363a137444cef9",
+    "version": 11,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF050/DJIFlightRecord_2018-04-19_12-46-27.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1q-VE7aEb99h0w0ibx3hDlfUvC5fRGKO4&export=download&confirm=t",
+    "archive_entry": "MC 06/Media01/userdata/media/0/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-04-19_[12-46-27].txt",
+    "sha256": "8365a1f3dea62bd2a359819de198387b04f77dd9d5b760514197e48dc00a6607",
+    "version": 11,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF050/DJIFlightRecord_2018-04-19_13-05-12.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1q-VE7aEb99h0w0ibx3hDlfUvC5fRGKO4&export=download&confirm=t",
+    "archive_entry": "MC 06/Media01/userdata/media/0/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-04-19_[13-05-12].txt",
+    "sha256": "18a29733318941302357eaf543e3c222480ef254f84bbb19163f9d112b89adb6",
+    "version": 11,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF050/DJIFlightRecord_2018-04-19_13-05-29.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1q-VE7aEb99h0w0ibx3hDlfUvC5fRGKO4&export=download&confirm=t",
+    "archive_entry": "MC 06/Media01/userdata/media/0/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-04-19_[13-05-29].txt",
+    "sha256": "db71b31cbd6aa7f7a693d86a7aea2765e9e648aa6bbd59554db87e9fc6f9cb4a",
+    "version": 11,
+    "aircraft": "MavicAir",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
   },
   {
     "name": "se0wtf/go-djilogs/testv3.txt",
@@ -573,12 +1343,52 @@
     "license": null
   },
   {
+    "name": "vto/DF020/DJIFlightRecord_2018-06-19_18-48-38.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1wuBF1a-jToqNbV-Pm2u1xCFBPFqrZfU3&export=download&confirm=t",
+    "archive_entry": "Android_Logical/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-06-19_[18-48-38].txt",
+    "sha256": "ab5bbc58a921d81c323a76c3a9d955fde58d503536facf43306e7e6bbb208c8d",
+    "version": 11,
+    "aircraft": "MavicPro",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
     "name": "chrisvm/node-djiparsetxt/phantom4_0.txt",
     "url": "https://raw.githubusercontent.com/chrisvm/node-djiparsetxt/2d9a63bc4ec308aa61a12f4f1e62c9b7905d776d/assets/flight_logs/phantom4/phantom4_0.txt",
     "sha256": "c598ad2955ae0dfad428a4fa558583fda6acf621c8edd8677992c96d090b67ac",
     "version": 11,
     "aircraft": "Phantom4Advanced",
     "source": "https://github.com/chrisvm/node-djiparsetxt",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF061/DJIFlightRecord_2018-06-19_14-08-27.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1yMEbMpWGriOzSmf1QwXaEpkuc3wyLahb&export=download&confirm=t",
+    "archive_entry": "Media01/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-06-19_[14-08-27].txt",
+    "sha256": "e95e1ddda066772fb7ed0d9c72d5404cd0b56b197eaf3fb0b06205a9a091d4bf",
+    "version": 11,
+    "aircraft": "Phantom4ProV2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF062/DJIFlightRecord_2018-06-19_14-57-20.txt",
+    "url": "https://drive.usercontent.google.com/download?id=12pd8n1NZqb22mhSEX3kv_22dZEUjdRZX&export=download&confirm=t",
+    "archive_entry": "DF062 305/Media01/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-06-19_[14-57-20].txt",
+    "sha256": "d61e1fa72279221219539517f785af4940cd806f0ae36717b1b3487b78812611",
+    "version": 11,
+    "aircraft": "Phantom4ProV2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
+    "license": "MIT"
+  },
+  {
+    "name": "vto/DF063/DJIFlightRecord_2018-06-19_15-34-56.txt",
+    "url": "https://drive.usercontent.google.com/download?id=1q8jTOJ3a0-Qa1GBigeRbkdkrtahHdivD&export=download&confirm=t",
+    "archive_entry": "Media01/sdcard/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2018-06-19_[15-34-56].txt",
+    "sha256": "e6972ec090a4ca14844c5cf721b099f5064e34c55c0754ec2f3eb82fc56e1d40",
+    "version": 11,
+    "aircraft": "Phantom4ProV2",
+    "source": "https://cfreds-archive.nist.gov/drone-images.html",
     "license": "MIT"
   },
   {

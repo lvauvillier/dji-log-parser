@@ -7,7 +7,7 @@
 #![cfg(not(target_arch = "wasm32"))]
 
 use std::collections::BTreeMap;
-use std::io::{Cursor, Read};
+use std::io::{self, Read, Seek, SeekFrom};
 use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::path::{Path, PathBuf};
 use std::{env, fs};
@@ -25,7 +25,7 @@ struct Source {
     /// Unique name, also the path of the log in the cache
     name: String,
     url: String,
-    /// Path of the log inside the zip archive downloaded from `url`
+    /// Path of the log inside the zip archive at `url`
     archive_entry: Option<String>,
     sha256: String,
 }
@@ -71,6 +71,93 @@ fn download(url: &str) -> Result<Vec<u8>, String> {
     Ok(bytes)
 }
 
+/// A remote file read with HTTP range requests: only the parts of a zip archive needed to extract
+/// a log are downloaded, not the whole archive.
+struct RemoteFile {
+    url: String,
+    size: u64,
+    position: u64,
+    /// Position and content of the last downloaded chunk
+    chunk: (u64, Vec<u8>),
+}
+
+impl RemoteFile {
+    const CHUNK_SIZE: u64 = 1 << 20;
+
+    fn open(url: &str) -> io::Result<Self> {
+        // Google Drive ignores a range of a single byte
+        let size = Self::get_range(url, 0, 1)?
+            .header("Content-Range")
+            .and_then(|range| range.rsplit('/').next()?.parse().ok())
+            .ok_or_else(|| {
+                io::Error::other(format!(
+                    "{url} doesn't support range requests, or its download quota is exceeded"
+                ))
+            })?;
+        Ok(RemoteFile {
+            url: url.to_owned(),
+            size,
+            position: 0,
+            chunk: (0, Vec::new()),
+        })
+    }
+
+    fn get_range(url: &str, start: u64, end: u64) -> io::Result<ureq::Response> {
+        ureq::get(url)
+            .set("Range", &format!("bytes={start}-{end}"))
+            .call()
+            .map_err(io::Error::other)
+    }
+}
+
+impl Read for RemoteFile {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        if self.position >= self.size {
+            return Ok(0);
+        }
+        let (start, chunk) = &self.chunk;
+        if !(*start..*start + chunk.len() as u64).contains(&self.position) {
+            let end = (self.position + Self::CHUNK_SIZE).min(self.size) - 1;
+            let mut chunk = Vec::new();
+            Self::get_range(&self.url, self.position, end)?
+                .into_reader()
+                .read_to_end(&mut chunk)?;
+            self.chunk = (self.position, chunk);
+        }
+
+        let (start, chunk) = &self.chunk;
+        let available = &chunk[(self.position - start) as usize..];
+        let count = available.len().min(buf.len());
+        buf[..count].copy_from_slice(&available[..count]);
+        self.position += count as u64;
+        Ok(count)
+    }
+}
+
+impl Seek for RemoteFile {
+    fn seek(&mut self, pos: SeekFrom) -> io::Result<u64> {
+        let position = match pos {
+            SeekFrom::Start(offset) => Some(offset),
+            SeekFrom::End(offset) => self.size.checked_add_signed(offset),
+            SeekFrom::Current(offset) => self.position.checked_add_signed(offset),
+        };
+        self.position =
+            position.ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "invalid seek"))?;
+        Ok(self.position)
+    }
+}
+
+/// Extracts a log from a remote zip archive.
+fn extract(url: &str, entry: &str) -> Result<Vec<u8>, String> {
+    let mut bytes = Vec::new();
+    RemoteFile::open(url)
+        .map_err(zip::result::ZipError::Io)
+        .and_then(zip::ZipArchive::new)
+        .and_then(|mut archive| Ok(archive.by_name(entry)?.read_to_end(&mut bytes)?))
+        .map_err(|e| format!("extract {entry} from {url}: {e}"))?;
+    Ok(bytes)
+}
+
 fn write(path: &Path, bytes: &[u8]) {
     fs::create_dir_all(path.parent().unwrap()).unwrap();
     fs::write(path, bytes).unwrap();
@@ -87,24 +174,7 @@ fn fetch(source: &Source, cache: &Path) -> Result<Vec<u8>, String> {
 
     let bytes = match &source.archive_entry {
         None => download(&source.url)?,
-        Some(entry) => {
-            let archive_path = cache
-                .join("archives")
-                .join(format!("{}.zip", sha256_hex(source.url.as_bytes())));
-            let archive = match fs::read(&archive_path) {
-                Ok(archive) => archive,
-                Err(_) => {
-                    let archive = download(&source.url)?;
-                    write(&archive_path, &archive);
-                    archive
-                }
-            };
-            let mut bytes = Vec::new();
-            zip::ZipArchive::new(Cursor::new(archive))
-                .and_then(|mut archive| Ok(archive.by_name(entry)?.read_to_end(&mut bytes)?))
-                .map_err(|e| format!("extract {entry}: {e}"))?;
-            bytes
-        }
+        Some(entry) => extract(&source.url, entry)?,
     };
 
     if sha256_hex(&bytes) != source.sha256 {
@@ -249,7 +319,7 @@ fn print_summary(reports: &[LogReport]) {
 }
 
 #[test]
-#[ignore = "downloads ~70 MB of flight logs: run with `--ignored --nocapture`, in release"]
+#[ignore = "downloads ~130 MB of flight logs: run with `--ignored --nocapture`, in release"]
 fn corpus() {
     let sources: Vec<Source> = serde_json::from_slice(
         &fs::read(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/corpus/sources.json"))
