@@ -72,7 +72,8 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
     "RC": 631,
     "Recover": 5,
     "SmartBattery": 450,
-    "Unknown": 3844
+    "SmartBatteryGroup": 1126,
+    "Unknown": 2718
   },
   "frame_count": 4515,
   "sample_frames": [
@@ -154,23 +155,23 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "rudder": 1024
         },
         "battery": {
-          "chargeLevel": 0,
-          "voltage": 0.0,
-          "current": 0.0,
-          "currentCapacity": 0,
-          "fullCapacity": 0,
+          "chargeLevel": 97,
+          "voltage": 12.755,
+          "current": 1.264,
+          "currentCapacity": 3734,
+          "fullCapacity": 3850,
           "cellNum": 3,
-          "isCellVoltageEstimated": true,
+          "isCellVoltageEstimated": false,
           "cellVoltages": [
-            0.0,
-            0.0,
-            0.0
+            4.255,
+            4.265,
+            4.26
           ],
-          "cellVoltageDeviation": 0.0,
-          "maxCellVoltageDeviation": 0.0,
-          "temperature": 0.0,
-          "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "cellVoltageDeviation": 0.01,
+          "maxCellVoltageDeviation": 0.01,
+          "temperature": 48.1,
+          "minTemperature": 48.1,
+          "maxTemperature": 48.1
         },
         "home": {
           "latitude": 0.0,
@@ -288,21 +289,21 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
         "battery": {
           "chargeLevel": 82,
           "voltage": 12.157,
-          "current": 0.0,
-          "currentCapacity": 0,
-          "fullCapacity": 0,
+          "current": 7.186,
+          "currentCapacity": 3171,
+          "fullCapacity": 3850,
           "cellNum": 3,
-          "isCellVoltageEstimated": true,
+          "isCellVoltageEstimated": false,
           "cellVoltages": [
-            4.0523334,
-            4.0523334,
-            4.0523334
+            4.05,
+            4.058,
+            4.053
           ],
-          "cellVoltageDeviation": 0.0,
-          "maxCellVoltageDeviation": 0.0,
-          "temperature": 0.0,
-          "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "cellVoltageDeviation": 0.008,
+          "maxCellVoltageDeviation": 0.011,
+          "temperature": 50.2,
+          "minTemperature": 48.1,
+          "maxTemperature": 50.3
         },
         "home": {
           "latitude": 39.96120410675419,
@@ -418,23 +419,23 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "rudder": 1024
         },
         "battery": {
-          "chargeLevel": 66,
-          "voltage": 11.757,
-          "current": 0.0,
-          "currentCapacity": 0,
-          "fullCapacity": 0,
+          "chargeLevel": 65,
+          "voltage": 11.989,
+          "current": 4.908,
+          "currentCapacity": 2388,
+          "fullCapacity": 3662,
           "cellNum": 3,
-          "isCellVoltageEstimated": true,
+          "isCellVoltageEstimated": false,
           "cellVoltages": [
-            3.919,
-            3.919,
-            3.919
+            3.912,
+            3.921,
+            3.916
           ],
-          "cellVoltageDeviation": 0.0,
-          "maxCellVoltageDeviation": 0.0,
-          "temperature": 0.0,
-          "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "cellVoltageDeviation": 0.009,
+          "maxCellVoltageDeviation": 0.021,
+          "temperature": 51.4,
+          "minTemperature": 48.1,
+          "maxTemperature": 51.4
         },
         "home": {
           "latitude": 39.96120410675419,

@@ -159,7 +159,7 @@ impl Record {
             14 => Record::AppGPS(content.read(())?),
             15 => Record::Firmware(content.read(())?),
             19 => Record::MCParams(content.read(())?),
-            22 => Record::SmartBatteryGroup(content.read::<SmartBatteryGroup>(args! { version })?),
+            22 => Record::SmartBatteryGroup(content.read::<SmartBatteryGroup>((version, length))?),
             24 => Record::AppSeriousWarn(content.read::<AppSeriousWarn>(args! { length })?),
             25 => Record::Camera(content.read(())?),
             33 => Record::VirtualStick(content.read(())?),
