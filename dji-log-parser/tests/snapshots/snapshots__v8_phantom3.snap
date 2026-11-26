@@ -209,6 +209,29 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
         "app": {
           "tip": "Flight mode changed to GPSAtti.",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": false,
+          "isCollisionAvoidanceEnabled": false,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": false,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": null,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     },
@@ -342,6 +365,29 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
         "app": {
           "tip": "",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": false,
+          "isCollisionAvoidanceEnabled": false,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": false,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": null,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     },
@@ -475,6 +521,29 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
         "app": {
           "tip": "Flight mode changed to GPSAtti.",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": false,
+          "isCollisionAvoidanceEnabled": false,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": false,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": null,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     }

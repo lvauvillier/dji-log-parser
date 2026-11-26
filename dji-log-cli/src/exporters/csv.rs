@@ -157,9 +157,30 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RECOVER.batterySerial".to_string(), // Serial number of the battery
         "APP.tip".to_string(),           // App tip
         "APP.warn".to_string(),          // App warning
-        "DETAILS.totalTime".to_string(), // Total flight time in seconds
+        "VISION.isObstacleAvoidanceEnabled".to_string(), // Indicates if obstacle avoidance is enabled
+        "VISION.isCollisionAvoidanceEnabled".to_string(), // Indicates if collision avoidance is enabled
+        "VISION.isAvoidingObstacleLegacy".to_string(), // Indicates if the aircraft is avoiding an obstacle, on older aircraft
+        "VISION.isBraking".to_string(), // Indicates if the aircraft is braking in front of an obstacle
+        "VISION.isRthObstacleAvoidanceEnabled".to_string(), // Indicates if obstacle avoidance is enabled during return to home
+        "VISION.isLandingConfirmationNeeded".to_string(), // Indicates if the landing must be confirmed by the pilot
+        "VISION.isAtDistanceLimit".to_string(), // Indicates if the aircraft is at its distance limit
+        "VISION.isAtAirportBoundary".to_string(), // Indicates if the aircraft is at the boundary of an airport zone
+        "VISION.isAvoidingObstacle".to_string(), // Indicates if the aircraft is avoiding an obstacle
+        "VISION.isNearHorizontalLimit".to_string(), // Indicates if the aircraft is near its horizontal limit
+        "VISION.isAvoidingActiveObstacle".to_string(), // Indicates if the aircraft is avoiding an obstacle moving toward it
+        "VISION.isAtLowAltitudeLimit".to_string(), // Indicates if the aircraft is at its low altitude limit
+        "VISION.isAtAirportAltitudeLimit".to_string(), // Indicates if the aircraft is at the altitude limit of an airport zone
+        "VISION.isAscentLimitedByObstacle".to_string(), // Indicates if the ascent is limited by an obstacle
+        "VISION.isAtGroundLimit".to_string(), // Indicates if the aircraft is at its limit above the ground
+        "VISION.frontDistance".to_string(), // Distance of the closest obstacle in front, in meters
+        "VISION.backDistance".to_string(),  // Distance of the closest obstacle behind, in meters
+        "VISION.rightDistance".to_string(), // Distance of the closest obstacle on the right, in meters
+        "VISION.leftDistance".to_string(), // Distance of the closest obstacle on the left, in meters
+        "VISION.topDistance".to_string(),  // Distance of the closest obstacle above, in meters
+        "VISION.bottomDistance".to_string(), // Distance of the closest obstacle below, in meters
+        "DETAILS.totalTime".to_string(),   // Total flight time in seconds
         "DETAILS.totalDistance".to_string(), // Total distance flown in meters
-        "DETAILS.maxHeight".to_string(), // Maximum height reached during the flight in meters
+        "DETAILS.maxHeight".to_string(),   // Maximum height reached during the flight in meters
         "DETAILS.maxHorizontalSpeed".to_string(), // Maximum horizontal speed reached during the flight in meters per second
         "DETAILS.maxVerticalSpeed".to_string(), // Maximum vertical speed reached during the flight in meters per second
         "DETAILS.photoNum".to_string(),         // Number of photos taken during the flight

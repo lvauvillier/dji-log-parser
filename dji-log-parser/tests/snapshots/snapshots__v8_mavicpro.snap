@@ -208,6 +208,29 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
         "app": {
           "tip": "Flight mode changed to EngineStart.",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": true,
+          "isCollisionAvoidanceEnabled": false,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": true,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": 1.0,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     },
@@ -340,6 +363,29 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
         "app": {
           "tip": "",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": true,
+          "isCollisionAvoidanceEnabled": false,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": true,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": null,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     },
@@ -472,6 +518,29 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
         "app": {
           "tip": "Flight mode changed to GPSAtti.",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": true,
+          "isCollisionAvoidanceEnabled": false,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": true,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": 4.71,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     }

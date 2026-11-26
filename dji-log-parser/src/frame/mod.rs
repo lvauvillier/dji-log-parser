@@ -19,6 +19,7 @@ mod home;
 mod osd;
 mod rc;
 mod recover;
+mod vision;
 
 pub use app::FrameApp;
 pub use battery::FrameBattery;
@@ -30,6 +31,7 @@ pub use home::FrameHome;
 pub use osd::FrameOSD;
 pub use rc::FrameRC;
 pub use recover::FrameRecover;
+pub use vision::FrameVision;
 
 /// Represents a normalized frame of data from a DJI log.
 ///
@@ -50,6 +52,7 @@ pub struct Frame {
     pub home: FrameHome,
     pub recover: FrameRecover,
     pub app: FrameApp,
+    pub vision: FrameVision,
 }
 
 impl Frame {
@@ -331,6 +334,11 @@ where
                         .copy_from_slice(&battery.cell_voltages[..cell_num]);
                 }
             },
+            Record::VisionGroup(group) => {
+                for entry in &group.entries {
+                    frame.vision.update(entry);
+                }
+            }
             Record::OFDM(ofdm) => {
                 if ofdm.is_up {
                     frame.rc.uplink_signal = Some(ofdm.signal_percent);

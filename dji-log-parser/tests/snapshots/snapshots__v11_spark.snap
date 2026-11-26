@@ -209,6 +209,29 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
         "app": {
           "tip": "Flight mode changed to Atti.",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": true,
+          "isCollisionAvoidanceEnabled": true,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": true,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": null,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     },
@@ -341,6 +364,29 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
         "app": {
           "tip": "",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": true,
+          "isCollisionAvoidanceEnabled": true,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": true,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": null,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     },
@@ -473,6 +519,29 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
         "app": {
           "tip": "Flight mode changed to GPSSport.",
           "warn": ""
+        },
+        "vision": {
+          "isObstacleAvoidanceEnabled": true,
+          "isCollisionAvoidanceEnabled": true,
+          "isAvoidingObstacleLegacy": false,
+          "isBraking": false,
+          "isRthObstacleAvoidanceEnabled": true,
+          "isLandingConfirmationNeeded": false,
+          "isAtDistanceLimit": false,
+          "isAtAirportBoundary": false,
+          "isAvoidingObstacle": false,
+          "isNearHorizontalLimit": false,
+          "isAvoidingActiveObstacle": false,
+          "isAtLowAltitudeLimit": false,
+          "isAtAirportAltitudeLimit": false,
+          "isAscentLimitedByObstacle": false,
+          "isAtGroundLimit": false,
+          "frontDistance": 60.0,
+          "backDistance": null,
+          "rightDistance": null,
+          "leftDistance": null,
+          "topDistance": null,
+          "bottomDistance": null
         }
       }
     }
