@@ -17,9 +17,18 @@ pub struct SmartBattery {
     pub land_time: u16,
     pub go_home_battery: u16,
     pub land_battery: u16,
+    /// Meaning unknown: values up to hundreds of thousands, not a radius
     pub safe_fly_radius: f32,
+    /// Meaning unknown: values up to tens of thousands
     pub volume_consume: f32,
+    /// Bits of the battery warnings
     pub status: u32,
+    /// Indicates if the low battery warning is on: the charge reached `low_warning`
+    #[br(calc(status & 0x01 != 0))]
+    pub is_low_warning: bool,
+    /// Indicates if the critical battery warning is on: the charge reached `serious_low_warning`
+    #[br(calc(status & 0x02 != 0))]
+    pub is_serious_low_warning: bool,
     #[br(map = |x: u8| BatteryGoHomeStatus::from(x))]
     pub go_home_status: BatteryGoHomeStatus,
     pub go_home_countdown: u8,
@@ -55,4 +64,23 @@ pub enum BatteryGoHomeStatus {
     #[serde(untagged)]
     #[num_enum(catch_all)]
     Unknown(u8),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use binrw::io::Cursor;
+    use binrw::BinRead;
+
+    #[test]
+    fn warning_bits_of_the_status() {
+        let mut data = [0u8; 30];
+        // Status 0x1003: bit 12 is set too, its meaning is unknown
+        data[18..22].copy_from_slice(&0x1003u32.to_le_bytes());
+
+        let battery = SmartBattery::read_le(&mut Cursor::new(data)).unwrap();
+
+        assert!(battery.is_low_warning);
+        assert!(battery.is_serious_low_warning);
+    }
 }
