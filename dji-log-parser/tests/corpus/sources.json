@@ -1398,7 +1398,7 @@
     "version": 14,
     "aircraft": "Matrice30",
     "source": "https://github.com/arpanghosh8453/open-dronelog",
-    "license": "AGPL-3.0"
+    "license": null
   },
   {
     "name": "iSensUIUC/dji-flight-log/DJIFlightRecord_2023-09-22_15-34-19.txt",
@@ -1722,7 +1722,7 @@
     "version": 14,
     "aircraft": "Mavic3Enterprise",
     "source": "https://github.com/lvauvillier/dji-log-parser",
-    "license": "MIT"
+    "license": null
   },
   {
     "name": "lvauvillier/dji-log-parser/issue21_3.txt",
@@ -1731,7 +1731,7 @@
     "version": 14,
     "aircraft": "Mavic3Enterprise",
     "source": "https://github.com/lvauvillier/dji-log-parser",
-    "license": "MIT"
+    "license": null
   },
   {
     "name": "TheRobBrennan/dji-flight-record-review/DJIFlightRecord_2021-09-05_19-47-57.txt",
@@ -1758,6 +1758,141 @@
     "version": 14,
     "aircraft": "Mini4Pro",
     "source": "https://github.com/ammar321an/decryption-dji-log",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue3_DJIFlightRecord_2026-01-10_09-38-26.txt",
+    "url": "https://github.com/user-attachments/files/25156228/DJIFlightRecord_2026-01-10_.09-38-26.txt",
+    "sha256": "69b6956e2d16ead14bf223bcea77eb4cb2f02bc597ba52bd0f158fac88a9d8aa",
+    "version": 14,
+    "aircraft": "Mini4Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue56_DJIFlightRecord_2024-12-05_14-53-55.txt",
+    "url": "https://github.com/user-attachments/files/25445084/DJIFlightRecord_2024-12-05_.14-53-55.txt",
+    "sha256": "f9b28a4c1b33d6ed9e954f41f2b12292c97a2f5ad4da4885fdff1d9d7e1235af",
+    "version": 11,
+    "aircraft": "Mavic2",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue63_DJIFlightRecord_2024-09-08_12-54-46.txt",
+    "url": "https://github.com/user-attachments/files/25471529/DJIFlightRecord_2024-09-08_.12-54-46.txt",
+    "sha256": "5bce7fb172050089aeb73562bf29bd387234efa8df603f027c29027a41c42bec",
+    "version": 14,
+    "aircraft": "Mavic3Enterprise",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue63_DJIFlightRecord_2025-11-08_13-45-30.txt",
+    "url": "https://github.com/user-attachments/files/25471524/DJIFlightRecord_2025-11-08_.13-45-30.txt",
+    "sha256": "38316c9f40103edcad38a3269157064e0d4fb42c4bedaedad6a448924fae733d",
+    "version": 14,
+    "aircraft": "Mavic3Enterprise",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue88_DJIFlightRecord_2025-06-01_13-52-26.txt",
+    "url": "https://github.com/user-attachments/files/25609583/DJIFlightRecord_2025-06-01_.13-52-26.txt",
+    "sha256": "0006f1948b34fdc7cfa07e8288ed129eed72944a81d8269ddcbf0072316971c4",
+    "version": 11,
+    "aircraft": "Phantom4Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue110_DJIFlightRecord_2026-01-03_15-26-01.txt",
+    "url": "https://github.com/user-attachments/files/25749627/DJIFlightRecord_2026-01-03_.15-26-01.txt",
+    "sha256": "457b0011f9e881b319df1516faba57c18e2c3e9554bd0aad88dd69bccd827c54",
+    "version": 14,
+    "aircraft": "Mini4Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue113_FlightRecord_2026-03-02_16-38-43.txt",
+    "url": "https://github.com/user-attachments/files/25743209/FlightRecord_2026-03-02_.16-38-43.txt",
+    "sha256": "8ec2c8c61c4155798be55f79ad2a7530cae158e6f682b214a8f474dbd9282f67",
+    "version": 14,
+    "aircraft": "Mini5Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue154_FlightRecord_2026-01-25_20-38-38.txt",
+    "url": "https://github.com/user-attachments/files/26073829/FlightRecord_2026-01-25_.20-38-38.txt",
+    "sha256": "96dd0a7c6c6193e2e586e5f98e8914180ffe33a1919aaf7d96183fc78268cf63",
+    "version": 14,
+    "aircraft": "Unknown(185)",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue182_DJIFlightRecord_2026-02-26_15-12-20.txt",
+    "url": "https://github.com/user-attachments/files/27011346/DJIFlightRecord_2026-02-26_.15-12-20.txt",
+    "sha256": "89ac8a91ad59dd5e54b386a335dbc48dba1c535c8f6c3f809d9daa75667e1d8a",
+    "version": 14,
+    "aircraft": "Unknown(181)",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue187_FlightRecord_2026-04-26_09-11-57.txt",
+    "url": "https://github.com/user-attachments/files/27101085/FlightRecord_2026-04-26_.09-11-57.txt",
+    "sha256": "54acbce00628a359eba5f263d507015d2037a63da606f2a113387c57ef033dce",
+    "version": 14,
+    "aircraft": "Neo2",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue199_FlightRecord_2026-05-13_17-33-48.txt",
+    "url": "https://github.com/user-attachments/files/27775589/FlightRecord_2026-05-13_.17-33-48.txt",
+    "sha256": "1b562eb64ffa7fa9010432c8d8d4329b0645217b580458a9b64382187ead1934",
+    "version": 14,
+    "aircraft": "Mini5Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue215_FlightRecord_2026-07-03_20-14-49.txt",
+    "url": "https://github.com/user-attachments/files/30507928/FlightRecord_2026-07-03_.20-14-49.txt",
+    "sha256": "3b38bfe0c2f4b54ce73c7d00ea2ce38e1ca3ef27d48ad49a2f0cf7dcc0a26bd2",
+    "version": 14,
+    "aircraft": "Mini5Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue215_FlightRecord_2026-07-27_13-01-54.txt",
+    "url": "https://github.com/user-attachments/files/30507929/FlightRecord_2026-07-27_.13-01-54.txt",
+    "sha256": "ae94a17a77505ae154c2613178f130bead1788f5d7a418cda6e7d90642a58622",
+    "version": 14,
+    "aircraft": "Mini5Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue225_FlightRecord_2026-09-18_17-53-35.txt",
+    "url": "https://github.com/user-attachments/files/32474068/FlightRecord_2026-09-18_.17-53-35.txt",
+    "sha256": "0cebc561be4f5803874ddebf0ec3dea4bcaaaf7904b34263708079d345f511e5",
+    "version": 14,
+    "aircraft": "Mavic4Pro",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
+    "license": null
+  },
+  {
+    "name": "arpanghosh8453/open-dronelog/issue226_FlightRecord_2026-06-08_22-45-06.1.txt",
+    "url": "https://github.com/user-attachments/files/32489055/FlightRecord_2026-06-08_.22-45-06.1.txt",
+    "sha256": "d9fc541477e172bdb1441f5af5aa4a8f188db25492d671220eb9a063fb8cf876",
+    "version": 14,
+    "aircraft": "LitoX1",
+    "source": "https://github.com/arpanghosh8453/open-dronelog",
     "license": null
   }
 ]

@@ -165,11 +165,16 @@ pub enum ProductType {
     Mavic3Enterprise = 118,
     Avata = 121,
     Mini4Pro = 126,
+    Mavic4Pro = 137,
     Mini5Pro = 139,
     Avata2 = 152,
+    Neo2 = 158,
+    LitoX1 = 165,
     Matrice350RTK = 170,
+    Matrice400 = 181,
     Neo = 182,
     Flip = 183,
+    Air3S = 185,
     #[serde(untagged)]
     #[num_enum(catch_all)]
     Unknown(u8),
@@ -237,6 +242,11 @@ impl ProductType {
             ProductType::Matrice350RTK => 12,
             ProductType::Neo => 2,
             ProductType::Flip => 2,
+            ProductType::Mavic4Pro => 4,
+            ProductType::Neo2 => 2,
+            ProductType::LitoX1 => 2,
+            ProductType::Matrice400 => 13,
+            ProductType::Air3S => 4,
             _ => 4,
         }
     }
@@ -294,6 +304,11 @@ impl ProductType {
             ProductType::Matrice350RTK => 2,
             ProductType::Neo => 1,
             ProductType::Flip => 1,
+            ProductType::Mavic4Pro => 1,
+            ProductType::Neo2 => 1,
+            ProductType::LitoX1 => 1,
+            ProductType::Matrice400 => 1,
+            ProductType::Air3S => 1,
             _ => 1,
         }
     }

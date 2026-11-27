@@ -5,7 +5,7 @@ use tsify_next::Tsify;
 
 /// RTK positioning of the drone, about once per second.
 ///
-/// The layout of 83 bytes of the Matrice 4 and Matrice 400, with QZSS satellites, isn't read.
+/// Recent aircraft, such as the Matrice 400, add the QZSS satellites at the end.
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -52,18 +52,18 @@ pub struct RTKDifference {
     pub std_altitude: f32,
     #[br(temp)]
     galileo: [u8; 3],
+    /// Zeros in the records without them, read as unknown counts
     #[br(temp)]
-    #[br(assert(qzss & 0x01 == 0, "RTK layout with QZSS satellites"))]
-    qzss: u8,
+    qzss: [u8; 3],
 
     /// Satellites of the main antenna of the drone
-    #[br(calc = RtkSatellites::new(&satellites[0..3], galileo[0]))]
+    #[br(calc = RtkSatellites::new(&satellites[0..3], galileo[0], qzss[0]))]
     pub antenna1_satellites: RtkSatellites,
     /// Satellites of the second antenna of the drone
-    #[br(calc = RtkSatellites::new(&satellites[3..6], galileo[1]))]
+    #[br(calc = RtkSatellites::new(&satellites[3..6], galileo[1], qzss[1]))]
     pub antenna2_satellites: RtkSatellites,
     /// Satellites of the base station
-    #[br(calc = RtkSatellites::new(&satellites[6..9], galileo[2]))]
+    #[br(calc = RtkSatellites::new(&satellites[6..9], galileo[2], qzss[2]))]
     pub base_station_satellites: RtkSatellites,
 }
 
@@ -109,16 +109,19 @@ pub struct RtkSatellites {
     pub glonass: Option<u8>,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub galileo: Option<u8>,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub qzss: Option<u8>,
 }
 
 impl RtkSatellites {
-    /// Reads the counts of GPS, BeiDou and GLONASS satellites, then Galileo
-    fn new(counts: &[u8], galileo: u8) -> Self {
+    /// Reads the counts of GPS, BeiDou and GLONASS satellites, then Galileo and QZSS
+    fn new(counts: &[u8], galileo: u8, qzss: u8) -> Self {
         RtkSatellites {
             gps: satellite_count(counts[0]),
             beidou: satellite_count(counts[1]),
             glonass: satellite_count(counts[2]),
             galileo: satellite_count(galileo),
+            qzss: satellite_count(qzss),
         }
     }
 }
@@ -184,10 +187,19 @@ mod tests {
     }
 
     #[test]
-    fn layout_with_qzss_satellites_is_rejected() {
+    fn qzss_satellites() {
         let mut hex = "00".repeat(80);
-        hex.push_str("03");
+        hex.push_str("050301");
 
-        assert!(read(&hex).is_err());
+        let rtk = read(&hex).unwrap();
+        assert_eq!(rtk.antenna1_satellites.qzss, Some(2));
+        assert_eq!(rtk.antenna2_satellites.qzss, Some(1));
+        assert_eq!(rtk.base_station_satellites.qzss, Some(0));
+    }
+
+    #[test]
+    fn qzss_satellites_are_unknown_in_the_records_without_them() {
+        let rtk = read(&"00".repeat(80)).unwrap();
+        assert_eq!(rtk.antenna1_satellites.qzss, None);
     }
 }

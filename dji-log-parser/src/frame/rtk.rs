@@ -45,6 +45,7 @@ impl FrameRTK {
             satellites.beidou,
             satellites.glonass,
             satellites.galileo,
+            satellites.qzss,
         ]
         .into_iter()
         .flatten()

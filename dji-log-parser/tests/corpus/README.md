@@ -10,7 +10,8 @@ The logs come from GitHub repositories and issues, and from the
 whose logs are extracted from mobile device backups hosted on Google Drive.
 
 `sources.json` lists each log with its url (pinned to a commit for GitHub), version, aircraft,
-source and license (`null` when the source has no license).
+source and license (`null` when the source has no license, as the files attached to issues, which
+belong to their authors rather than to the repository).
 
 ## Running
 
