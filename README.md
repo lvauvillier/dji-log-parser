@@ -26,7 +26,7 @@ To acquire an apiKey, follow these steps:
 1. Visit [DJI Developer Technologies](https://developer.dji.com/user) and log in.
 2. Click `CREATE APP`, choose `Open API` as the App Type, and provide the necessary details like `App Name`, `Category`, and `Description`.
 3. After creating the app, activate it through the link sent to your email.
-4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key).
+4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key or App Key).
 
 ## Cli Usage
 
