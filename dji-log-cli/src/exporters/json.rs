@@ -4,10 +4,10 @@ use dji_log_parser::layout::details::Details;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use serde::Serialize;
-use std::fs::File;
+
 use std::io::Write;
 
-use crate::{Cli, Exporter};
+use crate::{write_file, Cli, ExportResult, Exporter};
 
 #[derive(Serialize, Debug)]
 struct RecordJsonData<'a> {
@@ -26,7 +26,13 @@ struct FrameJsonData<'a> {
 pub struct JsonExporter;
 
 impl Exporter for JsonExporter {
-    fn export(&self, parser: &DJILog, records: &[Record], frames: &[Frame], args: &Cli) {
+    fn export(
+        &self,
+        parser: &DJILog,
+        records: &[Record],
+        frames: &[Frame],
+        args: &Cli,
+    ) -> ExportResult {
         let json_data = if args.raw {
             serde_json::to_string(&RecordJsonData {
                 version: parser.version,
@@ -43,23 +49,30 @@ impl Exporter for JsonExporter {
                         )
                     })
                     .collect(),
-            })
-            .unwrap()
+            })?
         } else {
             serde_json::to_string(&FrameJsonData {
                 version: parser.version,
                 details: parser.details.clone().into(),
                 frames,
-            })
-            .unwrap()
+            })?
         };
 
         if let Some(output_path) = &args.output {
-            let mut file = File::create(output_path).expect("Unable to create output file");
-            file.write_all(json_data.as_bytes())
-                .expect("Unable to write data");
+            write_file(output_path, json_data.as_bytes())?;
         } else {
-            println!("{json_data}");
+            let mut stdout = std::io::stdout().lock();
+            let written = stdout
+                .write_all(json_data.as_bytes())
+                .and_then(|()| stdout.write_all(b"\n"));
+            // A closed output, such as a pipe to head, isn't an error
+            match written {
+                Err(error) if error.kind() != std::io::ErrorKind::BrokenPipe => {
+                    return Err(error.into())
+                }
+                _ => {}
+            }
         }
+        Ok(())
     }
 }

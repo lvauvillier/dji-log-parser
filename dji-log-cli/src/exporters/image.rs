@@ -8,11 +8,10 @@ use exif::{Field, In, Rational, Tag, Value};
 use img_parts::jpeg::Jpeg;
 use img_parts::{Bytes, ImageEXIF};
 use std::fs::File;
-use std::io::Write;
 use std::path::Path;
 
 use crate::utils::decimal_to_dms;
-use crate::{Cli, Exporter};
+use crate::{write_file, Cli, ExportResult, Exporter};
 
 struct ExifInfo {
     datetime: DateTime<Utc>,
@@ -24,7 +23,13 @@ struct ExifInfo {
 pub struct ImageExporter;
 
 impl Exporter for ImageExporter {
-    fn export(&self, parser: &DJILog, records: &[Record], frames: &[Frame], args: &Cli) {
+    fn export(
+        &self,
+        parser: &DJILog,
+        records: &[Record],
+        frames: &[Frame],
+        args: &Cli,
+    ) -> ExportResult {
         // Get fallback GPS point from track in case of no GPS available on startup
         let mut fallback_latitude = 0.0;
         let mut fallback_longitude = 0.0;
@@ -46,7 +51,7 @@ impl Exporter for ImageExporter {
         // Export Images
         if let Some(image_path) = &args.images {
             let mut index = 0;
-            records.iter().for_each(|record| {
+            for record in records {
                 if let Record::JPEG(data) = record {
                     if index < 4
                         && parser.details.moment_pic_image_buffer_len[index] == data.len() as i32
@@ -73,17 +78,17 @@ impl Exporter for ImageExporter {
                                 },
                                 model: parser.details.product_type,
                             },
-                        );
+                        )?;
                         index += 1;
                     }
                 }
-            });
+            }
         }
 
         // Export Thumbnails
         if let Some(thumbnails_path) = &args.thumbnails {
             let mut index = 0;
-            records.iter().for_each(|record| {
+            for record in records {
                 if let Record::JPEG(data) = record {
                     if index < 4
                         && parser.details.moment_pic_shrink_image_buffer_len[index]
@@ -111,27 +116,27 @@ impl Exporter for ImageExporter {
                                 },
                                 model: parser.details.product_type,
                             },
-                        );
+                        )?;
                         index += 1;
                     }
                 }
-            });
+            }
         }
+        Ok(())
     }
 }
 
 impl ImageExporter {
-    fn save_image_with_exif_metadata(&self, data: &[u8], file_name: String, info: ExifInfo) {
-        let jpeg_result = Jpeg::from_bytes(Bytes::copy_from_slice(data));
-
-        if jpeg_result.is_err() {
+    fn save_image_with_exif_metadata(
+        &self,
+        data: &[u8],
+        file_name: String,
+        info: ExifInfo,
+    ) -> ExportResult {
+        let Ok(mut jpeg) = Jpeg::from_bytes(Bytes::copy_from_slice(data)) else {
             // Don't add exif metadata if JPEG creation fails
-            let mut file = File::create(Path::new(&file_name)).unwrap();
-            file.write_all(data).unwrap();
-            return;
-        }
-
-        let mut jpeg = jpeg_result.unwrap();
+            return write_file(&file_name, data);
+        };
         let mut writer = Writer::new();
 
         // Set Latitude
@@ -211,7 +216,7 @@ impl ImageExporter {
         writer.push_field(&make);
 
         // Set Model
-        let model_name = serde_json::to_string(&info.model).unwrap();
+        let model_name = serde_json::to_string(&info.model)?;
         let model = Field {
             tag: Tag::Model,
             ifd_num: In::PRIMARY,
@@ -225,13 +230,15 @@ impl ImageExporter {
         writer.push_field(&model);
 
         let mut buf = std::io::Cursor::new(Vec::new());
-        writer.write(&mut buf, false).unwrap();
+        writer.write(&mut buf, false)?;
 
         jpeg.set_exif(Some(Bytes::from(buf.into_inner())));
 
-        let file = File::create(Path::new(&file_name)).expect("Unable to create image file");
+        let file = File::create(Path::new(&file_name))
+            .map_err(|error| format!("unable to write {file_name}: {error}"))?;
         jpeg.encoder()
             .write_to(file)
-            .expect("Unable to write image file");
+            .map_err(|error| format!("unable to write {file_name}: {error}"))?;
+        Ok(())
     }
 }

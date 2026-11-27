@@ -2,14 +2,19 @@ use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use geojson::{Feature, GeoJson, Geometry, GeometryValue, JsonObject, JsonValue, Position};
-use std::{fs::File, io::Write};
 
-use crate::{Cli, Exporter};
+use crate::{write_file, Cli, ExportResult, Exporter};
 
 pub struct GeoJsonExporter;
 
 impl Exporter for GeoJsonExporter {
-    fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
+    fn export(
+        &self,
+        parser: &DJILog,
+        _records: &[Record],
+        frames: &[Frame],
+        args: &Cli,
+    ) -> ExportResult {
         if let Some(geojson_path) = &args.geojson {
             // Create a line string from all the coords.
             let mut coords = vec![];
@@ -147,7 +152,7 @@ impl Exporter for GeoJsonExporter {
                     .map(JsonValue::Number)
                     .unwrap_or(JsonValue::Null),
             );
-            let product_type = serde_json::to_string(&details.product_type).unwrap();
+            let product_type = serde_json::to_string(&details.product_type)?;
             properties.insert(
                 "productType".to_string(),
                 // product_type is an enum. Serialize it to JSON.
@@ -175,9 +180,8 @@ impl Exporter for GeoJsonExporter {
             };
             let geojson = GeoJson::Feature(feature);
             let geojson_string = geojson.to_string();
-            let mut file = File::create(geojson_path).expect("Unable to create GeoJSON file");
-            file.write_all(geojson_string.as_bytes())
-                .expect("Unable to write GeoJSON data");
+            write_file(geojson_path, geojson_string.as_bytes())?;
         }
+        Ok(())
     }
 }

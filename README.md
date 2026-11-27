@@ -46,6 +46,20 @@ or with an output arg
 dji-log --api-key __DJI_API_KEY__ --output frames.json DJIFlightRecord.txt
 ```
 
+The Api Key can also be set in the `DJI_API_KEY` environment variable:
+
+```bash
+export DJI_API_KEY=__DJI_API_KEY__
+dji-log --output frames.json DJIFlightRecord.txt
+```
+
+Keychains can be saved once fetched, to read the log again offline:
+
+```bash
+dji-log --save-keychains keychains.json --output frames.json DJIFlightRecord.txt
+dji-log --keychains keychains.json --csv frames.csv DJIFlightRecord.txt
+```
+
 ### Additional Options
 
 - `--raw`: Export raw records instead of normalized frames
@@ -59,8 +73,9 @@ Use `%d` in the images or thumbnails option to specify a sequence.
 
 ### Advanced Options
 
-- `--api-custom-department`: Manually set the department on keychains apis request
-- `--api-custom-version`: Manually set the department on keychains apis request
+- `--api-custom-department`: Manually set the department on keychains apis request. Without it,
+  the departments of the DJI apps are tried when the one of the log is rejected
+- `--api-custom-version`: Manually set the version on keychains apis request
 
 For a complete list of options, run:
 

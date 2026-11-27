@@ -5,7 +5,7 @@ use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
 use serde::Serialize;
 
-use crate::{Cli, Exporter};
+use crate::{Cli, ExportResult, Exporter};
 
 #[derive(Serialize)]
 struct FrameWithDetails<'a> {
@@ -17,16 +17,22 @@ struct FrameWithDetails<'a> {
 pub struct CSVExporter;
 
 impl Exporter for CSVExporter {
-    fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
+    fn export(
+        &self,
+        parser: &DJILog,
+        _records: &[Record],
+        frames: &[Frame],
+        args: &Cli,
+    ) -> ExportResult {
         if let Some(csv_path) = &args.csv {
             let mut writer = WriterBuilder::new()
                 .has_headers(false)
                 .from_path(csv_path)
-                .unwrap();
+                .map_err(|error| format!("unable to write {csv_path}: {error}"))?;
 
             let details: FrameDetails = parser.details.clone().into();
             let Some(first_frame) = frames.first() else {
-                return;
+                return Ok(());
             };
 
             // The columns of the separate batteries, of the RTK, of the sticks and position of the
@@ -131,20 +137,23 @@ impl Exporter for CSVExporter {
                     .collect()
             };
 
-            writer.write_record(keep(headers)).unwrap();
+            writer.write_record(keep(headers))?;
             for frame in frames {
                 let fields = serialize_fields(&FrameWithDetails {
                     frame,
                     details: &details,
                 });
-                writer.write_record(keep(fields)).unwrap();
+                writer.write_record(keep(fields))?;
             }
+            writer.flush()?;
         }
+        Ok(())
     }
 }
 
 /// Fields of a row, as the CSV writer serializes them.
 fn serialize_fields(row: &FrameWithDetails) -> Vec<String> {
+    // Writing to memory fails only if the row can't be serialized, which isn't the case of frames
     let mut row_writer = WriterBuilder::new()
         .has_headers(false)
         .from_writer(Vec::new());

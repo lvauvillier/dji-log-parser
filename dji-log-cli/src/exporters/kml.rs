@@ -4,15 +4,19 @@ use dji_log_parser::DJILog;
 use kml::types::{AltitudeMode, Coord, Geometry, LineString, Placemark};
 use kml::{Kml, KmlDocument, KmlVersion, KmlWriter};
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::Write;
 
-use crate::{Cli, Exporter};
+use crate::{write_file, Cli, ExportResult, Exporter};
 
 pub struct KmlExporter;
 
 impl Exporter for KmlExporter {
-    fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
+    fn export(
+        &self,
+        parser: &DJILog,
+        _records: &[Record],
+        frames: &[Frame],
+        args: &Cli,
+    ) -> ExportResult {
         if let Some(kml_path) = &args.kml {
             let mut coords = vec![];
 
@@ -61,10 +65,10 @@ impl Exporter for KmlExporter {
 
             let mut buf = Vec::new();
             let mut writer = KmlWriter::from_writer(&mut buf);
-            writer.write(&kml).unwrap();
+            writer.write(&kml)?;
 
-            let mut file = File::create(kml_path).expect("Unable to create KML file");
-            file.write_all(&buf).expect("Unable to write KML data");
+            write_file(kml_path, &buf)?;
         }
+        Ok(())
     }
 }

@@ -24,7 +24,7 @@ base64 = "0.23"
 binrw = "0.15"
 cbc = "0.2.1"
 chrono = { version = "0.4.45", features = ["serde"] }
-clap = { version = "4.6", features = ["derive"] }
+clap = { version = "4.6", features = ["derive", "env"] }
 crc64 = "2.0.0"
 csv = "1.4"
 geojson = "1.0"
