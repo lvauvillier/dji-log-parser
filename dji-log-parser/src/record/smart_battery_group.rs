@@ -1,8 +1,11 @@
 use binrw::io::{Read, Seek};
 use binrw::{binread, BinRead, BinResult, Endian};
+use chrono::NaiveDate;
 use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
+
+use crate::utils::c_string;
 
 #[derive(Serialize, Debug)]
 #[serde(tag = "type")]
@@ -48,7 +51,7 @@ impl BinRead for SmartBatteryGroup {
 #[binread]
 #[br(little, import(version: u8, length: u16))]
 enum Layout {
-    #[br(magic = 1u8, pre_assert(length >= 41))]
+    #[br(magic = 1u8, pre_assert(length >= 41), assert(self_0.is_plausible()))]
     Static(#[br(args { version })] SmartBatteryStatic),
     #[br(magic = 2u8, assert(self_0.is_plausible()))]
     Dynamic(SmartBatteryDynamic),
@@ -95,16 +98,39 @@ pub struct SmartBatteryStatic {
     pub designed_capacity: u32,
     pub loop_times: u16,
     pub full_voltage: u32,
-    #[br(temp)]
-    _unknown: u16,
+    #[br(map = production_date)]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "string | null"))]
+    pub production_date: Option<NaiveDate>,
     serial_number: u16,
-    #[br(temp)]
-    _unknown2: [u8; 10],
-    #[br(temp)]
-    _unknown3: [u8; 5],
+    /// Manufacturer of the cells, such as `ATL`
+    #[br(count = 10, map = c_string)]
+    pub manufacturer: String,
+    /// Code of the battery model, such as `BA01`
+    #[br(count = 5, map = c_string)]
+    pub model: String,
     pub version_number: [u8; 8],
+    /// Percentage
     pub battery_life: u8,
+    /// Identifier of the battery model in recent logs (100 for the Mini 2, 104 for the Neo…), 0
+    /// in most older logs
     pub battery_type: u8,
+}
+
+impl SmartBatteryStatic {
+    /// Whether the capacity and the voltage are those of a battery
+    fn is_plausible(&self) -> bool {
+        const MAX: u32 = 100_000;
+        self.designed_capacity < MAX && self.full_voltage < MAX
+    }
+}
+
+/// Date packed in 16 bits: years since 1980, month and day.
+fn production_date(date: u16) -> Option<NaiveDate> {
+    NaiveDate::from_ymd_opt(
+        1980 + i32::from(date >> 9),
+        u32::from((date >> 5) & 0xF),
+        u32::from(date & 0x1F),
+    )
 }
 
 #[binread]
@@ -186,6 +212,42 @@ mod tests {
             SmartBatteryGroup::SmartBatterySingleVoltage(info) => info,
             group => panic!("not cell voltages: {group:?}"),
         }
+    }
+
+    fn hex(text: &str) -> Vec<u8> {
+        (0..text.len())
+            .step_by(2)
+            .map(|i| u8::from_str_radix(&text[i..i + 2], 16).unwrap())
+            .collect()
+    }
+
+    /// Static record of a Mavic 2 battery.
+    #[test]
+    fn static_information() {
+        let data = hex(concat!(
+            "01000a0f00000b00283c0000544dae03544c204e565400000000",
+            "4d3234300000000000000000006400",
+        ));
+
+        let SmartBatteryGroup::SmartBatteryStatic(info) = read(11, &data) else {
+            panic!("not static information");
+        };
+        assert_eq!(info.designed_capacity, 3850);
+        assert_eq!(info.loop_times, 11);
+        assert_eq!(info.full_voltage, 15400);
+        assert_eq!(info.production_date, NaiveDate::from_ymd_opt(2018, 10, 20));
+        assert_eq!(info.manufacturer, "TL NVT");
+        assert_eq!(info.model, "M240");
+        assert_eq!(info.battery_life, 100);
+    }
+
+    #[test]
+    fn static_information_with_impossible_values_is_rejected() {
+        let mut data = vec![0x01, 0x00, 0x10, 0x4b, 0x48, 0x41];
+        data.resize(41, 0);
+        let length = data.len() as u16;
+
+        assert!(SmartBatteryGroup::read_le_args(&mut Cursor::new(&data), (8, length)).is_err());
     }
 
     /// Records of the second battery of an Inspire 2, in 2018 and in 2017.
