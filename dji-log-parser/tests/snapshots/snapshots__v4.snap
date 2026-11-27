@@ -377,7 +377,7 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
         "battery": {
           "chargeLevel": 85,
           "voltage": 15.504,
-          "current": 0.0,
+          "current": 9.263,
           "currentCapacity": 3696,
           "fullCapacity": 4349,
           "cellNum": 4,
@@ -591,7 +591,7 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
         "battery": {
           "chargeLevel": 82,
           "voltage": 15.865,
-          "current": 0.0,
+          "current": 11.895,
           "currentCapacity": 3566,
           "fullCapacity": 4349,
           "cellNum": 4,

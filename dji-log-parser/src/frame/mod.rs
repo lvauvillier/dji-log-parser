@@ -379,9 +379,13 @@ impl FrameBuilder {
             Record::CenterBattery(battery) => {
                 frame.battery.charge_level = battery.relative_capacity;
                 frame.battery.voltage = battery.voltage;
+                frame.battery.current = battery.current.abs();
                 frame.battery.current_capacity = battery.current_capacity as u32;
                 frame.battery.full_capacity = battery.full_capacity as u32;
-                frame.battery.full_capacity = battery.full_capacity as u32;
+                // Not recorded before version 8
+                if battery.temperature != 0.0 {
+                    frame.battery.temperature = battery.temperature;
+                }
                 frame.battery.is_cell_voltage_estimated = false;
 
                 let cell_num = frame.battery.cell_voltages.len();
