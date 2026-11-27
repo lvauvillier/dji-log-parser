@@ -220,7 +220,7 @@ where
                 frame.osd.flight_action = Some(osd.flight_action);
                 frame.osd.gps_num = osd.gps_num;
                 frame.osd.gps_level = osd.gps_level;
-                frame.osd.is_gpd_used = osd.is_gps_valid;
+                frame.osd.is_gps_used = osd.is_gps_valid;
                 frame.osd.non_gps_cause = Some(osd.non_gps_cause);
                 frame.osd.drone_type = Some(osd.drone_type);
                 frame.osd.is_swave_work = osd.is_swave_work;
@@ -233,7 +233,7 @@ where
                 frame.osd.motor_start_failed_cause = Some(osd.motor_start_failed_cause);
                 frame.osd.is_imu_preheated = osd.is_imu_preheated;
                 frame.osd.imu_init_fail_reason = Some(osd.imu_init_fail_reason);
-                frame.osd.is_acceletor_over_range = osd.is_acceletor_over_range;
+                frame.osd.is_accelerometer_over_range = osd.is_accelerometer_over_range;
                 frame.osd.is_barometer_dead_in_air = osd.is_barometer_dead_in_air;
                 frame.osd.is_compass_error = osd.is_compass_error;
                 frame.osd.is_go_home_height_modified = osd.is_go_home_height_modified;

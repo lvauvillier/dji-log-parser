@@ -53,7 +53,7 @@ pub struct FrameOSD {
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub flight_action: Option<FlightAction>,
     /// Indicates if GPS is being used
-    pub is_gpd_used: bool,
+    pub is_gps_used: bool,
     /// Reason for not using GPS
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub non_gps_cause: Option<NonGPSCause>,
@@ -89,7 +89,7 @@ pub struct FrameOSD {
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub imu_init_fail_reason: Option<ImuInitFailReason>,
     /// Indicates if the accelerometer is over range
-    pub is_acceletor_over_range: bool,
+    pub is_accelerometer_over_range: bool,
     /// Indicates if the barometer is malfunctioning in air
     pub is_barometer_dead_in_air: bool,
     /// Indicates if there's a compass error

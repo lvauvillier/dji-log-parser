@@ -123,7 +123,7 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "OSD.motorStartFailedCause".to_string(), // Reason for motor start failure
         "OSD.isImuPreheated".to_string(), // Indicates if the IMU is preheated
         "OSD.imuInitFailReason".to_string(), // Reason for IMU initialization failure
-        "OSD.isAcceleratorOverRange".to_string(), // Indicates if the accelerometer is over range
+        "OSD.isAccelerometerOverRange".to_string(), // Indicates if the accelerometer is over range
         "OSD.isBarometerDeadInAir".to_string(), // Indicates if the barometer is malfunctioning in air
         "OSD.isCompassError".to_string(),       // Indicates if there's a compass error
         "OSD.isGoHomeHeightModified".to_string(), // Indicates if the return-to-home height has been modified

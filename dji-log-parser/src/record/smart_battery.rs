@@ -17,10 +17,9 @@ pub struct SmartBattery {
     pub land_time: u16,
     pub go_home_battery: u16,
     pub land_battery: u16,
-    /// Meaning unknown: values up to hundreds of thousands, not a radius
-    pub safe_fly_radius: f32,
-    /// Meaning unknown: values up to tens of thousands
-    pub volume_consume: f32,
+    /// Two `f32` of unknown meaning: values up to hundreds of thousands
+    #[br(temp)]
+    _unknown: [f32; 2],
     /// Bits of the battery warnings
     pub status: u32,
     /// Indicates if the low battery warning is on: the charge reached `low_warning`

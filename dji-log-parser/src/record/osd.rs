@@ -106,7 +106,7 @@ pub struct OSD {
     #[br(calc(sub_byte_field(_bitpack5, 0x40) == 1))]
     pub is_vibrating: bool,
     #[br(calc(sub_byte_field(_bitpack5, 0x80) == 1))]
-    pub is_acceletor_over_range: bool,
+    pub is_accelerometer_over_range: bool,
 
     pub gps_num: u8,
     #[br(map = |x: u8| FlightAction::from(x))]
