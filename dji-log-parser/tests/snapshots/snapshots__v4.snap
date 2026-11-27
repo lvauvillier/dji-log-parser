@@ -130,7 +130,10 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 0.0
+          "mileage": 0.0,
+          "hSpeed": 0.0,
+          "hSpeedMax": 0.0,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -159,7 +162,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": null
         },
         "battery": {
           "chargeLevel": 0,
@@ -186,7 +190,12 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "goHomeBattery": null,
           "landBattery": null,
           "lowWarning": 30,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -223,7 +232,10 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "goHomeHeight": 0,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 0
+          "currentFlightRecordIndex": 0,
+          "aircraftHeadDirection": 0,
+          "distance": 0.0,
+          "distanceMax": 0.0
         },
         "recover": {
           "appPlatform": null,
@@ -244,7 +256,9 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -355,7 +369,10 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 18.125015
+          "mileage": 18.125015,
+          "hSpeed": 0.1,
+          "hSpeedMax": 2.745906,
+          "directionOfTravel": 195.06511
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -384,7 +401,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.018181818,
-          "rudderNormalized": 0.13030303
+          "rudderNormalized": 0.13030303,
+          "failSafeAction": null
         },
         "battery": {
           "chargeLevel": 85,
@@ -411,7 +429,12 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "goHomeBattery": 15,
           "landBattery": 10,
           "lowWarning": 30,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -448,7 +471,10 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "goHomeHeight": 30,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 25
+          "currentFlightRecordIndex": 25,
+          "aircraftHeadDirection": 1,
+          "distance": 10.246935,
+          "distanceMax": 10.326388
         },
         "recover": {
           "appPlatform": "Android",
@@ -469,7 +495,9 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -580,7 +608,10 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 30.773424
+          "mileage": 30.773424,
+          "hSpeed": 0.0,
+          "hSpeedMax": 2.745906,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -609,7 +640,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": -1.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": null
         },
         "battery": {
           "chargeLevel": 82,
@@ -636,7 +668,12 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "goHomeBattery": 17,
           "landBattery": 10,
           "lowWarning": 30,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -673,7 +710,10 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "goHomeHeight": 30,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 25
+          "currentFlightRecordIndex": 25,
+          "aircraftHeadDirection": 1,
+          "distance": 4.528088,
+          "distanceMax": 10.556068
         },
         "recover": {
           "appPlatform": "Android",
@@ -694,7 +734,9 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,

@@ -29,8 +29,8 @@ impl Exporter for CSVExporter {
                 return;
             };
 
-            // The columns of the separate batteries, of the RTK, of the sticks of the app, of the
-            // serial numbers and of the firmware versions only when the log has them
+            // The columns of the separate batteries, of the RTK, of the sticks and position of the
+            // app, of the serial numbers and of the firmware versions only when the log has them
             let has = |found: fn(&Frame) -> bool| frames.iter().any(found);
             let has_app_sticks = has(|frame| frame.app.aileron.is_some());
             let missing_sections: Vec<&str> = [
@@ -42,6 +42,8 @@ impl Exporter for CSVExporter {
                 ("APP.elevator", has_app_sticks),
                 ("APP.throttle", has_app_sticks),
                 ("APP.rudder", has_app_sticks),
+                ("APP.latitude", has(|frame| frame.app.latitude.is_some())),
+                ("APP.longitude", has(|frame| frame.app.latitude.is_some())),
                 (
                     "SERIAL.aircraft",
                     has(|frame| frame.serial.aircraft.is_some()),
@@ -210,6 +212,9 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "OSD.windDirection".to_string(), // Direction the wind comes from
         "OSD.positionSource".to_string(), // Source of the position of the aircraft
         "OSD.mileage".to_string(), // Horizontal distance traveled since the start of the log in meters
+        "OSD.hSpeed".to_string(),  // Horizontal speed in meters per second
+        "OSD.hSpeedMax".to_string(), // Maximum horizontal speed reached in meters per second
+        "OSD.directionOfTravel".to_string(), // Direction of the movement in degrees from the north
         "GIMBAL.mode".to_string(), // Current gimbal mode
         "GIMBAL.pitch".to_string(), // Gimbal pitch angle in degrees
         "GIMBAL.roll".to_string(), // Gimbal roll angle in degrees
@@ -233,6 +238,7 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RC.elevatorNormalized".to_string(), // Right stick vertical position, from -1 to 1
         "RC.throttleNormalized".to_string(), // Left stick vertical position, from -1 to 1
         "RC.rudderNormalized".to_string(), // Left stick horizontal position, from -1 to 1
+        "RC.failSafeAction".to_string(), // Action when the signal of the remote controller is lost
         "BATTERY.chargeLevel".to_string(), // Battery charge level in percentage
         "BATTERY.voltage".to_string(), // Battery voltage
         "BATTERY.current".to_string(), // Battery current
@@ -260,6 +266,11 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "BATTERY.landBattery".to_string(),          // Battery needed to land, in percentage
         "BATTERY.lowWarning".to_string(),           // Low battery warning threshold, in percentage
         "BATTERY.seriousLowWarning".to_string(), // Critical battery warning threshold, in percentage
+        "BATTERY.status".to_string(),            // Status bits of the battery
+        "BATTERY.goHomeStatus".to_string(),      // Return home status of the battery
+        "BATTERY.goHomeCountdown".to_string(),   // Countdown before the return home, in seconds
+        "BATTERY.lowWarningGoHome".to_string(),  // Returns home at the low battery warning
+        "BATTERY.seriousLowWarningLanding".to_string(), // Lands at the critical battery warning
         "BATTERY1.chargeLevel".to_string(), // Battery 1 charge level in percentage, on drones with several batteries
         "BATTERY1.voltage".to_string(),     // Battery 1 voltage, on drones with several batteries
         "BATTERY1.current".to_string(),     // Battery 1 current, on drones with several batteries
@@ -291,6 +302,9 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "HOME.IOCCourseLockAngle".to_string(), // Intelligent Orientation Control course lock angle
         "HOME.maxAllowedHeight".to_string(), // Maximum allowed height for the drone in meters
         "HOME.currentFlightRecordIndex".to_string(), // Index of the current flight record
+        "HOME.aircraftHeadDirection".to_string(), // Raw bit of the home record, of unknown meaning
+        "HOME.distance".to_string(),     // Horizontal distance to the home point in meters
+        "HOME.distanceMax".to_string(),  // Maximum horizontal distance to the home point in meters
         "RECOVER.appPlatform".to_string(), // The platform of the app used (e.g., iOS, Android)
         "RECOVER.appVersion".to_string(), // Version of the app used
         "RECOVER.aircraftName".to_string(), // Name of the aircraft
@@ -308,6 +322,8 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "APP.elevatorNormalized".to_string(), // Right stick vertical position of the app, from -1 to 1
         "APP.throttleNormalized".to_string(), // Left stick vertical position of the app, from -1 to 1
         "APP.rudderNormalized".to_string(), // Left stick horizontal position of the app, from -1 to 1
+        "APP.latitude".to_string(),         // Latitude of the mobile device in degrees
+        "APP.longitude".to_string(),        // Longitude of the mobile device in degrees
         "VISION.isObstacleAvoidanceEnabled".to_string(), // Indicates if obstacle avoidance is enabled
         "VISION.isCollisionAvoidanceEnabled".to_string(), // Indicates if collision avoidance is enabled
         "VISION.isAvoidingObstacleLegacy".to_string(), // Indicates if the aircraft is avoiding an obstacle, on older aircraft

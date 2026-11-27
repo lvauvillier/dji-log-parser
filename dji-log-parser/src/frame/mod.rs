@@ -97,6 +97,22 @@ impl Frame {
     fn finalize(&mut self) {
         self.osd.altitude = self.osd.height + self.home.altitude;
 
+        self.home.distance = if has_position(self.osd.latitude, self.osd.longitude)
+            && has_position(self.home.latitude, self.home.longitude)
+        {
+            distance(
+                self.osd.latitude,
+                self.osd.longitude,
+                self.home.latitude,
+                self.home.longitude,
+            ) as f32
+        } else {
+            0.0
+        };
+        if self.home.distance_max < self.home.distance {
+            self.home.distance_max = self.home.distance;
+        }
+
         if self.osd.height_max < self.osd.height {
             self.osd.height_max = self.osd.height;
         }
@@ -108,6 +124,9 @@ impl Frame {
         }
         if self.osd.z_speed_max < self.osd.z_speed {
             self.osd.z_speed_max = self.osd.z_speed;
+        }
+        if self.osd.h_speed_max < self.osd.h_speed {
+            self.osd.h_speed_max = self.osd.h_speed;
         }
 
         if let Some(first_cell) = self.battery.cell_voltages.first() {
@@ -230,6 +249,8 @@ struct FrameBuilder {
     previous_osd: Option<(f64, f64, f32, f32)>,
     /// Distance traveled, in meters
     mileage: f64,
+    /// Bearing between the last two different positions
+    direction_of_travel: Option<f32>,
     /// Serial numbers of the serial number records
     serials: FrameSerial,
     /// Serial numbers of the details and of the recover records, used for the components without
@@ -257,6 +278,7 @@ impl FrameBuilder {
             geoid_height: None,
             previous_osd: None,
             mileage: 0.0,
+            direction_of_travel: None,
             serials: FrameSerial::default(),
             fallback_serials: FrameSerial::from_details(details),
         }
@@ -275,8 +297,16 @@ impl FrameBuilder {
                     frame.reset();
                 }
 
-                self.mileage += distance_from_previous_osd(&mut self.previous_osd, osd);
+                let (distance, bearing) = travel_from_previous_osd(&mut self.previous_osd, osd);
+                self.mileage += distance;
                 frame.osd.mileage = self.mileage as f32;
+                frame.osd.h_speed = horizontal_speed(osd);
+                // The direction of the previous record is kept while the position doesn't change
+                if let Some(bearing) = bearing {
+                    self.direction_of_travel = Some(bearing as f32);
+                }
+                frame.osd.direction_of_travel =
+                    self.direction_of_travel.filter(|_| frame.osd.h_speed > 0.0);
 
                 // Fill OSD record
                 frame.osd.fly_time = osd.fly_time;
@@ -336,6 +366,8 @@ impl FrameBuilder {
                 frame.osd.position_source = osd.position_source;
                 frame.battery.low_warning = Some(osd.low_warning);
                 frame.battery.serious_low_warning = Some(osd.serious_low_warning);
+                frame.battery.low_warning_go_home = osd.low_warning_go_home;
+                frame.battery.serious_low_warning_landing = osd.serious_low_warning_landing;
 
                 self.frame_index += 1;
             }
@@ -428,6 +460,10 @@ impl FrameBuilder {
                 frame.battery.land_time = Some(battery.land_time);
                 frame.battery.go_home_battery = Some(battery.go_home_battery);
                 frame.battery.land_battery = Some(battery.land_battery);
+                frame.battery.status = Some(battery.status);
+                frame.battery.go_home_status = Some(battery.go_home_status);
+                frame.battery.go_home_countdown =
+                    (battery.go_home_countdown > 0).then_some(battery.go_home_countdown);
             }
             Record::FlightControllerCommonOSDField(FlightControllerCommonOSDField::BatteryOsd(
                 battery,
@@ -517,8 +553,18 @@ impl FrameBuilder {
                 }
                 frame.home.max_allowed_height = home.max_allowed_height;
                 frame.home.current_flight_record_index = home.current_flight_record_index;
+                frame.home.aircraft_head_direction = home.aircraft_head_direction;
             }
             Record::Firmware(firmware) => frame.firmware.update(firmware),
+            Record::MCParams(params) => {
+                frame.rc.fail_safe_action = Some(params.fail_safe_protection)
+            }
+            Record::AppGPS(gps) => {
+                if has_position(gps.latitude, gps.longitude) {
+                    frame.app.latitude = Some(gps.latitude);
+                    frame.app.longitude = Some(gps.longitude);
+                }
+            }
             Record::ComponentSerial(component) => {
                 self.serials.update(component);
                 frame.serial = self.serials.or(&self.fallback_serials);
@@ -590,26 +636,53 @@ impl FrameBuilder {
 }
 
 /// Horizontal distance in meters since the previous OSD record: between their positions, or
-/// from their speeds while a position is missing.
-fn distance_from_previous_osd(previous_osd: &mut Option<(f64, f64, f32, f32)>, osd: &OSD) -> f64 {
-    let speed = (osd.speed_x * osd.speed_x + osd.speed_y * osd.speed_y).sqrt();
+/// from their speeds while a position is missing. Also the bearing between the positions, in
+/// degrees, when they differ.
+fn travel_from_previous_osd(
+    previous_osd: &mut Option<(f64, f64, f32, f32)>,
+    osd: &OSD,
+) -> (f64, Option<f64>) {
+    let speed = horizontal_speed(osd);
     let previous = previous_osd.replace((osd.latitude, osd.longitude, osd.fly_time, speed));
     let Some((latitude, longitude, fly_time, previous_speed)) = previous else {
-        return 0.0;
-    };
-    // Without a position, the coordinates are almost 0, not always exactly
-    let has_position = |latitude: f64, longitude: f64| {
-        (latitude.abs() > 1e-4 || longitude.abs() > 1e-4)
-            && latitude.abs() <= 90.0
-            && longitude.abs() <= 180.0
+        return (0.0, None);
     };
     if has_position(latitude, longitude) && has_position(osd.latitude, osd.longitude) {
-        distance(latitude, longitude, osd.latitude, osd.longitude)
+        let bearing = (latitude != osd.latitude || longitude != osd.longitude)
+            .then(|| bearing(latitude, longitude, osd.latitude, osd.longitude));
+        (
+            distance(latitude, longitude, osd.latitude, osd.longitude),
+            bearing,
+        )
     } else if osd.fly_time > fly_time {
-        f64::from((previous_speed + speed) / 2.0 * (osd.fly_time - fly_time))
+        let distance = (previous_speed + speed) / 2.0 * (osd.fly_time - fly_time);
+        (f64::from(distance), None)
     } else {
-        0.0
+        (0.0, None)
     }
+}
+
+/// Whether the coordinates are a position: without a position, they are almost 0, not always
+/// exactly
+fn has_position(latitude: f64, longitude: f64) -> bool {
+    (latitude.abs() > 1e-4 || longitude.abs() > 1e-4)
+        && latitude.abs() <= 90.0
+        && longitude.abs() <= 180.0
+}
+
+/// Horizontal speed in meters per second, with a square root rather than `hypot` to get the same
+/// result in WebAssembly
+fn horizontal_speed(osd: &OSD) -> f32 {
+    (osd.speed_x * osd.speed_x + osd.speed_y * osd.speed_y).sqrt()
+}
+
+/// Initial bearing from a position to another, in degrees from the north, from 0 to 360
+fn bearing(latitude1: f64, longitude1: f64, latitude2: f64, longitude2: f64) -> f64 {
+    let (latitude1, latitude2) = (latitude1.to_radians(), latitude2.to_radians());
+    let longitude = (longitude2 - longitude1).to_radians();
+    let y = longitude.sin() * latitude2.cos();
+    let x = latitude1.cos() * latitude2.sin() - latitude1.sin() * latitude2.cos() * longitude.cos();
+    y.atan2(x).to_degrees().rem_euclid(360.0)
 }
 
 /// Distance in meters between two positions in degrees, on a sphere of the mean radius of the
@@ -627,6 +700,14 @@ fn distance(latitude1: f64, longitude1: f64, latitude2: f64, longitude2: f64) ->
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn bearing_between_two_positions() {
+        assert_eq!(bearing(45.0, 6.0, 46.0, 6.0), 0.0);
+        assert!((bearing(0.0, 6.0, 0.0, 7.0) - 90.0).abs() < 1e-9);
+        assert!((bearing(46.0, 6.0, 45.0, 6.0) - 180.0).abs() < 1e-9);
+        assert!((bearing(0.0, 7.0, 0.0, 6.0) - 270.0).abs() < 1e-9);
+    }
 
     #[test]
     fn distance_between_two_positions() {

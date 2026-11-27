@@ -131,7 +131,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 0.0
+          "mileage": 0.0,
+          "hSpeed": 0.0,
+          "hSpeedMax": 0.0,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -160,7 +163,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 0,
@@ -187,7 +191,12 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeBattery": null,
           "landBattery": null,
           "lowWarning": 25,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -224,7 +233,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeHeight": 0,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 0
+          "currentFlightRecordIndex": 0,
+          "aircraftHeadDirection": 0,
+          "distance": 0.0,
+          "distanceMax": 0.0
         },
         "recover": {
           "appPlatform": "Android",
@@ -245,7 +257,9 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 39.89197272,
+          "longitude": -105.26228309
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -356,7 +370,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 947.3976
+          "mileage": 947.3976,
+          "hSpeed": 13.991783,
+          "hSpeedMax": 14.221462,
+          "directionOfTravel": 172.86469
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -385,7 +402,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "aileronNormalized": -0.054545455,
           "elevatorNormalized": 1.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 76,
@@ -412,7 +430,12 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeBattery": 20,
           "landBattery": 10,
           "lowWarning": 25,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -449,7 +472,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeHeight": 30,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 120.0,
-          "currentFlightRecordIndex": 9
+          "currentFlightRecordIndex": 9,
+          "aircraftHeadDirection": 1,
+          "distance": 377.23666,
+          "distanceMax": 474.05618
         },
         "recover": {
           "appPlatform": "Android",
@@ -470,7 +496,9 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 39.89197272,
+          "longitude": -105.26228309
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -581,7 +609,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 1918.6909
+          "mileage": 1918.6909,
+          "hSpeed": 0.0,
+          "hSpeedMax": 14.221462,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -610,7 +641,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 69,
@@ -637,7 +669,12 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeBattery": 15,
           "landBattery": 10,
           "lowWarning": 25,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -674,7 +711,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeHeight": 30,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 120.0,
-          "currentFlightRecordIndex": 9
+          "currentFlightRecordIndex": 9,
+          "aircraftHeadDirection": 1,
+          "distance": 1.7208372,
+          "distanceMax": 478.22916
         },
         "recover": {
           "appPlatform": "Android",
@@ -695,7 +735,9 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 39.89197272,
+          "longitude": -105.26228309
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,

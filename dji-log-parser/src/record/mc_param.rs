@@ -24,7 +24,7 @@ pub struct MCParams {
     pub user_avoid_enabled: bool,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub enum FailSafeProtectionType {
     Hover,

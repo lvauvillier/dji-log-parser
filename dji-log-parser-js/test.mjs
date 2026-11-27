@@ -55,12 +55,14 @@ for (const file of readdirSync(snapshots).filter((file) => file.endsWith(".snap"
 }
 
 // Compares a value of the package with the JSON of the snapshot, where the `f32` are rounded
-// and a missing value is `null`.
+// and a missing value is `null`: the numbers are compared with a relative tolerance.
 function assertSame(actual, expected, path) {
   if (expected === null) {
     assert.equal(actual ?? null, null, path);
   } else if (typeof expected === "number" && typeof actual === "number") {
-    assert.ok(actual === expected || actual === Math.fround(expected), `${path}: ${actual} != ${expected}`);
+    // The trigonometric functions can differ by the last bit between WebAssembly and native code
+    const tolerance = 1e-6 * Math.max(1, Math.abs(expected));
+    assert.ok(Math.abs(actual - expected) <= tolerance, `${path}: ${actual} != ${expected}`);
   } else if (typeof expected === "object") {
     assert.equal(typeof actual, "object", path);
     const keys = new Set([...Object.keys(actual ?? {}), ...Object.keys(expected)]);

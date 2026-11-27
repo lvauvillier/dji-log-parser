@@ -52,4 +52,10 @@ pub struct FrameHome {
     pub max_allowed_height: f32,
     /// Index of the current flight record
     pub current_flight_record_index: u16,
+    /// Raw bit of the home record, of unknown meaning
+    pub aircraft_head_direction: u8,
+    /// Horizontal distance between the aircraft and the home point in meters, 0 without positions
+    pub distance: f32,
+    /// Maximum horizontal distance to the home point reached in meters
+    pub distance_max: f32,
 }

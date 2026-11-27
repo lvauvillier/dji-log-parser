@@ -1,5 +1,7 @@
 use serde::Serialize;
 
+use crate::record::smart_battery::BatteryGoHomeStatus;
+
 use crate::record::smart_battery_group::SmartBatteryDynamic;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
@@ -55,6 +57,20 @@ pub struct FrameBattery {
     /// Critical battery warning threshold, in percentage
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub serious_low_warning: Option<u8>,
+    /// Status bits of the battery: bit 0 is the low warning and bit 1 the critical warning, the
+    /// others are not known
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub status: Option<u32>,
+    /// Return home status of the battery
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub go_home_status: Option<BatteryGoHomeStatus>,
+    /// Countdown before the return home, in seconds, none when there is no countdown
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub go_home_countdown: Option<u8>,
+    /// Indicates if the aircraft returns home at the low battery warning
+    pub low_warning_go_home: bool,
+    /// Indicates if the aircraft lands at the critical battery warning
+    pub serious_low_warning_landing: bool,
 }
 
 /// One battery of a drone with several batteries, the others values of the frame being the total

@@ -34,4 +34,10 @@ pub struct FrameApp {
     /// Left stick horizontal position (rudder) of the app, from -1 to 1
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub rudder_normalized: Option<f32>,
+    /// Latitude of the mobile device in degrees
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub latitude: Option<f64>,
+    /// Longitude of the mobile device in degrees
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub longitude: Option<f64>,
 }

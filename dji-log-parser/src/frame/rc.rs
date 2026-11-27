@@ -1,5 +1,6 @@
 use serde::Serialize;
 
+use crate::record::mc_param::FailSafeProtectionType;
 use crate::record::osd::DroneType;
 use crate::record::rc_display_field::RCModeSwitch;
 #[cfg(target_arch = "wasm32")]
@@ -34,6 +35,9 @@ pub struct FrameRC {
     pub throttle_normalized: f32,
     /// Left stick horizontal position (rudder), from -1 to 1
     pub rudder_normalized: f32,
+    /// Action when the signal of the remote controller is lost
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub fail_safe_action: Option<FailSafeProtectionType>,
 }
 
 impl FrameRC {

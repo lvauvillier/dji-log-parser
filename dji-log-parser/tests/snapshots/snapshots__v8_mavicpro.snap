@@ -133,7 +133,10 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 0.0
+          "mileage": 0.0,
+          "hSpeed": 0.0,
+          "hSpeedMax": 0.0,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -162,7 +165,8 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 0,
@@ -188,7 +192,12 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "goHomeBattery": null,
           "landBattery": null,
           "lowWarning": 30,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -225,7 +234,10 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "goHomeHeight": 0,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 0
+          "currentFlightRecordIndex": 0,
+          "aircraftHeadDirection": 0,
+          "distance": 0.0,
+          "distanceMax": 0.0
         },
         "recover": {
           "appPlatform": "IOS",
@@ -246,7 +258,9 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -357,7 +371,10 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 365.80453
+          "mileage": 365.80453,
+          "hSpeed": 12.976902,
+          "hSpeedMax": 13.535878,
+          "directionOfTravel": 60.5808
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -386,7 +403,8 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "aileronNormalized": 0.043939393,
           "elevatorNormalized": 1.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 52,
@@ -412,7 +430,12 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "goHomeBattery": 19,
           "landBattery": 10,
           "lowWarning": 30,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -449,7 +472,10 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "goHomeHeight": 49,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 120.0,
-          "currentFlightRecordIndex": 61
+          "currentFlightRecordIndex": 61,
+          "aircraftHeadDirection": 1,
+          "distance": 119.74205,
+          "distanceMax": 145.02382
         },
         "recover": {
           "appPlatform": "IOS",
@@ -470,7 +496,9 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -581,7 +609,10 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 1609.3901
+          "mileage": 1609.3901,
+          "hSpeed": 0.0,
+          "hSpeedMax": 15.17432,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -610,7 +641,8 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": -1.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 30,
@@ -636,7 +668,12 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "goHomeBattery": 15,
           "landBattery": 10,
           "lowWarning": 30,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -673,7 +710,10 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "goHomeHeight": 49,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 120.0,
-          "currentFlightRecordIndex": 61
+          "currentFlightRecordIndex": 61,
+          "aircraftHeadDirection": 1,
+          "distance": 1.5011905,
+          "distanceMax": 152.20067
         },
         "recover": {
           "appPlatform": "IOS",
@@ -694,7 +734,9 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

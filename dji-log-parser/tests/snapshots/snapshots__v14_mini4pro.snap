@@ -137,7 +137,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "windSpeed": null,
           "windDirection": null,
           "positionSource": "Gnss",
-          "mileage": 0.0
+          "mileage": 0.0,
+          "hSpeed": 0.0,
+          "hSpeedMax": 0.0,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -166,7 +169,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 57,
@@ -191,7 +195,12 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeBattery": null,
           "landBattery": null,
           "lowWarning": 15,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -228,7 +237,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeHeight": 0,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 0
+          "currentFlightRecordIndex": 0,
+          "aircraftHeadDirection": 0,
+          "distance": 0.0,
+          "distanceMax": 0.0
         },
         "recover": {
           "appPlatform": "DJIFly",
@@ -249,7 +261,9 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": null,
+          "longitude": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -360,7 +374,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "windSpeed": 1.6,
           "windDirection": "NorthEast",
           "positionSource": "Gnss",
-          "mileage": 120.179794
+          "mileage": 120.179794,
+          "hSpeed": 0.0,
+          "hSpeedMax": 9.924716,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -389,7 +406,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 53,
@@ -414,7 +432,12 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeBattery": 18,
           "landBattery": 9,
           "lowWarning": 15,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -451,7 +474,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeHeight": 255,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 350.0,
-          "currentFlightRecordIndex": 111
+          "currentFlightRecordIndex": 111,
+          "aircraftHeadDirection": 1,
+          "distance": 103.18049,
+          "distanceMax": 103.19249
         },
         "recover": {
           "appPlatform": "DJIFly",
@@ -472,7 +498,9 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 45.47188493186769,
+          "longitude": 16.385295213197292
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -583,7 +611,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "windSpeed": null,
           "windDirection": null,
           "positionSource": "Gnss",
-          "mileage": 269.00775
+          "mileage": 269.00775,
+          "hSpeed": 0.0,
+          "hSpeedMax": 11.371895,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -612,7 +643,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 50,
@@ -637,7 +669,12 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeBattery": 17,
           "landBattery": 9,
           "lowWarning": 15,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -674,7 +711,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeHeight": 255,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 350.0,
-          "currentFlightRecordIndex": 111
+          "currentFlightRecordIndex": 111,
+          "aircraftHeadDirection": 1,
+          "distance": 5.8765016,
+          "distanceMax": 118.198494
         },
         "recover": {
           "appPlatform": "DJIFly",
@@ -695,7 +735,9 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 45.471903855839614,
+          "longitude": 16.385289705668974
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

@@ -134,7 +134,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 0.0
+          "mileage": 0.0,
+          "hSpeed": 0.0,
+          "hSpeedMax": 0.0,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -163,7 +166,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileronNormalized": -0.85,
           "elevatorNormalized": -0.75151515,
           "throttleNormalized": -0.8742424,
-          "rudderNormalized": 0.880303
+          "rudderNormalized": 0.880303,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 0,
@@ -189,7 +193,12 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeBattery": null,
           "landBattery": null,
           "lowWarning": 40,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": null,
+          "goHomeStatus": null,
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -226,7 +235,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeHeight": 0,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 0.0,
-          "currentFlightRecordIndex": 0
+          "currentFlightRecordIndex": 0,
+          "aircraftHeadDirection": 0,
+          "distance": 0.0,
+          "distanceMax": 0.0
         },
         "recover": {
           "appPlatform": "Android",
@@ -247,7 +259,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 18.0714951,
+          "longitude": -65.7990875
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -358,7 +372,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 229.5937
+          "mileage": 229.5937,
+          "hSpeed": 9.021087,
+          "hSpeedMax": 9.021087,
+          "directionOfTravel": 330.09216
         },
         "gimbal": {
           "mode": "FPV",
@@ -387,7 +404,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 1.0,
           "throttleNormalized": 0.0,
-          "rudderNormalized": 0.0
+          "rudderNormalized": 0.0,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 45,
@@ -413,7 +431,12 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeBattery": 21,
           "landBattery": 11,
           "lowWarning": 40,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 0,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -450,7 +473,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeHeight": 30,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 80.0,
-          "currentFlightRecordIndex": 30
+          "currentFlightRecordIndex": 30,
+          "aircraftHeadDirection": 1,
+          "distance": 161.9041,
+          "distanceMax": 184.88931
         },
         "recover": {
           "appPlatform": "Android",
@@ -471,7 +497,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 18.0716744,
+          "longitude": -65.7990058
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -582,7 +610,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "windSpeed": null,
           "windDirection": null,
           "positionSource": null,
-          "mileage": 456.68182
+          "mileage": 456.68182,
+          "hSpeed": 0.0,
+          "hSpeedMax": 13.743726,
+          "directionOfTravel": null
         },
         "gimbal": {
           "mode": "FPV",
@@ -611,7 +642,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileronNormalized": 0.0,
           "elevatorNormalized": 0.0,
           "throttleNormalized": -1.0,
-          "rudderNormalized": -0.11666667
+          "rudderNormalized": -0.11666667,
+          "failSafeAction": "GoHome"
         },
         "battery": {
           "chargeLevel": 28,
@@ -637,7 +669,12 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeBattery": 15,
           "landBattery": 10,
           "lowWarning": 40,
-          "seriousLowWarning": 10
+          "seriousLowWarning": 10,
+          "status": 1,
+          "goHomeStatus": "NonGoHome",
+          "goHomeCountdown": null,
+          "lowWarningGoHome": false,
+          "seriousLowWarningLanding": true
         },
         "battery1": {
           "chargeLevel": null,
@@ -674,7 +711,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeHeight": 30,
           "iocCourseLockAngle": null,
           "maxAllowedHeight": 80.0,
-          "currentFlightRecordIndex": 30
+          "currentFlightRecordIndex": 30,
+          "aircraftHeadDirection": 1,
+          "distance": 6.2007174,
+          "distanceMax": 184.88931
         },
         "recover": {
           "appPlatform": "Android",
@@ -695,7 +735,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileronNormalized": null,
           "elevatorNormalized": null,
           "throttleNormalized": null,
-          "rudderNormalized": null
+          "rudderNormalized": null,
+          "latitude": 18.0716814,
+          "longitude": -65.7990515
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

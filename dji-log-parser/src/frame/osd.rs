@@ -123,4 +123,12 @@ pub struct FrameOSD {
     /// Horizontal distance traveled since the start of the log in meters: from the positions, or
     /// from the speed while there is no position
     pub mileage: f32,
+    /// Horizontal speed in meters per second
+    pub h_speed: f32,
+    /// Maximum horizontal speed reached in meters per second
+    pub h_speed_max: f32,
+    /// Direction of the movement in degrees from the north, from 0 to 360: the bearing between
+    /// the last two different positions, none when the aircraft doesn't move. Noisy below 1 m/s
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub direction_of_travel: Option<f32>,
 }

@@ -53,7 +53,7 @@ pub struct SmartBattery {
     pub reserve: u8,
 }
 
-#[derive(FromPrimitive, Serialize, Debug)]
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[repr(u8)]
 pub enum BatteryGoHomeStatus {
