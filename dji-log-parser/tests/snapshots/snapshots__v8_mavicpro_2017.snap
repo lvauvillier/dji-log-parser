@@ -244,6 +244,13 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     },
@@ -413,6 +420,13 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     },
@@ -582,6 +596,13 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     }

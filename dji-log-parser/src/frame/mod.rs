@@ -20,6 +20,7 @@ mod home;
 mod osd;
 mod rc;
 mod recover;
+mod rtk;
 mod vision;
 
 pub use app::FrameApp;
@@ -32,6 +33,7 @@ pub use home::FrameHome;
 pub use osd::FrameOSD;
 pub use rc::FrameRC;
 pub use recover::FrameRecover;
+pub use rtk::FrameRTK;
 pub use vision::FrameVision;
 
 /// Represents a normalized frame of data from a DJI log.
@@ -54,6 +56,7 @@ pub struct Frame {
     pub recover: FrameRecover,
     pub app: FrameApp,
     pub vision: FrameVision,
+    pub rtk: FrameRTK,
 }
 
 impl Frame {
@@ -415,6 +418,7 @@ where
                 frame.recover.rc_sn = recover.rc_sn.clone();
                 frame.recover.battery_sn = recover.battery_sn.clone();
             }
+            Record::RTKDifference(rtk) => frame.rtk.update(rtk),
             Record::GOBusiness(business) => {
                 for tip in business.tips.iter().flatten() {
                     frame.app.tip = append_message(frame.app.tip, tip.text.as_str());

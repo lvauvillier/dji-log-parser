@@ -192,6 +192,11 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "VISION.leftDistance".to_string(), // Distance of the closest obstacle on the left, in meters
         "VISION.topDistance".to_string(),  // Distance of the closest obstacle above, in meters
         "VISION.bottomDistance".to_string(), // Distance of the closest obstacle below, in meters
+        "RTK.solution".to_string(),        // Solution of the RTK positioning
+        "RTK.stdLatitude".to_string(),     // Standard deviation of the latitude, in meters
+        "RTK.stdLongitude".to_string(),    // Standard deviation of the longitude, in meters
+        "RTK.stdAltitude".to_string(),     // Standard deviation of the altitude, in meters
+        "RTK.satellites".to_string(),      // Number of satellites of the main antenna
         "DETAILS.totalTime".to_string(),   // Total flight time in seconds
         "DETAILS.totalDistance".to_string(), // Total distance flown in meters
         "DETAILS.maxHeight".to_string(),   // Maximum height reached during the flight in meters

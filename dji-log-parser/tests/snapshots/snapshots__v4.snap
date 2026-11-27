@@ -242,6 +242,13 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     },
@@ -412,6 +419,13 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     },
@@ -582,6 +596,13 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     }

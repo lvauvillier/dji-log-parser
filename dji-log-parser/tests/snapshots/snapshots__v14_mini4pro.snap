@@ -247,6 +247,13 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     },
@@ -415,6 +422,13 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     },
@@ -583,6 +597,13 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "leftDistance": null,
           "topDistance": null,
           "bottomDistance": null
+        },
+        "rtk": {
+          "solution": null,
+          "stdLatitude": null,
+          "stdLongitude": null,
+          "stdAltitude": null,
+          "satellites": null
         }
       }
     }
