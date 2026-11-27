@@ -24,6 +24,7 @@ pub mod custom;
 pub mod deform;
 pub mod firmware;
 pub mod gimbal;
+pub mod ground_station_push_data;
 pub mod home;
 pub mod key_storage;
 pub mod mc_param;
@@ -52,6 +53,7 @@ use custom::Custom;
 use deform::Deform;
 use firmware::Firmware;
 use gimbal::Gimbal;
+use ground_station_push_data::GroundStationPushData;
 use home::Home;
 use key_storage::KeyStorage;
 use mc_param::MCParams;
@@ -108,6 +110,7 @@ pub enum Record {
     AppJoystick(AppJoystick),
     ADSBFlightData(ADSBFlightData),
     AircraftInfo(AircraftInfo),
+    GroundStationPushData(GroundStationPushData),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -197,6 +200,9 @@ impl Record {
             29 => Record::AppJoystick(content.read::<AppJoystick>(args! { length })?),
             33 => Record::VirtualStick(content.read(())?),
             40 => Record::ComponentSerial(content.read(())?),
+            48 => Record::GroundStationPushData(
+                content.read::<GroundStationPushData>(args! { length })?,
+            ),
             49 => Record::OFDM(content.read(())?),
             // Not encoded
             50 => Record::KeyStorageRecover(content.read_raw()?),
