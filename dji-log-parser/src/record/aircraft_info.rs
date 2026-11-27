@@ -4,6 +4,7 @@ use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
+use crate::record::protobuf::{fields, Value};
 use crate::utils::c_string;
 
 /// Information about the aircraft, written once per flight in recent logs: a message type and a
@@ -102,54 +103,6 @@ impl AircraftInfoMessage {
         }
         Some(Self::SerialNumbers(serial_numbers))
     }
-}
-
-/// Value of a protocol buffers field
-enum Value<'a> {
-    Fixed64([u8; 8]),
-    Bytes(&'a [u8]),
-    /// Varint or fixed 32 bits value, not used
-    Other,
-}
-
-/// Splits protocol buffers data into fields: a field number and a value. Fails if the data is
-/// not made of fields.
-fn fields(mut data: &[u8]) -> Option<Vec<(u32, Value<'_>)>> {
-    let mut fields = Vec::new();
-    while !data.is_empty() {
-        let key = varint(&mut data)?;
-        let number = u32::try_from(key >> 3).ok()?;
-        let value = match key & 0x7 {
-            0 => varint(&mut data).map(|_| Value::Other)?,
-            1 => Value::Fixed64(take(&mut data, 8)?.try_into().ok()?),
-            2 => {
-                let length = usize::try_from(varint(&mut data)?).ok()?;
-                Value::Bytes(take(&mut data, length)?)
-            }
-            5 => take(&mut data, 4).map(|_| Value::Other)?,
-            _ => return None,
-        };
-        fields.push((number, value));
-    }
-    Some(fields)
-}
-
-fn varint(data: &mut &[u8]) -> Option<u64> {
-    let mut value = 0;
-    for shift in (0..64).step_by(7) {
-        let byte = *take(data, 1)?.first()?;
-        value |= u64::from(byte & 0x7F) << shift;
-        if byte & 0x80 == 0 {
-            return Some(value);
-        }
-    }
-    None
-}
-
-fn take<'a>(data: &mut &'a [u8], length: usize) -> Option<&'a [u8]> {
-    let (taken, rest) = data.split_at_checked(length)?;
-    *data = rest;
-    Some(taken)
 }
 
 #[cfg(test)]

@@ -415,6 +415,18 @@ where
                 frame.recover.rc_sn = recover.rc_sn.clone();
                 frame.recover.battery_sn = recover.battery_sn.clone();
             }
+            Record::GOBusiness(business) => {
+                for tip in business.tips.iter().flatten() {
+                    frame.app.tip = append_message(frame.app.tip, tip.text.as_str());
+                }
+                for warning in business.warnings.iter().flatten() {
+                    if warning.level.unwrap_or_default() >= 2 {
+                        frame.app.warn = append_message(frame.app.warn, warning.text.as_str());
+                    } else {
+                        frame.app.tip = append_message(frame.app.tip, warning.text.as_str());
+                    }
+                }
+            }
             Record::AppTip(app_tip) => {
                 frame.app.tip = append_message(frame.app.tip, app_tip.message.as_str());
             }

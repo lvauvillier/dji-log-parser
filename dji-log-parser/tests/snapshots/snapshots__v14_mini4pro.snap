@@ -66,6 +66,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "Custom": 1020,
     "Firmware": 6,
     "FlightControllerCommonOSDField": 98,
+    "GOBusiness": 12,
     "Gimbal": 2164,
     "Home": 74,
     "KeyStorage": 10,
@@ -76,7 +77,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "RCDisplayField": 433,
     "Recover": 5,
     "SmartBatteryGroup": 351,
-    "Unknown": 367,
+    "Unknown": 355,
     "VisionGroup": 9
   },
   "frame_count": 1082,
@@ -218,7 +219,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
         },
         "app": {
           "tip": "Flight mode changed to GPSAtti.",
-          "warn": "",
+          "warn": "Aircraft not in flight. Vision systems and obstacle avoidance disabled (Code: 180059); GNSS signal weak. Geo-awareness function degraded. Fly with caution (Code: 30346)",
           "aileron": null,
           "elevator": null,
           "throttle": null,

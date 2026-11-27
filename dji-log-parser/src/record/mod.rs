@@ -25,12 +25,14 @@ pub mod deform;
 pub mod firmware;
 pub mod flight_controller_common_osd_field;
 pub mod gimbal;
+pub mod go_business;
 pub mod ground_station_push_data;
 pub mod home;
 pub mod key_storage;
 pub mod mc_param;
 pub mod ofdm;
 pub mod osd;
+mod protobuf;
 pub mod rc;
 pub mod rc_display_field;
 pub mod rc_gps;
@@ -56,6 +58,7 @@ use deform::Deform;
 use firmware::Firmware;
 use flight_controller_common_osd_field::FlightControllerCommonOSDField;
 use gimbal::Gimbal;
+use go_business::GOBusiness;
 use ground_station_push_data::GroundStationPushData;
 use home::Home;
 use key_storage::KeyStorage;
@@ -117,6 +120,7 @@ pub enum Record {
     GroundStationPushData(GroundStationPushData),
     FlightControllerCommonOSDField(FlightControllerCommonOSDField),
     RTKDifference(RTKDifference),
+    GOBusiness(GOBusiness),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -213,6 +217,7 @@ impl Record {
             49 => Record::OFDM(content.read(())?),
             // Not encoded
             50 => Record::KeyStorageRecover(content.read_raw()?),
+            54 => Record::GOBusiness(content.read::<GOBusiness>((length,))?),
             56 => Record::KeyStorage(content.read(())?),
             62 => Record::RCDisplayField(content.read(())?),
             63 => Record::FlightControllerCommonOSDField(
