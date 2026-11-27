@@ -65,6 +65,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "ComponentSerial": 1,
     "Custom": 1020,
     "Firmware": 6,
+    "FlightControllerCommonOSDField": 98,
     "Gimbal": 2164,
     "Home": 74,
     "KeyStorage": 10,
@@ -75,7 +76,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "RCDisplayField": 433,
     "Recover": 5,
     "SmartBatteryGroup": 351,
-    "Unknown": 465,
+    "Unknown": 367,
     "VisionGroup": 9
   },
   "frame_count": 1082,

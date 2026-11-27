@@ -23,6 +23,7 @@ pub mod component_serial;
 pub mod custom;
 pub mod deform;
 pub mod firmware;
+pub mod flight_controller_common_osd_field;
 pub mod gimbal;
 pub mod ground_station_push_data;
 pub mod home;
@@ -52,6 +53,7 @@ use component_serial::ComponentSerial;
 use custom::Custom;
 use deform::Deform;
 use firmware::Firmware;
+use flight_controller_common_osd_field::FlightControllerCommonOSDField;
 use gimbal::Gimbal;
 use ground_station_push_data::GroundStationPushData;
 use home::Home;
@@ -111,6 +113,7 @@ pub enum Record {
     ADSBFlightData(ADSBFlightData),
     AircraftInfo(AircraftInfo),
     GroundStationPushData(GroundStationPushData),
+    FlightControllerCommonOSDField(FlightControllerCommonOSDField),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -208,6 +211,9 @@ impl Record {
             50 => Record::KeyStorageRecover(content.read_raw()?),
             56 => Record::KeyStorage(content.read(())?),
             62 => Record::RCDisplayField(content.read(())?),
+            63 => Record::FlightControllerCommonOSDField(
+                content.read::<FlightControllerCommonOSDField>(args! { length })?,
+            ),
             253 => Record::AircraftInfo(content.read(())?),
             // Unknown type: no allocated error message, this is the common case for many logs
             _ => return Err(binrw::Error::NoVariantMatch { pos: content.start }),
