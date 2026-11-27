@@ -4,6 +4,7 @@ use std::borrow::Borrow;
 use tsify_next::Tsify;
 
 use crate::layout::details::Details;
+use crate::record::flight_controller_common_osd_field::FlightControllerCommonOSDField;
 use crate::record::osd::{AppCommand, GroundOrSky};
 use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
@@ -313,6 +314,20 @@ where
             Record::SmartBattery(battery) => {
                 frame.battery.charge_level = battery.percent;
                 frame.battery.voltage = battery.voltage;
+                frame.battery.useful_time = Some(battery.useful_time);
+                frame.battery.go_home_time = Some(battery.go_home_time);
+                frame.battery.land_time = Some(battery.land_time);
+                frame.battery.go_home_battery = Some(battery.go_home_battery);
+                frame.battery.land_battery = Some(battery.land_battery);
+            }
+            Record::FlightControllerCommonOSDField(FlightControllerCommonOSDField::BatteryOsd(
+                battery,
+            )) => {
+                frame.battery.useful_time = Some(battery.useful_time);
+                frame.battery.go_home_time = battery.go_home_time;
+                frame.battery.land_time = Some(battery.land_time);
+                frame.battery.go_home_battery = Some(battery.go_home_battery.into());
+                frame.battery.land_battery = Some(battery.land_battery.into());
             }
             Record::SmartBatteryGroup(battery_group) => match battery_group {
                 SmartBatteryGroup::SmartBatteryStatic(_) => {}

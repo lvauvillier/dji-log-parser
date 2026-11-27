@@ -32,4 +32,19 @@ pub struct FrameBattery {
     pub min_temperature: f32,
     /// Maximum battery temperature
     pub max_temperature: f32,
+    /// Flight time left, in seconds
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub useful_time: Option<u16>,
+    /// Time needed to return home, in seconds
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub go_home_time: Option<u16>,
+    /// Time needed to land, in seconds
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub land_time: Option<u16>,
+    /// Battery needed to return home, in percentage
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub go_home_battery: Option<u16>,
+    /// Battery needed to land, in percentage
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub land_battery: Option<u16>,
 }

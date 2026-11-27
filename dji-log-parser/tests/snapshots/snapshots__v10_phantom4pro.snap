@@ -172,7 +172,12 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "maxCellVoltageDeviation": 0.0,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": null,
+          "goHomeTime": null,
+          "landTime": null,
+          "goHomeBattery": null,
+          "landBattery": null
         },
         "home": {
           "latitude": 0.0,
@@ -332,7 +337,12 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "maxCellVoltageDeviation": 0.01,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": 1541,
+          "goHomeTime": 0,
+          "landTime": 1,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 39.96117754366448,
@@ -492,7 +502,12 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "maxCellVoltageDeviation": 0.013,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": 0,
+          "goHomeTime": 2,
+          "landTime": 0,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 39.96117279796969,

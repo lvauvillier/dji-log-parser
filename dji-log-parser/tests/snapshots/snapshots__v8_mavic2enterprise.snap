@@ -170,7 +170,12 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "maxCellVoltageDeviation": 0.0,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": null,
+          "goHomeTime": null,
+          "landTime": null,
+          "goHomeBattery": null,
+          "landBattery": null
         },
         "home": {
           "latitude": 0.0,
@@ -330,7 +335,12 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "maxCellVoltageDeviation": 0.041,
           "temperature": 22.2,
           "minTemperature": 22.2,
-          "maxTemperature": 22.2
+          "maxTemperature": 22.2,
+          "usefulTime": 0,
+          "goHomeTime": 0,
+          "landTime": 0,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 39.89195655802814,
@@ -490,7 +500,12 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "maxCellVoltageDeviation": 0.041,
           "temperature": 22.2,
           "minTemperature": 22.2,
-          "maxTemperature": 22.2
+          "maxTemperature": 22.2,
+          "usefulTime": 0,
+          "goHomeTime": 0,
+          "landTime": 0,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 39.89195655802814,

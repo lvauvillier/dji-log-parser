@@ -177,7 +177,12 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "maxCellVoltageDeviation": 0.0,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": null,
+          "goHomeTime": null,
+          "landTime": null,
+          "goHomeBattery": null,
+          "landBattery": null
         },
         "home": {
           "latitude": 0.0,
@@ -339,7 +344,12 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "maxCellVoltageDeviation": 0.018,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": 0,
+          "goHomeTime": 0,
+          "landTime": 0,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 45836623.61046586,
@@ -501,7 +511,12 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "maxCellVoltageDeviation": 0.021,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": 0,
+          "goHomeTime": 0,
+          "landTime": 0,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 45836623.61046586,

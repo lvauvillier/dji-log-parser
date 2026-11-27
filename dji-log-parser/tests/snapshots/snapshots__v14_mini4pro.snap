@@ -174,7 +174,12 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "maxCellVoltageDeviation": 0.0,
           "temperature": 37.2,
           "minTemperature": 37.2,
-          "maxTemperature": 37.2
+          "maxTemperature": 37.2,
+          "usefulTime": null,
+          "goHomeTime": null,
+          "landTime": null,
+          "goHomeBattery": null,
+          "landBattery": null
         },
         "home": {
           "latitude": 0.0,
@@ -332,7 +337,12 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "maxCellVoltageDeviation": 0.01,
           "temperature": 39.8,
           "minTemperature": 37.2,
-          "maxTemperature": 39.8
+          "maxTemperature": 39.8,
+          "usefulTime": 945,
+          "goHomeTime": 29,
+          "landTime": 36,
+          "goHomeBattery": 18,
+          "landBattery": 9
         },
         "home": {
           "latitude": 45.47186688213476,
@@ -490,7 +500,12 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "maxCellVoltageDeviation": 0.01,
           "temperature": 41.9,
           "minTemperature": 37.2,
-          "maxTemperature": 41.9
+          "maxTemperature": 41.9,
+          "usefulTime": 878,
+          "goHomeTime": 9,
+          "landTime": 30,
+          "goHomeBattery": 17,
+          "landBattery": 9
         },
         "home": {
           "latitude": 45.47186688213476,

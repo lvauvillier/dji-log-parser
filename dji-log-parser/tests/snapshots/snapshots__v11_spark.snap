@@ -173,7 +173,12 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "maxCellVoltageDeviation": 0.0,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": null,
+          "goHomeTime": null,
+          "landTime": null,
+          "goHomeBattery": null,
+          "landBattery": null
         },
         "home": {
           "latitude": 0.0,
@@ -332,7 +337,12 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "maxCellVoltageDeviation": 0.032,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": 505,
+          "goHomeTime": 37,
+          "landTime": 12,
+          "goHomeBattery": 21,
+          "landBattery": 11
         },
         "home": {
           "latitude": 18.071883786333082,
@@ -491,7 +501,12 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "maxCellVoltageDeviation": 0.035,
           "temperature": 0.0,
           "minTemperature": 0.0,
-          "maxTemperature": 0.0
+          "maxTemperature": 0.0,
+          "usefulTime": 237,
+          "goHomeTime": 0,
+          "landTime": 0,
+          "goHomeBattery": 15,
+          "landBattery": 10
         },
         "home": {
           "latitude": 18.071883786333082,

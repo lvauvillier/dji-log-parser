@@ -129,6 +129,11 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "BATTERY.temperature".to_string(),          // Battery temperature
         "BATTERY.minTemperature".to_string(),       // Minimum battery temperature
         "BATTERY.maxTemperature".to_string(),       // Maximum battery temperature
+        "BATTERY.usefulTime".to_string(),           // Flight time left, in seconds
+        "BATTERY.goHomeTime".to_string(),           // Time needed to return home, in seconds
+        "BATTERY.landTime".to_string(),             // Time needed to land, in seconds
+        "BATTERY.goHomeBattery".to_string(),        // Battery needed to return home, in percentage
+        "BATTERY.landBattery".to_string(),          // Battery needed to land, in percentage
         "HOME.latitude".to_string(),                // Home point latitude in degrees
         "HOME.longitude".to_string(),               // Home point longitude in degrees
         "HOME.altitude".to_string(),                // Home point altitude in meters
