@@ -10,6 +10,14 @@ Packages are published to npm: https://www.npmjs.com/package/dji-log-parser-js
 wasm-pack build --target web && node ./patch.mjs
 ```
 
+## Test
+
+After the build, checks the package against the snapshots of the Rust library:
+
+```bash
+node --test
+```
+
 ## Publish
 
 ```bash
