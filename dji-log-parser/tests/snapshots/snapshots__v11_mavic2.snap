@@ -65,7 +65,6 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
     "Custom": 244,
     "Firmware": 6,
     "Home": 6,
-    "Invalid": 1,
     "MCParams": 3,
     "OSD": 252,
     "RC": 133,

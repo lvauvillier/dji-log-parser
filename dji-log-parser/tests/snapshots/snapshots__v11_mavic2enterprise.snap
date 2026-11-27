@@ -67,7 +67,6 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
     "Firmware": 6,
     "Gimbal": 2052,
     "Home": 105,
-    "Invalid": 1,
     "MCParams": 21,
     "OSD": 2053,
     "RC": 905,

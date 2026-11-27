@@ -69,7 +69,6 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
     "Firmware": 6,
     "Gimbal": 366,
     "Home": 1,
-    "Invalid": 1,
     "MCParams": 8,
     "OSD": 747,
     "RC": 434,

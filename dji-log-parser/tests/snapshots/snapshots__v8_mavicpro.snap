@@ -67,7 +67,6 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
     "Firmware": 6,
     "Gimbal": 3237,
     "Home": 289,
-    "Invalid": 1,
     "MCParams": 50,
     "OSD": 4982,
     "RC": 1820,

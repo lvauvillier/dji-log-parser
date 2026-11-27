@@ -1,6 +1,6 @@
 use binrw::{parser, BinResult, Error};
 
-use std::io::{Read, SeekFrom};
+use std::io::{Read, Seek, SeekFrom};
 
 /// Marker written before images: before the images at the end of v13+ logs, and before the
 /// images embedded in the records of older logs.
@@ -81,6 +81,24 @@ pub fn read_jpeg() -> BinResult<Vec<u8>> {
                 break;
             }
         }
+    }
+}
+
+/// Skips the image markers that are not followed by an image: up to v11, the records can be
+/// followed by a lone marker, and a lone marker can precede a record.
+pub fn skip_lone_image_markers<R: Read + Seek>(reader: &mut R) -> std::io::Result<()> {
+    loop {
+        let start = reader.stream_position()?;
+        let mut bytes = [0; 6];
+        let read = reader.read(&mut bytes)?;
+        let is_lone_marker = read >= IMAGE_MARKER.len()
+            && bytes[..4] == IMAGE_MARKER
+            && (read < bytes.len() || bytes[4..] != [0xFF, 0xD8]);
+        if !is_lone_marker {
+            reader.seek(SeekFrom::Start(start))?;
+            return Ok(());
+        }
+        reader.seek(SeekFrom::Start(start + IMAGE_MARKER.len() as u64))?;
     }
 }
 
@@ -268,6 +286,32 @@ pub fn c_string(bytes: Vec<u8>) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Cursor;
+
+    fn position_after_markers(bytes: &[u8]) -> u64 {
+        let mut reader = Cursor::new(bytes);
+        skip_lone_image_markers(&mut reader).unwrap();
+        reader.position()
+    }
+
+    #[test]
+    fn lone_image_markers_are_skipped() {
+        // Before a record
+        assert_eq!(position_after_markers(&[0x39, 0x30, 0, 0, 0x28, 0x10]), 4);
+        // At the end of the records
+        assert_eq!(position_after_markers(&[0x39, 0x30, 0, 0]), 4);
+        // Repeated
+        assert_eq!(
+            position_after_markers(&[0x39, 0x30, 0, 0, 0x39, 0x30, 0, 0]),
+            8
+        );
+    }
+
+    #[test]
+    fn image_markers_followed_by_an_image_are_kept() {
+        assert_eq!(position_after_markers(&[0x39, 0x30, 0, 0, 0xFF, 0xD8]), 0);
+        assert_eq!(position_after_markers(&[0x01, 0x35, 0x00]), 0);
+    }
 
     #[test]
     fn c_string_ends_at_the_first_nul() {

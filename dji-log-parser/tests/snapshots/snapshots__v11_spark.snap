@@ -68,7 +68,6 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
     "Firmware": 6,
     "Gimbal": 3039,
     "Home": 146,
-    "Invalid": 1,
     "MCParams": 31,
     "OSD": 3043,
     "RC": 1613,

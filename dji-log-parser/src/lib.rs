@@ -353,7 +353,12 @@ impl DJILog {
 
         let mut keychain: Vec<EncodedKeychainFeaturePoint> = Vec::new();
 
-        while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
+        let records_end = self.prefix.records_end_offset(self.inner.len() as u64);
+        loop {
+            utils::skip_lone_image_markers(&mut cursor)?;
+            if cursor.position() >= records_end {
+                break;
+            }
             let empty_keychain = &RefCell::new(Keychain::empty());
             let record = match Record::read(
                 &mut cursor,
@@ -478,7 +483,12 @@ impl DJILog {
 
         let mut records = Vec::new();
 
-        while cursor.position() < self.prefix.records_end_offset(self.inner.len() as u64) {
+        let records_end = self.prefix.records_end_offset(self.inner.len() as u64);
+        loop {
+            utils::skip_lone_image_markers(&mut cursor)?;
+            if cursor.position() >= records_end {
+                break;
+            }
             // decode record
             let record = match Record::read(
                 &mut cursor,
