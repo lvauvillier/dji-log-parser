@@ -1,4 +1,6 @@
 use serde::Serialize;
+
+use crate::record::rc_display_field::RCModeSwitch;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
@@ -20,4 +22,7 @@ pub struct FrameRC {
     pub throttle: u16,
     /// Left stick horizontal position (rudder)
     pub rudder: u16,
+    /// Position of the flight mode switch
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub mode_switch: Option<RCModeSwitch>,
 }

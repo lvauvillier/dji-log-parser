@@ -284,6 +284,7 @@ where
                 frame.rc.elevator = rc.elevator;
                 frame.rc.throttle = rc.throttle;
                 frame.rc.rudder = rc.rudder;
+                frame.rc.mode_switch = Some(rc.mode_switch);
             }
             Record::AppJoystick(joystick) => {
                 frame.app.aileron = Some(joystick.aileron);

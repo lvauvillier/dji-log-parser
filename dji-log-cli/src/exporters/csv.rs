@@ -112,6 +112,7 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RC.elevator".to_string(),      // Right stick vertical position (elevator)
         "RC.throttle".to_string(),      // Left stick vertical position (throttle)
         "RC.rudder".to_string(),        // Left stick horizontal position (rudder)
+        "RC.modeSwitch".to_string(),    // Position of the flight mode switch
         "BATTERY.chargeLevel".to_string(), // Battery charge level in percentage
         "BATTERY.voltage".to_string(),  // Battery voltage
         "BATTERY.current".to_string(),  // Battery current

@@ -160,7 +160,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": "Normal"
         },
         "battery": {
           "chargeLevel": 57,
@@ -335,7 +336,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": "Normal"
         },
         "battery": {
           "chargeLevel": 53,
@@ -510,7 +512,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": "Normal"
         },
         "battery": {
           "chargeLevel": 50,

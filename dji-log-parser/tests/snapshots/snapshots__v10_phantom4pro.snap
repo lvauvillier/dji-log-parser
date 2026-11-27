@@ -155,7 +155,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "aileron": 364,
           "elevator": 364,
           "throttle": 364,
-          "rudder": 1684
+          "rudder": 1684,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 0,
@@ -332,7 +333,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 97,
@@ -509,7 +511,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "aileron": 1183,
           "elevator": 1024,
           "throttle": 364,
-          "rudder": 1684
+          "rudder": 1684,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 95,

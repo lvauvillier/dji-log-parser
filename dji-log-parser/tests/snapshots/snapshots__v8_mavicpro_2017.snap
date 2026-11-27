@@ -156,7 +156,8 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 97,
@@ -332,7 +333,8 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 82,
@@ -508,7 +510,8 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 65,

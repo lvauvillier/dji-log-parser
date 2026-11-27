@@ -153,7 +153,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 0,
@@ -330,7 +331,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1036,
-          "rudder": 1110
+          "rudder": 1110,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 85,
@@ -507,7 +509,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 364,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 82,

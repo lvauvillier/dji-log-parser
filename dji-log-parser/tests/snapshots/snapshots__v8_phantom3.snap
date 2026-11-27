@@ -156,7 +156,8 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "aileron": 0,
           "elevator": 0,
           "throttle": 0,
-          "rudder": 0
+          "rudder": 0,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 0,
@@ -333,7 +334,8 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 68,
@@ -510,7 +512,8 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 66,

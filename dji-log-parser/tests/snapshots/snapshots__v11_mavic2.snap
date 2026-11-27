@@ -154,7 +154,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "aileron": 0,
           "elevator": 0,
           "throttle": 0,
-          "rudder": 0
+          "rudder": 0,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 0,
@@ -331,7 +332,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "aileron": 955,
           "elevator": 772,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 99,
@@ -508,7 +510,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 99,

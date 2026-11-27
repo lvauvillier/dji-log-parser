@@ -157,7 +157,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileron": 463,
           "elevator": 528,
           "throttle": 447,
-          "rudder": 1605
+          "rudder": 1605,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 0,
@@ -333,7 +334,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileron": 1024,
           "elevator": 1684,
           "throttle": 1024,
-          "rudder": 1024
+          "rudder": 1024,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 45,
@@ -509,7 +511,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 364,
-          "rudder": 947
+          "rudder": 947,
+          "modeSwitch": null
         },
         "battery": {
           "chargeLevel": 28,
