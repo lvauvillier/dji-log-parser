@@ -8,10 +8,15 @@ A library and CLI tool for parsing DJI txt logs with support for all log version
 ## Features
 
 - Parse records and extract embedded images from DJI logs
-- Normalize records across different log versions for a consistent frame format
+- Normalize records across different log versions for a consistent frame format: position,
+  attitude, speeds, batteries, RC, camera, gimbal, obstacle avoidance, RTK, serial numbers and
+  firmware versions
 - Export frames to CSV for easy analysis
 - Generate flight tracks in GeoJSON and KML formats
-- Support for all log versions, including encrypted logs (version 13+)
+- Support for all log versions, including encrypted logs (version 13+), checked on a
+  [corpus](dji-log-parser/tests/corpus/README.md) of real logs from version 1 to 14
+- Read large logs record by record, without keeping them in memory
+- JavaScript bindings, for Node and browsers: [dji-log-parser-js](https://www.npmjs.com/package/dji-log-parser-js)
 
 ## Encryption in Version 13 and Later
 
@@ -26,7 +31,7 @@ To acquire an apiKey, follow these steps:
 1. Visit [DJI Developer Technologies](https://developer.dji.com/user) and log in.
 2. Click `CREATE APP`, choose `Open API` as the App Type, and provide the necessary details like `App Name`, `Category`, and `Description`.
 3. After creating the app, activate it through the link sent to your email.
-4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key).
+4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key or App Key).
 
 ## Cli Usage
 
@@ -109,12 +114,19 @@ println!("Details: {:?}", parser.details);
 
 For logs version 13 and later, keychains must be retrieved from the DJI API to decode the records:
 
-```js
+```rust
 // Replace `__DJI_API_KEY__` with your actual apiKey
 let keychains = parser.fetch_keychains("__DJI_API_KEY__").unwrap();
 ```
 
-Keychains can be retrieved once, serialized, and stored along with the log file for future offline use.
+Keychains can be retrieved once, serialized, and stored along with the log file for future offline use:
+
+```rust
+std::fs::write("keychains.json", serde_json::to_string(&keychains).unwrap()).unwrap();
+
+let keychains: Vec<Vec<KeychainFeaturePoint>> =
+    serde_json::from_slice(&std::fs::read("keychains.json").unwrap()).unwrap();
+```
 
 ### Accessing Frames
 
@@ -135,6 +147,10 @@ For version 13 and later:
 let frames = parser.frames(Some(keychains));
 ```
 
+Each frame holds the state of the aircraft at an OSD record (about 10 per second), in sections:
+`osd`, `gimbal`, `camera`, `rc`, `battery` (with `battery1` and `battery2` on aircraft with
+several batteries), `home`, `recover`, `app`, `vision`, `rtk`, `serial`, `firmware` and `custom`.
+
 ### Accessing raw Records
 
 Decrypt raw records based on the log file version.
@@ -150,8 +166,21 @@ For version 13 and later:
 let records = parser.records(Some(keychains));
 ```
 
+### Reading large logs
+
+`records_iter` and `frames_iter` read the records and the frames one by one, without keeping them
+all in memory:
+
+```rust
+let max_height = parser
+    .frames_iter(Some(keychains))
+    .unwrap()
+    .map(|frame| frame.osd.height)
+    .fold(0.0, f32::max);
+```
+
 For more information, including a more detailed overview of the log format, [visit the documentation](https://docs.rs/dji-log-parser).
 
 ## License
 
-dji-log-parser is available under the MIT license. See the LICENSE.txt file for more info.
+dji-log-parser is available under the MIT license. See the [LICENSE](LICENSE) file for more info.

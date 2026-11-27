@@ -9,7 +9,9 @@ A powerful JavaScript library for parsing DJI txt logs with support for all log 
 - Support for all log versions, including encrypted logs (version 13+)
 - Easy-to-use API for accessing general data, frames, and raw records
 - Ability to fetch and store keychains for offline use with encrypted logs
-- Browser support ([See Limitations](#limitations))
+- One ES module for Node, browsers and bundlers, with the WebAssembly inlined: no loader to
+  configure ([See Limitations](#limitations))
+- TypeScript types of the details, frames and records
 
 ## Installation
 
@@ -38,7 +40,7 @@ To acquire an apiKey, follow these steps:
 1. Visit [DJI Developer Technologies](https://developer.dji.com/user) and log in.
 2. Click `CREATE APP`, choose `Open API` as the App Type, and provide the necessary details like `App Name`, `Category`, and `Description`.
 3. After creating the app, activate it through the link sent to your email.
-4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key).
+4. On your developer user page, find your app's details to retrieve the ApiKey (labeled as the SDK key or App Key).
 
 ## Library Usage
 
@@ -128,6 +130,10 @@ For version 13 and later:
 const frames = parser.frames(keychains);
 ```
 
+Each frame holds the state of the aircraft at an OSD record (about 10 per second), in sections:
+`osd`, `gimbal`, `camera`, `rc`, `battery` (with `battery1` and `battery2` on aircraft with
+several batteries), `home`, `recover`, `app`, `vision`, `rtk`, `serial`, `firmware` and `custom`.
+
 ### Accessing raw Records
 
 Decrypt raw records based on the log file version.
@@ -142,6 +148,24 @@ For version 13 and later:
 ```js
 const records = parser.records(keychains);
 ```
+
+### Errors
+
+The functions throw `Error` objects, for example when the log can't be read or the keychains are
+invalid:
+
+```js
+try {
+  const frames = parser.frames(keychains);
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+### TypeScript
+
+The types use `Symbol.dispose`: set `lib` to `esnext` (or later) in `tsconfig.json`, or enable
+`skipLibCheck`.
 
 ## Limitations
 
@@ -189,4 +213,4 @@ const keychains = await parser.fetchKeychains(
 
 ## License
 
-dji-log-parser-js is available under the MIT license. See the LICENSE.txt file for more info.
+dji-log-parser-js is available under the MIT license. See the LICENSE file for more info.

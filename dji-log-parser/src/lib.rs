@@ -17,7 +17,7 @@
 //!    details like `App Name`, `Category`, and `Description`.
 //! 3. After creating the app, activate it through the link sent to your email.
 //! 4. On your developer user page, find your app's details to retrieve the ApiKey
-//!    (labeled as the SDK key).
+//!    (labeled as the SDK key or App Key).
 //!
 //! ## Usage
 //!
@@ -67,6 +67,9 @@
 //!
 //! A `Frame` is a standardized representation of log data, normalized across different log versions.
 //! It provides a consistent and easy-to-use format for analyzing and processing DJI log information.
+//! Each frame holds the state of the aircraft at an OSD record (about 10 per second), in sections:
+//! `osd`, `gimbal`, `camera`, `rc`, `battery` (with `battery1` and `battery2` on aircraft with
+//! several batteries), `home`, `recover`, `app`, `vision`, `rtk`, `serial`, `firmware` and `custom`.
 //!
 //! For versions prior to 13:
 //!
@@ -113,6 +116,22 @@
 //! # Ok::<(), dji_log_parser::Error>(())
 //! ```
 //!
+//! ### Reading large logs
+//!
+//! [`DJILog::records_iter`] and [`DJILog::frames_iter`] read the records and the frames one by
+//! one, without keeping them all in memory:
+//!
+//! ```no_run
+//! # use dji_log_parser::DJILog;
+//! # let bytes = std::fs::read("DJIFlightRecord.txt")?;
+//! # let parser = DJILog::from_bytes(bytes)?;
+//! # let keychains = parser.fetch_keychains("__DJI_API_KEY__")?;
+//! let max_height = parser
+//!     .frames_iter(Some(keychains))?
+//!     .map(|frame| frame.osd.height)
+//!     .fold(0.0, f32::max);
+//! # Ok::<(), dji_log_parser::Error>(())
+//! ```
 //!
 //! ## Binary structure of log files:
 //!
