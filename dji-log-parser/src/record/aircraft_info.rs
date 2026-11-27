@@ -7,19 +7,25 @@ use tsify_next::Tsify;
 use crate::record::protobuf::{fields, Value};
 use crate::utils::c_string;
 
-/// Information about the aircraft, written once per flight in recent logs: a message type and a
+/// Information about the aircraft, written once per flight in recent logs: a header, then a
 /// message encoded as protocol buffers.
+///
+/// The header holds the module and the key of the message (`u16` each), the length of the message
+/// (`u16`), a zero and flags whose high bit tells that a timestamp follows, always set in these
+/// records. The `FlightRecordTypeFrameData` records (type 254) share this header.
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[br(little)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct AircraftInfo {
+    /// Low byte of the module, which tells the type of the message
     #[br(temp)]
     message_type: u8,
+    /// High byte of the module (0), then the key (always 1)
     #[br(temp)]
     _unknown: [u8; 3],
-    /// The high bit is always set
+    /// Length of the message, then the zero and the flags in the high byte
     #[br(temp)]
     message_length: u32,
     #[br(map = |x: i64| {

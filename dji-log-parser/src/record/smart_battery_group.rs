@@ -155,6 +155,18 @@ pub struct SmartBatteryDynamic {
     pub cell_count: u8,
     pub capacity_percent: u8,
     pub battery_state: u64,
+    /// Older records end before it
+    #[br(temp, try, pad_before = 11)]
+    remaining_energy_raw: Option<u16>,
+    /// Wh, estimated by the battery. Only on some recent drones
+    #[br(calc = remaining_energy_raw.and_then(remaining_energy))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub remaining_energy: Option<f32>,
+}
+
+/// Energy in tenths of Wh, the high bit tells that it is known.
+fn remaining_energy(raw: u16) -> Option<f32> {
+    (raw & 0x8000 != 0).then(|| f32::from(raw & 0x7FFF) / 10.0)
 }
 
 impl SmartBatteryDynamic {
@@ -219,6 +231,23 @@ mod tests {
             .step_by(2)
             .map(|i| u8::from_str_radix(&text[i..i + 2], 16).unwrap())
             .collect()
+    }
+
+    #[test]
+    fn remaining_energy_when_known() {
+        let mut data = vec![2, 0];
+        data.extend(7800i32.to_le_bytes());
+        data.extend((-2000i32).to_le_bytes());
+        data.extend(3000u32.to_le_bytes());
+        data.extend(2500u32.to_le_bytes());
+        data.extend(250i16.to_le_bytes());
+        data.extend([2, 80]);
+        data.extend(0u64.to_le_bytes());
+        data.extend([0; 11]);
+        data.extend((0x8000u16 | 160).to_le_bytes());
+
+        assert_eq!(dynamic(14, &data).remaining_energy, Some(16.0));
+        assert_eq!(dynamic(14, &data[..35]).remaining_energy, None);
     }
 
     /// Static record of a Mavic 2 battery.
