@@ -158,7 +158,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "elevator": 528,
           "throttle": 447,
           "rudder": 1605,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": -0.85,
+          "elevatorNormalized": -0.75151515,
+          "throttleNormalized": -0.8742424,
+          "rudderNormalized": 0.880303
         },
         "battery": {
           "chargeLevel": 0,
@@ -238,7 +242,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -351,7 +359,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "elevator": 1684,
           "throttle": 1024,
           "rudder": 1024,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 1.0,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 45,
@@ -431,7 +443,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -544,7 +560,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "elevator": 1024,
           "throttle": 364,
           "rudder": 947,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": -1.0,
+          "rudderNormalized": -0.11666667
         },
         "battery": {
           "chargeLevel": 28,
@@ -624,7 +644,11 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

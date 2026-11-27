@@ -161,7 +161,11 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "elevator": 1024,
           "throttle": 1024,
           "rudder": 1024,
-          "modeSwitch": "Normal"
+          "modeSwitch": "Normal",
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 57,
@@ -240,7 +244,11 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -353,7 +361,11 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "elevator": 1024,
           "throttle": 1024,
           "rudder": 1024,
-          "modeSwitch": "Normal"
+          "modeSwitch": "Normal",
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 53,
@@ -432,7 +444,11 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -545,7 +561,11 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "elevator": 1024,
           "throttle": 1024,
           "rudder": 1024,
-          "modeSwitch": "Normal"
+          "modeSwitch": "Normal",
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 50,
@@ -624,7 +644,11 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

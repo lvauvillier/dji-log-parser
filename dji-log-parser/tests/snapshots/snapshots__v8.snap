@@ -157,7 +157,11 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "elevator": 364,
           "throttle": 364,
           "rudder": 1684,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": -1.0,
+          "elevatorNormalized": -1.0,
+          "throttleNormalized": -1.0,
+          "rudderNormalized": 1.0
         },
         "battery": {
           "chargeLevel": 0,
@@ -238,7 +242,11 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": false,
@@ -351,7 +359,11 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "elevator": 1024,
           "throttle": 787,
           "rudder": 1024,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": -0.3590909,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 45,
@@ -432,7 +444,11 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -545,7 +561,11 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "elevator": 1024,
           "throttle": 364,
           "rudder": 1036,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": -1.0,
+          "rudderNormalized": 0.018181818
         },
         "battery": {
           "chargeLevel": 14,
@@ -626,7 +646,11 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

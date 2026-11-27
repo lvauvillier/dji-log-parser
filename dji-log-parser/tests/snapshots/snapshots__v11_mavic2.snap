@@ -155,7 +155,11 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "elevator": 0,
           "throttle": 0,
           "rudder": 0,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 0,
@@ -236,7 +240,11 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -349,7 +357,11 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "elevator": 772,
           "throttle": 1024,
           "rudder": 1024,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": -0.10454545,
+          "elevatorNormalized": -0.38181818,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 99,
@@ -430,7 +442,11 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,
@@ -543,7 +559,11 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "elevator": 1024,
           "throttle": 1024,
           "rudder": 1024,
-          "modeSwitch": null
+          "modeSwitch": null,
+          "aileronNormalized": 0.0,
+          "elevatorNormalized": 0.0,
+          "throttleNormalized": 0.0,
+          "rudderNormalized": 0.0
         },
         "battery": {
           "chargeLevel": 99,
@@ -624,7 +644,11 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "aileron": null,
           "elevator": null,
           "throttle": null,
-          "rudder": null
+          "rudder": null,
+          "aileronNormalized": null,
+          "elevatorNormalized": null,
+          "throttleNormalized": null,
+          "rudderNormalized": null
         },
         "vision": {
           "isObstacleAvoidanceEnabled": true,

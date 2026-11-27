@@ -29,12 +29,19 @@ impl Exporter for CSVExporter {
                 return;
             };
 
-            // The columns of the separate batteries and of the RTK only when the log has them
+            // The columns of the separate batteries, of the RTK and of the sticks of the app only
+            // when the log has them
             let has = |found: fn(&Frame) -> bool| frames.iter().any(found);
+            let has_app_sticks = has(|frame| frame.app.aileron.is_some());
             let missing_sections: Vec<&str> = [
                 ("BATTERY1.", has(|frame| frame.battery1.voltage.is_some())),
                 ("BATTERY2.", has(|frame| frame.battery2.voltage.is_some())),
                 ("RTK.", has(|frame| frame.rtk.solution.is_some())),
+                // Also the normalized sticks: their names start with the same prefixes
+                ("APP.aileron", has_app_sticks),
+                ("APP.elevator", has_app_sticks),
+                ("APP.throttle", has_app_sticks),
+                ("APP.rudder", has_app_sticks),
             ]
             .into_iter()
             .filter_map(|(prefix, found)| (!found).then_some(prefix))
@@ -156,6 +163,10 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RC.throttle".to_string(),      // Left stick vertical position (throttle)
         "RC.rudder".to_string(),        // Left stick horizontal position (rudder)
         "RC.modeSwitch".to_string(),    // Position of the flight mode switch
+        "RC.aileronNormalized".to_string(), // Right stick horizontal position, from -1 to 1
+        "RC.elevatorNormalized".to_string(), // Right stick vertical position, from -1 to 1
+        "RC.throttleNormalized".to_string(), // Left stick vertical position, from -1 to 1
+        "RC.rudderNormalized".to_string(), // Left stick horizontal position, from -1 to 1
         "BATTERY.chargeLevel".to_string(), // Battery charge level in percentage
         "BATTERY.voltage".to_string(),  // Battery voltage
         "BATTERY.current".to_string(),  // Battery current
@@ -227,6 +238,10 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "APP.elevator".to_string(),      // Right stick vertical position of the app
         "APP.throttle".to_string(),      // Left stick vertical position of the app
         "APP.rudder".to_string(),        // Left stick horizontal position of the app
+        "APP.aileronNormalized".to_string(), // Right stick horizontal position of the app, from -1 to 1
+        "APP.elevatorNormalized".to_string(), // Right stick vertical position of the app, from -1 to 1
+        "APP.throttleNormalized".to_string(), // Left stick vertical position of the app, from -1 to 1
+        "APP.rudderNormalized".to_string(), // Left stick horizontal position of the app, from -1 to 1
         "VISION.isObstacleAvoidanceEnabled".to_string(), // Indicates if obstacle avoidance is enabled
         "VISION.isCollisionAvoidanceEnabled".to_string(), // Indicates if collision avoidance is enabled
         "VISION.isAvoidingObstacleLegacy".to_string(), // Indicates if the aircraft is avoiding an obstacle, on older aircraft

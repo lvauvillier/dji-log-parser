@@ -121,7 +121,10 @@ pub struct OSD {
     #[br(calc(sub_byte_field(_bitpack6, 0x10) == 1))]
     pub waypoint_limit_mode: bool,
 
-    pub battery: u8,
+    /// Not a battery value: it moves slowly up to v9, is 0 in v10 and v11, and counts up by 5
+    /// per record from v12
+    #[br(temp)]
+    _unknown2: u8,
     /// meters
     #[br(map = |x: u8| x as f32 / 10.0)]
     pub s_wave_height: f32,

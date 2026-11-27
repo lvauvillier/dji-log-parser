@@ -31,6 +31,7 @@ pub use details::FrameDetails;
 pub use gimbal::FrameGimbal;
 pub use home::FrameHome;
 pub use osd::FrameOSD;
+use rc::normalized_stick;
 pub use rc::FrameRC;
 pub use recover::FrameRecover;
 pub use rtk::FrameRTK;
@@ -281,16 +282,14 @@ where
                 frame.camera.sd_card_state = Some(camera.sd_card_state);
             }
             Record::RC(rc) => {
-                frame.rc.aileron = rc.aileron;
-                frame.rc.elevator = rc.elevator;
-                frame.rc.throttle = rc.throttle;
-                frame.rc.rudder = rc.rudder;
+                frame
+                    .rc
+                    .set_sticks(rc.aileron, rc.elevator, rc.throttle, rc.rudder);
             }
             Record::RCDisplayField(rc) => {
-                frame.rc.aileron = rc.aileron;
-                frame.rc.elevator = rc.elevator;
-                frame.rc.throttle = rc.throttle;
-                frame.rc.rudder = rc.rudder;
+                frame
+                    .rc
+                    .set_sticks(rc.aileron, rc.elevator, rc.throttle, rc.rudder);
                 frame.rc.mode_switch = Some(rc.mode_switch);
             }
             Record::AppJoystick(joystick) => {
@@ -298,6 +297,10 @@ where
                 frame.app.elevator = Some(joystick.elevator);
                 frame.app.throttle = Some(joystick.throttle);
                 frame.app.rudder = Some(joystick.rudder);
+                frame.app.aileron_normalized = Some(normalized_stick(joystick.aileron));
+                frame.app.elevator_normalized = Some(normalized_stick(joystick.elevator));
+                frame.app.throttle_normalized = Some(normalized_stick(joystick.throttle));
+                frame.app.rudder_normalized = Some(normalized_stick(joystick.rudder));
             }
             Record::CenterBattery(battery) => {
                 frame.battery.charge_level = battery.relative_capacity;
