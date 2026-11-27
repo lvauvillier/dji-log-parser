@@ -29,8 +29,8 @@ impl Exporter for CSVExporter {
                 return;
             };
 
-            // The columns of the separate batteries, of the RTK, of the sticks of the app and of
-            // the serial numbers only when the log has them
+            // The columns of the separate batteries, of the RTK, of the sticks of the app, of the
+            // serial numbers and of the firmware versions only when the log has them
             let has = |found: fn(&Frame) -> bool| frames.iter().any(found);
             let has_app_sticks = has(|frame| frame.app.aileron.is_some());
             let missing_sections: Vec<&str> = [
@@ -75,6 +75,38 @@ impl Exporter for CSVExporter {
                     has(|frame| frame.serial.gimbal2.is_some()),
                 ),
                 ("SERIAL.ssd", has(|frame| frame.serial.ssd.is_some())),
+                (
+                    "FIRMWARE.aircraft",
+                    has(|frame| frame.firmware.aircraft.is_some()),
+                ),
+                (
+                    "FIRMWARE.remoteController",
+                    has(|frame| frame.firmware.remote_controller.is_some()),
+                ),
+                (
+                    "FIRMWARE.battery1",
+                    has(|frame| frame.firmware.battery1.is_some()),
+                ),
+                (
+                    "FIRMWARE.battery2",
+                    has(|frame| frame.firmware.battery2.is_some()),
+                ),
+                (
+                    "FIRMWARE.camera1",
+                    has(|frame| frame.firmware.camera1.is_some()),
+                ),
+                (
+                    "FIRMWARE.camera2",
+                    has(|frame| frame.firmware.camera2.is_some()),
+                ),
+                (
+                    "FIRMWARE.gimbal1",
+                    has(|frame| frame.firmware.gimbal1.is_some()),
+                ),
+                (
+                    "FIRMWARE.gimbal2",
+                    has(|frame| frame.firmware.gimbal2.is_some()),
+                ),
             ]
             .into_iter()
             .filter_map(|(prefix, found)| (!found).then_some(prefix))
@@ -312,6 +344,14 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "SERIAL.gimbal1".to_string(),      // Serial number of the gimbal
         "SERIAL.gimbal2".to_string(),      // Serial number of the second gimbal
         "SERIAL.ssd".to_string(),          // Serial number of the SSD
+        "FIRMWARE.aircraft".to_string(),   // Firmware version of the flight controller
+        "FIRMWARE.remoteController".to_string(), // Firmware version of the remote controller
+        "FIRMWARE.battery1".to_string(),   // Firmware version of the battery
+        "FIRMWARE.battery2".to_string(),   // Firmware version of the second battery
+        "FIRMWARE.camera1".to_string(),    // Firmware version of the camera
+        "FIRMWARE.camera2".to_string(),    // Firmware version of the second camera
+        "FIRMWARE.gimbal1".to_string(),    // Firmware version of the gimbal
+        "FIRMWARE.gimbal2".to_string(),    // Firmware version of the second gimbal
         "DETAILS.totalTime".to_string(),   // Total flight time in seconds
         "DETAILS.totalDistance".to_string(), // Total distance flown in meters
         "DETAILS.maxHeight".to_string(),   // Maximum height reached during the flight in meters

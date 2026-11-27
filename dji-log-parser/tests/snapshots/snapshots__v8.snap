@@ -290,6 +290,16 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "87.10.1.3",
+          "remoteController": null,
+          "battery1": "45.0.0.2",
+          "battery2": null,
+          "camera1": "116.19.13.1",
+          "camera2": null,
+          "gimbal1": "40.12.50.1",
+          "gimbal2": "0.0.2.1"
         }
       }
     },
@@ -505,6 +515,16 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "87.10.1.3",
+          "remoteController": null,
+          "battery1": "45.0.0.2",
+          "battery2": null,
+          "camera1": "116.19.13.1",
+          "camera2": null,
+          "gimbal1": "40.12.50.1",
+          "gimbal2": "0.0.2.1"
         }
       }
     },
@@ -720,6 +740,16 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "87.10.1.3",
+          "remoteController": null,
+          "battery1": "45.0.0.2",
+          "battery2": null,
+          "camera1": "116.19.13.1",
+          "camera2": null,
+          "gimbal1": "40.12.50.1",
+          "gimbal2": "0.0.2.1"
         }
       }
     }

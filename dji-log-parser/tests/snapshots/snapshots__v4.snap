@@ -63,7 +63,6 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
     "CenterBattery": 87,
     "Custom": 872,
     "Deform": 174,
-    "Firmware": 6,
     "Gimbal": 872,
     "Home": 87,
     "JPEG": 2,
@@ -71,7 +70,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
     "RC": 872,
     "RCGPS": 87,
     "Recover": 6,
-    "SmartBattery": 87
+    "SmartBattery": 87,
+    "Unknown": 6
   },
   "frame_count": 872,
   "sample_frames": [
@@ -287,6 +287,16 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     },
@@ -502,6 +512,16 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     },
@@ -717,6 +737,16 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     }

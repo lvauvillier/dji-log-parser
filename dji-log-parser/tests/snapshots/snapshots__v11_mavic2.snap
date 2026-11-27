@@ -288,6 +288,16 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     },
@@ -503,6 +513,16 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "3.4.0.51",
+          "remoteController": null,
+          "battery1": "2.74.6.11",
+          "battery2": null,
+          "camera1": "0.8.0.17",
+          "camera2": null,
+          "gimbal1": "0.1.10.76",
+          "gimbal2": null
         }
       }
     },
@@ -718,6 +738,16 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "3.4.0.51",
+          "remoteController": null,
+          "battery1": "2.74.6.11",
+          "battery2": null,
+          "camera1": "0.8.0.17",
+          "camera2": null,
+          "gimbal1": "0.1.10.76",
+          "gimbal2": null
         }
       }
     }

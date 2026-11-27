@@ -290,6 +290,16 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     },
@@ -504,6 +514,16 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "3.2.43.20",
+          "remoteController": null,
+          "battery1": "1.0.0.85",
+          "battery2": null,
+          "camera1": "0.0.18.2",
+          "camera2": null,
+          "gimbal1": "1.0.1.30",
+          "gimbal2": null
         }
       }
     },
@@ -718,6 +738,16 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "3.2.43.20",
+          "remoteController": null,
+          "battery1": "1.0.0.85",
+          "battery2": null,
+          "camera1": "0.0.18.2",
+          "camera2": null,
+          "gimbal1": "1.0.1.30",
+          "gimbal2": null
         }
       }
     }

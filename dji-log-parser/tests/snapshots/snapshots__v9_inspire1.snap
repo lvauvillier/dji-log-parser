@@ -294,6 +294,16 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     },
@@ -511,6 +521,16 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "1.11.1.50",
+          "remoteController": null,
+          "battery1": "1.11.1.50",
+          "battery2": null,
+          "camera1": "1.11.1.50",
+          "camera2": null,
+          "gimbal1": "0.0.0.0",
+          "gimbal2": null
         }
       }
     },
@@ -728,6 +748,16 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "1.11.1.50",
+          "remoteController": null,
+          "battery1": "1.11.1.50",
+          "battery2": null,
+          "camera1": "1.11.1.50",
+          "camera2": null,
+          "gimbal1": "0.0.0.0",
+          "gimbal2": null
         }
       }
     }

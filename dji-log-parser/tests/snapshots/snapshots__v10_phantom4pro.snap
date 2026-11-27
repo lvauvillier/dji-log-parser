@@ -289,6 +289,16 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null
         }
       }
     },
@@ -504,6 +514,16 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "3.2.35.5",
+          "remoteController": null,
+          "battery1": "0.0.0.0",
+          "battery2": null,
+          "camera1": "1.5.15.77",
+          "camera2": "0.0.0.0",
+          "gimbal1": "1.50.13.1",
+          "gimbal2": "0.0.0.0"
         }
       }
     },
@@ -719,6 +739,16 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "3.2.35.5",
+          "remoteController": null,
+          "battery1": "0.0.0.0",
+          "battery2": null,
+          "camera1": "1.5.15.77",
+          "camera2": "0.0.0.0",
+          "gimbal1": "1.50.13.1",
+          "gimbal2": "0.0.0.0"
         }
       }
     }

@@ -16,6 +16,7 @@ mod battery;
 mod camera;
 mod custom;
 mod details;
+mod firmware;
 mod gimbal;
 mod home;
 mod osd;
@@ -30,6 +31,7 @@ pub use battery::{FrameBattery, FrameBatteryPack};
 pub use camera::FrameCamera;
 pub use custom::FrameCustom;
 pub use details::FrameDetails;
+pub use firmware::FrameFirmware;
 pub use gimbal::FrameGimbal;
 pub use home::FrameHome;
 pub use osd::FrameOSD;
@@ -67,6 +69,7 @@ pub struct Frame {
     pub vision: FrameVision,
     pub rtk: FrameRTK,
     pub serial: FrameSerial,
+    pub firmware: FrameFirmware,
 }
 
 impl Frame {
@@ -515,6 +518,7 @@ impl FrameBuilder {
                 frame.home.max_allowed_height = home.max_allowed_height;
                 frame.home.current_flight_record_index = home.current_flight_record_index;
             }
+            Record::Firmware(firmware) => frame.firmware.update(firmware),
             Record::ComponentSerial(component) => {
                 self.serials.update(component);
                 frame.serial = self.serials.or(&self.fallback_serials);

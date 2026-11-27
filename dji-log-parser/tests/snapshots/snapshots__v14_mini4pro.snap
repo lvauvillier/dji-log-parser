@@ -292,6 +292,16 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "4.0.0.2",
+          "remoteController": "1.1.3.0",
+          "battery1": "22.75.0.17",
+          "battery2": null,
+          "camera1": "10.8.66.2",
+          "camera2": null,
+          "gimbal1": "1.0.12.70",
+          "gimbal2": null
         }
       }
     },
@@ -505,6 +515,16 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "4.0.0.2",
+          "remoteController": "1.1.3.0",
+          "battery1": "22.75.0.17",
+          "battery2": null,
+          "camera1": "10.8.66.2",
+          "camera2": null,
+          "gimbal1": "1.0.12.70",
+          "gimbal2": null
         }
       }
     },
@@ -718,6 +738,16 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "gimbal1": null,
           "gimbal2": null,
           "ssd": null
+        },
+        "firmware": {
+          "aircraft": "4.0.0.2",
+          "remoteController": "1.1.3.0",
+          "battery1": "22.75.0.17",
+          "battery2": null,
+          "camera1": "10.8.66.2",
+          "camera2": null,
+          "gimbal1": "1.0.12.70",
+          "gimbal2": null
         }
       }
     }

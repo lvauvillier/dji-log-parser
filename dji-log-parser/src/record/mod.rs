@@ -200,7 +200,7 @@ impl Record {
             11 => Record::RCGPS(content.read(())?),
             13 => Record::Recover(content.read::<Recover>(args! { length })?),
             14 => Record::AppGPS(content.read(())?),
-            15 => Record::Firmware(content.read(())?),
+            15 => Record::Firmware(content.read::<Firmware>((version, length))?),
             17 => Record::VisionGroup(content.read::<VisionGroup>((length,))?),
             19 => Record::MCParams(content.read(())?),
             22 => Record::SmartBatteryGroup(content.read::<SmartBatteryGroup>((version, length))?),
