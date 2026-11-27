@@ -35,6 +35,7 @@ pub mod rc;
 pub mod rc_display_field;
 pub mod rc_gps;
 pub mod recover;
+pub mod rtk_difference;
 pub mod smart_battery;
 pub mod smart_battery_group;
 pub mod virtual_stick;
@@ -65,6 +66,7 @@ use rc::RC;
 use rc_display_field::RCDisplayField;
 use rc_gps::RCGPS;
 use recover::Recover;
+use rtk_difference::RTKDifference;
 use smart_battery::SmartBattery;
 use smart_battery_group::*;
 use virtual_stick::VirtualStick;
@@ -114,6 +116,7 @@ pub enum Record {
     AircraftInfo(AircraftInfo),
     GroundStationPushData(GroundStationPushData),
     FlightControllerCommonOSDField(FlightControllerCommonOSDField),
+    RTKDifference(RTKDifference),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -203,6 +206,7 @@ impl Record {
             29 => Record::AppJoystick(content.read::<AppJoystick>(args! { length })?),
             33 => Record::VirtualStick(content.read(())?),
             40 => Record::ComponentSerial(content.read(())?),
+            45 => Record::RTKDifference(content.read(())?),
             48 => Record::GroundStationPushData(
                 content.read::<GroundStationPushData>(args! { length })?,
             ),
