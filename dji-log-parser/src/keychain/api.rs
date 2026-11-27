@@ -100,18 +100,23 @@ pub(crate) mod native {
     ) -> Result<Vec<Vec<KeychainFeaturePoint>>> {
         let body = serde_json::to_string(&request)?;
 
-        let response = ureq::post(endpoint)
-            .set("Content-Type", "application/json")
-            .set("Api-Key", api_key)
-            .timeout(Duration::from_secs(30))
-            .send_string(&body)
+        let mut response = ureq::post(endpoint)
+            .header("Content-Type", "application/json")
+            .header("Api-Key", api_key)
+            .config()
+            .timeout_global(Some(Duration::from_secs(30)))
+            .build()
+            .send(&body)
             .map_err(|e| match e {
-                ureq::Error::Status(403, _) => Error::ApiKeyError,
-                ureq::Error::Status(status, _) => Error::NetworkRequestStatus(status),
+                ureq::Error::StatusCode(403) => Error::ApiKeyError,
+                ureq::Error::StatusCode(status) => Error::NetworkRequestStatus(status),
                 _ => Error::NetworkConnection,
             })?;
 
-        let keychains_response: KeychainsResponse = response.into_json()?;
+        let keychains_response: KeychainsResponse = response
+            .body_mut()
+            .read_json()
+            .map_err(|_| Error::NetworkConnection)?;
 
         if keychains_response.result.code != 0 {
             Err(Error::ApiError(keychains_response.result.msg))
@@ -170,9 +175,9 @@ pub(crate) mod wasm {
     ) -> Result<Vec<Vec<KeychainFeaturePoint>>> {
         let body = serde_json::to_string(&request)?;
 
-        let mut init = RequestInit::new();
-        init.method("POST");
-        init.body(Some(&JsValue::from_str(&body)));
+        let init = RequestInit::new();
+        init.set_method("POST");
+        init.set_body(&JsValue::from_str(&body));
 
         let request = Request::new_with_str_and_init(endpoint, &init)
             .map_err(|_| Error::ApiError("Unable to init request".to_owned()))?;

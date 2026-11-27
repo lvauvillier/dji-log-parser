@@ -1,7 +1,7 @@
 use dji_log_parser::frame::Frame;
 use dji_log_parser::record::Record;
 use dji_log_parser::DJILog;
-use geojson::{Feature, GeoJson, Geometry, JsonObject, JsonValue, Value};
+use geojson::{Feature, GeoJson, Geometry, GeometryValue, JsonObject, JsonValue, Position};
 use std::{fs::File, io::Write};
 
 use crate::{Cli, Exporter};
@@ -11,13 +11,13 @@ pub struct GeoJsonExporter;
 impl Exporter for GeoJsonExporter {
     fn export(&self, parser: &DJILog, _records: &[Record], frames: &[Frame], args: &Cli) {
         if let Some(geojson_path) = &args.geojson {
-            // Create a Value::LineString from all the coords.
+            // Create a line string from all the coords.
             let mut coords = vec![];
             frames.iter().for_each(|frame| {
                 let lat = frame.osd.latitude;
                 let lon = frame.osd.longitude;
                 let alt = frame.osd.altitude as f64;
-                let coord = vec![lon, lat, alt];
+                let coord = Position::from([lon, lat, alt]);
                 coords.push(coord);
             });
             let mut properties = JsonObject::new();
@@ -163,7 +163,9 @@ impl Exporter for GeoJsonExporter {
             );
             properties.insert("cameraSN".to_string(), JsonValue::String(details.camera_sn));
 
-            let geometry = Geometry::new(Value::LineString(coords));
+            let geometry = Geometry::new(GeometryValue::LineString {
+                coordinates: coords,
+            });
             let feature = Feature {
                 bbox: None,
                 geometry: Some(geometry),

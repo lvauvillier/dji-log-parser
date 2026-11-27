@@ -18,30 +18,30 @@ categories = [
 
 [workspace.dependencies]
 dji-log-parser = { path = "dji-log-parser" }
-aes = "0.9"
-async-channel = "2.0"
-base64 = "0.21.5"
-binrw = "0.13.1"
-cbc = "0.2"
-chrono = { version = "0.4.31", features = ["serde"] }
-clap = { version = "4.4.11", features = ["derive"] }
+aes = "0.9.4"
+async-channel = "2.5"
+base64 = "0.23"
+binrw = "0.15"
+cbc = "0.2.1"
+chrono = { version = "0.4.45", features = ["serde"] }
+clap = { version = "4.6", features = ["derive"] }
 crc64 = "2.0.0"
-csv = "1.0.0"
-geojson = "0.24.1"
-img-parts = "0.3.0"
-insta = "1.49.0"
-js-sys = "0.3"
-kamadak-exif = "0.5.5"
-kml = "0.8.5"
-num_enum = "0.7"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-sha2 = "0.10"
-thiserror = "1.0"
-ureq = { version = "2.0", features = ["json"] }
-zip = { version = "0.6", default-features = false }
-serde-wasm-bindgen = "0.4"
-tsify-next = "0.5.3"
-wasm-bindgen = "0.2"
-wasm-bindgen-futures = "0.4.42"
-web-sys = "0.3"
+csv = "1.4"
+geojson = "1.0"
+img-parts = "0.4"
+insta = "1.49"
+js-sys = "0.3.107"
+kamadak-exif = "0.6"
+kml = "0.15"
+num_enum = "0.7.6"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha2 = "0.11"
+thiserror = "2.0"
+ureq = { version = "3.5", features = ["json"] }
+zip = { version = "9.8", default-features = false }
+serde-wasm-bindgen = "0.6"
+tsify-next = "0.5.6"
+wasm-bindgen = "0.2.130"
+wasm-bindgen-futures = "0.4.80"
+web-sys = "0.3.107"

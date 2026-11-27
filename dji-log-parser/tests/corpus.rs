@@ -57,7 +57,10 @@ fn cache_dir() -> PathBuf {
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
+    Sha256::digest(bytes)
+        .iter()
+        .map(|byte| format!("{byte:02x}"))
+        .collect()
 }
 
 fn download(url: &str) -> Result<Vec<u8>, String> {
@@ -65,7 +68,10 @@ fn download(url: &str) -> Result<Vec<u8>, String> {
     ureq::get(url)
         .call()
         .map_err(|e| format!("download {url}: {e}"))?
-        .into_reader()
+        .into_body()
+        .into_with_config()
+        .limit(u64::MAX)
+        .reader()
         .read_to_end(&mut bytes)
         .map_err(|e| format!("download {url}: {e}"))?;
     Ok(bytes)
@@ -87,8 +93,9 @@ impl RemoteFile {
     fn open(url: &str) -> io::Result<Self> {
         // Google Drive ignores a range of a single byte
         let size = Self::get_range(url, 0, 1)?
-            .header("Content-Range")
-            .and_then(|range| range.rsplit('/').next()?.parse().ok())
+            .headers()
+            .get("Content-Range")
+            .and_then(|range| range.to_str().ok()?.rsplit('/').next()?.parse().ok())
             .ok_or_else(|| {
                 io::Error::other(format!(
                     "{url} doesn't support range requests, or its download quota is exceeded"
@@ -102,9 +109,9 @@ impl RemoteFile {
         })
     }
 
-    fn get_range(url: &str, start: u64, end: u64) -> io::Result<ureq::Response> {
+    fn get_range(url: &str, start: u64, end: u64) -> io::Result<ureq::http::Response<ureq::Body>> {
         ureq::get(url)
-            .set("Range", &format!("bytes={start}-{end}"))
+            .header("Range", &format!("bytes={start}-{end}"))
             .call()
             .map_err(io::Error::other)
     }
@@ -120,6 +127,7 @@ impl Read for RemoteFile {
             let end = (self.position + Self::CHUNK_SIZE).min(self.size) - 1;
             let mut chunk = Vec::new();
             Self::get_range(&self.url, self.position, end)?
+                .into_body()
                 .into_reader()
                 .read_to_end(&mut chunk)?;
             self.chunk = (self.position, chunk);
