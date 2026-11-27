@@ -188,6 +188,22 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "lowWarning": 15,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 0.0,
           "longitude": 0.0,
@@ -364,6 +380,22 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "lowWarning": 15,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 45.47186688213476,
           "longitude": 16.385342508170606,
@@ -539,6 +571,22 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "landBattery": 9,
           "lowWarning": 15,
           "seriousLowWarning": 10
+        },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
         },
         "home": {
           "latitude": 45.47186688213476,

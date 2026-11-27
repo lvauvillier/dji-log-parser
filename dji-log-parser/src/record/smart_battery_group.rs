@@ -65,7 +65,7 @@ enum Layout {
         #[br(pad_before = 1)] SmartBatterySingleVoltage,
         #[br(parse_with = zeros)] (),
     ),
-    #[br(pre_assert(length == 35))]
+    #[br(pre_assert(length == 35), assert(self_0.is_plausible()))]
     LegacyDynamic(SmartBatteryDynamic),
     #[br(assert(self_0.length() == length && self_0.is_plausible()))]
     LegacySingleVoltage(SmartBatterySingleVoltage),
@@ -170,10 +170,12 @@ fn remaining_energy(raw: u16) -> Option<f32> {
 }
 
 impl SmartBatteryDynamic {
-    /// Whether the index and the voltage are those of a battery: they are not when the record is
-    /// read with a layout shifted by one byte.
+    /// Whether the index, the voltage and the temperature are those of a battery: they are not
+    /// when the record is read with a layout shifted by one byte, or holds invalid data.
     fn is_plausible(&self) -> bool {
-        self.index <= 6 && (0.0..100.0).contains(&self.current_voltage)
+        self.index <= 6
+            && (0.0..100.0).contains(&self.current_voltage)
+            && (-50.0..150.0).contains(&self.temperature)
     }
 }
 

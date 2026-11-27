@@ -190,6 +190,22 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "lowWarning": 30,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 0.0,
           "longitude": 0.0,
@@ -370,6 +386,22 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "lowWarning": 30,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 45836623.61046586,
           "longitude": 45836623.61046586,
@@ -549,6 +581,22 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "landBattery": 10,
           "lowWarning": 30,
           "seriousLowWarning": 10
+        },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
         },
         "home": {
           "latitude": 45836623.61046586,

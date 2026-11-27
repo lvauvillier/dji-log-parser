@@ -24,7 +24,7 @@ mod rtk;
 mod vision;
 
 pub use app::FrameApp;
-pub use battery::FrameBattery;
+pub use battery::{FrameBattery, FrameBatteryPack};
 pub use camera::FrameCamera;
 pub use custom::FrameCustom;
 pub use details::FrameDetails;
@@ -51,7 +51,12 @@ pub struct Frame {
     pub gimbal: FrameGimbal,
     pub camera: FrameCamera,
     pub rc: FrameRC,
+    /// Values of all batteries: their total on drones with several batteries
     pub battery: FrameBattery,
+    /// First battery of the drones with several batteries
+    pub battery1: FrameBatteryPack,
+    /// Second battery of the drones with several batteries
+    pub battery2: FrameBatteryPack,
     pub home: FrameHome,
     pub recover: FrameRecover,
     pub app: FrameApp,
@@ -172,6 +177,8 @@ where
     };
 
     let mut frame_index = 0;
+    // On drones with several batteries, the battery of index 0 is the total of all batteries
+    let mut has_total_battery = false;
 
     for record in records {
         match record.borrow() {
@@ -341,8 +348,14 @@ where
             Record::SmartBatteryGroup(battery_group) => match battery_group {
                 SmartBatteryGroup::SmartBatteryStatic(_) => {}
                 SmartBatteryGroup::SmartBatteryDynamic(battery) => {
-                    // when there are multiple batteries, only one contains accurate values at index 1
-                    if details.product_type.battery_num() < 2 || battery.index == 1 {
+                    has_total_battery |= battery.index == 0;
+                    match battery.index {
+                        1 => frame.battery1.update(battery),
+                        2 => frame.battery2.update(battery),
+                        _ => {}
+                    }
+                    // The first battery stands for all of them in logs without a total
+                    if battery.index == 0 || (battery.index == 1 && !has_total_battery) {
                         frame.battery.voltage = battery.current_voltage;
                         frame.battery.current = battery.current_current;
                         frame.battery.current_capacity = battery.remained_capacity;
@@ -351,7 +364,8 @@ where
                         frame.battery.temperature = battery.temperature;
                     }
                 }
-                SmartBatteryGroup::SmartBatterySingleVoltage(battery) => {
+                // The cell voltages of one battery only
+                SmartBatteryGroup::SmartBatterySingleVoltage(battery) if battery.index <= 1 => {
                     let cell_num = frame
                         .battery
                         .cell_voltages
@@ -363,6 +377,7 @@ where
                     frame.battery.cell_voltages[..cell_num]
                         .copy_from_slice(&battery.cell_voltages[..cell_num]);
                 }
+                SmartBatteryGroup::SmartBatterySingleVoltage(_) => {}
             },
             Record::VisionGroup(group) => {
                 for entry in &group.entries {

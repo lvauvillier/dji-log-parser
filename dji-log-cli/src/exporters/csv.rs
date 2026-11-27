@@ -140,19 +140,31 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "BATTERY.landBattery".to_string(),          // Battery needed to land, in percentage
         "BATTERY.lowWarning".to_string(),           // Low battery warning threshold, in percentage
         "BATTERY.seriousLowWarning".to_string(), // Critical battery warning threshold, in percentage
-        "HOME.latitude".to_string(),             // Home point latitude in degrees
-        "HOME.longitude".to_string(),            // Home point longitude in degrees
-        "HOME.altitude".to_string(),             // Home point altitude in meters
-        "HOME.heightLimit".to_string(),          // Max allowed height in meters
-        "HOME.isHomeRecord".to_string(),         // Indicates if home point is recorded
-        "HOME.goHomeMode".to_string(),           // Current return-to-home mode
+        "BATTERY1.chargeLevel".to_string(), // Battery 1 charge level in percentage, on drones with several batteries
+        "BATTERY1.voltage".to_string(),     // Battery 1 voltage, on drones with several batteries
+        "BATTERY1.current".to_string(),     // Battery 1 current, on drones with several batteries
+        "BATTERY1.currentCapacity".to_string(), // Battery 1 current capacity, on drones with several batteries
+        "BATTERY1.fullCapacity".to_string(), // Battery 1 full capacity, on drones with several batteries
+        "BATTERY1.temperature".to_string(), // Battery 1 temperature, on drones with several batteries
+        "BATTERY2.chargeLevel".to_string(), // Battery 2 charge level in percentage, on drones with several batteries
+        "BATTERY2.voltage".to_string(),     // Battery 2 voltage, on drones with several batteries
+        "BATTERY2.current".to_string(),     // Battery 2 current, on drones with several batteries
+        "BATTERY2.currentCapacity".to_string(), // Battery 2 current capacity, on drones with several batteries
+        "BATTERY2.fullCapacity".to_string(), // Battery 2 full capacity, on drones with several batteries
+        "BATTERY2.temperature".to_string(), // Battery 2 temperature, on drones with several batteries
+        "HOME.latitude".to_string(),        // Home point latitude in degrees
+        "HOME.longitude".to_string(),       // Home point longitude in degrees
+        "HOME.altitude".to_string(),        // Home point altitude in meters
+        "HOME.heightLimit".to_string(),     // Max allowed height in meters
+        "HOME.isHomeRecord".to_string(),    // Indicates if home point is recorded
+        "HOME.goHomeMode".to_string(),      // Current return-to-home mode
         "HOME.isDynamicHomePointEnabled".to_string(), // Indicates if dynamic home point is enabled
         "HOME.isNearDistanceLimit".to_string(), // Indicates if the drone is near its distance limit
-        "HOME.isNearHeightLimit".to_string(),   // Indicates if the drone is near its height limit
+        "HOME.isNearHeightLimit".to_string(), // Indicates if the drone is near its height limit
         "HOME.isCompassCalibrating".to_string(), // Indicates if compass calibration is in progress
         "HOME.compassCalibrationState".to_string(), // Current state of compass calibration
         "HOME.isMultipleModeEnabled".to_string(), // Indicates if multiple flight modes are enabled
-        "HOME.isBeginnerMode".to_string(),      // Indicates if beginner mode is active
+        "HOME.isBeginnerMode".to_string(),  // Indicates if beginner mode is active
         "HOME.isIOCEnabled".to_string(), // Indicates if Intelligent Orientation Control is enabled
         "HOME.IOCMode".to_string(),      // Current Intelligent Orientation Control mode
         "HOME.goHomeHeight".to_string(), // Return-to-home height in meters

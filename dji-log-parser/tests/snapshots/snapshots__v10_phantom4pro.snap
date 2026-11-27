@@ -185,6 +185,22 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "lowWarning": 30,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 0.0,
           "longitude": 0.0,
@@ -363,6 +379,22 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "lowWarning": 30,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 39.96117754366448,
           "longitude": -106.21651292388093,
@@ -540,6 +572,22 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "landBattery": 10,
           "lowWarning": 30,
           "seriousLowWarning": 10
+        },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
         },
         "home": {
           "latitude": 39.96117279796969,

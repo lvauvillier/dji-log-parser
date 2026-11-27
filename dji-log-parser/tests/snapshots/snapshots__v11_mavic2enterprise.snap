@@ -184,6 +184,22 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "lowWarning": 25,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 0.0,
           "longitude": 0.0,
@@ -362,6 +378,22 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "lowWarning": 25,
           "seriousLowWarning": 10
         },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
         "home": {
           "latitude": 39.89193055411263,
           "longitude": -105.26223510469389,
@@ -539,6 +571,22 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "landBattery": 10,
           "lowWarning": 25,
           "seriousLowWarning": 10
+        },
+        "battery1": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
+        },
+        "battery2": {
+          "chargeLevel": null,
+          "voltage": null,
+          "current": null,
+          "currentCapacity": null,
+          "fullCapacity": null,
+          "temperature": null
         },
         "home": {
           "latitude": 39.89193055411263,
