@@ -274,6 +274,17 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -476,6 +487,17 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -678,6 +700,17 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": null,
+          "remoteController": null,
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

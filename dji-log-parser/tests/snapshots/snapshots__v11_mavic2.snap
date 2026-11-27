@@ -275,6 +275,17 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0M6DG1400189PP",
+          "remoteController": "13RLFC820601F1",
+          "battery1": "0P2AFC7534006E",
+          "battery2": null,
+          "camera1": "0K8HFBD01100LV",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -477,6 +488,17 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0M6DG1400189PP",
+          "remoteController": "13RLFC820601F1",
+          "battery1": "0P2AFC7534006E",
+          "battery2": null,
+          "camera1": "0K8HFBD01100LV",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -679,6 +701,17 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0M6DG1400189PP",
+          "remoteController": "13RLFC820601F1",
+          "battery1": "0P2AFC7534006E",
+          "battery2": null,
+          "camera1": "0K8HFBD01100LV",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

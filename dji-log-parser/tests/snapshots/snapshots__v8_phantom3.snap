@@ -277,6 +277,17 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "03Z1437134",
+          "remoteController": "05LU0199SP",
+          "battery1": "1225065009568",
+          "battery2": null,
+          "camera1": "EA06041036",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -479,6 +490,17 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "03Z1437134",
+          "remoteController": "05LU0199SP",
+          "battery1": "1225065009568",
+          "battery2": null,
+          "camera1": "EA06041036",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -681,6 +703,17 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "03Z1437134",
+          "remoteController": "05LU0199SP",
+          "battery1": "1225065009568",
+          "battery2": null,
+          "camera1": "EA06041036",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

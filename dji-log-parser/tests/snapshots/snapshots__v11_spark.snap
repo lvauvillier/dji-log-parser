@@ -277,6 +277,17 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0BMUF9M00102DG",
+          "remoteController": null,
+          "battery1": "0C0AF9NB3303CS",
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -478,6 +489,17 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0BMUF9M00102DG",
+          "remoteController": null,
+          "battery1": "0C0AF9NB3303CS",
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -679,6 +701,17 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0BMUF9M00102DG",
+          "remoteController": null,
+          "battery1": "0C0AF9NB3303CS",
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

@@ -5,13 +5,16 @@ use tsify_next::Tsify;
 
 use crate::utils::c_string;
 
+/// Serial number of a component of the aircraft.
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct ComponentSerial {
-    #[br(map = |x: u16| ComponentType::from(x as u8))]
+    #[br(map = ComponentType::from)]
     pub component_type: ComponentType,
+    /// Index of the component among those of its type, such as the battery 0 or 1
+    pub index: u8,
     #[br(temp)]
     length: u8,
     #[br(count=length, map = c_string)]
@@ -25,6 +28,8 @@ pub enum ComponentType {
     Aircraft,
     RC,
     Battery,
+    Ssd,
+    Gimbal,
     #[serde(untagged)]
     Unknown(u8),
 }
@@ -36,6 +41,8 @@ impl ComponentType {
             2 => ComponentType::Aircraft,
             3 => ComponentType::RC,
             4 => ComponentType::Battery,
+            5 => ComponentType::Ssd,
+            6 => ComponentType::Gimbal,
             _ => ComponentType::Unknown(value),
         }
     }

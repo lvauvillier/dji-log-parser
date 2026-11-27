@@ -281,6 +281,17 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0410059536",
+          "remoteController": "03LD015147",
+          "battery1": "1163701876",
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -485,6 +496,17 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0410059536",
+          "remoteController": "03LD015147",
+          "battery1": "1163701876",
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -689,6 +711,17 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "0410059536",
+          "remoteController": "03LD015147",
+          "battery1": "1163701876",
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

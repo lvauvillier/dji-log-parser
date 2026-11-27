@@ -276,6 +276,17 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "07JDE5300200GN",
+          "remoteController": "0CKJ2026ZD",
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -478,6 +489,17 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "07JDE5300200GN",
+          "remoteController": "0CKJ2026ZD",
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -680,6 +702,17 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "07JDE5300200GN",
+          "remoteController": "0CKJ2026ZD",
+          "battery1": null,
+          "battery2": null,
+          "camera1": null,
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

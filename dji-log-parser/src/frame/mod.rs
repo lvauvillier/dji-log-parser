@@ -21,6 +21,7 @@ mod osd;
 mod rc;
 mod recover;
 mod rtk;
+mod serial;
 mod vision;
 
 pub use app::FrameApp;
@@ -35,6 +36,7 @@ pub use rc::FrameRC;
 use rc::{normalized_stick, signal_percent};
 pub use recover::FrameRecover;
 pub use rtk::FrameRTK;
+pub use serial::FrameSerial;
 pub use vision::FrameVision;
 
 /// Represents a normalized frame of data from a DJI log.
@@ -63,6 +65,7 @@ pub struct Frame {
     pub app: FrameApp,
     pub vision: FrameVision,
     pub rtk: FrameRTK,
+    pub serial: FrameSerial,
 }
 
 impl Frame {
@@ -212,6 +215,11 @@ struct FrameBuilder {
     has_total_battery: bool,
     /// The camera records keep their photo flag for several records
     is_shooting_photo: bool,
+    /// Serial numbers of the serial number records
+    serials: FrameSerial,
+    /// Serial numbers of the details and of the recover records, used for the components without
+    /// serial number records
+    fallback_serials: FrameSerial,
 }
 
 impl FrameBuilder {
@@ -224,11 +232,14 @@ impl FrameBuilder {
                     is_cell_voltage_estimated: true,
                     ..FrameBattery::default()
                 },
+                serial: FrameSerial::from_details(details),
                 ..Frame::default()
             },
             frame_index: 0,
             has_total_battery: false,
             is_shooting_photo: false,
+            serials: FrameSerial::default(),
+            fallback_serials: FrameSerial::from_details(details),
         }
     }
 
@@ -484,7 +495,14 @@ impl FrameBuilder {
                 frame.home.max_allowed_height = home.max_allowed_height;
                 frame.home.current_flight_record_index = home.current_flight_record_index;
             }
+            Record::ComponentSerial(component) => {
+                self.serials.update(component);
+                frame.serial = self.serials.or(&self.fallback_serials);
+            }
             Record::Recover(recover) => {
+                self.fallback_serials.update_from_recover(recover);
+                frame.serial = self.serials.or(&self.fallback_serials);
+
                 frame.recover.app_platform = Some(recover.app_platform.clone());
                 frame.recover.app_version = recover.app_version.clone();
                 frame.recover.aircraft_name = recover.aircraft_name.clone();

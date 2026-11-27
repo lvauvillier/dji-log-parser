@@ -29,8 +29,8 @@ impl Exporter for CSVExporter {
                 return;
             };
 
-            // The columns of the separate batteries, of the RTK and of the sticks of the app only
-            // when the log has them
+            // The columns of the separate batteries, of the RTK, of the sticks of the app and of
+            // the serial numbers only when the log has them
             let has = |found: fn(&Frame) -> bool| frames.iter().any(found);
             let has_app_sticks = has(|frame| frame.app.aileron.is_some());
             let missing_sections: Vec<&str> = [
@@ -42,6 +42,39 @@ impl Exporter for CSVExporter {
                 ("APP.elevator", has_app_sticks),
                 ("APP.throttle", has_app_sticks),
                 ("APP.rudder", has_app_sticks),
+                (
+                    "SERIAL.aircraft",
+                    has(|frame| frame.serial.aircraft.is_some()),
+                ),
+                (
+                    "SERIAL.remoteController",
+                    has(|frame| frame.serial.remote_controller.is_some()),
+                ),
+                (
+                    "SERIAL.battery1",
+                    has(|frame| frame.serial.battery1.is_some()),
+                ),
+                (
+                    "SERIAL.battery2",
+                    has(|frame| frame.serial.battery2.is_some()),
+                ),
+                (
+                    "SERIAL.camera1",
+                    has(|frame| frame.serial.camera1.is_some()),
+                ),
+                (
+                    "SERIAL.camera2",
+                    has(|frame| frame.serial.camera2.is_some()),
+                ),
+                (
+                    "SERIAL.gimbal1",
+                    has(|frame| frame.serial.gimbal1.is_some()),
+                ),
+                (
+                    "SERIAL.gimbal2",
+                    has(|frame| frame.serial.gimbal2.is_some()),
+                ),
+                ("SERIAL.ssd", has(|frame| frame.serial.ssd.is_some())),
             ]
             .into_iter()
             .filter_map(|(prefix, found)| (!found).then_some(prefix))
@@ -268,6 +301,15 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RTK.stdLongitude".to_string(),    // Standard deviation of the longitude, in meters
         "RTK.stdAltitude".to_string(),     // Standard deviation of the altitude, in meters
         "RTK.satellites".to_string(),      // Number of satellites of the main antenna
+        "SERIAL.aircraft".to_string(),     // Serial number of the aircraft
+        "SERIAL.remoteController".to_string(), // Serial number of the remote controller
+        "SERIAL.battery1".to_string(),     // Serial number of the battery
+        "SERIAL.battery2".to_string(),     // Serial number of the second battery
+        "SERIAL.camera1".to_string(),      // Serial number of the camera
+        "SERIAL.camera2".to_string(),      // Serial number of the second camera
+        "SERIAL.gimbal1".to_string(),      // Serial number of the gimbal
+        "SERIAL.gimbal2".to_string(),      // Serial number of the second gimbal
+        "SERIAL.ssd".to_string(),          // Serial number of the SSD
         "DETAILS.totalTime".to_string(),   // Total flight time in seconds
         "DETAILS.totalDistance".to_string(), // Total distance flown in meters
         "DETAILS.maxHeight".to_string(),   // Maximum height reached during the flight in meters

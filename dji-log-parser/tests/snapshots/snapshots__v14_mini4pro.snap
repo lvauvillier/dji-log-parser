@@ -279,6 +279,17 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "1581F6Z9C23CP003KM61",
+          "remoteController": "6ZDZLBG007008Z",
+          "battery1": "7BVPLBVDA104J3",
+          "battery2": null,
+          "camera1": "6TVQLBJ0M209BS",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -479,6 +490,17 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "1581F6Z9C23CP003KM61",
+          "remoteController": "6ZDZLBG007008Z",
+          "battery1": "7BVPLBVDA104J3",
+          "battery2": null,
+          "camera1": "6TVQLBJ0M209BS",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -679,6 +701,17 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "1581F6Z9C23CP003KM61",
+          "remoteController": "6ZDZLBG007008Z",
+          "battery1": "7BVPLBVDA104J3",
+          "battery2": null,
+          "camera1": "6TVQLBJ0M209BS",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }

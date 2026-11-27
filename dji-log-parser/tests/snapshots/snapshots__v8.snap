@@ -277,6 +277,17 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "07JDD4E0010227",
+          "remoteController": null,
+          "battery1": "082AD4J03109KR",
+          "battery2": null,
+          "camera1": "07RDD4P0S301H6",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -479,6 +490,17 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "07JDD4E0010227",
+          "remoteController": null,
+          "battery1": "082AD4J03109KR",
+          "battery2": null,
+          "camera1": "07RDD4P0S301H6",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     },
@@ -681,6 +703,17 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "stdLongitude": null,
           "stdAltitude": null,
           "satellites": null
+        },
+        "serial": {
+          "aircraft": "07JDD4E0010227",
+          "remoteController": null,
+          "battery1": "082AD4J03109KR",
+          "battery2": null,
+          "camera1": "07RDD4P0S301H6",
+          "camera2": null,
+          "gimbal1": null,
+          "gimbal2": null,
+          "ssd": null
         }
       }
     }
