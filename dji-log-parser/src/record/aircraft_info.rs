@@ -41,7 +41,8 @@ pub enum AircraftInfoMessage {
     SerialNumbers(SerialNumbers),
     #[serde(rename_all = "camelCase")]
     FlightTime {
-        /// Total flight time of the aircraft before this flight, in seconds
+        /// Total flight time before this flight, in seconds: of the aircraft, or maybe of the remote
+        /// controller or the app
         total_flight_time: f64,
     },
     #[serde(rename_all = "camelCase")]

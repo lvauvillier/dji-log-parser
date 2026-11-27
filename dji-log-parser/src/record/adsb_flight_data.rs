@@ -1,5 +1,6 @@
 use binrw::io::{Read, Seek};
 use binrw::{binread, BinRead, BinResult, Endian};
+use num_enum::FromPrimitive;
 use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
@@ -43,22 +44,53 @@ fn entry_length(flags: u8) -> usize {
 pub struct ADSBAircraft {
     /// ICAO address, 6 hexadecimal characters
     pub icao: String,
+    /// 0 to 4, 1 when there is no particular risk
+    pub warning_level: u8,
     /// degrees
     pub latitude: f64,
     /// degrees
     pub longitude: f64,
-    /// meters above sea level, not reported by every drone
+    /// meters, above the reference of `altitude_type`, not reported by every drone
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    pub altitude: Option<i16>,
+    pub altitude: Option<i32>,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub altitude_type: Option<AltitudeType>,
     /// meters, relative to the drone
     pub relative_altitude: i16,
     /// degrees
     pub heading: f32,
+    /// Vertical movement of the aircraft, not reported by every drone
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub vertical_trend: Option<VerticalTrend>,
     /// m/s, not reported by every drone
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub speed: Option<u16>,
     /// meters, horizontal distance to the drone
     pub distance: u16,
+}
+
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
+pub enum AltitudeType {
+    /// Above the WGS84 ellipsoid
+    Ellipsoid = 0,
+    SeaLevel = 1,
+    #[serde(untagged)]
+    #[num_enum(catch_all)]
+    Unknown(u8),
+}
+
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
+pub enum VerticalTrend {
+    Level = 0,
+    Climbing = 1,
+    Descending = 2,
+    #[serde(untagged)]
+    #[num_enum(catch_all)]
+    Unknown(u8),
 }
 
 /// Entry of 26 bytes
@@ -67,14 +99,15 @@ pub struct ADSBAircraft {
 struct Entry {
     icao: [u8; 6],
     #[br(temp)]
-    _unknown: u16,
+    _end: u8,
+    warning_level: u8,
     latitude: i32,
     longitude: i32,
     heading: u16,
     relative_altitude: i16,
     speed: u16,
     #[br(temp)]
-    _unknown2: i16,
+    _unknown: i16,
     distance: u16,
 }
 
@@ -84,16 +117,15 @@ struct Entry {
 struct ExtendedEntry {
     icao: [u8; 6],
     #[br(temp)]
-    _unknown: u16,
+    _end: u8,
+    warning_level: u8,
     latitude: i32,
     longitude: i32,
-    altitude: i16,
-    #[br(temp)]
-    _unknown2: [u8; 3],
+    altitude: i32,
+    altitude_type: u8,
     heading: u16,
     relative_altitude: i16,
-    #[br(temp)]
-    _unknown3: u8,
+    vertical_trend: u8,
     distance: u16,
 }
 
@@ -110,11 +142,14 @@ impl BinRead for ADSBAircraft {
             let entry = ExtendedEntry::read_options(reader, endian, ())?;
             ADSBAircraft {
                 icao: String::from_utf8_lossy(&entry.icao).into_owned(),
+                warning_level: entry.warning_level,
                 latitude: degrees(entry.latitude),
                 longitude: degrees(entry.longitude),
                 altitude: Some(entry.altitude),
+                altitude_type: Some(AltitudeType::from(entry.altitude_type)),
                 relative_altitude: entry.relative_altitude,
                 heading: f32::from(entry.heading) / 10.0,
+                vertical_trend: Some(VerticalTrend::from(entry.vertical_trend)),
                 speed: None,
                 distance: entry.distance,
             }
@@ -122,11 +157,14 @@ impl BinRead for ADSBAircraft {
             let entry = Entry::read_options(reader, endian, ())?;
             ADSBAircraft {
                 icao: String::from_utf8_lossy(&entry.icao).into_owned(),
+                warning_level: entry.warning_level,
                 latitude: degrees(entry.latitude),
                 longitude: degrees(entry.longitude),
                 altitude: None,
+                altitude_type: None,
                 relative_altitude: entry.relative_altitude,
                 heading: f32::from(entry.heading) / 10.0,
+                vertical_trend: None,
                 speed: Some(entry.speed),
                 distance: entry.distance,
             }
@@ -164,6 +202,7 @@ mod tests {
         assert_eq!(data.aircraft.len(), 3);
         let aircraft = &data.aircraft[0];
         assert_eq!(aircraft.icao, "a1fc1b");
+        assert_eq!(aircraft.warning_level, 1);
         assert_eq!(aircraft.latitude, 39.932866);
         assert_eq!(aircraft.longitude, -105.167549);
         assert_eq!(aircraft.altitude, None);
@@ -184,8 +223,11 @@ mod tests {
         assert_eq!(aircraft.icao, "a4e638");
         assert_eq!(aircraft.latitude, 40.041217);
         assert_eq!(aircraft.longitude, -88.300037);
+        assert_eq!(aircraft.warning_level, 1);
         assert_eq!(aircraft.altitude, Some(434));
+        assert_eq!(aircraft.altitude_type, Some(AltitudeType::SeaLevel));
         assert_eq!(aircraft.relative_altitude, 174);
+        assert_eq!(aircraft.vertical_trend, Some(VerticalTrend::Level));
         assert_eq!(aircraft.heading, 2.8);
         assert_eq!(aircraft.speed, None);
         assert_eq!(aircraft.distance, 8292);

@@ -206,6 +206,7 @@ pub enum DroneType {
     Mini4Pro = 93,
     Avata2 = 94,
     Matrice4 = 99,
+    Matrice4D = 100,
     Flip = 102,
     Matrice400 = 103,
     Neo = 104,
