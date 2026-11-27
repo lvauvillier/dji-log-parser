@@ -1,7 +1,7 @@
 use dji_log_parser::keychain::KeychainFeaturePoint;
 use dji_log_parser::layout::auxiliary::Department;
 use dji_log_parser::DJILog;
-use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsValue};
+use wasm_bindgen::{prelude::wasm_bindgen, JsCast, JsError};
 
 #[wasm_bindgen]
 extern "C" {
@@ -38,10 +38,10 @@ impl DJILogWrapper {
     /// * `bytes` - An Uint8Array representing the DJI log file.
     ///
     #[wasm_bindgen(constructor)]
-    pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILogWrapper, JsValue> {
+    pub fn from_bytes(bytes: Vec<u8>) -> Result<DJILogWrapper, JsError> {
         DJILog::from_bytes(bytes)
             .map(|value| DJILogWrapper { inner: value })
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
     }
 
     /// Get version
@@ -52,9 +52,9 @@ impl DJILogWrapper {
 
     /// Get details
     #[wasm_bindgen(getter)]
-    pub fn details(&self) -> Result<JSDetails, JsValue> {
+    pub fn details(&self) -> Result<JSDetails, JsError> {
         serde_wasm_bindgen::to_value(&self.inner.details)
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
             .map(|value| value.unchecked_into())
     }
 
@@ -65,14 +65,11 @@ impl DJILogWrapper {
     /// For earlier versions, this function returns a default `KeychainsRequest`.
     ///
     #[wasm_bindgen(js_name = "keychainsRequest")]
-    pub fn keychains_request(&self) -> Result<JSKeychainsRequest, JsValue> {
-        let keychain_request = self
-            .inner
-            .keychains_request()
-            .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    pub fn keychains_request(&self) -> Result<JSKeychainsRequest, JsError> {
+        let keychain_request = self.inner.keychains_request().map_err(JsError::from)?;
 
         serde_wasm_bindgen::to_value(&keychain_request)
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
             .map(|value| value.unchecked_into())
     }
     /// Creates a `KeychainsRequest` object by parsing `KeyStorage` records with manually specified params.
@@ -93,16 +90,16 @@ impl DJILogWrapper {
         &self,
         department: Option<u8>,
         version: Option<u16>,
-    ) -> Result<JSKeychainsRequest, JsValue> {
+    ) -> Result<JSKeychainsRequest, JsError> {
         let department = department.map(Department::from);
 
         let keychain_request = self
             .inner
             .keychains_request_with_custom_params(department, version)
-            .map_err(|e| JsValue::from_str(&e.to_string()))?;
+            .map_err(JsError::from)?;
 
         serde_wasm_bindgen::to_value(&keychain_request)
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
             .map(|value| value.unchecked_into())
     }
 
@@ -122,17 +119,17 @@ impl DJILogWrapper {
         &self,
         api_key: String,
         endpoint: Option<String>,
-    ) -> Result<JSKeychains, JsValue> {
+    ) -> Result<JSKeychains, JsError> {
         let keychains = self
             .inner
             .keychains_request()
-            .map_err(|e| JsValue::from_str(&e.to_string()))?
+            .map_err(JsError::from)?
             .fetch_async(&api_key, endpoint.as_deref())
             .await
-            .map_err(|e| JsValue::from_str(&e.to_string()))?;
+            .map_err(JsError::from)?;
 
         serde_wasm_bindgen::to_value(&keychains)
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
             .map(|value| value.unchecked_into())
     }
 
@@ -147,18 +144,14 @@ impl DJILogWrapper {
     ///   the function will attempt to process the log without decryption.
     ///
     #[wasm_bindgen]
-    pub fn records(&self, keychains: Option<JSKeychains>) -> Result<JSRecords, JsValue> {
-        let keychains: Option<Vec<Vec<KeychainFeaturePoint>>> = keychains
-            .map(|keychains| serde_wasm_bindgen::from_value(keychains.unchecked_into()).unwrap());
+    pub fn records(&self, keychains: Option<JSKeychains>) -> Result<JSRecords, JsError> {
+        let keychains = parse_keychains(keychains)?;
 
-        let records = self
-            .inner
-            .records(keychains)
-            .map_err(|e| JsValue::from_str(&e.to_string()))?;
+        let records = self.inner.records(keychains).map_err(JsError::from)?;
 
         serde_wasm_bindgen::to_value(&records)
             .map(|value| value.unchecked_into())
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
     }
 
     /// Retrieves the normalized frames from the DJI log.
@@ -177,17 +170,23 @@ impl DJILogWrapper {
     ///   is used for decryption when working with encrypted logs (versions >= 13). If nothing is provided,
     ///   the function will attempt to process the log without decryption.
     ///
-    pub fn frames(&self, keychains: Option<JSKeychains>) -> Result<JSFrames, JsValue> {
-        let keychains: Option<Vec<Vec<KeychainFeaturePoint>>> = keychains
-            .map(|keychains| serde_wasm_bindgen::from_value(keychains.unchecked_into()).unwrap());
+    pub fn frames(&self, keychains: Option<JSKeychains>) -> Result<JSFrames, JsError> {
+        let keychains = parse_keychains(keychains)?;
 
-        let frames = self
-            .inner
-            .frames(keychains)
-            .map_err(|e| JsValue::from_str(&e.to_string()))?;
+        let frames = self.inner.frames(keychains).map_err(JsError::from)?;
 
         serde_wasm_bindgen::to_value(&frames)
             .map(|value| value.unchecked_into())
-            .map_err(|e| JsValue::from_str(&e.to_string()))
+            .map_err(JsError::from)
     }
+}
+
+/// Keychains given by JavaScript, an error when they don't have the expected shape
+fn parse_keychains(
+    keychains: Option<JSKeychains>,
+) -> Result<Option<Vec<Vec<KeychainFeaturePoint>>>, JsError> {
+    keychains
+        .map(|keychains| serde_wasm_bindgen::from_value(keychains.unchecked_into()))
+        .transpose()
+        .map_err(JsError::from)
 }

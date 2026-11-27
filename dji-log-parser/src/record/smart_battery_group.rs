@@ -89,6 +89,7 @@ fn zeros() -> BinResult<()> {
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little, import { version: u8 })]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatteryStatic {
@@ -135,6 +136,7 @@ fn production_date(date: u16) -> Option<NaiveDate> {
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatteryDynamic {
@@ -154,7 +156,9 @@ pub struct SmartBatteryDynamic {
     pub temperature: f32,
     pub cell_count: u8,
     pub capacity_percent: u8,
-    pub battery_state: u64,
+    /// Bit field of unknown meaning
+    #[br(temp)]
+    _battery_state: u64,
     /// Older records end before it
     #[br(temp, try, pad_before = 11)]
     remaining_energy_raw: Option<u16>,
@@ -181,6 +185,7 @@ impl SmartBatteryDynamic {
 
 #[binread]
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 #[br(little)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct SmartBatterySingleVoltage {

@@ -16,6 +16,16 @@ test("the package has the wasm inlined and no Node API", () => {
   }
 });
 
+test("errors are Error objects, not strings or panics", () => {
+  // A panic of the wasm is a RuntimeError, which is an Error too
+  const isError = (error) => error instanceof Error && !(error instanceof WebAssembly.RuntimeError);
+  assert.throws(() => new DJILog(new Uint8Array([1, 2, 3])), isError);
+
+  const parser = new DJILog(readFileSync(`${fixtures}/v14_mini4pro.txt`));
+  assert.throws(() => parser.records([[{ featurePoint: 1 }]]), isError);
+  assert.throws(() => parser.frames("not keychains"), isError);
+});
+
 // Each snapshot of the Rust library summarizes the fixture of the same name
 for (const file of readdirSync(snapshots).filter((file) => file.endsWith(".snap"))) {
   const name = file.replace(/^snapshots__/, "").replace(/\.snap$/, "");

@@ -32,7 +32,7 @@ pub struct GOBusinessStatus {
     pub text: String,
     /// 1 to 3, the higher the more serious
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    pub level: Option<u64>,
+    pub level: Option<u8>,
     pub is_blinking: bool,
 }
 
@@ -43,7 +43,7 @@ pub struct GOBusinessTip {
     pub identifier: String,
     pub text: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    pub level: Option<u64>,
+    pub level: Option<u8>,
     /// Seconds the tip is shown
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub duration: Option<f64>,
@@ -57,7 +57,7 @@ pub struct GOBusinessWarning {
     pub text: String,
     /// 1 to 3, the higher the more serious
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    pub level: Option<u64>,
+    pub level: Option<u8>,
 }
 
 const STATUS: u32 = 2;
@@ -105,7 +105,7 @@ impl GOBusinessStatus {
             match field {
                 (1, Value::Bytes(text)) => status.text = String::from_utf8_lossy(text).into(),
                 (2, Value::Varint(blinking)) => status.is_blinking = blinking != 0,
-                (3, Value::Varint(level)) => status.level = Some(level),
+                (3, Value::Varint(level)) => status.level = level.try_into().ok(),
                 _ => {}
             }
         }
@@ -118,7 +118,7 @@ impl GOBusinessTip {
         let mut tip = GOBusinessTip::default();
         for field in fields(data)? {
             match field {
-                (1, Value::Varint(level)) => tip.level = Some(level),
+                (1, Value::Varint(level)) => tip.level = level.try_into().ok(),
                 (2, Value::Bytes(identifier)) => {
                     tip.identifier = String::from_utf8_lossy(identifier).into()
                 }
@@ -139,7 +139,7 @@ impl GOBusinessWarning {
         for field in fields(data)? {
             match field {
                 (1, Value::Bytes(text)) => warning.text = String::from_utf8_lossy(text).into(),
-                (2, Value::Varint(level)) => warning.level = Some(level),
+                (2, Value::Varint(level)) => warning.level = level.try_into().ok(),
                 _ => {}
             }
         }
