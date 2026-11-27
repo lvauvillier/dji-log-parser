@@ -6,8 +6,8 @@ use crate::layout::details::Details;
 use crate::record::component_serial::{ComponentSerial, ComponentType};
 use crate::record::recover::Recover;
 
-/// Serial numbers of the components, from the serial number records, or else from the recover
-/// records and the log details.
+/// Serial numbers of the components, from the serial number and aircraft information records, or
+/// else from the recover records and the log details.
 ///
 /// The serial number of the aircraft of the details and of the recover records is cut to 16
 /// characters, recent aircraft have 20.
@@ -83,6 +83,17 @@ impl FrameSerial {
         set(field, &component.serial);
     }
 
+    /// Sets the serial numbers of the batteries of the aircraft information records, written by
+    /// the aircraft with several batteries without the serial number records
+    pub(crate) fn update_batteries(&mut self, batteries: &[String]) {
+        for (field, serial) in [&mut self.battery1, &mut self.battery2]
+            .into_iter()
+            .zip(batteries)
+        {
+            set(field, serial);
+        }
+    }
+
     /// Serial numbers of `self`, completed by those of `other`
     pub(crate) fn or(&self, other: &FrameSerial) -> FrameSerial {
         let or = |a: &Option<String>, b: &Option<String>| a.clone().or_else(|| b.clone());
@@ -142,6 +153,15 @@ mod tests {
 
         assert_eq!(serial.battery1.as_deref(), Some("09UADBH03101G8"));
         assert_eq!(serial.battery2.as_deref(), Some("09UADBH03101JU"));
+    }
+
+    #[test]
+    fn batteries_of_the_aircraft_information() {
+        let mut serial = FrameSerial::default();
+        serial.update_batteries(&["4BUPKCMDA22072".to_owned(), "4BUPKCMDA22062".to_owned()]);
+
+        assert_eq!(serial.battery1.as_deref(), Some("4BUPKCMDA22072"));
+        assert_eq!(serial.battery2.as_deref(), Some("4BUPKCMDA22062"));
     }
 
     #[test]

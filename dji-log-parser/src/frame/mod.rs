@@ -4,6 +4,7 @@ use std::borrow::Borrow;
 use tsify_next::Tsify;
 
 use crate::layout::details::Details;
+use crate::record::aircraft_info::{AircraftInfo, AircraftInfoMessage};
 use crate::record::flight_controller_common_osd_field::FlightControllerCommonOSDField;
 use crate::record::osd::{AppCommand, GroundOrSky};
 use crate::record::smart_battery_group::SmartBatteryGroup;
@@ -497,6 +498,13 @@ impl FrameBuilder {
             }
             Record::ComponentSerial(component) => {
                 self.serials.update(component);
+                frame.serial = self.serials.or(&self.fallback_serials);
+            }
+            Record::AircraftInfo(AircraftInfo {
+                message: AircraftInfoMessage::SerialNumbers(serial_numbers),
+                ..
+            }) => {
+                self.serials.update_batteries(&serial_numbers.battery_sns);
                 frame.serial = self.serials.or(&self.fallback_serials);
             }
             Record::Recover(recover) => {
