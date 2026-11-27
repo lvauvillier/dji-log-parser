@@ -275,7 +275,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "07JDE5300200GN",
@@ -488,7 +489,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "07JDE5300200GN",
@@ -701,7 +703,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "07JDE5300200GN",

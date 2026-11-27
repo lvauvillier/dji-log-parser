@@ -274,7 +274,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0M6DG1400189PP",
@@ -487,7 +488,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0M6DG1400189PP",
@@ -700,7 +702,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0M6DG1400189PP",

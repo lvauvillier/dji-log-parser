@@ -301,6 +301,7 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "RTK.stdLongitude".to_string(),    // Standard deviation of the longitude, in meters
         "RTK.stdAltitude".to_string(),     // Standard deviation of the altitude, in meters
         "RTK.satellites".to_string(),      // Number of satellites of the main antenna
+        "RTK.altitude".to_string(),        // Altitude above the sea level, when the geoid is known
         "SERIAL.aircraft".to_string(),     // Serial number of the aircraft
         "SERIAL.remoteController".to_string(), // Serial number of the remote controller
         "SERIAL.battery1".to_string(),     // Serial number of the battery

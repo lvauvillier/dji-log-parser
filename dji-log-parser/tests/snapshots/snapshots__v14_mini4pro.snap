@@ -278,7 +278,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "1581F6Z9C23CP003KM61",
@@ -489,7 +490,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "1581F6Z9C23CP003KM61",
@@ -700,7 +702,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "1581F6Z9C23CP003KM61",

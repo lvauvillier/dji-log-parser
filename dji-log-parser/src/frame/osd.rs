@@ -23,7 +23,8 @@ pub struct FrameOSD {
     pub height_max: f32,
     /// Visual Positioning System height in meters
     pub vps_height: f32,
-    /// Altitude above sea level in meters
+    /// Altitude above sea level in meters: the height plus the altitude of the home point, see
+    /// its precision there
     pub altitude: f32,
     /// Speed along the X-axis in meters per second
     pub x_speed: f32,

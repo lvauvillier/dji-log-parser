@@ -24,12 +24,19 @@ pub struct FrameRTK {
     /// Number of satellites of the main antenna, all constellations
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub satellites: Option<u8>,
+    /// Altitude above the sea level in meters, when the ground station records give the geoid
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub altitude: Option<f32>,
 }
 
 impl FrameRTK {
-    pub(crate) fn update(&mut self, rtk: &RTKDifference) {
+    /// Updates from an RTK record, with the height of the geoid above the ellipsoid when known
+    pub(crate) fn update(&mut self, rtk: &RTKDifference, geoid_height: Option<f32>) {
         let satellites = &rtk.antenna1_satellites;
         self.solution = Some(rtk.solution);
+        self.altitude = geoid_height
+            .filter(|_| rtk.solution != RtkSolution::None)
+            .map(|geoid_height| rtk.ellipsoid_height - geoid_height);
         self.std_latitude = Some(rtk.std_latitude);
         self.std_longitude = Some(rtk.std_longitude);
         self.std_altitude = Some(rtk.std_altitude);
@@ -65,7 +72,7 @@ mod tests {
         let rtk = RTKDifference::read_le(&mut Cursor::new(data)).unwrap();
 
         let mut frame = FrameRTK::default();
-        frame.update(&rtk);
+        frame.update(&rtk, None);
 
         assert_eq!(frame.solution, Some(RtkSolution::Fixed));
         assert_eq!(frame.std_altitude, Some(0.025224999));

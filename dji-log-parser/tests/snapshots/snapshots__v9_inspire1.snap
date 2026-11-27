@@ -280,7 +280,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0410059536",
@@ -495,7 +496,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0410059536",
@@ -710,7 +712,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0410059536",

@@ -12,7 +12,9 @@ pub struct FrameHome {
     pub latitude: f64,
     /// Home point longitude in degrees
     pub longitude: f64,
-    /// Home point altitude in meters
+    /// Home point altitude above the sea level in meters: from the GNSS on the aircraft with ground
+    /// station records (enterprise aircraft), else from the barometer, often tens of meters off
+    /// depending on the weather
     pub altitude: f32,
     /// Max allowed height in meters
     pub height_limit: f32,

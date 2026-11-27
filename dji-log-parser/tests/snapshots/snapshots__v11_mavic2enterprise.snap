@@ -274,7 +274,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "276DFAK001T843",
@@ -487,7 +488,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "276DFAK001T843",
@@ -700,7 +702,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "276DFAK001T843",

@@ -276,7 +276,8 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "07JDD4E0010227",
@@ -489,7 +490,8 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "07JDD4E0010227",
@@ -702,7 +704,8 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "07JDD4E0010227",

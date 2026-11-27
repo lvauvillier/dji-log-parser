@@ -92,6 +92,8 @@ impl Frame {
     /// attributes have been set or modified.
     ///
     fn finalize(&mut self) {
+        self.osd.altitude = self.osd.height + self.home.altitude;
+
         if self.osd.height_max < self.osd.height {
             self.osd.height_max = self.osd.height;
         }
@@ -216,6 +218,11 @@ struct FrameBuilder {
     has_total_battery: bool,
     /// The camera records keep their photo flag for several records
     is_shooting_photo: bool,
+    /// Altitude of the home point from the GNSS, more precise than the one of the home records,
+    /// which comes from the barometer
+    home_altitude: Option<f32>,
+    /// Height of the geoid above the ellipsoid at the home point
+    geoid_height: Option<f32>,
     /// Serial numbers of the serial number records
     serials: FrameSerial,
     /// Serial numbers of the details and of the recover records, used for the components without
@@ -239,6 +246,8 @@ impl FrameBuilder {
             frame_index: 0,
             has_total_battery: false,
             is_shooting_photo: false,
+            home_altitude: None,
+            geoid_height: None,
             serials: FrameSerial::default(),
             fallback_serials: FrameSerial::from_details(details),
         }
@@ -261,8 +270,6 @@ impl FrameBuilder {
                 frame.osd.fly_time = osd.fly_time;
                 frame.osd.latitude = osd.latitude;
                 frame.osd.longitude = osd.longitude;
-                // Fix altitude by adding the home point altitude
-                frame.osd.altitude = osd.altitude + frame.home.altitude;
                 frame.osd.height = osd.altitude;
                 frame.osd.vps_height = osd.s_wave_height;
 
@@ -468,11 +475,7 @@ impl FrameBuilder {
             Record::Home(home) => {
                 frame.home.latitude = home.latitude;
                 frame.home.longitude = home.longitude;
-                // If home_altitude was not previously set, also update osd.altitude
-                if frame.home.altitude == f32::default() {
-                    frame.osd.altitude += home.altitude;
-                }
-                frame.home.altitude = home.altitude;
+                frame.home.altitude = self.home_altitude.unwrap_or(home.altitude);
                 frame.home.height_limit = home.max_allowed_height;
                 frame.home.is_home_record = home.is_home_record;
                 frame.home.go_home_mode = Some(home.go_home_mode);
@@ -519,7 +522,18 @@ impl FrameBuilder {
                 frame.recover.rc_sn = recover.rc_sn.clone();
                 frame.recover.battery_sn = recover.battery_sn.clone();
             }
-            Record::RTKDifference(rtk) => frame.rtk.update(rtk),
+            Record::RTKDifference(rtk) => frame.rtk.update(rtk, self.geoid_height),
+            Record::GroundStationPushData(data) => {
+                // The first altitude of the home point: the next ones vary with the GNSS noise
+                if let (None, Some(geoid_height)) = (self.home_altitude, data.geoid_height) {
+                    if data.home_ellipsoid_height != 0.0 {
+                        let altitude = data.home_ellipsoid_height - geoid_height;
+                        self.geoid_height = Some(geoid_height);
+                        self.home_altitude = Some(altitude);
+                        frame.home.altitude = altitude;
+                    }
+                }
+            }
             Record::GOBusiness(business) => {
                 for tip in business.tips.iter().flatten() {
                     append_message(&mut frame.app.tip, tip.text.as_str());

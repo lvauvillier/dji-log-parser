@@ -276,7 +276,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0BMUF9M00102DG",
@@ -488,7 +489,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0BMUF9M00102DG",
@@ -700,7 +702,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "stdLatitude": null,
           "stdLongitude": null,
           "stdAltitude": null,
-          "satellites": null
+          "satellites": null,
+          "altitude": null
         },
         "serial": {
           "aircraft": "0BMUF9M00102DG",
