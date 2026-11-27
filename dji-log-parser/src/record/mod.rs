@@ -11,6 +11,7 @@ use crate::utils;
 use crate::Keychain;
 
 pub mod adsb_flight_data;
+pub mod aircraft_info;
 pub mod app_gps;
 pub mod app_joystick;
 pub mod app_serious_warn;
@@ -38,6 +39,7 @@ pub mod virtual_stick;
 pub mod vision_group;
 
 use adsb_flight_data::ADSBFlightData;
+use aircraft_info::AircraftInfo;
 use app_gps::AppGPS;
 use app_joystick::AppJoystick;
 use app_serious_warn::AppSeriousWarn;
@@ -105,6 +107,7 @@ pub enum Record {
     VisionGroup(VisionGroup),
     AppJoystick(AppJoystick),
     ADSBFlightData(ADSBFlightData),
+    AircraftInfo(AircraftInfo),
     JPEG(Vec<u8>),
     /// Valid record of unknown data: record type and decoded content
     Unknown(u8, Vec<u8>),
@@ -199,6 +202,7 @@ impl Record {
             50 => Record::KeyStorageRecover(content.read_raw()?),
             56 => Record::KeyStorage(content.read(())?),
             62 => Record::RCDisplayField(content.read(())?),
+            253 => Record::AircraftInfo(content.read(())?),
             // Unknown type: no allocated error message, this is the common case for many logs
             _ => return Err(binrw::Error::NoVariantMatch { pos: content.start }),
         };

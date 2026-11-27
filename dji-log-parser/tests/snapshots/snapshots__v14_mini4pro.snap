@@ -59,6 +59,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "appVersion": "1.13.10"
   },
   "record_counts": {
+    "AircraftInfo": 1,
     "AppGPS": 53,
     "Camera": 108,
     "ComponentSerial": 1,
@@ -74,7 +75,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "RCDisplayField": 433,
     "Recover": 5,
     "SmartBatteryGroup": 351,
-    "Unknown": 466,
+    "Unknown": 465,
     "VisionGroup": 9
   },
   "frame_count": 1082,
