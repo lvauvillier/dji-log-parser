@@ -167,9 +167,6 @@
 //! │(Encrypted + AES)|
 //! └─────────────────┘
 //! ```
-// binrw expands `#[br(count = ...)]` into a `try_into()` call, which triggers this lint on
-// every u8/u16 length field. The conversion is generated code, not ours.
-#![allow(clippy::unnecessary_fallible_conversions)]
 
 use base64::engine::general_purpose::STANDARD as Base64Standard;
 use base64::Engine as _;
