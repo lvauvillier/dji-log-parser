@@ -490,6 +490,7 @@ impl DJILog {
                 break;
             }
             // decode record
+            let position = cursor.position();
             let record = match Record::read(
                 &mut cursor,
                 self.version,
@@ -497,7 +498,15 @@ impl DJILog {
                 &keychain,
             ) {
                 Ok(record) => record,
-                Err(_) => break,
+                Err(_) => {
+                    // A record cut off at the end of a truncated log: its data is kept as invalid
+                    let end = (records_end as usize).min(self.inner.len());
+                    let rest = self.inner.get(position as usize..end).unwrap_or_default();
+                    if !rest.is_empty() {
+                        records.push(Record::Invalid(rest.to_vec()));
+                    }
+                    break;
+                }
             };
 
             if let Record::KeyStorageRecover(_) = record {

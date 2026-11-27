@@ -3,6 +3,7 @@
 use std::path::PathBuf;
 
 use dji_log_parser::keychain::KeychainFeaturePoint;
+use dji_log_parser::record::Record;
 use dji_log_parser::{DJILog, Error};
 
 fn fixture(name: &str) -> Vec<u8> {
@@ -105,4 +106,16 @@ fn wrong_length_keychain_is_an_error() {
         parser.records(Some(keychains)),
         Err(Error::InvalidKeychain(_))
     ));
+}
+
+/// A record cut off at the end of a truncated log is kept as invalid data, the reading doesn't
+/// stop silently.
+#[test]
+fn data_of_a_truncated_last_record_is_kept() {
+    let bytes = fixture("v14_mini4pro.txt");
+    let parser = DJILog::from_bytes(bytes[..bytes.len() - 3].to_vec()).unwrap();
+
+    let records = parser.records(Some(v14_keychains())).unwrap();
+
+    assert!(matches!(records.last(), Some(Record::Invalid(data)) if !data.is_empty()));
 }
