@@ -1,4 +1,4 @@
-use csv::WriterBuilder;
+use csv::{ReaderBuilder, WriterBuilder};
 use dji_log_parser::frame::Frame;
 use dji_log_parser::frame::FrameDetails;
 use dji_log_parser::record::Record;
@@ -25,22 +25,65 @@ impl Exporter for CSVExporter {
                 .unwrap();
 
             let details: FrameDetails = parser.details.clone().into();
+            let Some(first_frame) = frames.first() else {
+                return;
+            };
 
-            frames.iter().enumerate().for_each(|(index, frame)| {
-                // write headers
-                if index == 0 {
-                    writer.write_record(get_headers(frame)).unwrap();
-                }
-                // write frame with details
-                writer
-                    .serialize(FrameWithDetails {
-                        frame,
-                        details: &details,
-                    })
-                    .unwrap();
-            })
+            // The columns of the separate batteries and of the RTK only when the log has them
+            let has = |found: fn(&Frame) -> bool| frames.iter().any(found);
+            let missing_sections: Vec<&str> = [
+                ("BATTERY1.", has(|frame| frame.battery1.voltage.is_some())),
+                ("BATTERY2.", has(|frame| frame.battery2.voltage.is_some())),
+                ("RTK.", has(|frame| frame.rtk.solution.is_some())),
+            ]
+            .into_iter()
+            .filter_map(|(prefix, found)| (!found).then_some(prefix))
+            .collect();
+
+            let headers = get_headers(first_frame);
+            let kept: Vec<bool> = headers
+                .iter()
+                .map(|header| {
+                    !missing_sections
+                        .iter()
+                        .any(|prefix| header.starts_with(prefix))
+                })
+                .collect();
+            let keep = |fields: Vec<String>| -> Vec<String> {
+                fields
+                    .into_iter()
+                    .zip(&kept)
+                    .filter_map(|(field, kept)| kept.then_some(field))
+                    .collect()
+            };
+
+            writer.write_record(keep(headers)).unwrap();
+            for frame in frames {
+                let fields = serialize_fields(&FrameWithDetails {
+                    frame,
+                    details: &details,
+                });
+                writer.write_record(keep(fields)).unwrap();
+            }
         }
     }
+}
+
+/// Fields of a row, as the CSV writer serializes them.
+fn serialize_fields(row: &FrameWithDetails) -> Vec<String> {
+    let mut row_writer = WriterBuilder::new()
+        .has_headers(false)
+        .from_writer(Vec::new());
+    row_writer.serialize(row).unwrap();
+    let data = row_writer.into_inner().unwrap();
+    ReaderBuilder::new()
+        .has_headers(false)
+        .from_reader(data.as_slice())
+        .records()
+        .next()
+        .and_then(Result::ok)
+        .map(|record| record.iter().map(String::from).collect())
+        .unwrap_or_default()
 }
 
 fn get_headers(frame: &Frame) -> Vec<String> {
