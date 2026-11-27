@@ -156,7 +156,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
         },
         "rc": {
           "downlinkSignal": null,
-          "uplinkSignal": 90,
+          "uplinkSignal": 100,
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
@@ -355,8 +355,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "sdCardState": "Normal"
         },
         "rc": {
-          "downlinkSignal": 90,
-          "uplinkSignal": 90,
+          "downlinkSignal": 100,
+          "uplinkSignal": 100,
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,
@@ -555,8 +555,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "sdCardState": "Normal"
         },
         "rc": {
-          "downlinkSignal": 90,
-          "uplinkSignal": 90,
+          "downlinkSignal": 100,
+          "uplinkSignal": 100,
           "aileron": 1024,
           "elevator": 1024,
           "throttle": 1024,

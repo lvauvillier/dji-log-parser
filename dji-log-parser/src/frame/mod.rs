@@ -31,8 +31,8 @@ pub use details::FrameDetails;
 pub use gimbal::FrameGimbal;
 pub use home::FrameHome;
 pub use osd::FrameOSD;
-use rc::normalized_stick;
 pub use rc::FrameRC;
+use rc::{normalized_stick, signal_percent};
 pub use recover::FrameRecover;
 pub use rtk::FrameRTK;
 pub use vision::FrameVision;
@@ -437,10 +437,11 @@ impl FrameBuilder {
                 }
             }
             Record::OFDM(ofdm) => {
+                let signal = Some(signal_percent(ofdm.signal, frame.osd.drone_type));
                 if ofdm.is_up {
-                    frame.rc.uplink_signal = Some(ofdm.signal_percent);
+                    frame.rc.uplink_signal = signal;
                 } else {
-                    frame.rc.downlink_signal = Some(ofdm.signal_percent);
+                    frame.rc.downlink_signal = signal;
                 }
             }
             Record::Custom(custom) => {
