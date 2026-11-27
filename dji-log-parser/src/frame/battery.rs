@@ -47,4 +47,10 @@ pub struct FrameBattery {
     /// Battery needed to land, in percentage
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub land_battery: Option<u16>,
+    /// Low battery warning threshold, in percentage
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub low_warning: Option<u8>,
+    /// Critical battery warning threshold, in percentage
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub serious_low_warning: Option<u8>,
 }

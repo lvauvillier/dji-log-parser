@@ -91,6 +91,9 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "OSD.isVibrating".to_string(),         // Indicates if the drone is experiencing vibrations
         "OSD.isVisionUsed".to_string(), // Indicates if vision positioning system is being used
         "OSD.voltageWarning".to_string(), // Battery voltage warning level
+        "OSD.windSpeed".to_string(),    // Wind speed estimated by the aircraft, in m/s
+        "OSD.windDirection".to_string(), // Direction the wind comes from
+        "OSD.positionSource".to_string(), // Source of the position of the aircraft
         "GIMBAL.mode".to_string(),      // Current gimbal mode
         "GIMBAL.pitch".to_string(),     // Gimbal pitch angle in degrees
         "GIMBAL.roll".to_string(),      // Gimbal roll angle in degrees
@@ -134,12 +137,14 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "BATTERY.landTime".to_string(),             // Time needed to land, in seconds
         "BATTERY.goHomeBattery".to_string(),        // Battery needed to return home, in percentage
         "BATTERY.landBattery".to_string(),          // Battery needed to land, in percentage
-        "HOME.latitude".to_string(),                // Home point latitude in degrees
-        "HOME.longitude".to_string(),               // Home point longitude in degrees
-        "HOME.altitude".to_string(),                // Home point altitude in meters
-        "HOME.heightLimit".to_string(),             // Max allowed height in meters
-        "HOME.isHomeRecord".to_string(),            // Indicates if home point is recorded
-        "HOME.goHomeMode".to_string(),              // Current return-to-home mode
+        "BATTERY.lowWarning".to_string(),           // Low battery warning threshold, in percentage
+        "BATTERY.seriousLowWarning".to_string(), // Critical battery warning threshold, in percentage
+        "HOME.latitude".to_string(),             // Home point latitude in degrees
+        "HOME.longitude".to_string(),            // Home point longitude in degrees
+        "HOME.altitude".to_string(),             // Home point altitude in meters
+        "HOME.heightLimit".to_string(),          // Max allowed height in meters
+        "HOME.isHomeRecord".to_string(),         // Indicates if home point is recorded
+        "HOME.goHomeMode".to_string(),           // Current return-to-home mode
         "HOME.isDynamicHomePointEnabled".to_string(), // Indicates if dynamic home point is enabled
         "HOME.isNearDistanceLimit".to_string(), // Indicates if the drone is near its distance limit
         "HOME.isNearHeightLimit".to_string(),   // Indicates if the drone is near its height limit

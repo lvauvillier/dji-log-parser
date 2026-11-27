@@ -127,7 +127,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -176,7 +179,9 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeTime": null,
           "landTime": null,
           "goHomeBattery": null,
-          "landBattery": null
+          "landBattery": null,
+          "lowWarning": 25,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 0.0,
@@ -292,7 +297,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -341,7 +349,9 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeTime": 71,
           "landTime": 5,
           "goHomeBattery": 20,
-          "landBattery": 10
+          "landBattery": 10,
+          "lowWarning": 25,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 39.89193055411263,
@@ -457,7 +467,10 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -506,7 +519,9 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "goHomeTime": 3,
           "landTime": 0,
           "goHomeBattery": 15,
-          "landBattery": 10
+          "landBattery": 10,
+          "lowWarning": 25,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 39.89193055411263,

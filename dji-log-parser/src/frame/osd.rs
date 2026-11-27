@@ -4,7 +4,7 @@ use tsify_next::Tsify;
 
 use crate::record::osd::{
     AppCommand, BatteryType, DroneType, FlightAction, FlightMode, GoHomeStatus, ImuInitFailReason,
-    MotorStartFailedCause, NonGPSCause,
+    MotorStartFailedCause, NonGPSCause, PositionSource, WindDirection,
 };
 
 #[derive(Serialize, Debug, Default, Clone)]
@@ -110,4 +110,13 @@ pub struct FrameOSD {
     pub is_vision_used: bool,
     /// Battery voltage warning level
     pub voltage_warning: u8,
+    /// Wind speed estimated by the aircraft, in m/s
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub wind_speed: Option<f32>,
+    /// Direction the wind comes from
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub wind_direction: Option<WindDirection>,
+    /// Source of the position of the aircraft
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub position_source: Option<PositionSource>,
 }

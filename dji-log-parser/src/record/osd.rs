@@ -1,4 +1,5 @@
 use binrw::binread;
+use binrw::io::SeekFrom;
 use serde::Serialize;
 use std::f64::consts::PI;
 #[cfg(target_arch = "wasm32")]
@@ -128,13 +129,85 @@ pub struct OSD {
     #[br(map = |x: u16| x as f32 / 10.0)]
     pub fly_time: f32,
     pub motor_revolution: u8,
+
     #[br(temp)]
-    _unknown: u16,
+    _bitpack7: u8,
+    /// Low battery warning threshold, in percentage
+    #[br(calc(sub_byte_field(_bitpack7, 0x7F)))]
+    pub low_warning: u8,
+    /// Indicates if the aircraft returns home at the low battery warning
+    #[br(calc(sub_byte_field(_bitpack7, 0x80) == 1))]
+    pub low_warning_go_home: bool,
+    #[br(temp)]
+    _bitpack8: u8,
+    /// Critical battery warning threshold, in percentage
+    #[br(calc(sub_byte_field(_bitpack8, 0x7F)))]
+    pub serious_low_warning: u8,
+    /// Indicates if the aircraft lands at the critical battery warning
+    #[br(calc(sub_byte_field(_bitpack8, 0x80) == 1))]
+    pub serious_low_warning_landing: bool,
+
     pub version_c: u8,
     #[br(if(version >=2), map = |x: u8| DroneType::from(x))]
     pub drone_type: DroneType,
     #[br(if(version >=3), map = |x: u8| ImuInitFailReason::from(x))]
     pub imu_init_fail_reason: ImuInitFailReason,
+
+    /// Only in recent logs, and not on every aircraft: none when the aircraft doesn't report it
+    /// or has no positioning
+    #[br(seek_before = SeekFrom::Start(60))]
+    #[br(map = |x: u8| (x != 0).then(|| PositionSource::from(x)))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub position_source: Option<PositionSource>,
+
+    #[br(temp, seek_before = SeekFrom::Start(63))]
+    wind_speed_raw: u8,
+    #[br(temp)]
+    wind_direction_raw: u8,
+    /// m/s, estimated by the aircraft. Only in recent logs, and not on every aircraft: none when
+    /// the wind is calm or the aircraft doesn't report it
+    #[br(calc = has_wind(wind_speed_raw, wind_direction_raw).then(|| f32::from(wind_speed_raw) / 10.0))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub wind_speed: Option<f32>,
+    /// Direction the wind comes from
+    #[br(calc = has_wind(wind_speed_raw, wind_direction_raw).then(|| WindDirection::from(wind_direction_raw & 0x0F)))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub wind_direction: Option<WindDirection>,
+}
+
+/// Whether the wind bytes hold an estimate: they are zeros when the wind is calm or isn't
+/// reported, and 255 when it isn't available.
+fn has_wind(speed: u8, direction: u8) -> bool {
+    speed != u8::MAX && (speed, direction & 0x0F) != (0, 0)
+}
+
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
+pub enum PositionSource {
+    Vision = 1,
+    Gnss = 2,
+    RtkFixed = 3,
+    #[serde(untagged)]
+    #[num_enum(catch_all)]
+    Unknown(u8),
+}
+
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
+pub enum WindDirection {
+    North = 1,
+    NorthEast = 2,
+    East = 3,
+    SouthEast = 4,
+    South = 5,
+    SouthWest = 6,
+    West = 7,
+    NorthWest = 8,
+    #[serde(untagged)]
+    #[num_enum(catch_all)]
+    Unknown(u8),
 }
 
 #[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
@@ -578,5 +651,17 @@ pub enum ImuInitFailReason {
 impl Default for ImuInitFailReason {
     fn default() -> Self {
         ImuInitFailReason::MonitorError
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn wind_is_missing_when_calm_unknown_or_unavailable() {
+        assert!(has_wind(16, 2));
+        assert!(!has_wind(0, 0));
+        assert!(!has_wind(u8::MAX, 2));
     }
 }

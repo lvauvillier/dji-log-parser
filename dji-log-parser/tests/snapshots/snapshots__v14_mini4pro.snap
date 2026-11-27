@@ -132,7 +132,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": "Gnss"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -179,7 +182,9 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeTime": null,
           "landTime": null,
           "goHomeBattery": null,
-          "landBattery": null
+          "landBattery": null,
+          "lowWarning": 15,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 0.0,
@@ -295,7 +300,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": 1.6,
+          "windDirection": "NorthEast",
+          "positionSource": "Gnss"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -342,7 +350,9 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeTime": 29,
           "landTime": 36,
           "goHomeBattery": 18,
-          "landBattery": 9
+          "landBattery": 9,
+          "lowWarning": 15,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 45.47186688213476,
@@ -458,7 +468,10 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": "Gnss"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -505,7 +518,9 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "goHomeTime": 9,
           "landTime": 30,
           "goHomeBattery": 17,
-          "landBattery": 9
+          "landBattery": 9,
+          "lowWarning": 15,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 45.47186688213476,

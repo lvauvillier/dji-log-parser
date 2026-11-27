@@ -234,6 +234,11 @@ where
                 frame.osd.is_vibrating = osd.is_vibrating;
                 frame.osd.is_vision_used = osd.is_vision_used;
                 frame.osd.voltage_warning = osd.voltage_warning;
+                frame.osd.wind_speed = osd.wind_speed;
+                frame.osd.wind_direction = osd.wind_direction;
+                frame.osd.position_source = osd.position_source;
+                frame.battery.low_warning = Some(osd.low_warning);
+                frame.battery.serious_low_warning = Some(osd.serious_low_warning);
 
                 frame_index += 1;
             }

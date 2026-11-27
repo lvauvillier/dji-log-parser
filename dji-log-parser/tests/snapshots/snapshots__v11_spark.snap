@@ -130,7 +130,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -178,7 +181,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeTime": null,
           "landTime": null,
           "goHomeBattery": null,
-          "landBattery": null
+          "landBattery": null,
+          "lowWarning": 40,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 0.0,
@@ -294,7 +299,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "FPV",
@@ -342,7 +350,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeTime": 37,
           "landTime": 12,
           "goHomeBattery": 21,
-          "landBattery": 11
+          "landBattery": 11,
+          "lowWarning": 40,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 18.071883786333082,
@@ -458,7 +468,10 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 1
+          "voltageWarning": 1,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "FPV",
@@ -506,7 +519,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "goHomeTime": 0,
           "landTime": 0,
           "goHomeBattery": 15,
-          "landBattery": 10
+          "landBattery": 10,
+          "lowWarning": 40,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 18.071883786333082,

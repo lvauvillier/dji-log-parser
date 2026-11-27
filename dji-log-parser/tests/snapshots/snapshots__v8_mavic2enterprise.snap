@@ -126,7 +126,10 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": null,
@@ -175,7 +178,9 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "goHomeTime": null,
           "landTime": null,
           "goHomeBattery": null,
-          "landBattery": null
+          "landBattery": null,
+          "lowWarning": 25,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 0.0,
@@ -291,7 +296,10 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -340,7 +348,9 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "goHomeTime": 0,
           "landTime": 0,
           "goHomeBattery": 15,
-          "landBattery": 10
+          "landBattery": 10,
+          "lowWarning": 25,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 39.89195655802814,
@@ -456,7 +466,10 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "isPropellerCatapult": false,
           "isVibrating": false,
           "isVisionUsed": false,
-          "voltageWarning": 0
+          "voltageWarning": 0,
+          "windSpeed": null,
+          "windDirection": null,
+          "positionSource": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -505,7 +518,9 @@ expression: "summarize(fixture(\"v8_mavic2enterprise.txt\"), None)"
           "goHomeTime": 0,
           "landTime": 0,
           "goHomeBattery": 15,
-          "landBattery": 10
+          "landBattery": 10,
+          "lowWarning": 25,
+          "seriousLowWarning": 10
         },
         "home": {
           "latitude": 39.89195655802814,
