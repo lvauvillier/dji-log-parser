@@ -133,7 +133,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -346,7 +347,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 229.5937
         },
         "gimbal": {
           "mode": "FPV",
@@ -559,7 +561,8 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "voltageWarning": 1,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 456.68182
         },
         "gimbal": {
           "mode": "FPV",

@@ -6,7 +6,7 @@ use tsify_next::Tsify;
 use crate::layout::details::Details;
 use crate::record::aircraft_info::{AircraftInfo, AircraftInfoMessage};
 use crate::record::flight_controller_common_osd_field::FlightControllerCommonOSDField;
-use crate::record::osd::{AppCommand, GroundOrSky};
+use crate::record::osd::{AppCommand, GroundOrSky, OSD};
 use crate::record::smart_battery_group::SmartBatteryGroup;
 use crate::record::Record;
 use crate::utils::append_message;
@@ -223,6 +223,10 @@ struct FrameBuilder {
     home_altitude: Option<f32>,
     /// Height of the geoid above the ellipsoid at the home point
     geoid_height: Option<f32>,
+    /// Previous OSD record: position, flight time and horizontal speed
+    previous_osd: Option<(f64, f64, f32, f32)>,
+    /// Distance traveled, in meters
+    mileage: f64,
     /// Serial numbers of the serial number records
     serials: FrameSerial,
     /// Serial numbers of the details and of the recover records, used for the components without
@@ -248,6 +252,8 @@ impl FrameBuilder {
             is_shooting_photo: false,
             home_altitude: None,
             geoid_height: None,
+            previous_osd: None,
+            mileage: 0.0,
             serials: FrameSerial::default(),
             fallback_serials: FrameSerial::from_details(details),
         }
@@ -265,6 +271,9 @@ impl FrameBuilder {
                     completed = Some(frame.clone());
                     frame.reset();
                 }
+
+                self.mileage += distance_from_previous_osd(&mut self.previous_osd, osd);
+                frame.osd.mileage = self.mileage as f32;
 
                 // Fill OSD record
                 frame.osd.fly_time = osd.fly_time;
@@ -573,5 +582,53 @@ impl FrameBuilder {
             self.frame.finalize();
             self.frame
         })
+    }
+}
+
+/// Horizontal distance in meters since the previous OSD record: between their positions, or
+/// from their speeds while a position is missing.
+fn distance_from_previous_osd(previous_osd: &mut Option<(f64, f64, f32, f32)>, osd: &OSD) -> f64 {
+    let speed = (osd.speed_x * osd.speed_x + osd.speed_y * osd.speed_y).sqrt();
+    let previous = previous_osd.replace((osd.latitude, osd.longitude, osd.fly_time, speed));
+    let Some((latitude, longitude, fly_time, previous_speed)) = previous else {
+        return 0.0;
+    };
+    // Without a position, the coordinates are almost 0, not always exactly
+    let has_position = |latitude: f64, longitude: f64| {
+        (latitude.abs() > 1e-4 || longitude.abs() > 1e-4)
+            && latitude.abs() <= 90.0
+            && longitude.abs() <= 180.0
+    };
+    if has_position(latitude, longitude) && has_position(osd.latitude, osd.longitude) {
+        distance(latitude, longitude, osd.latitude, osd.longitude)
+    } else if osd.fly_time > fly_time {
+        f64::from((previous_speed + speed) / 2.0 * (osd.fly_time - fly_time))
+    } else {
+        0.0
+    }
+}
+
+/// Distance in meters between two positions in degrees, on a sphere of the mean radius of the
+/// Earth
+fn distance(latitude1: f64, longitude1: f64, latitude2: f64, longitude2: f64) -> f64 {
+    const EARTH_RADIUS: f64 = 6_371_000.0;
+    let (latitude1, latitude2) = (latitude1.to_radians(), latitude2.to_radians());
+    let half_latitude = (latitude2 - latitude1) / 2.0;
+    let half_longitude = (longitude2 - longitude1).to_radians() / 2.0;
+    let a = half_latitude.sin().powi(2)
+        + latitude1.cos() * latitude2.cos() * half_longitude.sin().powi(2);
+    2.0 * EARTH_RADIUS * a.sqrt().asin()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn distance_between_two_positions() {
+        // One degree of latitude, then one degree of longitude at the equator
+        assert!((distance(45.0, 6.0, 46.0, 6.0) - 111_195.0).abs() < 1.0);
+        assert!((distance(0.0, 6.0, 0.0, 7.0) - 111_195.0).abs() < 1.0);
+        assert_eq!(distance(45.0, 6.0, 45.0, 6.0), 0.0);
     }
 }

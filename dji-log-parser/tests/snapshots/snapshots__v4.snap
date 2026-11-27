@@ -129,7 +129,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -343,7 +344,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 18.125015
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -557,7 +559,8 @@ expression: "summarize(fixture(\"v4.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 30.773424
         },
         "gimbal": {
           "mode": "YawFollow",

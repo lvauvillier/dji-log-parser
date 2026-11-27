@@ -17,7 +17,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
     "startTime": "2024-09-01T12:55:49.477Z",
     "longitude": 16.385342469793752,
     "latitude": 45.471866872275065,
-    "totalDistance": 0.2690069,
+    "totalDistance": 269.0069,
     "totalTime": 108.0,
     "maxHeight": 55.0,
     "maxHorizontalSpeed": 11.371896,
@@ -136,7 +136,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": "Gnss"
+          "positionSource": "Gnss",
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -348,7 +349,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "voltageWarning": 0,
           "windSpeed": 1.6,
           "windDirection": "NorthEast",
-          "positionSource": "Gnss"
+          "positionSource": "Gnss",
+          "mileage": 120.179794
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -560,7 +562,8 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": "Gnss"
+          "positionSource": "Gnss",
+          "mileage": 269.00775
         },
         "gimbal": {
           "mode": "YawFollow",

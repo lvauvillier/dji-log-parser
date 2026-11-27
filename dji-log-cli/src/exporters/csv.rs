@@ -177,35 +177,36 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "OSD.windSpeed".to_string(),    // Wind speed estimated by the aircraft, in m/s
         "OSD.windDirection".to_string(), // Direction the wind comes from
         "OSD.positionSource".to_string(), // Source of the position of the aircraft
-        "GIMBAL.mode".to_string(),      // Current gimbal mode
-        "GIMBAL.pitch".to_string(),     // Gimbal pitch angle in degrees
-        "GIMBAL.roll".to_string(),      // Gimbal roll angle in degrees
-        "GIMBAL.yaw".to_string(),       // Gimbal yaw angle in degrees
+        "OSD.mileage".to_string(), // Horizontal distance traveled since the start of the log in meters
+        "GIMBAL.mode".to_string(), // Current gimbal mode
+        "GIMBAL.pitch".to_string(), // Gimbal pitch angle in degrees
+        "GIMBAL.roll".to_string(), // Gimbal roll angle in degrees
+        "GIMBAL.yaw".to_string(),  // Gimbal yaw angle in degrees
         "GIMBAL.isPitchAtLimit".to_string(), // Indicates if gimbal pitch is at its limit
         "GIMBAL.isRollAtLimit".to_string(), // Indicates if gimbal roll is at its limit
         "GIMBAL.isYawAtLimit".to_string(), // Indicates if gimbal yaw is at its limit
-        "GIMBAL.isStuck".to_string(),   // Indicates if the gimbal is stuck
-        "CAMERA.isPhoto".to_string(),   // Indicates if the camera is in photo mode
-        "CAMERA.isVideo".to_string(),   // Indicates if the camera is in video mode
+        "GIMBAL.isStuck".to_string(), // Indicates if the gimbal is stuck
+        "CAMERA.isPhoto".to_string(), // Indicates if the camera is in photo mode
+        "CAMERA.isVideo".to_string(), // Indicates if the camera is in video mode
         "CAMERA.sdCardIsInserted".to_string(), // Indicates if an SD card is inserted
         "CAMERA.sdCardState".to_string(), // Current state of the SD card
         "RC.downlinkSignal".to_string(), // Downlink signal strength
-        "RC.uplinkSignal".to_string(),  // Uplink signal strength
-        "RC.aileron".to_string(),       // Right stick horizontal position (aileron)
-        "RC.elevator".to_string(),      // Right stick vertical position (elevator)
-        "RC.throttle".to_string(),      // Left stick vertical position (throttle)
-        "RC.rudder".to_string(),        // Left stick horizontal position (rudder)
-        "RC.modeSwitch".to_string(),    // Position of the flight mode switch
+        "RC.uplinkSignal".to_string(), // Uplink signal strength
+        "RC.aileron".to_string(),  // Right stick horizontal position (aileron)
+        "RC.elevator".to_string(), // Right stick vertical position (elevator)
+        "RC.throttle".to_string(), // Left stick vertical position (throttle)
+        "RC.rudder".to_string(),   // Left stick horizontal position (rudder)
+        "RC.modeSwitch".to_string(), // Position of the flight mode switch
         "RC.aileronNormalized".to_string(), // Right stick horizontal position, from -1 to 1
         "RC.elevatorNormalized".to_string(), // Right stick vertical position, from -1 to 1
         "RC.throttleNormalized".to_string(), // Left stick vertical position, from -1 to 1
         "RC.rudderNormalized".to_string(), // Left stick horizontal position, from -1 to 1
         "BATTERY.chargeLevel".to_string(), // Battery charge level in percentage
-        "BATTERY.voltage".to_string(),  // Battery voltage
-        "BATTERY.current".to_string(),  // Battery current
+        "BATTERY.voltage".to_string(), // Battery voltage
+        "BATTERY.current".to_string(), // Battery current
         "BATTERY.currentCapacity".to_string(), // Current battery capacity
         "BATTERY.fullCapacity".to_string(), // Full battery capacity
-        "BATTERY.cellNum".to_string(),  // Number of battery cells
+        "BATTERY.cellNum".to_string(), // Number of battery cells
         "BATTERY.isCellVoltageEstimated".to_string(), // Indicates if cell voltage is derived from global voltage
     ];
 

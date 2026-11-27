@@ -132,7 +132,8 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": null,
@@ -346,7 +347,8 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 38.45182
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -560,7 +562,8 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 50.499886
         },
         "gimbal": {
           "mode": "YawFollow",

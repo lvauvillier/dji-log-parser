@@ -130,7 +130,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -344,7 +345,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 947.3976
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -558,7 +560,8 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 1918.6909
         },
         "gimbal": {
           "mode": "YawFollow",

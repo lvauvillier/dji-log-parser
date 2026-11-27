@@ -11,7 +11,8 @@ use crate::layout::details::Platform;
 pub struct FrameDetails {
     /// Total flight time in seconds
     pub total_time: f32,
-    /// Total distance flown in meters
+    /// Total distance flown in meters, as recorded by the app: `osd.mileage` of the last frame is
+    /// computed from the positions
     pub total_distance: f32,
     /// Maximum height reached during the flight in meters
     pub max_height: f32,
@@ -19,7 +20,8 @@ pub struct FrameDetails {
     pub max_horizontal_speed: f32,
     /// Maximum vertical speed reached during the flight in meters per second
     pub max_vertical_speed: f32,
-    /// Number of photos taken during the flight
+    /// Number of photos taken during the flight, 0 in the logs of DJI Fly: the frames with
+    /// `camera.isPhoto` count them
     pub photo_num: i32,
     /// Total video recording time in seconds
     pub video_time: i64,

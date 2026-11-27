@@ -130,7 +130,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": null,
@@ -344,7 +345,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 2.7105715
         },
         "gimbal": {
           "mode": null,
@@ -558,7 +560,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 8.617206
         },
         "gimbal": {
           "mode": null,

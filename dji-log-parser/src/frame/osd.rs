@@ -120,4 +120,7 @@ pub struct FrameOSD {
     /// Source of the position of the aircraft
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub position_source: Option<PositionSource>,
+    /// Horizontal distance traveled since the start of the log in meters: from the positions, or
+    /// from the speed while there is no position
+    pub mileage: f32,
 }

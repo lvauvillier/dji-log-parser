@@ -34,7 +34,8 @@ pub struct Details {
     pub longitude: f64,
     /// degrees
     pub latitude: f64,
-    /// meters
+    /// meters, recorded in kilometers in version 14
+    #[br(map = |x: f32| if version >= 14 { x * 1000.0 } else { x })]
     pub total_distance: f32,
     /// seconds
     #[br(map = |x: i32| x as f64 / 1000.0)]
@@ -45,6 +46,7 @@ pub struct Details {
     pub max_horizontal_speed: f32,
     /// meters / seconds
     pub max_vertical_speed: f32,
+    /// Number of photos taken during the flight, 0 in the logs of DJI Fly
     pub capture_num: i32,
     pub video_time: i64,
     pub moment_pic_image_buffer_len: [i32; 4],

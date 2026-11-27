@@ -131,7 +131,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "FPV",
@@ -345,7 +346,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 1.8735476
         },
         "gimbal": {
           "mode": "FPV",
@@ -559,7 +561,8 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 5.6422057
         },
         "gimbal": {
           "mode": "FPV",

@@ -134,7 +134,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -350,7 +351,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -566,7 +568,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "voltageWarning": 0,
           "windSpeed": null,
           "windDirection": null,
-          "positionSource": null
+          "positionSource": null,
+          "mileage": 0.0
         },
         "gimbal": {
           "mode": "YawFollow",
