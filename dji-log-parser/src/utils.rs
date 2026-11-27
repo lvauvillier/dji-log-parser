@@ -252,25 +252,12 @@ pub fn pad_with_zeros(input: &[u8], min_length: usize) -> Vec<u8> {
     output
 }
 
-/// Adds a new message to the original message with a separator if the new message is not empty.
-///
-/// # Arguments
-///
-/// * `original_message` - The original message to which the new message will be appended.
-/// * `message` - The new message to be added. If this message is empty, the original message will remain unchanged.
-///
-/// # Returns
-///
-/// A `String` containing the original message followed by the new message separated by "; " if the new message is not empty,
-/// otherwise the original message.
-///
-///
-pub fn append_message(original_message: String, message: impl Into<String>) -> String {
-    if !original_message.is_empty() {
-        format!("{}; {}", original_message, message.into())
-    } else {
-        message.into()
+/// Appends a message to a list of messages separated by `; `.
+pub fn append_message(messages: &mut String, message: &str) {
+    if !messages.is_empty() {
+        messages.push_str("; ");
     }
+    messages.push_str(message);
 }
 
 /// Reads a string of a fixed size field: it ends at the first `\0`, the bytes after it are

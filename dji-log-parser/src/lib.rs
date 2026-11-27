@@ -185,7 +185,7 @@ pub mod record;
 mod utils;
 
 pub use error::{Error, Result};
-use frame::{records_to_frames, Frame};
+use frame::{Frame, Frames};
 use keychain::{EncodedKeychainFeaturePoint, Keychain, KeychainFeaturePoint, KeychainsRequest};
 use layout::auxiliary::{Auxiliary, Department};
 use layout::details::Details;
@@ -461,6 +461,20 @@ impl DJILog {
         &self,
         keychains: Option<Vec<Vec<KeychainFeaturePoint>>>,
     ) -> Result<Vec<Record>> {
+        Ok(self.records_iter(keychains)?.collect())
+    }
+
+    /// Iterates over the raw records of the DJI log, decoding each record when it is reached.
+    ///
+    /// Same records as [`DJILog::records`], without keeping them all in memory.
+    ///
+    /// # Arguments
+    ///
+    /// * `keychains` - The keychains of the log, required for encrypted logs (versions >= 13).
+    pub fn records_iter(
+        &self,
+        keychains: Option<Vec<Vec<KeychainFeaturePoint>>>,
+    ) -> Result<Records<'_>> {
         if self.version >= 13 && keychains.is_none() {
             return Err(Error::KeychainRequired);
         }
@@ -473,47 +487,18 @@ impl DJILog {
             None => Vec::new(),
         });
 
-        let mut cursor = Cursor::new(&self.inner);
+        let mut cursor = Cursor::new(self.inner.as_slice());
         cursor.set_position(self.prefix.records_offset());
+        let keychain = RefCell::new(keychains.pop_front().unwrap_or(Keychain::empty()));
 
-        let mut keychain = RefCell::new(keychains.pop_front().unwrap_or(Keychain::empty()));
-
-        let mut records = Vec::new();
-
-        let records_end = self.prefix.records_end_offset(self.inner.len() as u64);
-        loop {
-            utils::skip_lone_image_markers(&mut cursor)?;
-            if cursor.position() >= records_end {
-                break;
-            }
-            // decode record
-            let position = cursor.position();
-            let record = match Record::read(
-                &mut cursor,
-                self.version,
-                self.details.product_type,
-                &keychain,
-            ) {
-                Ok(record) => record,
-                Err(_) => {
-                    // A record cut off at the end of a truncated log: its data is kept as invalid
-                    let end = (records_end as usize).min(self.inner.len());
-                    let rest = self.inner.get(position as usize..end).unwrap_or_default();
-                    if !rest.is_empty() {
-                        records.push(Record::Invalid(rest.to_vec()));
-                    }
-                    break;
-                }
-            };
-
-            if let Record::KeyStorageRecover(_) = record {
-                keychain = RefCell::new(keychains.pop_front().unwrap_or(Keychain::empty()));
-            }
-
-            records.push(record);
-        }
-
-        Ok(records)
+        Ok(Records {
+            log: self,
+            cursor,
+            keychains,
+            keychain,
+            records_end: self.prefix.records_end_offset(self.inner.len() as u64),
+            is_done: false,
+        })
     }
 
     /// Retrieves the normalized frames from the DJI log.
@@ -545,7 +530,74 @@ impl DJILog {
     /// versions, simplifying data analysis and interpretation.
     ///
     pub fn frames(&self, keychains: Option<Vec<Vec<KeychainFeaturePoint>>>) -> Result<Vec<Frame>> {
-        let records = self.records(keychains)?;
-        Ok(records_to_frames(records, self.details.clone()))
+        Ok(self.frames_iter(keychains)?.collect())
+    }
+
+    /// Iterates over the normalized frames of the DJI log, building each frame from the records
+    /// when it is reached.
+    ///
+    /// Same frames as [`DJILog::frames`], without keeping all the records and frames in memory.
+    ///
+    /// # Arguments
+    ///
+    /// * `keychains` - The keychains of the log, required for encrypted logs (versions >= 13).
+    pub fn frames_iter(
+        &self,
+        keychains: Option<Vec<Vec<KeychainFeaturePoint>>>,
+    ) -> Result<Frames<Records<'_>>> {
+        Ok(Frames::new(
+            self.records_iter(keychains)?,
+            self.details.clone(),
+        ))
+    }
+}
+
+/// Iterator over the records of a DJI log, see [`DJILog::records_iter`].
+pub struct Records<'a> {
+    log: &'a DJILog,
+    cursor: Cursor<&'a [u8]>,
+    /// Keychains of the next parts of the log, each starting with a `KeyStorageRecover` record
+    keychains: VecDeque<Keychain>,
+    keychain: RefCell<Keychain>,
+    records_end: u64,
+    is_done: bool,
+}
+
+impl Iterator for Records<'_> {
+    type Item = Record;
+
+    fn next(&mut self) -> Option<Record> {
+        if self.is_done {
+            return None;
+        }
+        let at_end = utils::skip_lone_image_markers(&mut self.cursor).is_err()
+            || self.cursor.position() >= self.records_end;
+        if at_end {
+            self.is_done = true;
+            return None;
+        }
+
+        let position = self.cursor.position();
+        match Record::read(
+            &mut self.cursor,
+            self.log.version,
+            self.log.details.product_type,
+            &self.keychain,
+        ) {
+            Ok(record) => {
+                if let Record::KeyStorageRecover(_) = record {
+                    self.keychain =
+                        RefCell::new(self.keychains.pop_front().unwrap_or(Keychain::empty()));
+                }
+                Some(record)
+            }
+            Err(_) => {
+                // A record cut off at the end of a truncated log: its data is kept as invalid
+                self.is_done = true;
+                let end = (self.records_end as usize).min(self.log.inner.len());
+                let rest = self.log.inner.get(position as usize..end)?;
+                (!rest.is_empty()).then(|| Record::Invalid(rest.to_vec()))
+            }
+        }
     }
 }

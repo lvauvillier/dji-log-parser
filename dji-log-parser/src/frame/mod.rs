@@ -166,27 +166,79 @@ where
     I: IntoIterator,
     I::Item: Borrow<Record>,
 {
-    let mut frames = Vec::new();
-    let mut frame = Frame {
-        battery: FrameBattery {
-            cell_num: details.product_type.battery_cell_num(),
-            cell_voltages: vec![0.0; details.product_type.battery_cell_num() as usize],
-            is_cell_voltage_estimated: true,
-            ..FrameBattery::default()
-        },
-        ..Frame::default()
-    };
+    Frames::new(records.into_iter(), details).collect()
+}
 
-    let mut frame_index = 0;
-    // On drones with several batteries, the battery of index 0 is the total of all batteries
-    let mut has_total_battery = false;
+/// Iterator over the frames built from records, see
+/// [`DJILog::frames_iter`](crate::DJILog::frames_iter).
+pub struct Frames<I> {
+    records: I,
+    /// None once the last frame is returned
+    builder: Option<FrameBuilder>,
+}
 
-    for record in records {
-        match record.borrow() {
+impl<I> Frames<I> {
+    pub(crate) fn new(records: I, details: Details) -> Self {
+        Frames {
+            records,
+            builder: Some(FrameBuilder::new(&details)),
+        }
+    }
+}
+
+impl<I> Iterator for Frames<I>
+where
+    I: Iterator,
+    I::Item: Borrow<Record>,
+{
+    type Item = Frame;
+
+    fn next(&mut self) -> Option<Frame> {
+        let builder = self.builder.as_mut()?;
+        for record in self.records.by_ref() {
+            if let Some(frame) = builder.push(record.borrow()) {
+                return Some(frame);
+            }
+        }
+        self.builder.take()?.finish()
+    }
+}
+
+/// Builds the frames from the records, one record at a time.
+struct FrameBuilder {
+    frame: Frame,
+    frame_index: usize,
+    /// On drones with several batteries, the battery of index 0 is the total of all batteries
+    has_total_battery: bool,
+}
+
+impl FrameBuilder {
+    fn new(details: &Details) -> Self {
+        FrameBuilder {
+            frame: Frame {
+                battery: FrameBattery {
+                    cell_num: details.product_type.battery_cell_num(),
+                    cell_voltages: vec![0.0; details.product_type.battery_cell_num() as usize],
+                    is_cell_voltage_estimated: true,
+                    ..FrameBattery::default()
+                },
+                ..Frame::default()
+            },
+            frame_index: 0,
+            has_total_battery: false,
+        }
+    }
+
+    /// Adds a record to the current frame. Returns the previous frame when an OSD record starts a
+    /// new one.
+    fn push(&mut self, record: &Record) -> Option<Frame> {
+        let mut completed = None;
+        let frame = &mut self.frame;
+        match record {
             Record::OSD(osd) => {
-                if frame_index > 0 {
+                if self.frame_index > 0 {
                     frame.finalize();
-                    frames.push(frame.clone());
+                    completed = Some(frame.clone());
                     frame.reset();
                 }
 
@@ -207,9 +259,9 @@ where
                 frame.osd.roll = osd.roll;
 
                 if frame.osd.flyc_state != Some(osd.flight_mode) {
-                    frame.app.tip = append_message(
-                        frame.app.tip,
-                        format!("Flight mode changed to {:?}.", osd.flight_mode),
+                    append_message(
+                        &mut frame.app.tip,
+                        &format!("Flight mode changed to {:?}.", osd.flight_mode),
                     );
                 }
                 frame.osd.flyc_state = Some(osd.flight_mode);
@@ -251,7 +303,7 @@ where
                 frame.battery.low_warning = Some(osd.low_warning);
                 frame.battery.serious_low_warning = Some(osd.serious_low_warning);
 
-                frame_index += 1;
+                self.frame_index += 1;
             }
             Record::Gimbal(gimbal) => {
                 frame.gimbal.mode = Some(gimbal.mode);
@@ -259,18 +311,15 @@ where
                 frame.gimbal.roll = gimbal.roll;
                 frame.gimbal.yaw = gimbal.yaw;
                 if !frame.gimbal.is_pitch_at_limit && gimbal.is_pitch_at_limit {
-                    frame.app.tip =
-                        append_message(frame.app.tip, "Gimbal pitch axis endpoint reached.")
+                    append_message(&mut frame.app.tip, "Gimbal pitch axis endpoint reached.")
                 }
                 frame.gimbal.is_pitch_at_limit = gimbal.is_pitch_at_limit;
                 if !frame.gimbal.is_roll_at_limit && gimbal.is_roll_at_limit {
-                    frame.app.tip =
-                        append_message(frame.app.tip, "Gimbal roll axis endpoint reached.")
+                    append_message(&mut frame.app.tip, "Gimbal roll axis endpoint reached.")
                 }
                 frame.gimbal.is_roll_at_limit = gimbal.is_roll_at_limit;
                 if !frame.gimbal.is_yaw_at_limit && gimbal.is_yaw_at_limit {
-                    frame.app.tip =
-                        append_message(frame.app.tip, "Gimbal yaw axis endpoint reached.")
+                    append_message(&mut frame.app.tip, "Gimbal yaw axis endpoint reached.")
                 }
                 frame.gimbal.is_yaw_at_limit = gimbal.is_yaw_at_limit;
                 frame.gimbal.is_stuck = gimbal.is_stuck;
@@ -351,14 +400,14 @@ where
             Record::SmartBatteryGroup(battery_group) => match battery_group {
                 SmartBatteryGroup::SmartBatteryStatic(_) => {}
                 SmartBatteryGroup::SmartBatteryDynamic(battery) => {
-                    has_total_battery |= battery.index == 0;
+                    self.has_total_battery |= battery.index == 0;
                     match battery.index {
                         1 => frame.battery1.update(battery),
                         2 => frame.battery2.update(battery),
                         _ => {}
                     }
                     // The first battery stands for all of them in logs without a total
-                    if battery.index == 0 || (battery.index == 1 && !has_total_battery) {
+                    if battery.index == 0 || (battery.index == 1 && !self.has_total_battery) {
                         frame.battery.voltage = battery.current_voltage;
                         frame.battery.current = battery.current_current;
                         frame.battery.current_capacity = battery.remained_capacity;
@@ -440,34 +489,35 @@ where
             Record::RTKDifference(rtk) => frame.rtk.update(rtk),
             Record::GOBusiness(business) => {
                 for tip in business.tips.iter().flatten() {
-                    frame.app.tip = append_message(frame.app.tip, tip.text.as_str());
+                    append_message(&mut frame.app.tip, tip.text.as_str());
                 }
                 for warning in business.warnings.iter().flatten() {
                     if warning.level.unwrap_or_default() >= 2 {
-                        frame.app.warn = append_message(frame.app.warn, warning.text.as_str());
+                        append_message(&mut frame.app.warn, warning.text.as_str());
                     } else {
-                        frame.app.tip = append_message(frame.app.tip, warning.text.as_str());
+                        append_message(&mut frame.app.tip, warning.text.as_str());
                     }
                 }
             }
             Record::AppTip(app_tip) => {
-                frame.app.tip = append_message(frame.app.tip, app_tip.message.as_str());
+                append_message(&mut frame.app.tip, app_tip.message.as_str());
             }
             Record::AppWarn(app_warn) => {
-                frame.app.warn = append_message(frame.app.warn, app_warn.message.as_str());
+                append_message(&mut frame.app.warn, app_warn.message.as_str());
             }
             Record::AppSeriousWarn(app_serious_warn) => {
-                frame.app.warn = append_message(frame.app.warn, app_serious_warn.message.as_str());
+                append_message(&mut frame.app.warn, app_serious_warn.message.as_str());
             }
             _ => {}
         }
+        completed
     }
 
-    // A frame is only pushed when the next OSD record starts a new one: push the last one too
-    if frame_index > 0 {
-        frame.finalize();
-        frames.push(frame);
+    /// Returns the last frame: a frame is only returned when the next OSD record starts a new one.
+    fn finish(mut self) -> Option<Frame> {
+        (self.frame_index > 0).then(|| {
+            self.frame.finalize();
+            self.frame
+        })
     }
-
-    frames
 }
