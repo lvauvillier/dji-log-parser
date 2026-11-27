@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v11_mavic2enterprise.txt\"), None)"
       0.0,
       0.0
     ],
-    "takeOffAltitude": 18738.066,
+    "takeOffAltitude": 1873.8066,
     "productType": "Mavic2Enterprise",
     "aircraftName": "dronefo...-Mavic 2 Enterprise",
     "aircraftSn": "276DFAK001T843",

@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
       0.0,
       0.0
     ],
-    "takeOffAltitude": -205.71811,
+    "takeOffAltitude": -20.571812,
     "productType": "Mavic2",
     "aircraftName": "Red Cat ihsotas",
     "aircraftSn": "0M6DG1400189PP",
@@ -419,8 +419,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "temperature": null
         },
         "home": {
-          "latitude": 45836623.61046586,
-          "longitude": 45836623.61046586,
+          "latitude": 0.0,
+          "longitude": 0.0,
           "altitude": -20.571812,
           "heightLimit": 120.0,
           "isHomeRecord": false,
@@ -633,8 +633,8 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "temperature": null
         },
         "home": {
-          "latitude": 45836623.61046586,
-          "longitude": 45836623.61046586,
+          "latitude": 0.0,
+          "longitude": 0.0,
           "altitude": -20.571812,
           "heightLimit": 120.0,
           "isHomeRecord": false,

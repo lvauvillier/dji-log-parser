@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
       0.0,
       0.0
     ],
-    "takeOffAltitude": -569.10455,
+    "takeOffAltitude": -56.910454,
     "productType": "Phantom3Standard",
     "aircraftName": "Red Cat",
     "aircraftSn": "03Z1437134",

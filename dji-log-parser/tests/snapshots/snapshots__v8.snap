@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
       48.61542722132414,
       48.615300352185024
     ],
-    "takeOffAltitude": 576.1842,
+    "takeOffAltitude": 57.61842,
     "productType": "Phantom4",
     "aircraftName": "Trollcopter",
     "aircraftSn": "07JDD4E0010227",

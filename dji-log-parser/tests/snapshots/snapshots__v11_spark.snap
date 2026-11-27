@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
       0.0,
       0.0
     ],
-    "takeOffAltitude": -226.29378,
+    "takeOffAltitude": -22.629377,
     "productType": "Spark",
     "aircraftName": "Profesor",
     "aircraftSn": "0BMUF9M00102DG",

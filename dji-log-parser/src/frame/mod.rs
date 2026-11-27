@@ -473,8 +473,11 @@ impl FrameBuilder {
                 frame.custom.date_time = custom.update_timestamp;
             }
             Record::Home(home) => {
-                frame.home.latitude = home.latitude;
-                frame.home.longitude = home.longitude;
+                // Before the GNSS fix, the position is a sentinel value out of range
+                if home.latitude.abs() <= 90.0 && home.longitude.abs() <= 180.0 {
+                    frame.home.latitude = home.latitude;
+                    frame.home.longitude = home.longitude;
+                }
                 frame.home.altitude = self.home_altitude.unwrap_or(home.altitude);
                 frame.home.height_limit = home.max_allowed_height;
                 frame.home.is_home_record = home.is_home_record;

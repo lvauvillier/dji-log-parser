@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
       0.0,
       0.0
     ],
-    "takeOffAltitude": 25419.336,
+    "takeOffAltitude": 2541.9336,
     "productType": "Phantom4Pro",
     "aircraftName": "df005",
     "aircraftSn": "07JDE5300200GN",

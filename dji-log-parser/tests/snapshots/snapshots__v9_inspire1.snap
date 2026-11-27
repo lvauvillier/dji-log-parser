@@ -427,8 +427,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "temperature": null
         },
         "home": {
-          "latitude": 45836623.61046586,
-          "longitude": 45836623.61046586,
+          "latitude": 0.0,
+          "longitude": 0.0,
           "altitude": 1747.6888,
           "heightLimit": 0.0,
           "isHomeRecord": false,
@@ -643,8 +643,8 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "temperature": null
         },
         "home": {
-          "latitude": 45836623.61046586,
-          "longitude": 45836623.61046586,
+          "latitude": 0.0,
+          "longitude": 0.0,
           "altitude": 1747.6888,
           "heightLimit": 0.0,
           "isHomeRecord": false,

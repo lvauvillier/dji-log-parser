@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v8_mavicpro_2017.txt\"), None)"
       39.964889627235415,
       39.96490045740414
     ],
-    "takeOffAltitude": 24698.676,
+    "takeOffAltitude": 2469.8677,
     "productType": "MavicPro",
     "aircraftName": "DF020",
     "aircraftSn": "08RDE5F001007H",

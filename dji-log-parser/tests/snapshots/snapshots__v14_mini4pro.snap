@@ -48,7 +48,7 @@ expression: "summarize(fixture(\"v14_mini4pro.txt\"),\nSome(keychains(\"v14_mini
       0.0,
       0.0
     ],
-    "takeOffAltitude": 952.0319,
+    "takeOffAltitude": 95.20319,
     "productType": "Mini4Pro",
     "aircraftName": "m4p.rembish.org",
     "aircraftSn": "1581F6Z9C23CP003",

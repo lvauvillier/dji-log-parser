@@ -59,7 +59,11 @@ pub struct Details {
     _analysis_offset: i64,
     #[br(temp)]
     _user_api_center_id_md5: [u8; 16],
-    #[br(seek_before = if version <= 5 { SeekFrom::Start(352) } else { SeekFrom::Current(0) })]
+    /// meters, the barometric altitude of the home point
+    #[br(
+        seek_before = if version <= 5 { SeekFrom::Start(352) } else { SeekFrom::Current(0) },
+        map = |x: f32| x / 10.0
+    )]
     pub take_off_altitude: f32,
     #[br(
         seek_before = if version <= 5 { SeekFrom::Start(277) } else { SeekFrom::Current(0) },
