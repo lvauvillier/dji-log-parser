@@ -7,7 +7,7 @@ Packages are published to npm: https://www.npmjs.com/package/dji-log-parser-js
 ## Build
 
 ```bash
-wasm-pack build --target nodejs  && node ./patch.mjs
+wasm-pack build --target web && node ./patch.mjs
 ```
 
 ## Publish
