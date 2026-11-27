@@ -72,3 +72,32 @@ fn mini_4_pro_battery_static_info() {
         assert_eq!(battery.designed_capacity, 2590);
     }
 }
+
+/// The 5 photos of this Mini 4 Pro flight keep their flag for several camera records, but each
+/// photo is in one frame only.
+#[test]
+fn mini_4_pro_photos_are_in_one_frame_each() {
+    let parser = DJILog::from_bytes(fixture("v14_mini4pro.txt")).unwrap();
+    let keychains = Some(keychains("v14_mini4pro.keychains.json"));
+
+    let photo_records = parser
+        .records(keychains.clone())
+        .unwrap()
+        .into_iter()
+        .filter(
+            |record| matches!(record, Record::Camera(camera) if camera.is_shooting_single_photo),
+        )
+        .count();
+    let photo_frames = parser
+        .frames(keychains)
+        .unwrap()
+        .into_iter()
+        .filter(|frame| frame.camera.is_photo)
+        .count();
+
+    assert!(
+        photo_records > 5,
+        "{photo_records} camera records with a photo"
+    );
+    assert_eq!(photo_frames, 5);
+}

@@ -210,6 +210,8 @@ struct FrameBuilder {
     frame_index: usize,
     /// On drones with several batteries, the battery of index 0 is the total of all batteries
     has_total_battery: bool,
+    /// The camera records keep their photo flag for several records
+    is_shooting_photo: bool,
 }
 
 impl FrameBuilder {
@@ -226,6 +228,7 @@ impl FrameBuilder {
             },
             frame_index: 0,
             has_total_battery: false,
+            is_shooting_photo: false,
         }
     }
 
@@ -325,7 +328,10 @@ impl FrameBuilder {
                 frame.gimbal.is_stuck = gimbal.is_stuck;
             }
             Record::Camera(camera) => {
-                frame.camera.is_photo = camera.is_shooting_single_photo;
+                if camera.is_shooting_single_photo && !self.is_shooting_photo {
+                    frame.camera.is_photo = true;
+                }
+                self.is_shooting_photo = camera.is_shooting_single_photo;
                 frame.camera.is_video = camera.is_recording;
                 frame.camera.sd_card_is_inserted = camera.has_sd_card;
                 frame.camera.sd_card_state = Some(camera.sd_card_state);
