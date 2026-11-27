@@ -1,4 +1,5 @@
 use binrw::binread;
+use binrw::io::SeekFrom;
 use serde::Serialize;
 use std::f64::consts::PI;
 #[cfg(target_arch = "wasm32")]
@@ -65,6 +66,14 @@ pub struct Home {
     _unknown: [u8; 5],
     #[br(if(version >= 8))]
     pub max_allowed_height: f32,
+    /// Older records end before it
+    #[br(temp, try, seek_before = SeekFrom::Start(98))]
+    aircraft_flight_count_raw: Option<u16>,
+    /// Number of flights of the aircraft, this flight included: it counts up at the takeoff. Only
+    /// on some recent drones, such as the Mini 5 Pro
+    #[br(calc = aircraft_flight_count_raw.filter(|count| *count != 0))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub aircraft_flight_count: Option<u16>,
 }
 
 #[derive(FromPrimitive, Serialize, Debug, Clone, Copy)]
@@ -106,4 +115,39 @@ pub enum CompassCalibrationState {
     Failed = 4,
     #[num_enum(catch_all)]
     Unknown(u8),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use binrw::args;
+    use binrw::io::Cursor;
+    use binrw::BinRead;
+
+    fn read(hex: &str) -> Home {
+        let data: Vec<u8> = (0..hex.len())
+            .step_by(2)
+            .map(|i| u8::from_str_radix(&hex[i..i + 2], 16).unwrap())
+            .collect();
+        Home::read_args(&mut Cursor::new(data), args! { version: 14 }).unwrap()
+    }
+
+    /// Record of 102 bytes of a Mini 5 Pro, before its 59th flight
+    #[test]
+    fn aircraft_flight_count() {
+        let home = read(concat!(
+            "e71eeac393d7bd3fc8921df08907ea3f9226104647005a00000000000000910000000000450000f0",
+            "42aaaa0000050000000000004639444543323539453032393331333100d66bd20d00000001000000",
+            "010001010000c07f0000c07f0000c07f00013a000000",
+        ));
+
+        assert_eq!(home.aircraft_flight_count, Some(58));
+    }
+
+    #[test]
+    fn aircraft_flight_count_is_missing_from_shorter_records() {
+        let home = read(&"00".repeat(80));
+
+        assert_eq!(home.aircraft_flight_count, None);
+    }
 }
