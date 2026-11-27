@@ -364,6 +364,8 @@ impl FrameBuilder {
                 frame.osd.wind_speed = osd.wind_speed;
                 frame.osd.wind_direction = osd.wind_direction;
                 frame.osd.position_source = osd.position_source;
+                frame.osd.motor_fail_reason = osd.motor_fail_reason;
+                frame.osd.control_device = osd.control_device;
                 frame.battery.low_warning = Some(osd.low_warning);
                 frame.battery.serious_low_warning = Some(osd.serious_low_warning);
                 frame.battery.low_warning_go_home = osd.low_warning_go_home;

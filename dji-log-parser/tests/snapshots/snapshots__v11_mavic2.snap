@@ -134,7 +134,9 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": null,
@@ -373,7 +375,9 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "mileage": 2.7105715,
           "hSpeed": 0.4,
           "hSpeedMax": 1.264911,
-          "directionOfTravel": 357.1558
+          "directionOfTravel": 357.1558,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": null,
@@ -612,7 +616,9 @@ expression: "summarize(fixture(\"v11_mavic2.txt\"), None)"
           "mileage": 8.617206,
           "hSpeed": 0.0,
           "hSpeedMax": 1.264911,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": null,

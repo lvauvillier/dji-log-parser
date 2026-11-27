@@ -136,7 +136,9 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -375,7 +377,9 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "mileage": 2040.1381,
           "hSpeed": 0.1,
           "hSpeedMax": 17.712425,
-          "directionOfTravel": 136.32747
+          "directionOfTravel": 136.32747,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -614,7 +618,9 @@ expression: "summarize(fixture(\"v8.txt\"), None)"
           "mileage": 3288.7397,
           "hSpeed": 0.0,
           "hSpeedMax": 17.712425,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",

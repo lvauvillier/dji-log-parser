@@ -135,7 +135,9 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "FPV",
@@ -374,7 +376,9 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "mileage": 1.8735476,
           "hSpeed": 0.0,
           "hSpeedMax": 0.14142136,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "FPV",
@@ -613,7 +617,9 @@ expression: "summarize(fixture(\"v10_phantom4pro.txt\"), None)"
           "mileage": 5.6422057,
           "hSpeed": 0.1,
           "hSpeedMax": 0.41231057,
-          "directionOfTravel": 62.851364
+          "directionOfTravel": 62.851364,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "FPV",

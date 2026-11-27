@@ -136,7 +136,9 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": null,
@@ -375,7 +377,9 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "mileage": 38.45182,
           "hSpeed": 0.0,
           "hSpeedMax": 4.2720017,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -614,7 +618,9 @@ expression: "summarize(fixture(\"v8_phantom3.txt\"), None)"
           "mileage": 50.499886,
           "hSpeed": 0.0,
           "hSpeedMax": 4.2720017,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",

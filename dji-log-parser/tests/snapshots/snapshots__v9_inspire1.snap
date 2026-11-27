@@ -138,7 +138,9 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -379,7 +381,9 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": null
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -620,7 +624,9 @@ expression: "summarize(fixture(\"v9_inspire1.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": null
         },
         "gimbal": {
           "mode": "YawFollow",

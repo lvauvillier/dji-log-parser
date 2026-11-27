@@ -137,7 +137,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -375,7 +377,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "mileage": 229.5937,
           "hSpeed": 9.021087,
           "hSpeedMax": 9.021087,
-          "directionOfTravel": 330.09216
+          "directionOfTravel": 330.09216,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "FPV",
@@ -613,7 +617,9 @@ expression: "summarize(fixture(\"v11_spark.txt\"), None)"
           "mileage": 456.68182,
           "hSpeed": 0.0,
           "hSpeedMax": 13.743726,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "FPV",

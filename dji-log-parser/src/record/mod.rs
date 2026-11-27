@@ -187,7 +187,7 @@ impl Record {
         let length = content.data_length();
 
         let record = match content.record_type {
-            1 => Record::OSD(content.read::<OSD>(args! { version })?),
+            1 => Record::OSD(content.read::<OSD>(args! { version, length })?),
             2 => Record::Home(content.read::<Home>(args! { version })?),
             3 => Record::Gimbal(content.read::<Gimbal>(args! { version })?),
             4 => Record::RC(content.read::<RC>(args! { version, product_type })?),

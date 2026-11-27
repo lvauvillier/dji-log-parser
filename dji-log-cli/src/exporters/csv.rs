@@ -215,6 +215,8 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "OSD.hSpeed".to_string(),  // Horizontal speed in meters per second
         "OSD.hSpeedMax".to_string(), // Maximum horizontal speed reached in meters per second
         "OSD.directionOfTravel".to_string(), // Direction of the movement in degrees from the north
+        "OSD.motorFailReason".to_string(), // Why the motors failed to start or stopped
+        "OSD.controlDevice".to_string(), // Device controlling the aircraft
         "GIMBAL.mode".to_string(), // Current gimbal mode
         "GIMBAL.pitch".to_string(), // Gimbal pitch angle in degrees
         "GIMBAL.roll".to_string(), // Gimbal roll angle in degrees
@@ -381,6 +383,8 @@ fn get_headers(frame: &Frame) -> Vec<String> {
         "DETAILS.rcSerial".to_string(),         // Serial number of the remote control
         "DETAILS.appPlatform".to_string(),      // The platform of the app used (e.g., iOS, Android)
         "DETAILS.appVersion".to_string(),       // Version of the app used
+        "DETAILS.startTime".to_string(),        // Start time of the log
+        "DETAILS.productType".to_string(),      // Model of the aircraft
     ]);
 
     headers

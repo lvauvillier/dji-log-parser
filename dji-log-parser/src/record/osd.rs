@@ -11,7 +11,7 @@ use num_enum::FromPrimitive;
 #[binread]
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
-#[br( import { version: u8 }, little)]
+#[br( import { version: u8, length: u16 }, little)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 pub struct OSD {
     /// degrees
@@ -156,6 +156,17 @@ pub struct OSD {
     #[br(if(version >=3), map = |x: u8| ImuInitFailReason::from(x))]
     pub imu_init_fail_reason: ImuInitFailReason,
 
+    /// Why the motors failed to start or stopped, none without failure
+    #[br(seek_before = SeekFrom::Start(50))]
+    #[br(map = |x: u8| (x != 0).then(|| MotorFailReason::from(x)))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub motor_fail_reason: Option<MotorFailReason>,
+    /// Device controlling the aircraft, in the records longer than 52 bytes
+    #[br(seek_before = SeekFrom::Start(52))]
+    #[br(map = |x: u8| (length > 52).then(|| ControlDevice::from(x)))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub control_device: Option<ControlDevice>,
+
     /// Only in recent logs, and not on every aircraft: none when the aircraft doesn't report it
     /// or has no positioning
     #[br(seek_before = SeekFrom::Start(60))]
@@ -182,6 +193,39 @@ pub struct OSD {
 /// reported, and 255 when it isn't available.
 fn has_wind(speed: u8, direction: u8) -> bool {
     speed != u8::MAX && (speed, direction & 0x0F) != (0, 0)
+}
+
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
+pub enum MotorFailReason {
+    TakeoffException = 94,
+    EscStalledNearGround = 95,
+    EscUnbalancedOnGround = 96,
+    EscPartEmptyOnGround = 97,
+    EngineStartFailed = 98,
+    AutoTakeoffLaunchFailed = 99,
+    RolledOverOnGround = 100,
+    Other = 128,
+    #[serde(untagged)]
+    #[num_enum(catch_all)]
+    Unknown(u8),
+}
+
+/// Device controlling the aircraft: the remote controller, an app such as a waypoint mission, or
+/// the aircraft itself in the intelligent flight modes such as ActiveTrack
+#[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[repr(u8)]
+pub enum ControlDevice {
+    RC = 0,
+    App = 1,
+    OnboardDevice = 2,
+    Camera = 3,
+    Other = 128,
+    #[serde(untagged)]
+    #[num_enum(catch_all)]
+    Unknown(u8),
 }
 
 #[derive(FromPrimitive, Serialize, Debug, Clone, Copy, PartialEq)]

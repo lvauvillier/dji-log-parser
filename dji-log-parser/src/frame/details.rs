@@ -2,8 +2,9 @@ use serde::Serialize;
 #[cfg(target_arch = "wasm32")]
 use tsify_next::Tsify;
 
-use crate::layout::details::Details;
-use crate::layout::details::Platform;
+use chrono::{DateTime, Utc};
+
+use crate::layout::details::{Details, Platform, ProductType};
 
 #[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -37,6 +38,11 @@ pub struct FrameDetails {
     pub app_platform: Platform,
     /// Version of the app used
     pub app_version: String,
+    /// Start time of the log, none in the oldest logs which don't record it
+    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "string"))]
+    pub start_time: Option<DateTime<Utc>>,
+    /// Model of the aircraft
+    pub product_type: ProductType,
 }
 
 impl From<Details> for FrameDetails {
@@ -55,6 +61,8 @@ impl From<Details> for FrameDetails {
             rc_sn: value.rc_sn.clone(),
             app_platform: value.app_platform.clone(),
             app_version: value.app_version.clone(),
+            start_time: (value.start_time.timestamp() != 0).then_some(value.start_time),
+            product_type: value.product_type,
         }
     }
 }

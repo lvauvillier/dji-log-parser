@@ -3,8 +3,9 @@ use serde::Serialize;
 use tsify_next::Tsify;
 
 use crate::record::osd::{
-    AppCommand, BatteryType, DroneType, FlightAction, FlightMode, GoHomeStatus, ImuInitFailReason,
-    MotorStartFailedCause, NonGPSCause, PositionSource, WindDirection,
+    AppCommand, BatteryType, ControlDevice, DroneType, FlightAction, FlightMode, GoHomeStatus,
+    ImuInitFailReason, MotorFailReason, MotorStartFailedCause, NonGPSCause, PositionSource,
+    WindDirection,
 };
 
 #[derive(Serialize, Debug, Default, Clone)]
@@ -131,4 +132,11 @@ pub struct FrameOSD {
     /// the last two different positions, none when the aircraft doesn't move. Noisy below 1 m/s
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     pub direction_of_travel: Option<f32>,
+    /// Why the motors failed to start or stopped
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub motor_fail_reason: Option<MotorFailReason>,
+    /// Device controlling the aircraft: the remote controller, an app or the aircraft itself in
+    /// the intelligent flight modes
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    pub control_device: Option<ControlDevice>,
 }

@@ -136,7 +136,9 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "mileage": 0.0,
           "hSpeed": 0.0,
           "hSpeedMax": 0.0,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -374,7 +376,9 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "mileage": 365.80453,
           "hSpeed": 12.976902,
           "hSpeedMax": 13.535878,
-          "directionOfTravel": 60.5808
+          "directionOfTravel": 60.5808,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
@@ -612,7 +616,9 @@ expression: "summarize(fixture(\"v8_mavicpro.txt\"), None)"
           "mileage": 1609.3901,
           "hSpeed": 0.0,
           "hSpeedMax": 15.17432,
-          "directionOfTravel": null
+          "directionOfTravel": null,
+          "motorFailReason": null,
+          "controlDevice": "RC"
         },
         "gimbal": {
           "mode": "YawFollow",
